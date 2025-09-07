@@ -1,3 +1,26 @@
+/**
+ * TSV Ledger - Main Express Server
+ * 
+ * @fileoverview Main server application for Texas Sunset Venues expense tracking
+ *               and business intelligence platform. Provides REST API endpoints
+ *               for data import, analysis, and comprehensive business insights.
+ * 
+ * @version 2.1.0
+ * @author GitHub Copilot (Claude Sonnet 3.5)
+ * @since 2025-09-05
+ * @updated 2025-09-07
+ * 
+ * @requires express Express.js web framework
+ * @requires csv-parser CSV parsing library
+ * @requires ./tsv-categorizer Business intelligence categorization engine
+ * @requires ./database JSON database operations
+ * 
+ * @example
+ * // Start the server
+ * node server.js
+ * // Access at http://localhost:3000
+ */
+
 const express = require('express');
 const path = require('path');
 const fs = require('fs');
