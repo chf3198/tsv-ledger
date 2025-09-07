@@ -117,8 +117,8 @@ app.post('/api/import-csv', (req, res) => {
       let dateValue, amountValue, descValue, expenditure;
 
       if (isAmazonFormat) {
-        // Amazon CSV format handling
-        console.log('🛒 Processing Amazon order data');
+        // Enhanced Amazon CSV format handling (Premium Extension)
+        console.log('🛒 Processing Amazon order data with premium fields');
         
         // Skip if no date or total
         dateValue = data.date || data.Date;
@@ -158,16 +158,37 @@ app.post('/api/import-csv', (req, res) => {
           return;
         }
 
-        // Create description from items (truncate if too long)
+        // Create enriched order object with premium extension fields
         const items = data.items || data.Items || '';
         const truncatedItems = items.length > 100 ? items.substring(0, 97) + '...' : items;
         const orderId = data['order id'] || data['Order ID'] || '';
+        
+        // Premium data fields
+        const orderUrl = data['order url'] || '';
+        const shipping = data.shipping || '0';
+        const tax = data.tax || '0';
+        const payments = data.payments || '';
+        const shipments = data.shipments || '';
+        const invoice = data.invoice || '';
         
         expenditure = {
           date: formattedDate,
           amount: -Math.abs(parsedAmount), // Amazon purchases are negative expenditures
           category: 'supplies restocking',
-          description: `Amazon Order ${orderId}: ${truncatedItems}`.trim()
+          description: `Amazon Order ${orderId}: ${truncatedItems}`.trim(),
+          // Premium: Enhanced metadata for analysis
+          metadata: {
+            orderId: orderId,
+            orderUrl: orderUrl,
+            items: items,
+            shipping: shipping,
+            tax: tax,
+            payments: payments,
+            shipments: shipments,
+            invoice: invoice,
+            total: totalValue,
+            source: 'amazon_premium'
+          }
         };
 
       } else {
@@ -301,7 +322,7 @@ app.post('/api/import-csv', (req, res) => {
     });
 });
 
-// GET /api/analysis - Get comprehensive spending analysis and insights
+// GET /api/analysis - Enhanced comprehensive analysis using premium extension data
 app.get('/api/analysis', (req, res) => {
   getAllExpenditures((err, expenditures) => {
     if (err) {
@@ -310,24 +331,52 @@ app.get('/api/analysis', (req, res) => {
 
     const categorizer = new TSVCategorizer();
     
-    // Filter Amazon orders for detailed analysis
+    // Enhanced Amazon order filtering with premium data support
     const amazonOrders = expenditures.filter(exp => 
       exp.description && exp.description.includes('Amazon Order')
-    ).map(exp => ({
-      orderId: exp.description.match(/Amazon Order ([^:]+):/)?.[1] || 'Unknown',
-      date: exp.date,
-      amount: exp.amount,
-      items: exp.description.replace(/^Amazon Order [^:]+: /, ''),
-      payments: '', // Not available in current data structure
-      shipping: exp.amount < 0 && Math.abs(exp.amount) % 1 === 0 ? '0' : 'unknown'
-    }));
+    ).map(exp => {
+      // Extract order details from description and metadata
+      const orderId = exp.description.match(/Amazon Order ([^:]+):/)?.[1] || 'Unknown';
+      const items = exp.description.replace(/^Amazon Order [^:]+: /, '');
+      
+      // Use premium metadata if available
+      if (exp.metadata && exp.metadata.source === 'amazon_premium') {
+        return {
+          'order id': exp.metadata.orderId || orderId,
+          'order url': exp.metadata.orderUrl || '',
+          date: exp.date,
+          total: Math.abs(exp.amount),
+          amount: exp.amount,
+          items: exp.metadata.items || items,
+          shipping: exp.metadata.shipping || '0',
+          tax: exp.metadata.tax || '0',
+          payments: exp.metadata.payments || '',
+          shipments: exp.metadata.shipments || '',
+          invoice: exp.metadata.invoice || '',
+          isPremiumData: true
+        };
+      } else {
+        // Legacy format compatibility
+        return {
+          orderId: orderId,
+          date: exp.date,
+          amount: exp.amount,
+          total: Math.abs(exp.amount),
+          items: items,
+          payments: '',
+          shipping: exp.amount < 0 && Math.abs(exp.amount) % 1 === 0 ? '0' : 'unknown',
+          isPremiumData: false
+        };
+      }
+    });
 
-    // Generate comprehensive analysis
+    // Generate comprehensive analysis with enhanced categorization
     const analysis = {
       overview: {
         totalExpenditures: expenditures.length,
         totalAmount: expenditures.reduce((sum, exp) => sum + Math.abs(exp.amount), 0),
         amazonOrders: amazonOrders.length,
+        premiumDataOrders: amazonOrders.filter(o => o.isPremiumData).length,
         bankTransactions: expenditures.length - amazonOrders.length,
         dateRange: {
           earliest: expenditures.reduce((min, exp) => exp.date < min ? exp.date : min, '9999-12-31'),
@@ -338,6 +387,7 @@ app.get('/api/analysis', (req, res) => {
         amazonDataCompleteness: 0,
         bankDataCompleteness: 0,
         overallCompleteness: 0,
+        premiumDataAvailable: amazonOrders.filter(o => o.isPremiumData).length > 0,
         confidenceScores: {
           subscribeAndSave: 0,
           locationDetection: 0,

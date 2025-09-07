@@ -15,10 +15,32 @@ class TSVCategorizer {
       ]
     };
 
-    // Subscribe & Save detection patterns
+    // Enhanced Subscribe & Save detection patterns (premium extension data)
     this.subscribeAndSaveKeywords = [
       'subscribe & save', 'subscription', 'recurring', 'monthly delivery',
       'subscribe and save', 'automatic delivery', 'regular delivery'
+    ];
+
+    // Premium: High-confidence Subscribe & Save products based on frequency analysis
+    this.confirmedSubscribeAndSaveProducts = [
+      'bounty paper towels quick size',
+      'pure life purified water bottles',
+      'oxiclean white revive laundry whitener and stain remover liquid',
+      'bulletproof original medium roast whole bean coffee',
+      'glade plugins refills air freshener',
+      'lysol power clean multi-surface cleaner',
+      'audible premium plus',
+      'downy free & gentle fabric softener',
+      'off! family care insect & mosquito repellent',
+      'honest kids organic juice drink',
+      'scott rapid-dissolving toilet paper',
+      'tide free & gentle liquid laundry detergent',
+      'ortho orthene fire ant killer1',
+      '4th & heart original grass-fed ghee',
+      'downy fabric softener liquid',
+      'mccafe premium roast coffee',
+      'toughbag 42 gallon trash bags',
+      'aveeno daily moisturizing body wash'
     ];
 
     // Employee benefits/perks items
@@ -90,13 +112,19 @@ class TSVCategorizer {
     };
   }
 
-  // Analyze Amazon order for comprehensive categorization
+  // Enhanced Amazon order analysis using premium extension data
   analyzeAmazonOrder(order) {
     const analysis = {
-      orderId: order.orderId,
+      orderId: order.orderId || order['order id'], // Handle both formats
+      orderUrl: order['order url'], // Premium: Direct link to order
       date: order.date,
-      amount: order.amount,
+      amount: order.total || order.amount, // Premium: Use 'total' field
       items: order.items,
+      shipping: order.shipping, // Premium: Explicit shipping cost
+      tax: order.tax, // Premium: Tax amount
+      payments: order.payments, // Premium: Payment details
+      shipments: order.shipments, // Premium: Delivery status
+      invoice: order.invoice, // Premium: Invoice link
       category: 'General',
       subcategory: null,
       location: this.detectLocation(order.items),
@@ -106,10 +134,13 @@ class TSVCategorizer {
       seasonality: this.detectSeasonality(order.date, order.items),
       insights: [],
       dataQuality: {
-        hasOrderId: !!(order.orderId && order.orderId !== 'Unknown'),
+        hasOrderId: !!(order.orderId || order['order id']),
         hasItems: !!(order.items && order.items.length > 10),
-        hasAmount: !!(order.amount && !isNaN(order.amount)),
+        hasAmount: !!(order.total || order.amount),
         hasDate: !!(order.date && order.date !== 'Invalid Date'),
+        hasShipping: !!(order.shipping !== undefined), // Premium field
+        hasPayments: !!(order.payments), // Premium field
+        hasShipments: !!(order.shipments), // Premium field
         completeness: 0
       }
     };
@@ -162,56 +193,73 @@ class TSVCategorizer {
     return 'Both Properties'; // Default for general items
   }
 
-  // Detect Subscribe & Save orders
+  // Enhanced Subscribe & Save detection using premium extension data
   detectSubscribeAndSave(order) {
     // Defensive programming - handle malformed data
     const itemsLower = (order.items || '').toString().toLowerCase();
     const paymentsLower = (order.payments || '').toString().toLowerCase();
+    const shipmentsLower = (order.shipments || '').toString().toLowerCase();
 
-    // Enhanced detection patterns
+    // Enhanced detection patterns from premium data
     const subscribePatterns = [
       'subscribe & save', 'subscribe and save', 'subscription', 'recurring',
       'monthly delivery', 'automatic delivery', 'regular delivery', 'auto-delivery'
     ];
 
-    // Check for explicit Subscribe & Save indicators
+    // Check for explicit Subscribe & Save indicators in all fields
     const hasSubscribeKeywords = subscribePatterns.some(keyword => 
-      itemsLower.includes(keyword) || paymentsLower.includes(keyword)
+      itemsLower.includes(keyword) || paymentsLower.includes(keyword) || shipmentsLower.includes(keyword)
     );
 
-    // Heuristic: Free shipping often indicates Subscribe & Save
-    const hasFreeShipping = order.shipping === '0' || order.shipping === 0;
+    // Premium: Check against confirmed S&S products (from frequency analysis)
+    const productName = itemsLower.split(/[,;]/)[0].trim();
+    const isConfirmedSSProduct = this.confirmedSubscribeAndSaveProducts.some(confirmed => 
+      productName.includes(confirmed.toLowerCase()) || confirmed.toLowerCase().includes(productName)
+    );
 
-    // Heuristic: Round dollar amounts sometimes indicate S&S discounts
-    const amount = Math.abs(parseFloat(order.amount) || 0);
-    const isRoundAmount = amount % 1 === 0;
+    // Premium: Use shipping data more accurately
+    const shipping = parseFloat(order.shipping || 0);
+    const hasFreeShipping = shipping === 0;
+
+    // Premium: Enhanced delivery status analysis
+    const hasSubscriptionDeliveryPattern = shipmentsLower.includes('delivered: yes') && 
+      (shipmentsLower.includes('arriving friday') || shipmentsLower.includes('regular delivery'));
 
     // Enhanced heuristic: Check for common S&S product patterns
     const commonSSProducts = [
       'detergent', 'paper towels', 'toilet paper', 'cleaning', 'soap',
       'water bottles', 'coffee', 'pet food', 'vitamins', 'supplements',
-      'dishwasher', 'laundry', 'trash bags', 'tissues', 'shampoo'
+      'dishwasher', 'laundry', 'trash bags', 'tissues', 'shampoo', 'fabric softener',
+      'air freshener', 'stain remover', 'ghee', 'olive oil', 'body wash'
     ];
     
     const isCommonSSProduct = commonSSProducts.some(product => 
       itemsLower.includes(product)
     );
 
-    // Multiple indicators suggest Subscribe & Save
+    // Premium: Multiple indicators with enhanced confidence scoring
     let confidence = 0;
-    if (hasSubscribeKeywords) confidence += 0.8;
-    if (hasFreeShipping && isCommonSSProduct) confidence += 0.6;
-    if (isRoundAmount && isCommonSSProduct) confidence += 0.3;
-    if (isCommonSSProduct) confidence += 0.2;
+    if (hasSubscribeKeywords) confidence += 0.9; // Explicit mention
+    if (isConfirmedSSProduct) confidence += 0.8; // High-frequency product from analysis
+    if (hasFreeShipping && isCommonSSProduct) confidence += 0.7; // Free shipping + common product
+    if (hasSubscriptionDeliveryPattern) confidence += 0.6; // Delivery pattern
+    if (isCommonSSProduct) confidence += 0.3; // Common product type
+    
+    // Premium: Payment pattern analysis (monthly recurring charges)
+    const hasRecurringPaymentPattern = paymentsLower.includes('mastercard') && 
+      (isConfirmedSSProduct || isCommonSSProduct);
+    if (hasRecurringPaymentPattern) confidence += 0.4;
 
     return {
-      isSubscribeAndSave: confidence >= 0.5,
-      confidence: confidence,
+      isSubscribeAndSave: confidence >= 0.6, // Raised threshold for higher accuracy
+      confidence: Math.min(confidence, 1.0),
       indicators: {
         hasKeywords: hasSubscribeKeywords,
+        confirmedProduct: isConfirmedSSProduct,
         freeShipping: hasFreeShipping,
         commonProduct: isCommonSSProduct,
-        roundAmount: isRoundAmount
+        deliveryPattern: hasSubscriptionDeliveryPattern,
+        paymentPattern: hasRecurringPaymentPattern
       }
     };
   }
