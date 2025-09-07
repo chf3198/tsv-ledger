@@ -1,5 +1,45 @@
 # TSV Ledger - AI Assistant Context File
 
+## ⚠️ CRITICAL: Documentation Maintenance Protocol
+
+**FIRST PRIORITY FOR ANY NEW AI ASSISTANT:**
+
+This project is designed for seamless AI-to-AI handoffs. Your primary responsibility is to maintain and continuously update this `AI_CONTEXT.md` file as the project evolves. This ensures that future AI assistants can pick up exactly where you left off without any knowledge gaps.
+
+### 📝 Documentation Update Requirements
+1. **Update AI_CONTEXT.md After Every Major Change**
+   - Add new features to the "Completed Features" section
+   - Update "Next Development Priorities" as tasks are completed
+   - Document any technical decisions or architecture changes
+   - Include new API endpoints, data structures, or file changes
+
+2. **Git Commit Best Practices**
+   - Use descriptive commit messages that explain what changed and why
+   - Commit frequently with small, logical changes
+   - Always update documentation before committing code changes
+   - Include "AI_CONTEXT.md" updates in commit messages
+
+3. **Knowledge Transfer Protocol**
+   - Before ending any session, ensure AI_CONTEXT.md reflects the current state
+   - Document any unresolved issues, pending decisions, or blockers
+   - Include setup instructions for any new dependencies or tools
+   - Note any environmental requirements or configuration changes
+
+4. **Self-Documenting Code Standards**
+   - Add comments to complex logic explaining the "why" not just the "what"
+   - Update README.md for any API changes or new features
+   - Maintain consistent code patterns for future AI comprehension
+
+### 🔄 Continuous Improvement Cycle
+- **Read AI_CONTEXT.md first** when starting any new session
+- **Update AI_CONTEXT.md immediately** after implementing features
+- **Commit changes** with documentation updates included
+- **Verify completeness** before session end
+
+**Remember**: This file is the single source of truth for project continuity. Treat it with the same importance as the codebase itself.
+
+---
+
 ## Project Overview
 **TSV Ledger** is a web application for tracking and analyzing expenditures for Texas Sunset Venues (texassunsetvenues.com). The goal is to automate data gathering where possible while providing manual entry capabilities.
 
