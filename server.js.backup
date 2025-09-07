@@ -92,8 +92,7 @@ app.post('/api/import-csv', (req, res) => {
       }
 
       // Check if this row has a valid date
-      // For Bank of America format: Date is in 'Description' column, Description is in '' column
-      const dateValue = data.Date || data.date || data['Transaction Date'] || data['Description'];
+      const dateValue = data.Date || data.date || data['Transaction Date'];
       console.log('Date value found:', dateValue);
 
       if (!dateValue || dateValue.trim() === '') {
@@ -109,7 +108,7 @@ app.post('/api/import-csv', (req, res) => {
       }
 
       // Try to extract amount
-      const amountValue = data.Amount || data.amount || data['Transaction Amount'] || data['Summary Amt.'];
+      const amountValue = data.Amount || data.amount || data['Transaction Amount'] || data['Summary Amt.'] || data[''];
       console.log('Amount value found:', amountValue);
 
       const cleanAmount = amountValue ? amountValue.toString().replace(/"/g, '').trim() : '0';
@@ -125,8 +124,7 @@ app.post('/api/import-csv', (req, res) => {
       }
 
       // Try to extract description
-      // For Bank of America format: Description is in the empty column ''
-      const descValue = data[''] || data.Description || data.description || data['Transaction Description'];
+      const descValue = data.Description || data.description || data['Transaction Description'] || data[''];
       console.log('Description value found:', descValue);
 
       // Create expenditure object
@@ -140,73 +138,60 @@ app.post('/api/import-csv', (req, res) => {
       console.log('✅ CREATED EXPENDITURE:', expenditure);
       results.push(expenditure);
     })
-    .on('end', () => {
-      console.log('\n=== PARSING COMPLETE ===');
-      console.log('Total lines processed:', lineNumber);
-      console.log('Valid expenditures found:', results.length);
-      console.log('Rows skipped:', skippedRows.length);
-
-      if (skippedRows.length > 0) {
-        console.log('\nSkipped rows summary:');
-        skippedRows.forEach(row => {
-          console.log(`Line ${row.line}: ${row.reason}`);
-        });
+        return;
       }
+
+      // Try to map data columns to our expenditure format
+      const expenditure = {
+        date: data.Date ? data.Date.trim() : new Date().toISOString().split('T')[0],
+        amount: parseFloat((data.Amount || data['Summary Amt.'] || '0').toString().replace(/"/g, '')), // Remove quotes
+        category: data.Category || data.category || 'supplies restocking', // Default category
+        description: (data.Description || data[''] || 'Imported from data file').toString().replace(/"/g, '') // Remove quotes
+      };
+
+      console.log('Parsed expenditure:', expenditure); // Debug: log parsed data
+
+      if (expenditure.amount !== 0 && !isNaN(expenditure.amount)) {
+        results.push(expenditure);
+        console.log('Added valid expenditure:', expenditure.amount, expenditure.description);
+      } else {
+        console.log('Skipping invalid amount:', expenditure.amount);
+      }
+    })
+    .on('end', () => {
+      console.log('Parsing complete. Found', results.length, 'valid expenditures');
 
       // Import all valid expenditures
       let importedCount = 0;
       let processedCount = 0;
 
       if (results.length === 0) {
-        console.log('❌ NO VALID EXPENDITURES FOUND');
-        return res.json({
-          message: 'No valid expenditures found in data file',
-          imported: 0,
-          errors: errors,
-          skipped: skippedRows.length,
-          totalLines: lineNumber
-        });
+        return res.json({ message: 'No valid expenditures found in data file', imported: 0, errors });
       }
-
-      console.log('🚀 STARTING DATABASE IMPORT...');
 
       results.forEach((expenditure) => {
         addExpenditure(expenditure, (err) => {
           processedCount++;
           if (!err) {
             importedCount++;
-            console.log(`✅ Imported: ${expenditure.description} - $${expenditure.amount}`);
           } else {
-            const errorMsg = `Failed to import: ${expenditure.description} - ${err.message}`;
-            errors.push(errorMsg);
-            console.log(`❌ ${errorMsg}`);
+            errors.push(`Failed to import: ${expenditure.description}`);
           }
 
           // Send response when all items are processed
           if (processedCount === results.length) {
-            console.log('\n=== IMPORT COMPLETE ===');
-            console.log(`Successfully imported: ${importedCount}/${results.length}`);
-            console.log(`Errors: ${errors.length}`);
-
             res.json({
               message: `Imported ${importedCount} expenditures from data file`,
               imported: importedCount,
-              totalProcessed: results.length,
-              errors: errors,
-              skipped: skippedRows.length,
-              totalLines: lineNumber
+              errors: errors
             });
           }
         });
       });
     })
     .on('error', (error) => {
-      console.error('❌ CSV PARSING ERROR:', error);
-      res.status(500).json({
-        error: 'Failed to parse data file',
-        details: error.message,
-        totalLines: lineNumber
-      });
+      console.error('CSV parsing error:', error);
+      res.status(500).json({ error: 'Failed to parse data file', details: error.message });
     });
 });
 

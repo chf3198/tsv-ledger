@@ -73,7 +73,7 @@ This project is designed for seamless AI-to-AI handoffs. Your primary responsibi
 **TSV Ledger** is a web application for tracking and analyzing expenditures for Texas Sunset Venues (texassunsetvenues.com). The goal is to automate data gathering where possible while providing manual entry capabilities.
 
 **Date Created**: September 6, 2025
-**Current Status**: MVP with manual entry and CSV import
+**Current Status**: MVP with manual entry, CSV import, and Bank of America integration ready
 **Tech Stack**: Node.js + Express backend, Bootstrap 5 frontend, JSON file storage
 
 ## Core Objectives
@@ -112,20 +112,37 @@ This project is designed for seamless AI-to-AI handoffs. Your primary responsibi
    - Real-time list display of expenditures
    - API endpoints: GET/POST /api/expenditures
 
-3. **CSV Import Functionality** ⭐ NEW
-   - File upload interface for CSV files
-   - CSV parsing with csv-parser library
-   - Automatic mapping of common CSV column names
+3. **Bank Data Import Functionality** ⭐ NEW
+   - File upload interface for CSV, DAT, TSV, and TXT files
+   - CSV/TSV parser with csv-parser library supporting multiple delimiters
+   - Automatic delimiter detection (comma, tab, pipe)
+   - Support for Bank of America DAT files (tab-delimited)
+   - Automatic mapping of common bank data column names
    - Error handling for malformed data
    - Bulk import with progress feedback
    - API endpoint: POST /api/import-csv
 
-4. **Project Infrastructure**
+4. **Bank of America Integration** ⭐ NEW
+   - **Download Formats Available**: Web Connect, Excel, Spreadsheet (tab/space delimiters)
+   - **Recommended Format**: Spreadsheet with tab delimiters (DAT format)
+   - **Business Account**: Texas Sunset Venues business account
+   - **Compatibility**: Tab-delimited DAT format perfectly matches parser requirements
+   - **Testing Status**: Ready for Bank of America DAT file import testing
+
+5. **Amazon Order History Research & Extension Setup** ⭐ NEW
+   - **Research Completed**: Comprehensive analysis of Amazon data export options
+   - **Extension Installed**: Amazon Order History Reporter Chrome extension
+   - **Data Format Prepared**: TSV format compatibility confirmed for import
+   - **Integration Ready**: CSV import system prepared for Amazon data
+   - **Documentation**: AMAZON_RESEARCH.md created with expected data formats
+
+6. **Project Infrastructure**
    - Git repository initialized with proper commits
    - Comprehensive .gitignore
    - Detailed README.md with API docs
    - Package.json with dependencies
    - Self-documenting code with comments
+   - AI_CONTEXT.md for seamless AI handoffs
 
 ### 🔄 Current Architecture
 ```
