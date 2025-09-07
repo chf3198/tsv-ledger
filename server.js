@@ -3,6 +3,7 @@ const path = require('path');
 const fs = require('fs');
 const csv = require('csv-parser');
 const { getAllExpenditures, addExpenditure } = require('./database');
+const TSVCategorizer = require('./tsv-categorizer');
 
 const app = express();
 const port = 3000;
@@ -275,6 +276,149 @@ app.post('/api/import-csv', (req, res) => {
         totalLines: lineNumber
       });
     });
+});
+
+// GET /api/analysis - Get comprehensive spending analysis and insights
+app.get('/api/analysis', (req, res) => {
+  getAllExpenditures((err, expenditures) => {
+    if (err) {
+      return res.status(500).json({ error: 'Failed to fetch expenditures for analysis' });
+    }
+
+    const categorizer = new TSVCategorizer();
+    
+    // Filter Amazon orders for detailed analysis
+    const amazonOrders = expenditures.filter(exp => 
+      exp.description && exp.description.includes('Amazon Order')
+    ).map(exp => ({
+      orderId: exp.description.match(/Amazon Order ([^:]+):/)?.[1] || 'Unknown',
+      date: exp.date,
+      amount: exp.amount,
+      items: exp.description.replace(/^Amazon Order [^:]+: /, ''),
+      payments: '', // Not available in current data structure
+      shipping: exp.amount < 0 && Math.abs(exp.amount) % 1 === 0 ? '0' : 'unknown'
+    }));
+
+    // Generate comprehensive analysis
+    const analysis = {
+      overview: {
+        totalExpenditures: expenditures.length,
+        totalAmount: expenditures.reduce((sum, exp) => sum + Math.abs(exp.amount), 0),
+        amazonOrders: amazonOrders.length,
+        dateRange: {
+          earliest: expenditures.reduce((min, exp) => exp.date < min ? exp.date : min, '9999-12-31'),
+          latest: expenditures.reduce((max, exp) => exp.date > max ? exp.date : max, '0000-01-01')
+        }
+      },
+      categories: {},
+      locations: { Freeport: 0, Smithville: 0, 'Both Properties': 0 },
+      subscribeAndSave: { count: 0, total: 0 },
+      employeeBenefits: { count: 0, total: 0 },
+      monthlyTrends: {},
+      seasonalTrends: {},
+      insights: []
+    };
+
+    // Analyze each Amazon order
+    const detailedAnalyses = amazonOrders.map(order => {
+      const orderAnalysis = categorizer.analyzeAmazonOrder(order);
+      const amount = Math.abs(order.amount);
+
+      // Update category totals
+      if (!analysis.categories[orderAnalysis.category]) {
+        analysis.categories[orderAnalysis.category] = { total: 0, count: 0, subcategories: {} };
+      }
+      analysis.categories[orderAnalysis.category].total += amount;
+      analysis.categories[orderAnalysis.category].count++;
+
+      if (orderAnalysis.subcategory) {
+        if (!analysis.categories[orderAnalysis.category].subcategories[orderAnalysis.subcategory]) {
+          analysis.categories[orderAnalysis.category].subcategories[orderAnalysis.subcategory] = 0;
+        }
+        analysis.categories[orderAnalysis.category].subcategories[orderAnalysis.subcategory] += amount;
+      }
+
+      // Update location totals
+      analysis.locations[orderAnalysis.location] += amount;
+
+      // Update Subscribe & Save tracking
+      if (orderAnalysis.isSubscribeAndSave) {
+        analysis.subscribeAndSave.count++;
+        analysis.subscribeAndSave.total += amount;
+      }
+
+      // Update employee benefits tracking
+      if (orderAnalysis.isEmployeeBenefit) {
+        analysis.employeeBenefits.count++;
+        analysis.employeeBenefits.total += amount;
+      }
+
+      // Update monthly trends
+      const month = new Date(order.date).toISOString().substring(0, 7);
+      if (!analysis.monthlyTrends[month]) {
+        analysis.monthlyTrends[month] = 0;
+      }
+      analysis.monthlyTrends[month] += amount;
+
+      // Update seasonal trends
+      if (!analysis.seasonalTrends[orderAnalysis.seasonality.season]) {
+        analysis.seasonalTrends[orderAnalysis.seasonality.season] = 0;
+      }
+      analysis.seasonalTrends[orderAnalysis.seasonality.season] += amount;
+
+      return orderAnalysis;
+    });
+
+    // Generate high-level insights
+    const totalAmazonSpending = amazonOrders.reduce((sum, order) => sum + Math.abs(order.amount), 0);
+    
+    if (analysis.subscribeAndSave.total > 0) {
+      const subscribePercentage = (analysis.subscribeAndSave.total / totalAmazonSpending) * 100;
+      analysis.insights.push({
+        type: 'subscribe_save',
+        message: `${subscribePercentage.toFixed(1)}% of Amazon spending (${analysis.subscribeAndSave.count} orders) is through Subscribe & Save`,
+        recommendation: subscribePercentage > 60 ? 'Excellent subscription discipline for predictable budgeting' : 'Consider more Subscribe & Save for budget predictability'
+      });
+    }
+
+    if (analysis.employeeBenefits.total > 0) {
+      const benefitsPercentage = (analysis.employeeBenefits.total / totalAmazonSpending) * 100;
+      analysis.insights.push({
+        type: 'employee_benefits',
+        message: `${benefitsPercentage.toFixed(1)}% of Amazon spending (${analysis.employeeBenefits.count} orders) is on employee benefits`,
+        recommendation: benefitsPercentage > 20 ? 'Consider dedicated employee benefits budget category' : 'Employee benefits spending is well-controlled'
+      });
+    }
+
+    // Location insights
+    const freeportPercentage = (analysis.locations.Freeport / totalAmazonSpending) * 100;
+    const smithvillePercentage = (analysis.locations.Smithville / totalAmazonSpending) * 100;
+    const bothPercentage = (analysis.locations['Both Properties'] / totalAmazonSpending) * 100;
+
+    analysis.insights.push({
+      type: 'location_distribution',
+      message: `Property spending: Freeport ${freeportPercentage.toFixed(1)}%, Smithville ${smithvillePercentage.toFixed(1)}%, Both Properties ${bothPercentage.toFixed(1)}%`,
+      recommendation: Math.abs(freeportPercentage - smithvillePercentage) > 30 ? 'Significant spending difference between properties - review allocation strategy' : 'Balanced spending across properties'
+    });
+
+    // Top category insight
+    const topCategory = Object.entries(analysis.categories)
+      .sort(([,a], [,b]) => b.total - a.total)[0];
+    
+    if (topCategory) {
+      const categoryPercentage = (topCategory[1].total / totalAmazonSpending) * 100;
+      analysis.insights.push({
+        type: 'top_category',
+        message: `${topCategory[0]} is the largest expense category at ${categoryPercentage.toFixed(1)}% of Amazon spending`,
+        recommendation: categoryPercentage > 40 ? 'Consider budget monitoring for this dominant category' : 'Well-diversified spending across categories'
+      });
+    }
+
+    // Include detailed analyses for debugging/detailed view
+    analysis.detailedAnalyses = detailedAnalyses.slice(0, 10); // Limit for response size
+
+    res.json(analysis);
+  });
 });
 
 // Serve the main HTML page
