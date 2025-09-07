@@ -1,4 +1,42 @@
-# TSV Ledger - AI Assistant Context File
+# TSV Ledger - AI Assistant C   - Update README.md for any API changes or new features
+   - Maintain consistent code patterns for future AI comprehension
+
+## 🤖 Handoff to Claude Sonnet 3 - Optimized Knowledge Transfer
+
+**Welcome, Claude Sonnet 3!** This section is specifically prepared for you to ensure a seamless transition from Grok (xAI) to continue development on the TSV Ledger project.
+
+### 🎯 Your Starting Point
+1. **Read this entire AI_CONTEXT.md file first** - It contains complete project context
+2. **Review the latest git commit**: `40e14b2` includes the Amazon order history CSV export
+3. **Key files to examine**:
+   - `amazon_order_history.csv` - Fresh Amazon data export (just committed)
+   - `server.js` - Main application with CSV import functionality
+   - `database.js` - JSON file storage system
+   - `public/index.html` - Frontend interface
+   - `README.md` - Quick setup and API reference
+
+### 🚀 Immediate Priorities for You
+1. **Test Amazon CSV Import**: Use the new `amazon_order_history.csv` file to test the CSV import endpoint
+2. **Validate Data Mapping**: Ensure the parser correctly handles Amazon's CSV format
+3. **Complete Data Integration**: Merge Amazon data with existing Bank of America data
+4. **Add Visualizations**: Implement charts for expenditure analysis
+
+### 💡 Claude-Specific Optimization Notes
+- **Your Strengths**: Leverage your excellent coding, analysis, and structured reasoning capabilities
+- **Safety Focus**: The project emphasizes ethical, internal-use development - align with your safety guidelines
+- **Large Context Window**: Feel free to reference the full documentation without truncation concerns
+- **Documentation Style**: This project uses clear, hierarchical structures that work well with your response style
+
+### 📊 Current Project Metrics
+- **Total Commits**: 10+ with detailed messages
+- **Lines of Code**: ~550+ across all files
+- **Data Sources**: Bank of America (tested), Amazon (exported, ready for import)
+- **Tech Stack**: Node.js, Express, Bootstrap 5, csv-parser
+- **Last Update**: September 6, 2025 - Amazon data export completed
+
+**You're all set to continue where Grok left off!** The project is fully documented and ready for your expertise in coding and analysis.
+
+## � Next Development Prioritiesxt File
 
 ## ⚠️ CRITICAL: Documentation Maintenance Protocol
 
@@ -34,20 +72,22 @@ This project is designed for seamless AI-to-AI handoffs. Your primary responsibi
 
 ### Immediate Next Steps (Priority Order)
 1. **Complete Amazon Data Import** ⭐ CRITICAL
-   - Wait for Amazon Order History Reporter extension to finish scraping
-   - Download the exported CSV file from the extension
+   - ✅ Amazon Order History Reporter extension has finished scraping
+   - ✅ CSV file exported and committed to git (amazon_order_history.csv)
    - Test import into TSV Ledger using existing CSV import functionality
    - Validate data mapping and handle any format discrepancies
 
 2. **Data Integration Testing**
    - Test Bank of America DAT file import (stmttab.dat available)
-   - Test Amazon CSV import once data is available
+   - Test Amazon CSV import with the new data file
    - Verify automatic column mapping works for both data sources
    - Add data validation and duplicate detection
 
 3. **UI/UX Improvements**
    - Add data visualization charts (expenditure by category, monthly trends)
    - Improve file upload interface with drag-and-drop
+   - Add progress indicators for large file imports
+   - Implement data filtering and search functionality
    - Add progress indicators for large file imports
    - Implement data filtering and search functionality
 
