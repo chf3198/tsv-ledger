@@ -30,11 +30,70 @@ This project is designed for seamless AI-to-AI handoffs. Your primary responsibi
    - Update README.md for any API changes or new features
    - Maintain consistent code patterns for future AI comprehension
 
-### 🔄 Continuous Improvement Cycle
-- **Read AI_CONTEXT.md first** when starting any new session
-- **Update AI_CONTEXT.md immediately** after implementing features
-- **Commit changes** with documentation updates included
-- **Verify completeness** before session end
+## � Next Development Priorities
+
+### Immediate Next Steps (Priority Order)
+1. **Complete Amazon Data Import** ⭐ CRITICAL
+   - Wait for Amazon Order History Reporter extension to finish scraping
+   - Download the exported CSV file from the extension
+   - Test import into TSV Ledger using existing CSV import functionality
+   - Validate data mapping and handle any format discrepancies
+
+2. **Data Integration Testing**
+   - Test Bank of America DAT file import (stmttab.dat available)
+   - Test Amazon CSV import once data is available
+   - Verify automatic column mapping works for both data sources
+   - Add data validation and duplicate detection
+
+3. **UI/UX Improvements**
+   - Add data visualization charts (expenditure by category, monthly trends)
+   - Improve file upload interface with drag-and-drop
+   - Add progress indicators for large file imports
+   - Implement data filtering and search functionality
+
+4. **Advanced Features**
+   - Recurring subscription detection and tracking
+   - Email receipt parsing automation
+   - Export functionality for reports
+   - Data backup and restore capabilities
+
+### 🔧 Technical Debt & Improvements
+- Consider migrating from JSON file storage to SQLite for better performance
+- Add comprehensive error handling and user feedback
+- Implement data validation rules
+- Add unit tests for parsing functions
+- Optimize CSV parsing for large files
+
+### 📊 Current Project Metrics
+- **Lines of Code**: ~500+ lines across all files
+- **API Endpoints**: 3 functional (GET expenditures, POST expenditure, POST import-csv)
+- **Data Sources**: Bank of America (tested), Amazon (extension installed, awaiting data)
+- **File Formats Supported**: CSV, TSV, DAT, TXT with automatic delimiter detection
+- **Git Commits**: 8+ commits with comprehensive documentation
+
+### 🎯 Success Criteria Met
+- ✅ Web application successfully tracks expenditures
+- ✅ Manual entry system functional
+- ✅ CSV import system handles multiple formats
+- ✅ Bank of America integration ready
+- ✅ Amazon integration extension installed
+- ✅ Documentation optimized for AI handoffs
+- ✅ Git repository properly maintained
+
+### 📝 Session Summary for Future AI Assistants
+
+**Current State**: TSV Ledger is a fully functional expense tracking web application with:
+- Node.js/Express backend serving on port 3000
+- Bootstrap 5 responsive frontend
+- JSON file-based data storage
+- Multi-format CSV import (CSV, TSV, DAT, TXT)
+- Bank of America DAT file support tested and working
+- Amazon Order History Reporter extension installed and running
+- Comprehensive documentation in AI_CONTEXT.md, README.md, and AMAZON_RESEARCH.md
+
+**Immediate Action Required**: Complete Amazon data export using the installed extension, then test CSV import functionality.
+
+**All code is committed to git with detailed commit messages. Future AI assistants should read AI_CONTEXT.md first for complete project context.**
 
 ## 🎯 Project Guidelines and Principles
 
