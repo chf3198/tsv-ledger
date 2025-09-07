@@ -7,9 +7,9 @@ const { getAllExpenditures, addExpenditure } = require('./database');
 const app = express();
 const port = 3000;
 
-// Middleware for parsing JSON and URL-encoded data
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+// Middleware for parsing JSON and URL-encoded data (with increased limits for CSV files)
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
 // Serve static files from the 'public' directory
 app.use(express.static(path.join(__dirname, 'public')));
@@ -84,58 +84,125 @@ app.post('/api/import-csv', (req, res) => {
       console.log('Raw data keys:', Object.keys(data));
       console.log('Raw data values:', Object.values(data));
 
-      // Skip the first 5 summary rows that have different column structure
-      if (lineNumber <= 5) {
-        console.log(`⏭️  SKIPPING SUMMARY ROW ${lineNumber}`);
-        skippedRows.push({ line: lineNumber, reason: 'summary row', data: data });
-        return;
+      // Detect file format based on column headers
+      const isAmazonFormat = data.hasOwnProperty('order id') || data.hasOwnProperty('Order ID') || data.hasOwnProperty('date');
+      const isBankFormat = data.hasOwnProperty('Description') && data.hasOwnProperty('') && data.hasOwnProperty('Amount');
+
+      console.log('Format detection - Amazon:', isAmazonFormat, 'Bank:', isBankFormat);
+
+      let dateValue, amountValue, descValue, expenditure;
+
+      if (isAmazonFormat) {
+        // Amazon CSV format handling
+        console.log('🛒 Processing Amazon order data');
+        
+        // Skip if no date or total
+        dateValue = data.date || data.Date;
+        const totalValue = data.total || data.Total;
+        
+        if (!dateValue || !totalValue || dateValue.trim() === '' || totalValue.trim() === '') {
+          console.log(`❌ SKIPPING: Missing Amazon date or total`);
+          skippedRows.push({ line: lineNumber, reason: 'missing Amazon date/total', data: data });
+          return;
+        }
+
+        // Skip orders with pending dates or zero amounts
+        if (dateValue.trim() === 'pending' || totalValue.trim() === '0' || totalValue.trim() === '') {
+          console.log(`❌ SKIPPING: Pending or zero amount order`);
+          skippedRows.push({ line: lineNumber, reason: 'pending or zero amount order', data: data });
+          return;
+        }
+
+        // Convert Amazon date format (YYYY-MM-DD) to MM/DD/YYYY
+        const amazonDate = dateValue.trim();
+        if (!/^\d{4}-\d{2}-\d{2}$/.test(amazonDate)) {
+          console.log(`❌ SKIPPING: Invalid Amazon date format: "${amazonDate}"`);
+          skippedRows.push({ line: lineNumber, reason: 'invalid Amazon date format', data: data });
+          return;
+        }
+
+        const [year, month, day] = amazonDate.split('-');
+        const formattedDate = `${month}/${day}/${year}`;
+
+        // Parse amount
+        const cleanAmount = totalValue.toString().replace(/[^\d.-]/g, '').trim();
+        const parsedAmount = parseFloat(cleanAmount);
+
+        if (isNaN(parsedAmount) || parsedAmount === 0) {
+          console.log(`❌ SKIPPING: Invalid Amazon amount: "${totalValue}" -> ${parsedAmount}`);
+          skippedRows.push({ line: lineNumber, reason: 'invalid Amazon amount', data: data });
+          return;
+        }
+
+        // Create description from items (truncate if too long)
+        const items = data.items || data.Items || '';
+        const truncatedItems = items.length > 100 ? items.substring(0, 97) + '...' : items;
+        const orderId = data['order id'] || data['Order ID'] || '';
+        
+        expenditure = {
+          date: formattedDate,
+          amount: -Math.abs(parsedAmount), // Amazon purchases are negative expenditures
+          category: 'supplies restocking',
+          description: `Amazon Order ${orderId}: ${truncatedItems}`.trim()
+        };
+
+      } else {
+        // Bank of America format handling (existing logic)
+        console.log('🏦 Processing Bank data');
+        
+        // Skip the first 5 summary rows that have different column structure
+        if (lineNumber <= 5) {
+          console.log(`⏭️  SKIPPING SUMMARY ROW ${lineNumber}`);
+          skippedRows.push({ line: lineNumber, reason: 'summary row', data: data });
+          return;
+        }
+
+        // Check if this row has a valid date
+        // For Bank of America format: Date is in 'Description' column, Description is in '' column
+        dateValue = data.Date || data.date || data['Transaction Date'] || data['Description'];
+        console.log('Date value found:', dateValue);
+
+        if (!dateValue || dateValue.trim() === '') {
+          console.log(`❌ SKIPPING: No date field`);
+          skippedRows.push({ line: lineNumber, reason: 'no date field', data: data });
+          return;
+        }
+
+        if (!/^\d{2}\/\d{2}\/\d{4}$/.test(dateValue.trim())) {
+          console.log(`❌ SKIPPING: Invalid date format: "${dateValue}"`);
+          skippedRows.push({ line: lineNumber, reason: 'invalid date format', data: data });
+          return;
+        }
+
+        // Try to extract amount
+        amountValue = data.Amount || data.amount || data['Transaction Amount'] || data['Summary Amt.'];
+        console.log('Amount value found:', amountValue);
+
+        const cleanAmount = amountValue ? amountValue.toString().replace(/"/g, '').trim() : '0';
+        const parsedAmount = parseFloat(cleanAmount);
+
+        console.log('Clean amount:', cleanAmount);
+        console.log('Parsed amount:', parsedAmount);
+
+        if (isNaN(parsedAmount) || parsedAmount === 0) {
+          console.log(`❌ SKIPPING: Invalid amount: "${amountValue}" -> ${parsedAmount}`);
+          skippedRows.push({ line: lineNumber, reason: 'invalid amount', data: data });
+          return;
+        }
+
+        // Try to extract description
+        // For Bank of America format: Description is in the empty column ''
+        descValue = data[''] || data.Description || data.description || data['Transaction Description'];
+        console.log('Description value found:', descValue);
+
+        // Create expenditure object
+        expenditure = {
+          date: dateValue.trim(),
+          amount: parsedAmount,
+          category: data.Category || data.category || 'supplies restocking',
+          description: descValue ? descValue.toString().replace(/"/g, '').trim() : 'Imported from data file'
+        };
       }
-
-      // Check if this row has a valid date
-      // For Bank of America format: Date is in 'Description' column, Description is in '' column
-      const dateValue = data.Date || data.date || data['Transaction Date'] || data['Description'];
-      console.log('Date value found:', dateValue);
-
-      if (!dateValue || dateValue.trim() === '') {
-        console.log(`❌ SKIPPING: No date field`);
-        skippedRows.push({ line: lineNumber, reason: 'no date field', data: data });
-        return;
-      }
-
-      if (!/^\d{2}\/\d{2}\/\d{4}$/.test(dateValue.trim())) {
-        console.log(`❌ SKIPPING: Invalid date format: "${dateValue}"`);
-        skippedRows.push({ line: lineNumber, reason: 'invalid date format', data: data });
-        return;
-      }
-
-      // Try to extract amount
-      const amountValue = data.Amount || data.amount || data['Transaction Amount'] || data['Summary Amt.'];
-      console.log('Amount value found:', amountValue);
-
-      const cleanAmount = amountValue ? amountValue.toString().replace(/"/g, '').trim() : '0';
-      const parsedAmount = parseFloat(cleanAmount);
-
-      console.log('Clean amount:', cleanAmount);
-      console.log('Parsed amount:', parsedAmount);
-
-      if (isNaN(parsedAmount) || parsedAmount === 0) {
-        console.log(`❌ SKIPPING: Invalid amount: "${amountValue}" -> ${parsedAmount}`);
-        skippedRows.push({ line: lineNumber, reason: 'invalid amount', data: data });
-        return;
-      }
-
-      // Try to extract description
-      // For Bank of America format: Description is in the empty column ''
-      const descValue = data[''] || data.Description || data.description || data['Transaction Description'];
-      console.log('Description value found:', descValue);
-
-      // Create expenditure object
-      const expenditure = {
-        date: dateValue.trim(),
-        amount: parsedAmount,
-        category: data.Category || data.category || 'supplies restocking',
-        description: descValue ? descValue.toString().replace(/"/g, '').trim() : 'Imported from data file'
-      };
 
       console.log('✅ CREATED EXPENDITURE:', expenditure);
       results.push(expenditure);

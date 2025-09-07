@@ -71,13 +71,18 @@ This project is designed for seamless AI-to-AI handoffs. Your primary responsibi
 ## � Next Development Priorities
 
 ### Immediate Next Steps (Priority Order)
-1. **Complete Amazon Data Import** ⭐ CRITICAL
-   - ✅ Amazon Order History Reporter extension has finished scraping
+1. **Amazon Data Import - IN PROGRESS** ⭐ CRITICAL
+   - ✅ Amazon Order History Reporter extension completed scraping (685 orders)
    - ✅ CSV file exported and committed to git (amazon_order_history.csv)
-   - Test import into TSV Ledger using existing CSV import functionality
-   - Validate data mapping and handle any format discrepancies
+   - ✅ Enhanced CSV import parser to handle Amazon format with dual format detection
+   - ✅ Added support for YYYY-MM-DD to MM/DD/YYYY date conversion
+   - ✅ Implemented filtering for pending orders and zero amounts
+   - ✅ Successfully tested single Amazon order import
+   - 🔧 **Current Issue**: Server payload limit increased, format detection improved
+   - 📊 **Status**: 105 valid orders identified out of 685 total entries
+   - 🎯 **Next**: Complete bulk import of all valid Amazon orders
 
-2. **Data Integration Testing**
+2. **Data Integration and Validation**
    - Test Bank of America DAT file import (stmttab.dat available)
    - Test Amazon CSV import with the new data file
    - Verify automatic column mapping works for both data sources
