@@ -100,12 +100,23 @@ class TSVCategorizer {
       category: 'General',
       subcategory: null,
       location: this.detectLocation(order.items),
-      isSubscribeAndSave: this.detectSubscribeAndSave(order),
+      subscribeAndSave: this.detectSubscribeAndSave(order),
       isEmployeeBenefit: this.detectEmployeeBenefit(order.items),
       businessPurpose: this.determinBusinessPurpose(order.items),
       seasonality: this.detectSeasonality(order.date, order.items),
-      insights: []
+      insights: [],
+      dataQuality: {
+        hasOrderId: !!(order.orderId && order.orderId !== 'Unknown'),
+        hasItems: !!(order.items && order.items.length > 10),
+        hasAmount: !!(order.amount && !isNaN(order.amount)),
+        hasDate: !!(order.date && order.date !== 'Invalid Date'),
+        completeness: 0
+      }
     };
+
+    // Calculate data completeness score
+    const qualityChecks = Object.values(analysis.dataQuality).filter(v => typeof v === 'boolean');
+    analysis.dataQuality.completeness = qualityChecks.filter(Boolean).length / qualityChecks.length;
 
     // Determine primary category
     const categoryResult = this.categorizeItems(order.items);
@@ -120,7 +131,7 @@ class TSVCategorizer {
 
   // Detect property location based on item description
   detectLocation(items) {
-    const itemsLower = items.toLowerCase();
+    const itemsLower = (items || '').toString().toLowerCase();
     
     let freeportScore = 0;
     let smithvilleScore = 0;
@@ -153,18 +164,61 @@ class TSVCategorizer {
 
   // Detect Subscribe & Save orders
   detectSubscribeAndSave(order) {
-    const itemsLower = order.items.toLowerCase();
-    const paymentsLower = (order.payments || '').toLowerCase();
+    // Defensive programming - handle malformed data
+    const itemsLower = (order.items || '').toString().toLowerCase();
+    const paymentsLower = (order.payments || '').toString().toLowerCase();
 
-    // Check for Subscribe & Save keywords in item description or payment info
-    return this.subscribeAndSaveKeywords.some(keyword => 
+    // Enhanced detection patterns
+    const subscribePatterns = [
+      'subscribe & save', 'subscribe and save', 'subscription', 'recurring',
+      'monthly delivery', 'automatic delivery', 'regular delivery', 'auto-delivery'
+    ];
+
+    // Check for explicit Subscribe & Save indicators
+    const hasSubscribeKeywords = subscribePatterns.some(keyword => 
       itemsLower.includes(keyword) || paymentsLower.includes(keyword)
-    ) || order.shipping === '0'; // Free shipping often indicates S&S
+    );
+
+    // Heuristic: Free shipping often indicates Subscribe & Save
+    const hasFreeShipping = order.shipping === '0' || order.shipping === 0;
+
+    // Heuristic: Round dollar amounts sometimes indicate S&S discounts
+    const amount = Math.abs(parseFloat(order.amount) || 0);
+    const isRoundAmount = amount % 1 === 0;
+
+    // Enhanced heuristic: Check for common S&S product patterns
+    const commonSSProducts = [
+      'detergent', 'paper towels', 'toilet paper', 'cleaning', 'soap',
+      'water bottles', 'coffee', 'pet food', 'vitamins', 'supplements',
+      'dishwasher', 'laundry', 'trash bags', 'tissues', 'shampoo'
+    ];
+    
+    const isCommonSSProduct = commonSSProducts.some(product => 
+      itemsLower.includes(product)
+    );
+
+    // Multiple indicators suggest Subscribe & Save
+    let confidence = 0;
+    if (hasSubscribeKeywords) confidence += 0.8;
+    if (hasFreeShipping && isCommonSSProduct) confidence += 0.6;
+    if (isRoundAmount && isCommonSSProduct) confidence += 0.3;
+    if (isCommonSSProduct) confidence += 0.2;
+
+    return {
+      isSubscribeAndSave: confidence >= 0.5,
+      confidence: confidence,
+      indicators: {
+        hasKeywords: hasSubscribeKeywords,
+        freeShipping: hasFreeShipping,
+        commonProduct: isCommonSSProduct,
+        roundAmount: isRoundAmount
+      }
+    };
   }
 
   // Detect employee benefit items
   detectEmployeeBenefit(items) {
-    const itemsLower = items.toLowerCase();
+    const itemsLower = (items || '').toString().toLowerCase();
     return this.employeeBenefitKeywords.some(keyword => 
       itemsLower.includes(keyword)
     );
@@ -172,7 +226,7 @@ class TSVCategorizer {
 
   // Categorize items into business categories
   categorizeItems(items) {
-    const itemsLower = items.toLowerCase();
+    const itemsLower = (items || '').toString().toLowerCase();
     let bestMatch = { category: 'General', subcategory: null, score: 0 };
 
     Object.entries(this.categories).forEach(([category, data]) => {
@@ -206,7 +260,7 @@ class TSVCategorizer {
 
   // Determine business purpose
   determinBusinessPurpose(items) {
-    const itemsLower = items.toLowerCase();
+    const itemsLower = (items || '').toString().toLowerCase();
 
     if (itemsLower.includes('guest') || itemsLower.includes('client')) {
       return 'Guest Experience';
@@ -226,8 +280,21 @@ class TSVCategorizer {
 
   // Detect seasonal patterns
   detectSeasonality(date, items) {
-    const month = new Date(date).getMonth() + 1; // 1-12
-    const itemsLower = items.toLowerCase();
+    // Handle potential invalid dates
+    let month;
+    try {
+      const parsedDate = new Date(date);
+      if (isNaN(parsedDate.getTime())) {
+        // Fallback to current month if date is invalid
+        month = new Date().getMonth() + 1;
+      } else {
+        month = parsedDate.getMonth() + 1; // 1-12
+      }
+    } catch (error) {
+      month = new Date().getMonth() + 1; // Fallback
+    }
+    
+    const itemsLower = (items || '').toString().toLowerCase();
 
     const seasons = {
       'Winter': [12, 1, 2],
@@ -261,33 +328,70 @@ class TSVCategorizer {
 
   // Add contextual insights
   addInsights(analysis) {
-    if (analysis.isSubscribeAndSave) {
-      analysis.insights.push('Subscribe & Save order - predictable recurring expense');
+    if (analysis.subscribeAndSave.isSubscribeAndSave) {
+      const confidence = (analysis.subscribeAndSave.confidence * 100).toFixed(0);
+      analysis.insights.push({
+        type: 'subscribe_save',
+        message: `Subscribe & Save order detected (${confidence}% confidence)`,
+        explanation: `Based on: ${Object.entries(analysis.subscribeAndSave.indicators)
+          .filter(([k,v]) => v).map(([k,v]) => k).join(', ')}`,
+        recommendation: 'Predictable recurring expense for budget planning'
+      });
     }
 
     if (analysis.isEmployeeBenefit) {
-      analysis.insights.push('Employee benefit/perk item - consider budget allocation');
+      analysis.insights.push({
+        type: 'employee_benefit',
+        message: 'Employee benefit/perk item identified',
+        explanation: 'Item matches corporate perk categories: coffee, snacks, office supplies, cleaning supplies, etc.',
+        recommendation: 'Consider dedicated employee benefits budget allocation'
+      });
     }
 
     if (analysis.location !== 'Both Properties') {
-      analysis.insights.push(`Property-specific purchase for ${analysis.location}`);
+      analysis.insights.push({
+        type: 'location_specific',
+        message: `Property-specific purchase for ${analysis.location}`,
+        explanation: `Item keywords suggest specific use at ${analysis.location} property`,
+        recommendation: 'Track property-specific expenses for cost allocation'
+      });
     }
 
     if (analysis.seasonality.seasonalItems.length > 0) {
-      analysis.insights.push(`Seasonal item: ${analysis.seasonality.seasonalItems.join(', ')}`);
+      analysis.insights.push({
+        type: 'seasonal',
+        message: `Seasonal item: ${analysis.seasonality.seasonalItems.join(', ')}`,
+        explanation: 'Item has seasonal usage patterns that can help with budget planning',
+        recommendation: 'Plan seasonal inventory and budget allocation'
+      });
     }
 
     // Budget planning insights
-    if (analysis.amount > 50) {
-      analysis.insights.push('High-value purchase - review for budget planning');
+    if (Math.abs(analysis.amount) > 50) {
+      analysis.insights.push({
+        type: 'high_value',
+        message: 'High-value purchase identified',
+        explanation: `Purchase amount $${Math.abs(analysis.amount)} exceeds $50 threshold`,
+        recommendation: 'Review for budget planning and approval processes'
+      });
     }
 
     if (analysis.category === 'Property Maintenance') {
-      analysis.insights.push('Maintenance expense - track for property upkeep budgets');
+      analysis.insights.push({
+        type: 'maintenance',
+        message: 'Property maintenance expense',
+        explanation: 'Categorized as maintenance based on item keywords and patterns',
+        recommendation: 'Track for property upkeep budgets and maintenance schedules'
+      });
     }
 
     if (analysis.category === 'Marketing & Photography') {
-      analysis.insights.push('Marketing investment - measure ROI impact');
+      analysis.insights.push({
+        type: 'marketing',
+        message: 'Marketing investment identified',
+        explanation: 'Photography, marketing materials, or promotional items detected',
+        recommendation: 'Measure ROI impact on bookings and brand visibility'
+      });
     }
   }
 
