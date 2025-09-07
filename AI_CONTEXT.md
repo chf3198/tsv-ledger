@@ -50,24 +50,38 @@ This project is designed for seamless AI-to-AI handoffs. Your primary responsibi
 1. **Licensing**: Internal use only - no licensing requirements
 2. **Tool Selection**: Prefer free/open-source tools and services
 3. **Research Protocol**: Always research existing solutions before implementing
-4. **Code Simplicity**: Write clear, simple code that requires minimal context to understand
-5. **AI Integration**: Design code to be AI-friendly with comprehensive comments
-6. **Automation**: Look for opportunities to automate development and operational tasks
+4. **Code Simplicity**: Write clear code requiring minimal context to understand
+5. **AI Integration**: Design AI-friendly code with comprehensive comments
+6. **Automation**: Look for automation opportunities in development and operations
 
 ### Implementation Principles
-- **Modular Design**: Keep components simple and loosely coupled
-- **Clear Documentation**: Every function, class, and complex logic must be well-commented
-- **Consistent Patterns**: Use consistent coding patterns for predictability
-- **Minimal Dependencies**: Only add dependencies when absolutely necessary
-- **Testability**: Write code that can be easily tested and maintained
+- **Modular Design**: Simple, loosely coupled components
+- **Clear Documentation**: Well-commented functions and logic
+- **Consistent Patterns**: Predictable coding patterns
+- **Minimal Dependencies**: Only add when absolutely necessary
+- **Testability**: Easily testable and maintainable code
 
 ### Research and Learning
-- **Online Research**: Regularly check for new tools, libraries, and best practices
-- **Open Source Utilization**: Leverage existing open-source solutions
-- **Community Resources**: Use free documentation, tutorials, and community support
+- **Online Research**: Regularly check for new tools and best practices
+- **Open Source Utilization**: Leverage existing solutions
+- **Community Resources**: Use free documentation and support
 - **Technology Evaluation**: Continuously evaluate new free tools and services
 
 ---
+
+## Project Overview
+**TSV Ledger** is a web application for tracking and analyzing expenditures for Texas Sunset Venues (texassunsetvenues.com). The goal is to automate data gathering where possible while providing manual entry capabilities.
+
+**Date Created**: September 6, 2025
+**Current Status**: MVP with manual entry and CSV import
+**Tech Stack**: Node.js + Express backend, Bootstrap 5 frontend, JSON file storage
+
+## Core Objectives
+- Build a web app to track expenditures
+- Automate data gathering (email parsing, CSV import, recurring subscriptions)
+- Provide dashboard, manual entry, CSV import, reports, and export functionality
+- Internal use only (no license required)
+- Optimize documentation and code for future AI assistants
 
 ## Project Overview
 **TSV Ledger** is a web application for tracking and analyzing expenditures for Texas Sunset Venues (texassunsetvenues.com). The goal is to automate data gathering where possible while providing manual entry capabilities.
