@@ -98,7 +98,15 @@ This project is designed for seamless AI-to-AI handoffs. Your primary responsibi
    - Real-time list display of expenditures
    - API endpoints: GET/POST /api/expenditures
 
-3. **Project Infrastructure**
+3. **CSV Import Functionality** ⭐ NEW
+   - File upload interface for CSV files
+   - CSV parsing with csv-parser library
+   - Automatic mapping of common CSV column names
+   - Error handling for malformed data
+   - Bulk import with progress feedback
+   - API endpoint: POST /api/import-csv
+
+4. **Project Infrastructure**
    - Git repository initialized with proper commits
    - Comprehensive .gitignore
    - Detailed README.md with API docs
