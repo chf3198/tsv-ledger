@@ -36,7 +36,36 @@ This project is designed for seamless AI-to-AI handoffs. Your primary responsibi
 - **Commit changes** with documentation updates included
 - **Verify completeness** before session end
 
-**Remember**: This file is the single source of truth for project continuity. Treat it with the same importance as the codebase itself.
+## 🎯 Project Guidelines and Principles
+
+### Core Development Philosophy
+- **AI-First Approach**: Leverage AI assistance extensively throughout development
+- **Future-Proofing**: Design with extensibility and AI compatibility in mind
+- **Automation Priority**: Automate repetitive tasks and processes wherever possible
+- **Free/Open Source Focus**: Utilize free tools, services, and open-source libraries
+- **Research-Driven**: Conduct online research to avoid reinventing solutions
+- **Simplicity First**: Keep code simple, organized, and easily comprehensible
+
+### Development Guidelines
+1. **Licensing**: Internal use only - no licensing requirements
+2. **Tool Selection**: Prefer free/open-source tools and services
+3. **Research Protocol**: Always research existing solutions before implementing
+4. **Code Simplicity**: Write clear, simple code that requires minimal context to understand
+5. **AI Integration**: Design code to be AI-friendly with comprehensive comments
+6. **Automation**: Look for opportunities to automate development and operational tasks
+
+### Implementation Principles
+- **Modular Design**: Keep components simple and loosely coupled
+- **Clear Documentation**: Every function, class, and complex logic must be well-commented
+- **Consistent Patterns**: Use consistent coding patterns for predictability
+- **Minimal Dependencies**: Only add dependencies when absolutely necessary
+- **Testability**: Write code that can be easily tested and maintained
+
+### Research and Learning
+- **Online Research**: Regularly check for new tools, libraries, and best practices
+- **Open Source Utilization**: Leverage existing open-source solutions
+- **Community Resources**: Use free documentation, tutorials, and community support
+- **Technology Evaluation**: Continuously evaluate new free tools and services
 
 ---
 
