@@ -1,0 +1,143 @@
+# TSV Ledger - AI Assistant Context File
+
+## Project Overview
+**TSV Ledger** is a web application for tracking and analyzing expenditures for Texas Sunset Venues (texassunsetvenues.com). The goal is to automate data gathering where possible while providing manual entry capabilities.
+
+**Date Created**: September 6, 2025
+**Current Status**: MVP functional with manual entry
+**Tech Stack**: Node.js + Express backend, Bootstrap 5 frontend, JSON file storage
+
+## Core Objectives
+- Build a web app to track expenditures
+- Automate data gathering (email parsing, CSV import, recurring subscriptions)
+- Provide dashboard, manual entry, CSV import, reports, and export functionality
+- Internal use only (no license required)
+- Optimize documentation and code for future AI assistants
+
+## Current Implementation Status
+
+### ✅ Completed Features
+1. **Basic Web App Structure**
+   - Node.js Express server (server.js)
+   - Bootstrap 5 responsive frontend (public/index.html)
+   - Client-side JavaScript (public/js/app.js)
+   - JSON file-based data storage (database.js)
+
+2. **Manual Entry System**
+   - Form for adding expenditures (date, amount, category, description)
+   - Categories: Tool Subscriptions, Maintenance Payments, Supplies Restocking
+   - Real-time list display of expenditures
+   - API endpoints: GET/POST /api/expenditures
+
+3. **Project Infrastructure**
+   - Git repository initialized with proper commits
+   - Comprehensive .gitignore
+   - Detailed README.md with API docs
+   - Package.json with dependencies
+   - Self-documenting code with comments
+
+### 🔄 Current Architecture
+```
+tsv-ledger/
+├── server.js              # Express server (port 3000)
+├── database.js            # JSON file operations
+├── expenditures.json      # Data storage (auto-created)
+├── package.json           # Dependencies: express
+├── .gitignore             # Node.js ignores
+├── README.md              # Full documentation
+└── public/
+    ├── index.html         # Dashboard with Bootstrap UI
+    └── js/app.js          # Frontend JavaScript
+```
+
+### 🚀 API Endpoints
+- `GET /api/expenditures` - Retrieve all expenditures
+- `POST /api/expenditures` - Add new expenditure
+- `GET /` - Serve main dashboard
+
+## Next Development Priorities
+
+### High Priority
+1. **CSV Import Functionality**
+   - File upload endpoint
+   - CSV parsing for bank/credit card statements
+   - Data validation and mapping
+   - Bulk import with error handling
+
+2. **Reports and Analytics**
+   - Summary dashboard with totals by category
+   - Date range filtering
+   - Export to CSV functionality
+   - Basic charts/visualizations
+
+### Medium Priority
+3. **Data Storage Upgrade**
+   - Migrate from JSON to SQLite database
+   - Add data validation
+   - Implement proper error handling
+   - Add backup/restore functionality
+
+4. **Enhanced UI/UX**
+   - Edit/delete expenditure functionality
+   - Search and filter capabilities
+   - Better mobile responsiveness
+   - Loading states and user feedback
+
+### Future Features
+5. **Automation Features**
+   - Email parsing for receipts
+   - Recurring subscription detection
+   - Automatic categorization
+   - Integration with financial APIs
+
+## Technical Decisions Made
+- **Storage**: Started with JSON for simplicity, plan to upgrade to SQLite
+- **Frontend**: Bootstrap 5 for rapid development and consistency
+- **Backend**: Express.js for lightweight API
+- **Version Control**: Git with descriptive commits
+- **Documentation**: Comprehensive README and inline code comments
+
+## Current Data Structure
+```json
+{
+  "id": 1,
+  "date": "2025-09-06",
+  "amount": 99.99,
+  "category": "tool subscriptions",
+  "description": "Adobe Creative Cloud subscription"
+}
+```
+
+## Setup Instructions
+1. Navigate to project directory: `cd /mnt/chromeos/removable/Drive/repos/tsv-ledger`
+2. Install dependencies: `npm install`
+3. Start server: `npm start`
+4. Access app: http://localhost:3000
+
+## Development Guidelines
+- Use descriptive commit messages
+- Add comments for complex logic
+- Update README.md for API changes
+- Test functionality before committing
+- Keep code modular and well-documented
+
+## Pending Decisions
+- Database choice (JSON vs SQLite vs PostgreSQL)
+- Authentication requirements (currently internal only)
+- Deployment strategy
+- Backup and data retention policies
+
+## Key Files to Review
+- `README.md` - Complete project documentation
+- `server.js` - Main application logic
+- `database.js` - Data operations
+- `public/index.html` - Frontend structure
+- `public/js/app.js` - Frontend interactions
+
+## Git Status
+- Repository: Initialized and committed
+- Branch: master
+- Last commit: Initial setup of TSV Ledger MVP
+- Working tree: Clean
+
+This context file provides everything needed to continue development seamlessly. Focus on CSV import and reports for the next iteration of the MVP.
