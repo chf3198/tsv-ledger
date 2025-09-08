@@ -1,0 +1,26 @@
+# TSV Ledger Protocol Customizations
+# These are project-specific adaptations of the v1.0 protocols
+
+## Business Domain Customizations
+- Texas Sunset Venues property management specific business rules
+- Property portfolio analysis and optimization methodologies
+- Amazon integration for property management expenses
+- Subscribe & Save optimization business logic
+
+## AI System Customizations  
+- Property expense categorization algorithm documentation
+- Confidence scoring for transaction classification
+- AI analysis engine for business intelligence
+- Automated categorization with manual review workflows
+
+## Technical Customizations
+- Node.js 22.19.0 specific implementation patterns
+- Express.js server architecture for property management
+- TSV data processing and analysis methodologies
+- Property management API design patterns
+
+## Documentation Customizations
+- Property management domain knowledge capture
+- Texas business context and regulatory considerations
+- Industry-specific terminology and business processes
+- Real estate and property management best practices
