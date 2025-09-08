@@ -869,7 +869,7 @@ app.get('/api/amazon-items', (req, res) => {
 
         // Apply any stored edits to the items
         try {
-          const editsFile = path.join(__dirname, 'amazon_item_edits.json');
+          const editsFile = path.join(__dirname, 'data', 'amazon_item_edits.json');
           if (fs.existsSync(editsFile)) {
             const edits = JSON.parse(fs.readFileSync(editsFile, 'utf8'));
             
@@ -931,7 +931,7 @@ app.put('/api/amazon-items/:id', (req, res) => {
     }
 
     // Load or create Amazon item edits file
-    const editsFile = path.join(__dirname, 'amazon_item_edits.json');
+    const editsFile = path.join(__dirname, 'data', 'amazon_item_edits.json');
     let edits = {};
     
     try {
