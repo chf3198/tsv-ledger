@@ -4,21 +4,41 @@
  * @fileoverview Main server application for Texas Sunset Venues expense tracking
  *               and business intelligence platform. Provides REST API endpoints
  *               for data import, analysis, and comprehensive business insights.
+ *               Features complete Amazon order management, AI-powered analysis,
+ *               and premium business intelligence capabilities.
  * 
- * @version 2.1.0
+ * @version 2.2.1
  * @author GitHub Copilot (Claude Sonnet 3.5)
  * @since 2025-09-05
- * @updated 2025-09-07
+ * @updated 2025-09-08
  * 
  * @requires express Express.js web framework
- * @requires csv-parser CSV parsing library
- * @requires ./tsv-categorizer Business intelligence categorization engine
- * @requires ./database JSON database operations
+ * @requires csv-parser CSV parsing library for Amazon order import
+ * @requires ./src/tsv-categorizer Business intelligence categorization engine
+ * @requires ./src/database JSON database operations and persistence
+ * @requires ./src/ai-analysis-engine AI-powered analysis and insights
+ * 
+ * @features
+ * - Amazon order import and CRUD operations
+ * - AI-powered expense categorization
+ * - Premium business intelligence analytics
+ * - Employee benefits filtering
+ * - Subscribe & Save detection
+ * - Comprehensive testing API endpoints
+ * - Real-time data analysis
  * 
  * @example
  * // Start the server
  * node server.js
  * // Access at http://localhost:3000
+ * 
+ * @example
+ * // Development with auto-reload
+ * npm run dev
+ * 
+ * @example
+ * // Run comprehensive tests
+ * npm test
  */
 
 const express = require('express');

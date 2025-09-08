@@ -1,20 +1,55 @@
 # TSV Ledger - Advanced Business Intelligence Platform
 
-**Version:** 2.1.0  
-**Last Updated:** September 7, 2025  
-**Status:** Production Ready
+**Version:** 2.2.1  
+**Last Updated:** September 8, 2025  
+**Status:** Production Ready - Professionally Organized
 
-Advanced expense tracking and business intelligence platform for Texas Sunset Venues (texassunsetvenues.com), featuring comprehensive analysis, automated testing, and interactive insights with enhanced Subscribe & Save detection and real-time tooltips.
+Advanced expense tracking and business intelligence platform for Texas Sunset Venues (texassunsetvenues.com), featuring comprehensive analysis, automated testing, interactive insights, and professional codebase organization.
 
-## 🚀 **New in Version 2.1.0**
+## 🎯 **Project Highlights (v2.2.1)**
 
-- ✅ **Enhanced Subscribe & Save Detection** (80% confidence, 156 orders detected)
-- ✅ **Comprehensive Unit Testing Framework** (90.9% success rate)
-- ✅ **Interactive Tooltip System** (Tippy.js integration with explanations)
-- ✅ **Data Quality Dashboard** with confidence metrics
-- ✅ **Console Testing Tools** for rapid development iteration
-- ✅ **Performance Optimization** (19,290 orders/second processing)
-- ✅ **Robust Error Handling** for malformed data and edge cases
+- ✅ **Complete Codebase Organization** - Professional directory structure with 8 organized modules
+- ✅ **Comprehensive Documentation** - 17 documentation files covering all aspects
+- ✅ **Extensive Testing Framework** - 20+ test files with full feature coverage  
+- ✅ **Enhanced Business Intelligence** - AI-powered analysis with premium features
+- ✅ **Amazon Integration** - Full CRUD operations for Amazon order management
+- ✅ **Developer Experience** - CLI tools, automation scripts, and detailed handoff guides
+- ✅ **Git Workflow Optimization** - Conventional commits with semantic versioning
+
+## 📁 **Professional Architecture**
+
+```
+tsv-ledger/
+├── 📂 src/               # Core business logic (5 modules)
+├── 📂 tests/             # Testing framework (20+ files) 
+├── 📂 docs/              # Documentation hub (17 files)
+├── 📂 data/              # Data storage (10 files)
+├── 📂 utils/             # Utility scripts (11 tools)
+├── 📂 demos/             # Feature demonstrations
+├── 📂 servers/           # Alternative implementations
+├── 📂 scripts/           # Automation tools
+├── 📂 public/            # Frontend assets
+└── 📂 BestPractices/     # Knowledge transfer framework
+    ├── Generic/          # Framework-agnostic patterns
+    └── ProjectSpecific/  # TSV Ledger domain knowledge
+```
+
+## 📚 **Knowledge Transfer & Documentation**
+
+This project includes a comprehensive **BestPractices framework** for seamless knowledge transfer:
+
+### 🌐 **Generic Patterns** (`BestPractices/Generic/`)
+- **CodeOrganizationFramework** - Universal directory structure principles
+- **GitWorkflowPatterns** - Version control best practices
+- **DocumentationFramework** - Knowledge transfer standards
+
+### 🎯 **Project-Specific Knowledge** (`BestPractices/ProjectSpecific/`)
+- **HANDOFF_GUIDE** - Complete project handoff documentation
+- **BusinessDomainKnowledge** - Texas Sunset Venues business context
+- **TechnicalArchitecture** - System design and implementation details
+- **API_DOCUMENTATION** - Complete REST API reference
+
+**→ Start with [`BestPractices/README.md`](BestPractices/README.md) for complete framework overview**
 
 ## 📊 **Current Performance Metrics**
 

@@ -1,7 +1,7 @@
 {
   "name": "tsv-ledger",
   "version": "2.2.1",
-  "description": "Advanced expense tracking and business intelligence platform for Texas Sunset Venues with comprehensive analysis and testing framework",
+  "description": "Advanced expense tracking and business intelligence platform for Texas Sunset Venues with comprehensive Amazon integration, AI-powered analysis, professional organization, and extensive testing framework",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
