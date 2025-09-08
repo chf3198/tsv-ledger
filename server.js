@@ -390,7 +390,7 @@ app.post('/api/import-csv', (req, res) => {
 app.get('/api/premium-status', (req, res) => {
   try {
     // Check if we have premium fields in the data
-    fs.createReadStream('amazon_order_history.csv')
+    fs.createReadStream('data/amazon_order_history.csv')
       .pipe(csv())
       .on('data', (row) => {
         try {

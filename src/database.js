@@ -1,14 +1,31 @@
+/**
+ * Database Module - JSON File Operations
+ * 
+ * Handles all data persistence operations for the TSV Ledger application.
+ * Manages expenditure data storage and retrieval using JSON files.
+ * 
+ * @module database
+ * @author TSV Ledger Team
+ * @version 2.2.1
+ */
+
 const fs = require('fs');
 const path = require('path');
 
-const dataFile = path.join(__dirname, 'expenditures.json');
+// Data file path - look in parent directory from src/
+const dataFile = path.join(__dirname, '..', 'expenditures.json');
 
 // Initialize data file if it doesn't exist
 if (!fs.existsSync(dataFile)) {
   fs.writeFileSync(dataFile, JSON.stringify([]));
 }
 
-// Function to read expenditures from file
+/**
+ * Reads expenditures from the JSON data file
+ * 
+ * @returns {Array} Array of expenditure objects
+ * @throws {Error} Returns empty array if file read fails
+ */
 function readExpenditures() {
   try {
     const data = fs.readFileSync(dataFile, 'utf8');

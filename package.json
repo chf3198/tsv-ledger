@@ -1,6 +1,6 @@
 {
   "name": "tsv-ledger",
-  "version": "2.2.0",
+  "version": "2.2.1",
   "description": "Advanced expense tracking and business intelligence platform for Texas Sunset Venues with comprehensive analysis and testing framework",
   "main": "server.js",
   "scripts": {
@@ -13,6 +13,9 @@
     "test-interactive": "node quick-test.js interactive",
     "test-backend": "./smart-test.sh test quick",
     "test-cli": "./smart-test.sh test cli",
+    "test-amazon": "node tests/test-amazon-edit-feature.js",
+    "test-ux": "node tests/test-ux-amazon-edit.js",
+    "test-complete": "node tests/test-complete.js",
     "test-full": "node standalone-test.js full",
     "test-standalone": "node standalone-test.js quick",
     "server-start": "./smart-test.sh start",
