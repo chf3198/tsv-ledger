@@ -53,22 +53,32 @@ Advanced expense tracking and business intelligence platform for Texas Sunset Ve
 
 ```
 tsv-ledger/
-├── server.js              # Main Express server file
-├── database.js            # JSON file operations
-├── expenditures.json      # Data storage (auto-created)
-├── AMAZON_RESEARCH.md     # Amazon data format documentation
-├── AI_CONTEXT.md          # AI assistant handoff documentation
-├── amazonOrdrHist2025.dat # Amazon order history data file
-├── amazon-test-parser.js  # Amazon data parsing tests
-├── stmttab.dat            # Bank of America statement data
-├── test-parser.js         # Bank data parsing tests
-├── package.json           # Node.js dependencies and scripts
-├── public/                # Static frontend files
-│   ├── index.html         # Main dashboard page
-│   ├── js/
-│   │   └── app.js         # Client-side JavaScript
-│   └── css/               # Custom styles (if needed)
-└── README.md              # This file
+├── server.js                    # Main Express server file
+├── package.json                 # Node.js dependencies and scripts
+├── src/                         # Core source code
+│   ├── database.js             #   JSON database operations
+│   ├── tsv-categorizer.js      #   Business intelligence categorization
+│   └── ai-analysis-engine.js   #   AI-powered analysis engine
+├── tests/                       # Test suite
+│   ├── test-amazon-edit-feature.js  # Amazon editing tests
+│   ├── test-ux-amazon-edit.js       # UX validation tests
+│   └── test-complete.js             # Complete test runner
+├── docs/                        # Documentation
+│   ├── TESTING_COMPLETE.md     #   Testing infrastructure guide
+│   ├── AI_IMPLEMENTATION.md    #   AI features documentation
+│   └── CLI_TESTING.md          #   CLI testing reference
+├── data/                        # Data files
+│   ├── amazon_order_history.csv #   Amazon purchase data
+│   ├── stmttab.dat             #   Bank statement data
+│   └── expenditures.json       #   Application data storage
+├── utils/                       # Utility scripts
+│   ├── amazon-data-comparison.js #  Data comparison tools
+│   └── import-full-amazon.js     #  Data import utilities
+├── public/                      # Static frontend files
+│   ├── index.html              #   Main dashboard page
+│   ├── employee-benefits.html  #   Employee benefits interface
+│   └── js/app.js               #   Client-side JavaScript
+└── README.md                    # This file
 ```
 
 ## Setup Instructions

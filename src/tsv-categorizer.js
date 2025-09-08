@@ -1,7 +1,28 @@
-// TSV Ledger - Enhanced Categorization Engine
-// Provides intelligent categorization for Texas Sunset Venues expenditures
+/**
+ * TSV Ledger - Enhanced Categorization Engine
+ * 
+ * Provides intelligent categorization for Texas Sunset Venues expenditures.
+ * Implements business logic for property-specific categorization, location detection,
+ * and expense type classification.
+ * 
+ * @module TSVCategorizer
+ * @author TSV Ledger Team
+ * @version 2.2.1
+ * @since 1.0.0
+ */
 
+/**
+ * Main categorization engine for TSV Ledger application
+ * 
+ * @class TSVCategorizer
+ * @description Handles all business intelligence categorization logic
+ */
 class TSVCategorizer {
+  /**
+   * Initialize the categorization engine with predefined rules and keywords
+   * 
+   * @constructor
+   */
   constructor() {
     // Define property-specific keywords for location detection
     this.locationKeywords = {
