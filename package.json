@@ -10,7 +10,14 @@
     "test-quick": "node quick-test.js",
     "test-ss": "node quick-test.js ss",
     "test-categories": "node quick-test.js categories",
-    "test-interactive": "node quick-test.js interactive"
+    "test-interactive": "node quick-test.js interactive",
+    "test-backend": "./smart-test.sh test quick",
+    "test-cli": "./smart-test.sh test cli",
+    "test-full": "node standalone-test.js full",
+    "test-standalone": "node standalone-test.js quick",
+    "server-start": "./smart-test.sh start",
+    "server-stop": "./smart-test.sh stop",
+    "server-status": "./smart-test.sh status"
   },
   "dependencies": {
     "express": "^4.18.2",

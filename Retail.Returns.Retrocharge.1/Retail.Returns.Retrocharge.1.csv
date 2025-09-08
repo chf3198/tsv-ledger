@@ -1,0 +1,3 @@
+﻿"Contract Unit Id","Order Id","Resolution","Charge State","Replacement Order Id","Gift Card Id","Payment Method Service Type","Contract Creation Date"
+"7407746a-4b44-4376-9782-a49f48158146#07d09e2c-c358-4124-8073-bbb95a176e67","113-5376204-8467432","ReplacementOrder","ChargeSuccess","113-5376204-8467432","Not Applicable","WalletService","2025-02-11T00:55:34Z"
+"3485cc9b-b625-437b-89b9-98b24bb97b22#b5c1cf2a-61c7-4bb0-904f-c7fd781c75a0","113-3737530-4537867","ReplacementOrder","ChargeSuccess","113-3737530-4537867","Not Applicable","WalletService","2023-05-08T14:38:47Z"
