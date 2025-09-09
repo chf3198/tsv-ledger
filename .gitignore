@@ -9,6 +9,9 @@ yarn-error.log*
 *.bak
 *.backup
 
+# Exclude kt-cli-alpha (it's its own repository)
+kt-cli-alpha/
+
 # Runtime data
 pids
 *.pid

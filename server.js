@@ -186,13 +186,72 @@ app.post('/api/import-csv', (req, res) => {
 
       // Detect file format based on column headers
       const isAmazonFormat = data.hasOwnProperty('order id') || data.hasOwnProperty('Order ID') || data.hasOwnProperty('date');
+      const isAmazonOfficialFormat = data.hasOwnProperty('id') && data.hasOwnProperty('asin') && data.hasOwnProperty('source');
       const isBankFormat = data.hasOwnProperty('Description') && data.hasOwnProperty('') && data.hasOwnProperty('Amount');
 
-      console.log('Format detection - Amazon:', isAmazonFormat, 'Bank:', isBankFormat);
+      console.log('Format detection - Amazon Chrome:', isAmazonFormat, 'Amazon Official:', isAmazonOfficialFormat, 'Bank:', isBankFormat);
 
       let dateValue, amountValue, descValue, expenditure;
 
-      if (isAmazonFormat) {
+      if (isAmazonOfficialFormat) {
+        // Amazon Official Data format handling (Rich Amazon Export)
+        console.log('🏆 Processing Amazon OFFICIAL data with rich metadata');
+        
+        // Skip if no date or amount
+        dateValue = data.date || data.Date;
+        amountValue = data.amount || data.Amount;
+        
+        if (!dateValue || !amountValue || dateValue.trim() === '' || amountValue.trim() === '') {
+          console.log(`❌ SKIPPING: Missing Amazon official date or amount`);
+          skippedRows.push({ line: lineNumber, reason: 'missing Amazon official date/amount', data: data });
+          return;
+        }
+
+        // Convert Amazon date format (YYYY-MM-DD) to MM/DD/YYYY
+        const amazonDate = dateValue.trim();
+        if (!/^\d{4}-\d{2}-\d{2}$/.test(amazonDate)) {
+          console.log(`❌ SKIPPING: Invalid Amazon official date format: "${amazonDate}"`);
+          skippedRows.push({ line: lineNumber, reason: 'invalid Amazon official date format', data: data });
+          return;
+        }
+
+        const [year, month, day] = amazonDate.split('-');
+        const formattedDate = `${month}/${day}/${year}`;
+
+        // Parse amount
+        const cleanAmount = amountValue.toString().replace(/[^\d.-]/g, '').trim();
+        const parsedAmount = parseFloat(cleanAmount);
+
+        if (isNaN(parsedAmount) || parsedAmount === 0) {
+          console.log(`❌ SKIPPING: Invalid Amazon official amount: "${amountValue}" -> ${parsedAmount}`);
+          skippedRows.push({ line: lineNumber, reason: 'invalid Amazon official amount', data: data });
+          return;
+        }
+
+        // Create enriched order object with official Amazon data
+        const description = data.description || '';
+        const orderId = data.id || '';
+        const category = data.category || 'supplies restocking';
+        const asin = data.asin || '';
+        const source = data.source || 'amazon_official';
+        
+        expenditure = {
+          date: formattedDate,
+          amount: -Math.abs(parsedAmount), // Amazon purchases are negative expenditures
+          category: category,
+          description: description,
+          // Premium: Enhanced metadata for analysis
+          metadata: {
+            orderId: orderId,
+            asin: asin,
+            source: source,
+            originalCategory: category,
+            amazonDescription: description,
+            dataSource: 'amazon_official_export'
+          }
+        };
+
+      } else if (isAmazonFormat) {
         // Enhanced Amazon CSV format handling (Premium Extension)
         console.log('🛒 Processing Amazon order data with premium fields');
         
