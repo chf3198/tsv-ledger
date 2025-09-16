@@ -1189,13 +1189,13 @@ function processAmazonOrder(order, orderIndex, amazonItems, seenItems) {
   }
 }
 
-// POST /api/benefits-filter - Apply benefits filter
+// POST /api/employee-benefits-filter - Apply benefits filter with percentage allocations
 app.post('/api/employee-benefits-filter', (req, res) => {
   try {
-    const { itemIds } = req.body;
+    const { itemIds, itemAllocations } = req.body;
 
     if (!itemIds || !Array.isArray(itemIds) || itemIds.length === 0) {
-      return res.status(400).json({ 
+      return res.status(400).json({
         error: 'Item IDs are required',
         message: 'Please provide an array of item IDs to filter'
       });
@@ -1204,7 +1204,7 @@ app.post('/api/employee-benefits-filter', (req, res) => {
     getAllExpenditures((err, expenditures) => {
       if (err) {
         console.error('❌ Database error fetching expenditures for benefits filter:', err);
-        return res.status(500).json({ 
+        return res.status(500).json({
           error: 'Failed to fetch expenditures',
           message: 'Database operation failed'
         });
@@ -1213,7 +1213,7 @@ app.post('/api/employee-benefits-filter', (req, res) => {
       try {
         // Get all Amazon items
         const amazonItems = [];
-        const amazonOrders = expenditures.filter(exp => 
+        const amazonOrders = expenditures.filter(exp =>
           exp.description && exp.description.includes('Amazon Order')
         );
 
@@ -1236,18 +1236,26 @@ app.post('/api/employee-benefits-filter', (req, res) => {
           }
         }      if (items) {
               const itemList = items.includes(';') ? items.split(';').filter(item => item.trim()) : [items];
-              
+
               itemList.forEach((itemName, itemIndex) => {
                 const cleanItemName = itemName.trim();
                 if (cleanItemName) {
                   const itemId = `amazon_${orderId}_${itemIndex}`;
-                  const estimatedPrice = itemList.length > 1 ? 
+                  const estimatedPrice = itemList.length > 1 ?
                     (totalPrice / itemList.length) : totalPrice;
+
+                  // Get percentage allocation (default 100% if not specified)
+                  const allocation = itemAllocations?.[itemId] || 100;
+                  const benefitsAmount = (estimatedPrice * allocation) / 100;
+                  const operationalAmount = estimatedPrice - benefitsAmount;
 
                   amazonItems.push({
                     id: itemId,
                     name: cleanItemName,
                     price: estimatedPrice,
+                    benefitsAmount: benefitsAmount,
+                    operationalAmount: operationalAmount,
+                    allocationPercentage: allocation,
                     date: date,
                     orderId: orderId,
                     category: categorizeItem(cleanItemName),
@@ -1264,17 +1272,22 @@ app.post('/api/employee-benefits-filter', (req, res) => {
         // Filter selected items
         const selectedItems = amazonItems.filter(item => item.isSelected);
 
-        // Calculate summary
+        // Calculate summary with percentage allocations
         const summary = calculateBenefitsSummary(selectedItems);
 
         res.json({
           summary: summary,
           items: selectedItems,
-          totalFilteredValue: summary.totalAmount
+          totalFilteredValue: summary.totalAmount,
+          allocationBreakdown: {
+            totalBenefitsAmount: summary.totalBenefitsAmount,
+            totalOperationalAmount: summary.totalOperationalAmount,
+            averageAllocationPercentage: summary.averageAllocationPercentage
+          }
         });
       } catch (error) {
         console.error('❌ Error processing benefits filter:', error);
-        res.status(500).json({ 
+        res.status(500).json({
           error: 'Failed to process benefits filter',
           message: 'Data processing failed'
         });
@@ -1282,7 +1295,7 @@ app.post('/api/employee-benefits-filter', (req, res) => {
     });
   } catch (error) {
     console.error('❌ Error in benefits filter endpoint:', error);
-    res.status(500).json({ 
+    res.status(500).json({
       error: 'Server error',
       message: 'Internal server error'
     });
@@ -1350,42 +1363,66 @@ function categorizeItem(itemName) {
   return 'other';
 }
 
-// Helper function to calculate benefits summary
+// Helper function to calculate benefits summary with percentage allocations
 function calculateBenefitsSummary(items) {
   let totalAmount = 0;
+  let totalBenefitsAmount = 0;
+  let totalOperationalAmount = 0;
   const monthlyBreakdown = {};
   const categories = {};
-  
+  const allocationPercentages = [];
+
   items.forEach(item => {
     const price = parseFloat(item.price) || 0;
+    const benefitsAmount = parseFloat(item.benefitsAmount) || price;
+    const operationalAmount = parseFloat(item.operationalAmount) || 0;
+    const allocationPercentage = parseFloat(item.allocationPercentage) || 100;
+
     totalAmount += price;
-    
-    // Monthly breakdown
+    totalBenefitsAmount += benefitsAmount;
+    totalOperationalAmount += operationalAmount;
+    allocationPercentages.push(allocationPercentage);
+
+    // Monthly breakdown (using benefits amount for benefits tracking)
     const month = getMonthFromDate(item.date);
     if (!monthlyBreakdown[month]) {
-      monthlyBreakdown[month] = { amount: 0, items: 0 };
+      monthlyBreakdown[month] = { amount: 0, benefitsAmount: 0, operationalAmount: 0, items: 0 };
     }
     monthlyBreakdown[month].amount += price;
+    monthlyBreakdown[month].benefitsAmount += benefitsAmount;
+    monthlyBreakdown[month].operationalAmount += operationalAmount;
     monthlyBreakdown[month].items += 1;
-    
+
     // Category breakdown
     const category = item.category || 'other';
     if (!categories[category]) {
-      categories[category] = { count: 0, amount: 0 };
+      categories[category] = { count: 0, amount: 0, benefitsAmount: 0, operationalAmount: 0 };
     }
     categories[category].count += 1;
     categories[category].amount += price;
+    categories[category].benefitsAmount += benefitsAmount;
+    categories[category].operationalAmount += operationalAmount;
   });
+
+  // Calculate average allocation percentage
+  const averageAllocationPercentage = allocationPercentages.length > 0
+    ? allocationPercentages.reduce((sum, pct) => sum + pct, 0) / allocationPercentages.length
+    : 100;
 
   // Convert monthly breakdown to array
   const monthlyArray = Object.keys(monthlyBreakdown).map(month => ({
     month: month,
     amount: monthlyBreakdown[month].amount,
+    benefitsAmount: monthlyBreakdown[month].benefitsAmount,
+    operationalAmount: monthlyBreakdown[month].operationalAmount,
     items: monthlyBreakdown[month].items
   })).sort((a, b) => new Date(a.month) - new Date(b.month));
 
   return {
     totalAmount: totalAmount,
+    totalBenefitsAmount: totalBenefitsAmount,
+    totalOperationalAmount: totalOperationalAmount,
+    averageAllocationPercentage: Math.round(averageAllocationPercentage * 100) / 100,
     itemCount: items.length,
     orderCount: new Set(items.map(item => item.orderId)).size,
     monthlyBreakdown: monthlyArray,

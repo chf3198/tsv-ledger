@@ -1,0 +1,18 @@
+[
+  {
+    "id": "test_amazon_001_0",
+    "name": "Paper Plates - 50 Count",
+    "price": 12.99,
+    "date": "2025-09-15",
+    "orderId": "test_amazon_001",
+    "category": "kitchen_equipment"
+  },
+  {
+    "id": "test_amazon_002_0",
+    "name": "Coffee Filters - 100 Count",
+    "price": 8.50,
+    "date": "2025-09-14",
+    "orderId": "test_amazon_002",
+    "category": "kitchen_equipment"
+  }
+]
