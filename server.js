@@ -50,6 +50,7 @@ const { getAllExpenditures, addExpenditure } = require('./src/database');
 const TSVCategorizer = require('./src/tsv-categorizer');
 const SubscriptionAnalysisEngine = require('./src/subscription-analysis-engine');
 const BankReconciliationEngine = require('./src/bank-reconciliation-engine');
+const GeographicAnalysisEngine = require('./src/geographic-analysis-engine');
 
 // Global import status for progress reporting
 let importStatus = {
@@ -1817,6 +1818,131 @@ app.get('/api/subscription-for-order/:orderId', (req, res) => {
   }
 });
 
+// GET /api/geographic-dashboard - Get geographic dashboard data
+app.get('/api/geographic-dashboard', (req, res) => {
+  try {
+    const dashboardData = geographicEngine.getGeographicDashboard();
+
+    if (dashboardData.error) {
+      res.status(503).json({
+        error: 'Geographic data not available',
+        message: dashboardData.error
+      });
+    } else {
+      res.json({
+        success: true,
+        data: dashboardData
+      });
+    }
+
+  } catch (error) {
+    console.error('❌ Error fetching geographic dashboard:', error);
+    res.status(500).json({
+      error: 'Failed to fetch geographic dashboard',
+      message: error.message
+    });
+  }
+});
+
+// GET /api/geographic-analysis - Get comprehensive geographic analysis
+app.get('/api/geographic-analysis', async (req, res) => {
+  try {
+    const analysis = geographicEngine.generateGeographicAnalysis();
+
+    res.json({
+      success: true,
+      data: analysis,
+      generatedAt: new Date().toISOString()
+    });
+
+  } catch (error) {
+    console.error('❌ Error generating geographic analysis:', error);
+    res.status(500).json({
+      error: 'Failed to generate geographic analysis',
+      message: error.message
+    });
+  }
+});
+
+// GET /api/geographic-locations/:type - Get locations by type (states, cities, zipcodes)
+app.get('/api/geographic-locations/:type', (req, res) => {
+  try {
+    const { type } = req.params;
+    const { limit = 10, sortBy = 'orderCount' } = req.query;
+
+    let locationData;
+    switch (type.toLowerCase()) {
+      case 'states':
+        locationData = geographicEngine.getTopLocations(geographicEngine.geographicData.states, sortBy, parseInt(limit));
+        break;
+      case 'cities':
+        locationData = geographicEngine.getTopLocations(geographicEngine.geographicData.cities, sortBy, parseInt(limit));
+        break;
+      case 'zipcodes':
+        locationData = geographicEngine.getTopLocations(geographicEngine.geographicData.zipCodes, sortBy, parseInt(limit));
+        break;
+      default:
+        return res.status(400).json({
+          error: 'Invalid location type',
+          message: 'Type must be one of: states, cities, zipcodes'
+        });
+    }
+
+    res.json({
+      success: true,
+      data: locationData,
+      type,
+      sortBy,
+      limit: parseInt(limit)
+    });
+
+  } catch (error) {
+    console.error('❌ Error fetching geographic locations:', error);
+    res.status(500).json({
+      error: 'Failed to fetch geographic locations',
+      message: error.message
+    });
+  }
+});
+
+// GET /api/geographic-revenue - Get revenue analysis by geography
+app.get('/api/geographic-revenue', (req, res) => {
+  try {
+    const revenueAnalysis = geographicEngine.generateRevenueAnalysis();
+
+    res.json({
+      success: true,
+      data: revenueAnalysis
+    });
+
+  } catch (error) {
+    console.error('❌ Error fetching geographic revenue analysis:', error);
+    res.status(500).json({
+      error: 'Failed to fetch geographic revenue analysis',
+      message: error.message
+    });
+  }
+});
+
+// GET /api/geographic-shipping - Get shipping analysis by geography
+app.get('/api/geographic-shipping', (req, res) => {
+  try {
+    const shippingAnalysis = geographicEngine.generateShippingAnalysis();
+
+    res.json({
+      success: true,
+      data: shippingAnalysis
+    });
+
+  } catch (error) {
+    console.error('❌ Error fetching geographic shipping analysis:', error);
+    res.status(500).json({
+      error: 'Failed to fetch geographic shipping analysis',
+      message: error.message
+    });
+  }
+});
+
 // BANK RECONCILIATION ENDPOINTS
 
 // GET /api/reconciliation-dashboard - Get reconciliation dashboard data
@@ -1975,6 +2101,18 @@ bankReconciliationEngine.loadBankData().then(success => {
   }
 }).catch(error => {
   console.warn('⚠️ Bank reconciliation engine initialization error:', error.message);
+});
+
+// Initialize geographic analysis engine
+const geographicEngine = new GeographicAnalysisEngine();
+geographicEngine.loadOrderData().then(success => {
+  if (success) {
+    console.log('🗺️ Geographic analysis engine ready');
+  } else {
+    console.warn('⚠️ Geographic data loading failed');
+  }
+}).catch(error => {
+  console.warn('⚠️ Geographic analysis engine initialization error:', error.message);
 });
 
 // Load Amazon data for reconciliation

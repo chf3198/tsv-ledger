@@ -1,0 +1,1025 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Geographic Analysis - TSV Ledger</title>
+
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --secondary-color: #64748b;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --danger-color: #ef4444;
+            --background-color: #f8fafc;
+            --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            background-color: var(--background-color);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .navbar-brand {
+            font-weight: bold;
+            color: var(--primary-color) !important;
+        }
+
+        .card {
+            border: none;
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+            transition: transform 0.2s ease-in-out;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+        }
+
+        .metric-card {
+            background: linear-gradient(135deg, var(--primary-color), #1d4ed8);
+            color: white;
+        }
+
+        .metric-card.success {
+            background: linear-gradient(135deg, var(--success-color), #059669);
+        }
+
+        .metric-card.warning {
+            background: linear-gradient(135deg, var(--warning-color), #d97706);
+        }
+
+        .metric-card.danger {
+            background: linear-gradient(135deg, var(--danger-color), #dc2626);
+        }
+
+        .metric-value {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .metric-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 400px;
+            margin-bottom: 2rem;
+        }
+
+        .location-card {
+            transition: all 0.2s ease-in-out;
+        }
+
+        .location-card:hover {
+            box-shadow: 0 8px 25px -8px rgba(0, 0, 0, 0.2);
+        }
+
+        .location-rank {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+        }
+
+        .rank-1 { background: linear-gradient(135deg, #ffd700, #ffb347); }
+        .rank-2 { background: linear-gradient(135deg, #c0c0c0, #a8a8a8); }
+        .rank-3 { background: linear-gradient(135deg, #cd7f32, #a0522d); }
+        .rank-other { background: linear-gradient(135deg, var(--secondary-color), #475569); }
+
+        .btn-outline-primary {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .btn-outline-primary:hover {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        .loading-spinner {
+            display: none;
+            justify-content: center;
+            align-items: center;
+            min-height: 200px;
+        }
+
+        .recommendation-card {
+            border-left: 4px solid var(--warning-color);
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+        }
+
+        .recommendation-high {
+            border-left-color: var(--danger-color);
+            background: linear-gradient(135deg, #fee2e2, #fecaca);
+        }
+
+        .recommendation-low {
+            border-left-color: var(--success-color);
+            background: linear-gradient(135deg, #d1fae5, #a7f3d0);
+        }
+
+        .map-placeholder {
+            background: linear-gradient(135deg, #e0f2fe, #bae6fd);
+            border: 2px dashed #0ea5e9;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 300px;
+            color: #0ea5e9;
+            font-size: 1.2rem;
+            font-weight: 500;
+        }
+
+        .sidebar {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--card-shadow);
+        }
+
+        .nav-link {
+            color: var(--secondary-color);
+            font-weight: 500;
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            margin-bottom: 0.25rem;
+            transition: all 0.2s ease;
+        }
+
+        .nav-link:hover {
+            background-color: var(--background-color);
+            color: var(--primary-color);
+        }
+
+        .nav-link.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .nav-link i {
+            width: 20px;
+            margin-right: 0.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                margin-bottom: 1rem;
+            }
+
+            .metric-value {
+                font-size: 1.5rem;
+            }
+
+            .chart-container {
+                height: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom mb-4">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <i class="fas fa-map-marked-alt me-2"></i>
+                TSV Ledger - Geographic Analysis
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">
+                            <i class="fas fa-home"></i> Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/subscription-analysis.html">
+                            <i class="fas fa-calendar-alt"></i> Subscriptions
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/reconciliation.html">
+                            <i class="fas fa-balance-scale"></i> Reconciliation
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/geographic-analysis.html">
+                            <i class="fas fa-map-marked-alt"></i> Geographic
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-lg-3 col-xl-2">
+                <div class="sidebar">
+                    <h5 class="mb-3">
+                        <i class="fas fa-bars me-2"></i>
+                        Analysis Views
+                    </h5>
+                    <nav class="nav flex-column">
+                        <a class="nav-link active" href="#overview" onclick="showSection('overview')">
+                            <i class="fas fa-chart-pie"></i> Overview
+                        </a>
+                        <a class="nav-link" href="#locations" onclick="showSection('locations')">
+                            <i class="fas fa-map-marker-alt"></i> Top Locations
+                        </a>
+                        <a class="nav-link" href="#revenue" onclick="showSection('revenue')">
+                            <i class="fas fa-dollar-sign"></i> Revenue Analysis
+                        </a>
+                        <a class="nav-link" href="#shipping" onclick="showSection('shipping')">
+                            <i class="fas fa-truck"></i> Shipping Analysis
+                        </a>
+                        <a class="nav-link" href="#temporal" onclick="showSection('temporal')">
+                            <i class="fas fa-calendar"></i> Temporal Trends
+                        </a>
+                        <a class="nav-link" href="#recommendations" onclick="showSection('recommendations')">
+                            <i class="fas fa-lightbulb"></i> Recommendations
+                        </a>
+                    </nav>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="col-lg-9 col-xl-10">
+                <!-- Loading Spinner -->
+                <div id="loadingSpinner" class="loading-spinner">
+                    <div class="text-center">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <p class="mt-2 text-muted">Loading geographic analysis...</p>
+                    </div>
+                </div>
+
+                <!-- Overview Section -->
+                <div id="overviewSection" class="content-section">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h2><i class="fas fa-chart-pie me-2"></i>Geographic Overview</h2>
+                        <button class="btn btn-outline-primary" onclick="refreshData()">
+                            <i class="fas fa-sync-alt me-1"></i> Refresh
+                        </button>
+                    </div>
+
+                    <!-- Key Metrics -->
+                    <div class="row mb-4">
+                        <div class="col-md-3 mb-3">
+                            <div class="card metric-card">
+                                <div class="card-body text-center">
+                                    <div class="metric-value" id="totalOrders">-</div>
+                                    <div class="metric-label">Total Orders</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <div class="card metric-card success">
+                                <div class="card-body text-center">
+                                    <div class="metric-value" id="validOrders">-</div>
+                                    <div class="metric-label">Valid Geographic Orders</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <div class="card metric-card warning">
+                                <div class="card-body text-center">
+                                    <div class="metric-value" id="uniqueStates">-</div>
+                                    <div class="metric-label">States Reached</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <div class="card metric-card danger">
+                                <div class="card-body text-center">
+                                    <div class="metric-value" id="totalRevenue">$-</div>
+                                    <div class="metric-label">Total Revenue</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Geographic Distribution Chart -->
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="mb-0"><i class="fas fa-chart-bar me-2"></i>Revenue by State</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="chart-container">
+                                        <canvas id="stateRevenueChart"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="mb-0"><i class="fas fa-city me-2"></i>Top Cities by Orders</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="chart-container">
+                                        <canvas id="cityOrdersChart"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Geographic Map Placeholder -->
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h5 class="mb-0"><i class="fas fa-map me-2"></i>Geographic Distribution Map</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="map-placeholder">
+                                <div class="text-center">
+                                    <i class="fas fa-map-marked-alt fa-3x mb-3"></i>
+                                    <p>Interactive geographic map visualization</p>
+                                    <small class="text-muted">Map integration available in premium version</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Top Locations Section -->
+                <div id="locationsSection" class="content-section" style="display: none;">
+                    <h2 class="mb-4"><i class="fas fa-map-marker-alt me-2"></i>Top Locations</h2>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="mb-0">Top Cities by Order Count</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div id="topCitiesByOrders" class="location-list">
+                                        <!-- Cities will be populated here -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="mb-0">Top Cities by Revenue</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div id="topCitiesByRevenue" class="location-list">
+                                        <!-- Cities will be populated here -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mt-4">
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="mb-0">Top States by Revenue</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div id="topStatesByRevenue" class="location-list">
+                                        <!-- States will be populated here -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="mb-0">Top ZIP Codes by Orders</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div id="topZipCodes" class="location-list">
+                                        <!-- ZIP codes will be populated here -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Revenue Analysis Section -->
+                <div id="revenueSection" class="content-section" style="display: none;">
+                    <h2 class="mb-4"><i class="fas fa-dollar-sign me-2"></i>Revenue Analysis</h2>
+
+                    <div class="row mb-4">
+                        <div class="col-md-8">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="mb-0">Revenue Distribution by State</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="chart-container">
+                                        <canvas id="revenueDistributionChart"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="mb-0">Revenue Concentration</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div id="revenueConcentrationStats">
+                                        <!-- Concentration stats will be populated here -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Shipping Analysis Section -->
+                <div id="shippingSection" class="content-section" style="display: none;">
+                    <h2 class="mb-4"><i class="fas fa-truck me-2"></i>Shipping Analysis</h2>
+
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="mb-0">Shipping Costs by State</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="chart-container">
+                                        <canvas id="shippingByStateChart"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="mb-0">Shipping Efficiency Metrics</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div id="shippingEfficiencyStats">
+                                        <!-- Shipping efficiency stats will be populated here -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Temporal Trends Section -->
+                <div id="temporalSection" class="content-section" style="display: none;">
+                    <h2 class="mb-4"><i class="fas fa-calendar me-2"></i>Temporal Trends</h2>
+
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="mb-0">Monthly Geographic Trends</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="chart-container">
+                                        <canvas id="monthlyTrendsChart"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="mb-0">Weekday Order Patterns</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="chart-container">
+                                        <canvas id="weekdayPatternsChart"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recommendations Section -->
+                <div id="recommendationsSection" class="content-section" style="display: none;">
+                    <h2 class="mb-4"><i class="fas fa-lightbulb me-2"></i>Strategic Recommendations</h2>
+
+                    <div id="recommendationsList">
+                        <!-- Recommendations will be populated here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Global variables
+        let geographicData = null;
+        let currentSection = 'overview';
+
+        // Initialize the dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            loadGeographicData();
+        });
+
+        // Load geographic data from API
+        async function loadGeographicData() {
+            showLoading(true);
+
+            try {
+                const response = await fetch('/api/geographic-dashboard');
+                const result = await response.json();
+
+                if (result.success) {
+                    geographicData = result.data;
+                    renderDashboard();
+                } else {
+                    showError('Failed to load geographic data: ' + result.error);
+                }
+            } catch (error) {
+                console.error('Error loading geographic data:', error);
+                showError('Network error while loading geographic data');
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        // Refresh data
+        async function refreshData() {
+            await loadGeographicData();
+        }
+
+        // Show loading spinner
+        function showLoading(show) {
+            const spinner = document.getElementById('loadingSpinner');
+            spinner.style.display = show ? 'flex' : 'none';
+        }
+
+        // Show error message
+        function showError(message) {
+            // Create error alert
+            const alert = document.createElement('div');
+            alert.className = 'alert alert-danger alert-dismissible fade show';
+            alert.innerHTML = `
+                <i class="fas fa-exclamation-triangle me-2"></i>
+                ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            `;
+
+            // Insert at top of main content
+            const mainContent = document.querySelector('.col-lg-9');
+            mainContent.insertBefore(alert, mainContent.firstChild);
+
+            // Auto-dismiss after 5 seconds
+            setTimeout(() => {
+                alert.remove();
+            }, 5000);
+        }
+
+        // Render dashboard with data
+        function renderDashboard() {
+            if (!geographicData) return;
+
+            // Update metrics
+            updateMetrics();
+
+            // Render overview charts
+            renderOverviewCharts();
+
+            // Load detailed analysis data
+            loadDetailedAnalysis();
+        }
+
+        // Update key metrics
+        function updateMetrics() {
+            const summary = geographicData.summary;
+
+            document.getElementById('totalOrders').textContent = summary.totalOrders.toLocaleString();
+            document.getElementById('validOrders').textContent = summary.validGeographicOrders.toLocaleString();
+            document.getElementById('uniqueStates').textContent = summary.uniqueStates;
+            document.getElementById('totalRevenue').textContent = '$' + summary.totalRevenue.toFixed(2);
+        }
+
+        // Render overview charts
+        function renderOverviewCharts() {
+            // State revenue chart
+            const stateRevenueCtx = document.getElementById('stateRevenueChart').getContext('2d');
+            const topStates = geographicData.topStates || [];
+
+            new Chart(stateRevenueCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: topStates.map(s => s.location),
+                    datasets: [{
+                        data: topStates.map(s => s.totalRevenue),
+                        backgroundColor: [
+                            '#2563eb', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6'
+                        ],
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.label + ': $' + context.parsed.toFixed(2);
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // City orders chart
+            const cityOrdersCtx = document.getElementById('cityOrdersChart').getContext('2d');
+            const topCities = geographicData.topCities || [];
+
+            new Chart(cityOrdersCtx, {
+                type: 'bar',
+                data: {
+                    labels: topCities.map(c => c.location),
+                    datasets: [{
+                        label: 'Orders',
+                        data: topCities.map(c => c.orderCount),
+                        backgroundColor: '#2563eb',
+                        borderColor: '#1d4ed8',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+        }
+
+        // Load detailed analysis data
+        async function loadDetailedAnalysis() {
+            try {
+                const response = await fetch('/api/geographic-analysis');
+                const result = await response.json();
+
+                if (result.success) {
+                    renderDetailedAnalysis(result.data);
+                }
+            } catch (error) {
+                console.error('Error loading detailed analysis:', error);
+            }
+        }
+
+        // Render detailed analysis sections
+        function renderDetailedAnalysis(analysis) {
+            renderTopLocations(analysis.topLocations);
+            renderRevenueAnalysis(analysis.revenueAnalysis);
+            renderShippingAnalysis(analysis.shippingAnalysis);
+            renderTemporalAnalysis(analysis.temporalAnalysis);
+            renderRecommendations(analysis.recommendations);
+        }
+
+        // Render top locations
+        function renderTopLocations(topLocations) {
+            renderLocationList('topCitiesByOrders', topLocations.byOrderCount, 'orderCount');
+            renderLocationList('topCitiesByRevenue', topLocations.byRevenue, 'totalRevenue');
+            renderLocationList('topStatesByRevenue', topLocations.statesByRevenue, 'totalRevenue');
+            renderLocationList('topZipCodes', topLocations.byOrderCount.slice(0, 5), 'orderCount');
+        }
+
+        // Render location list
+        function renderLocationList(containerId, locations, metric) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = '';
+
+            locations.forEach((location, index) => {
+                const rankClass = index < 3 ? `rank-${index + 1}` : 'rank-other';
+                const card = document.createElement('div');
+                card.className = 'location-card card mb-2';
+                card.innerHTML = `
+                    <div class="card-body d-flex align-items-center">
+                        <div class="location-rank ${rankClass} me-3">
+                            ${index + 1}
+                        </div>
+                        <div class="flex-grow-1">
+                            <h6 class="mb-1">${location.location}</h6>
+                            <small class="text-muted">
+                                ${metric === 'totalRevenue' ?
+                                    `$${location[metric].toFixed(2)} revenue` :
+                                    `${location[metric]} orders`}
+                            </small>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // Render revenue analysis
+        function renderRevenueAnalysis(revenueAnalysis) {
+            // Revenue distribution chart
+            const revenueCtx = document.getElementById('revenueDistributionChart').getContext('2d');
+            const stateRevenue = revenueAnalysis.byState.slice(0, 10);
+
+            new Chart(revenueCtx, {
+                type: 'horizontalBar',
+                data: {
+                    labels: stateRevenue.map(s => s.state),
+                    datasets: [{
+                        label: 'Revenue ($)',
+                        data: stateRevenue.map(s => s.revenue),
+                        backgroundColor: '#10b981',
+                        borderColor: '#059669',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            beginAtZero: true
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+
+            // Revenue concentration stats
+            const concentration = revenueAnalysis.concentrationAnalysis;
+            const concentrationContainer = document.getElementById('revenueConcentrationStats');
+            concentrationContainer.innerHTML = `
+                <div class="text-center mb-3">
+                    <h4 class="text-primary">${concentration.concentrationRatio.toFixed(1)}%</h4>
+                    <small class="text-muted">Revenue concentration in top state</small>
+                </div>
+                <div class="mb-2">
+                    <strong>Top State:</strong> ${concentration.topState}
+                </div>
+                <div class="mb-2">
+                    <strong>Status:</strong>
+                    <span class="badge ${concentration.isHighlyConcentrated ? 'bg-danger' : concentration.isModeratelyConcentrated ? 'bg-warning' : 'bg-success'}">
+                        ${concentration.isHighlyConcentrated ? 'High Concentration' : concentration.isModeratelyConcentrated ? 'Moderate Concentration' : 'Well Distributed'}
+                    </span>
+                </div>
+            `;
+        }
+
+        // Render shipping analysis
+        function renderShippingAnalysis(shippingAnalysis) {
+            // Shipping by state chart
+            const shippingCtx = document.getElementById('shippingByStateChart').getContext('2d');
+            const shippingByState = shippingAnalysis.byState.slice(0, 10);
+
+            new Chart(shippingCtx, {
+                type: 'bar',
+                data: {
+                    labels: shippingByState.map(s => s.state),
+                    datasets: [{
+                        label: 'Average Shipping Cost ($)',
+                        data: shippingByState.map(s => s.averageShipping),
+                        backgroundColor: '#f59e0b',
+                        borderColor: '#d97706',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+
+            // Shipping efficiency stats
+            const efficiency = shippingAnalysis.shippingEfficiency;
+            const efficiencyContainer = document.getElementById('shippingEfficiencyStats');
+            efficiencyContainer.innerHTML = `
+                <div class="row text-center mb-3">
+                    <div class="col-6">
+                        <h5 class="text-warning">$${efficiency.averageShippingCost.toFixed(2)}</h5>
+                        <small class="text-muted">Avg Shipping Cost</small>
+                    </div>
+                    <div class="col-6">
+                        <h5 class="text-info">${efficiency.shippingVariance.toFixed(2)}</h5>
+                        <small class="text-muted">Cost Variance</small>
+                    </div>
+                </div>
+                <div class="mb-2">
+                    <strong>Highest Cost State:</strong> ${efficiency.highestShippingState}
+                </div>
+                <div class="mb-2">
+                    <strong>Lowest Cost State:</strong> ${efficiency.lowestShippingState}
+                </div>
+            `;
+        }
+
+        // Render temporal analysis
+        function renderTemporalAnalysis(temporalAnalysis) {
+            // Monthly trends chart
+            const monthlyCtx = document.getElementById('monthlyTrendsChart').getContext('2d');
+            const monthlyData = temporalAnalysis.monthlyTrends.slice(-12); // Last 12 months
+
+            new Chart(monthlyCtx, {
+                type: 'line',
+                data: {
+                    labels: monthlyData.map(m => m.period),
+                    datasets: [{
+                        label: 'Revenue ($)',
+                        data: monthlyData.map(m => m.revenue),
+                        borderColor: '#2563eb',
+                        backgroundColor: 'rgba(37, 99, 235, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+
+            // Weekday patterns chart
+            const weekdayCtx = document.getElementById('weekdayPatternsChart').getContext('2d');
+            const weekdays = Object.keys(temporalAnalysis.weekdayPatterns);
+            const weekdayValues = Object.values(temporalAnalysis.weekdayPatterns);
+
+            new Chart(weekdayCtx, {
+                type: 'radar',
+                data: {
+                    labels: weekdays,
+                    datasets: [{
+                        label: 'Orders',
+                        data: weekdayValues,
+                        borderColor: '#10b981',
+                        backgroundColor: 'rgba(16, 185, 129, 0.2)',
+                        pointBackgroundColor: '#10b981',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: '#10b981'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+
+        // Render recommendations
+        function renderRecommendations(recommendations) {
+            const container = document.getElementById('recommendationsList');
+            container.innerHTML = '';
+
+            if (recommendations.length === 0) {
+                container.innerHTML = `
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle me-2"></i>
+                        No specific recommendations at this time. Your geographic distribution looks well-balanced!
+                    </div>
+                `;
+                return;
+            }
+
+            recommendations.forEach(rec => {
+                const priorityClass = rec.priority === 'high' ? 'recommendation-high' :
+                                    rec.priority === 'low' ? 'recommendation-low' : 'recommendation-card';
+
+                const card = document.createElement('div');
+                card.className = `card mb-3 ${priorityClass}`;
+                card.innerHTML = `
+                    <div class="card-body">
+                        <div class="d-flex align-items-start">
+                            <div class="flex-grow-1">
+                                <h6 class="card-title mb-2">
+                                    <i class="fas fa-${getRecommendationIcon(rec.type)} me-2"></i>
+                                    ${rec.title}
+                                </h6>
+                                <p class="card-text mb-2">${rec.description}</p>
+                                <span class="badge ${rec.priority === 'high' ? 'bg-danger' : rec.priority === 'medium' ? 'bg-warning' : 'bg-success'}">
+                                    ${rec.priority.charAt(0).toUpperCase() + rec.priority.slice(1)} Priority
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // Get recommendation icon based on type
+        function getRecommendationIcon(type) {
+            const icons = {
+                expansion: 'expand-arrows-alt',
+                optimization: 'cogs',
+                data_quality: 'database',
+                seasonal: 'calendar-alt'
+            };
+            return icons[type] || 'lightbulb';
+        }
+
+        // Show specific section
+        function showSection(sectionName) {
+            // Hide all sections
+            const sections = document.querySelectorAll('.content-section');
+            sections.forEach(section => section.style.display = 'none');
+
+            // Show selected section
+            const targetSection = document.getElementById(sectionName + 'Section');
+            if (targetSection) {
+                targetSection.style.display = 'block';
+            }
+
+            // Update navigation
+            const navLinks = document.querySelectorAll('.nav-link');
+            navLinks.forEach(link => link.classList.remove('active'));
+
+            const activeLink = document.querySelector(`[href="#${sectionName}"]`);
+            if (activeLink) {
+                activeLink.classList.add('active');
+            }
+
+            currentSection = sectionName;
+        }
+
+        // Handle browser back/forward navigation
+        window.addEventListener('popstate', function(event) {
+            if (event.state && event.state.section) {
+                showSection(event.state.section);
+            }
+        });
+
+        // Update URL when section changes
+        function updateURL(section) {
+            const url = new URL(window.location);
+            url.hash = section;
+            window.history.pushState({ section }, '', url);
+        }
+
+        // Initialize with URL hash if present
+        const initialSection = window.location.hash.substring(1) || 'overview';
+        if (initialSection !== 'overview') {
+            setTimeout(() => showSection(initialSection), 100);
+        }
+    </script>
+</body>
+</html>
