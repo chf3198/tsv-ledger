@@ -48,6 +48,7 @@ const csv = require('csv-parser');
 const multer = require('multer');
 const { getAllExpenditures, addExpenditure } = require('./src/database');
 const TSVCategorizer = require('./src/tsv-categorizer');
+const SubscriptionAnalysisEngine = require('./src/subscription-analysis-engine');
 
 // Global import status for progress reporting
 let importStatus = {
@@ -1725,6 +1726,96 @@ app.post('/api/import-amazon-zip', upload.single('amazonZip'), async (req, res) 
   }
 });
 
+// SUBSCRIPTION ANALYSIS ENDPOINTS
+
+// GET /api/subscription-dashboard - Get subscription dashboard data
+app.get('/api/subscription-dashboard', (req, res) => {
+  try {
+    const dashboard = subscriptionEngine.getSubscriptionDashboard();
+    res.json({
+      success: true,
+      data: dashboard,
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    console.error('❌ Error fetching subscription dashboard:', error);
+    res.status(500).json({
+      error: 'Failed to fetch subscription dashboard',
+      message: error.message
+    });
+  }
+});
+
+// GET /api/subscription-analysis - Get comprehensive subscription analysis
+app.get('/api/subscription-analysis', async (req, res) => {
+  try {
+    // Load Amazon orders for linking
+    const amazonOrders = [];
+    const csv = require('csv-parser');
+    const fs = require('fs');
+
+    // Try to load from comprehensive orders file
+    const ordersPath = path.join(__dirname, 'data', 'amazon-comprehensive-orders.csv');
+
+    if (fs.existsSync(ordersPath)) {
+      await new Promise((resolve, reject) => {
+        fs.createReadStream(ordersPath)
+          .pipe(csv())
+          .on('data', (data) => amazonOrders.push(data))
+          .on('end', resolve)
+          .on('error', reject);
+      });
+    }
+
+    // Perform subscription-to-order linking
+    const analysis = subscriptionEngine.linkSubscriptionsToOrders(amazonOrders);
+
+    res.json({
+      success: true,
+      data: analysis,
+      timestamp: new Date().toISOString(),
+      ordersAnalyzed: amazonOrders.length
+    });
+
+  } catch (error) {
+    console.error('❌ Error performing subscription analysis:', error);
+    res.status(500).json({
+      error: 'Failed to perform subscription analysis',
+      message: error.message
+    });
+  }
+});
+
+// GET /api/subscription-for-order/:orderId - Get subscription details for specific order
+app.get('/api/subscription-for-order/:orderId', (req, res) => {
+  try {
+    const orderId = req.params.orderId;
+    const subscriptionDetails = subscriptionEngine.getSubscriptionForOrder(orderId);
+
+    if (subscriptionDetails) {
+      res.json({
+        success: true,
+        data: subscriptionDetails,
+        linked: true
+      });
+    } else {
+      res.json({
+        success: true,
+        data: null,
+        linked: false,
+        message: 'No subscription found for this order'
+      });
+    }
+
+  } catch (error) {
+    console.error('❌ Error fetching subscription for order:', error);
+    res.status(500).json({
+      error: 'Failed to fetch subscription details',
+      message: error.message
+    });
+  }
+});
+
 // 404 handler
 app.use((req, res) => {
   res.status(404).json({
@@ -1773,6 +1864,19 @@ process.on('SIGINT', () => {
 });
 
 // Start the server with error handling
+const subscriptionEngine = new SubscriptionAnalysisEngine();
+
+// Initialize subscription data on server start
+subscriptionEngine.loadSubscriptionData().then(success => {
+  if (success) {
+    console.log('📊 Subscription analysis engine ready');
+  } else {
+    console.warn('⚠️ Subscription data loading failed');
+  }
+}).catch(error => {
+  console.warn('⚠️ Subscription engine initialization error:', error.message);
+});
+
 const server = app.listen(port, (error) => {
   if (error) {
     console.error('❌ Failed to start server:', error);
