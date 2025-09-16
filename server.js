@@ -49,6 +49,7 @@ const multer = require('multer');
 const { getAllExpenditures, addExpenditure } = require('./src/database');
 const TSVCategorizer = require('./src/tsv-categorizer');
 const SubscriptionAnalysisEngine = require('./src/subscription-analysis-engine');
+const BankReconciliationEngine = require('./src/bank-reconciliation-engine');
 
 // Global import status for progress reporting
 let importStatus = {
@@ -1816,6 +1817,93 @@ app.get('/api/subscription-for-order/:orderId', (req, res) => {
   }
 });
 
+// BANK RECONCILIATION ENDPOINTS
+
+// GET /api/reconciliation-dashboard - Get reconciliation dashboard data
+app.get('/api/reconciliation-dashboard', (req, res) => {
+  try {
+    const dashboard = bankReconciliationEngine.getReconciliationDashboard();
+    res.json({
+      success: true,
+      data: dashboard,
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    console.error('❌ Error fetching reconciliation dashboard:', error);
+    res.status(500).json({
+      error: 'Failed to fetch reconciliation dashboard',
+      message: error.message
+    });
+  }
+});
+
+// POST /api/perform-reconciliation - Perform bank-Amazon reconciliation
+app.post('/api/perform-reconciliation', async (req, res) => {
+  try {
+    const options = req.body || {};
+    const results = bankReconciliationEngine.performReconciliation(options);
+
+    res.json({
+      success: true,
+      data: results,
+      timestamp: new Date().toISOString(),
+      message: `Reconciled ${results.stats.matchedTransactions} transactions`
+    });
+
+  } catch (error) {
+    console.error('❌ Error performing reconciliation:', error);
+    res.status(500).json({
+      error: 'Failed to perform reconciliation',
+      message: error.message
+    });
+  }
+});
+
+// GET /api/reconciliation-results - Get current reconciliation results
+app.get('/api/reconciliation-results', (req, res) => {
+  try {
+    // Perform reconciliation with default settings
+    const results = bankReconciliationEngine.performReconciliation();
+
+    res.json({
+      success: true,
+      data: results,
+      timestamp: new Date().toISOString()
+    });
+
+  } catch (error) {
+    console.error('❌ Error fetching reconciliation results:', error);
+    res.status(500).json({
+      error: 'Failed to fetch reconciliation results',
+      message: error.message
+    });
+  }
+});
+
+// POST /api/export-reconciliation - Export reconciliation report
+app.post('/api/export-reconciliation', (req, res) => {
+  try {
+    const results = bankReconciliationEngine.performReconciliation();
+    const outputPath = path.join(__dirname, 'data', `reconciliation-report-${Date.now()}.csv`);
+
+    bankReconciliationEngine.exportReconciliationReport(outputPath, results.matches);
+
+    res.json({
+      success: true,
+      message: 'Reconciliation report exported',
+      filePath: outputPath,
+      matchedTransactions: results.stats.matchedTransactions
+    });
+
+  } catch (error) {
+    console.error('❌ Error exporting reconciliation report:', error);
+    res.status(500).json({
+      error: 'Failed to export reconciliation report',
+      message: error.message
+    });
+  }
+});
+
 // 404 handler
 app.use((req, res) => {
   res.status(404).json({
@@ -1865,6 +1953,7 @@ process.on('SIGINT', () => {
 
 // Start the server with error handling
 const subscriptionEngine = new SubscriptionAnalysisEngine();
+const bankReconciliationEngine = new BankReconciliationEngine();
 
 // Initialize subscription data on server start
 subscriptionEngine.loadSubscriptionData().then(success => {
@@ -1875,6 +1964,28 @@ subscriptionEngine.loadSubscriptionData().then(success => {
   }
 }).catch(error => {
   console.warn('⚠️ Subscription engine initialization error:', error.message);
+});
+
+// Initialize bank reconciliation engine
+bankReconciliationEngine.loadBankData().then(success => {
+  if (success) {
+    console.log('🏦 Bank reconciliation engine ready');
+  } else {
+    console.warn('⚠️ Bank data loading failed');
+  }
+}).catch(error => {
+  console.warn('⚠️ Bank reconciliation engine initialization error:', error.message);
+});
+
+// Load Amazon data for reconciliation
+bankReconciliationEngine.loadAmazonData().then(success => {
+  if (success) {
+    console.log('🔗 Amazon reconciliation data ready');
+  } else {
+    console.warn('⚠️ Amazon reconciliation data loading failed');
+  }
+}).catch(error => {
+  console.warn('⚠️ Amazon reconciliation data initialization error:', error.message);
 });
 
 const server = app.listen(port, (error) => {
