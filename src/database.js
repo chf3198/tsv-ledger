@@ -6,14 +6,14 @@
  * 
  * @module database
  * @author TSV Ledger Team
- * @version 2.2.1
+ * @version 2.2.2
  */
 
 const fs = require('fs');
 const path = require('path');
 
-// Data file path - look in parent directory from src/
-const dataFile = path.join(__dirname, '..', 'expenditures.json');
+// Data file path - look in data directory
+const dataFile = path.join(__dirname, '..', 'data', 'expenditures.json');
 
 // Initialize data file if it doesn't exist
 if (!fs.existsSync(dataFile)) {

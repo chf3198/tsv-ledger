@@ -7,7 +7,7 @@
 
 This package contains everything needed to test our Knowledge Transfer Protocol Evolution system on a fresh Chromebook with VS Code.
 
-### 1. Core Protocols (Proven from TSV Ledger v2.2.1)
+### 1. Core Protocols (Proven from TSV Ledger v2.2.2)
 - **CodeOrganizationFramework.md** - Universal project structure standards
 - **GitWorkflowPatterns.md** - Professional version control practices
 - **DocumentationFramework.md** - Knowledge capture and transfer standards

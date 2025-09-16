@@ -7,7 +7,7 @@
  *               Features complete Amazon order management, AI-powered analysis,
  *               and premium business intelligence capabilities.
  * 
- * @version 2.2.1
+ * @version 2.2.2
  * @author GitHub Copilot (Claude Sonnet 3.5)
  * @since 2025-09-05
  * @updated 2025-09-08
@@ -45,16 +45,52 @@ const express = require('express');
 const path = require('path');
 const fs = require('fs');
 const csv = require('csv-parser');
+const multer = require('multer');
 const { getAllExpenditures, addExpenditure } = require('./src/database');
 const TSVCategorizer = require('./src/tsv-categorizer');
+
+// Global import status for progress reporting
+let importStatus = {
+  inProgress: false,
+  currentFile: '',
+  processedFiles: 0,
+  totalFiles: 0,
+  lastUpdate: null
+};
 const AIAnalysisEngine = require('./src/ai-analysis-engine');
+const AmazonZipParser = require('./src/amazon-zip-parser');
 
 const app = express();
 const port = 3000;
 
+// API endpoint to get current import status
+app.get('/api/import-status', (req, res) => {
+  res.json(importStatus);
+});
+
 // Middleware for parsing JSON and URL-encoded data (with increased limits for CSV files)
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+
+// Configure multer for file uploads
+const upload = multer({
+  dest: path.join(__dirname, 'data', 'temp-uploads'),
+  limits: {
+    fileSize: 50 * 1024 * 1024 // 50MB limit for zip files
+  },
+  fileFilter: (req, file, cb) => {
+    // Accept zip files and CSV files
+    if (file.mimetype === 'application/zip' || 
+        file.mimetype === 'application/x-zip-compressed' ||
+        file.mimetype === 'text/csv' ||
+        file.originalname.endsWith('.zip') ||
+        file.originalname.endsWith('.csv')) {
+      cb(null, true);
+    } else {
+      cb(new Error('Only ZIP and CSV files are allowed'));
+    }
+  }
+});
 
 // Serve static files from the 'public' directory
 app.use(express.static(path.join(__dirname, 'public')));
@@ -1389,6 +1425,267 @@ app.use((error, req, res, next) => {
     message: error.message,
     ...(isDevelopment && { stack: error.stack })
   });
+});
+
+// POST /api/validate-amazon-zip - Validate and detect Amazon ZIP file type
+app.post('/api/validate-amazon-zip', upload.single('amazonZip'), async (req, res) => {
+  try {
+    console.log('=== AMAZON ZIP VALIDATION REQUEST ===');
+    
+    if (!req.file) {
+      return res.status(400).json({
+        error: 'No file uploaded',
+        message: 'Please upload an Amazon ZIP file for validation'
+      });
+    }
+
+    const AmazonZipDetector = require('./src/amazon-zip-detector');
+    const detector = new AmazonZipDetector();
+    
+    console.log('Validating file:', req.file.originalname);
+    console.log('File size:', req.file.size, 'bytes');
+    console.log('Temp file path:', req.file.path);
+    
+    // Analyze the uploaded ZIP file
+    // Pass the original filename for proper extension validation
+    const analysis = await detector.analyzeZipFile(req.file.path, {
+      originalName: req.file.originalname
+    });
+    
+    // Clean up temporary file
+    fs.unlink(req.file.path, (err) => {
+      if (err) console.warn('Failed to cleanup temp file:', err.message);
+    });
+    
+    if (!analysis.isValid) {
+      return res.status(400).json({
+        error: 'Invalid ZIP file',
+        message: analysis.error || 'The uploaded file is not a valid Amazon ZIP export',
+        details: analysis
+      });
+    }
+
+    console.log('✅ ZIP validation successful');
+    console.log('Detected type:', analysis.type);
+    console.log('Confidence:', analysis.confidence + '%');
+    
+    res.json({
+      success: true,
+      message: 'ZIP file validated successfully',
+      analysis: analysis
+    });
+
+  } catch (error) {
+    console.error('❌ ZIP validation error:', error);
+    
+    // Clean up temporary file on error
+    if (req.file) {
+      fs.unlink(req.file.path, (err) => {
+        if (err) console.warn('Failed to cleanup temp file on error:', err.message);
+      });
+    }
+    
+    res.status(500).json({
+      error: 'Validation failed',
+      message: error.message
+    });
+  }
+});
+
+// POST /api/import-amazon-zip - Import Amazon ZIP files automatically
+app.post('/api/import-amazon-zip', upload.single('amazonZip'), async (req, res) => {
+  try {
+    console.log('=== AMAZON ZIP IMPORT REQUEST ===');
+    
+    if (!req.file) {
+      return res.status(400).json({
+        error: 'No file uploaded',
+        message: 'Please upload an Amazon ZIP file'
+      });
+    }
+
+    console.log('File uploaded:', req.file.originalname);
+    console.log('File size:', req.file.size, 'bytes');
+    console.log('File type:', req.file.mimetype);
+
+    // Detect ZIP type before processing
+    const AmazonZipDetector = require('./src/amazon-zip-detector');
+    const detector = new AmazonZipDetector();
+    
+    console.log('🔍 Detecting Amazon ZIP type...');
+    const analysis = await detector.analyzeZipFile(req.file.path);
+    
+    let zipTypeInfo = 'Unknown Amazon ZIP';
+    if (analysis.isValid && analysis.detected) {
+      zipTypeInfo = analysis.zipInfo.name;
+      console.log('✅ Detected:', analysis.type, `(${analysis.confidence}% confidence)`);
+    } else {
+      console.log('⚠️ ZIP type detection failed:', analysis.error);
+    }
+
+    const parser = new AmazonZipParser();
+    const zipFilePath = req.file.path;
+    
+
+    // Set up import status
+    importStatus.inProgress = true;
+    importStatus.currentFile = 'Starting...';
+    importStatus.processedFiles = 0;
+    importStatus.totalFiles = 0;
+    importStatus.lastUpdate = new Date().toISOString();
+
+    // Patch parser to update importStatus during processing
+    parser.onFileProcess = (filename, idx, total) => {
+      importStatus.currentFile = filename;
+      importStatus.processedFiles = idx;
+      importStatus.totalFiles = total;
+      importStatus.lastUpdate = new Date().toISOString();
+    };
+
+    // Process the ZIP file
+    const result = await parser.processZipFile(zipFilePath, {
+      extractDir: path.join(__dirname, 'data', `temp-extract-${Date.now()}`),
+      keepExtracted: false,
+      onFileProcess: parser.onFileProcess
+    });
+
+
+    // Clean up uploaded file
+    try {
+      fs.unlinkSync(zipFilePath);
+    } catch (cleanupError) {
+      console.warn('⚠️ Could not cleanup uploaded file:', cleanupError.message);
+    }
+
+    // Mark import as done
+    importStatus.inProgress = false;
+    importStatus.currentFile = '';
+    importStatus.lastUpdate = new Date().toISOString();
+
+    if (!result.success) {
+      return res.status(500).json({
+        error: 'ZIP processing failed',
+        message: result.error,
+        stats: result.stats
+      });
+    }
+
+    // Transform and save the data
+    const savedOrders = [];
+    const savedSubscriptions = [];
+    const errors = [];
+
+    // Process orders
+    for (const order of result.data.orders) {
+      try {
+        const expenditure = {
+          date: order.orderDate || new Date().toISOString(),
+          amount: order.purchasePrice || 0,
+          category: order.tsvCategory || 'Miscellaneous',
+          description: `Amazon Order ${order.orderId}: ${order.title || 'Unknown Item'}`,
+          amazonOrderId: order.orderId,
+          amazonASIN: order.asin,
+          amazonCategory: order.category,
+          dataSource: 'amazon-zip-import',
+          processedDate: new Date().toISOString()
+        };
+
+        await new Promise((resolve, reject) => {
+          addExpenditure(expenditure, (err, newExpenditure) => {
+            if (err) {
+              reject(err);
+            } else {
+              savedOrders.push(newExpenditure);
+              resolve(newExpenditure);
+            }
+          });
+        });
+
+      } catch (error) {
+        errors.push(`Order ${order.orderId}: ${error.message}`);
+        console.warn('⚠️ Failed to save order:', order.orderId, error.message);
+      }
+    }
+
+    // Process subscriptions (saved as recurring expenditures)
+    for (const subscription of result.data.subscriptions) {
+      try {
+        const expenditure = {
+          date: subscription.eventDate || new Date().toISOString(),
+          amount: 0, // Subscriptions don't have prices in the data
+          category: subscription.tsvCategory || 'Miscellaneous',
+          description: `Amazon Subscription: ${subscription.productTitle} (${subscription.frequency})`,
+          amazonSubscriptionId: subscription.subscriptionId,
+          amazonSubscriptionState: subscription.subscriptionState,
+          amazonFrequency: subscription.frequency,
+          isSubscription: true,
+          dataSource: 'amazon-zip-subscriptions',
+          processedDate: new Date().toISOString()
+        };
+
+        await new Promise((resolve, reject) => {
+          addExpenditure(expenditure, (err, newExpenditure) => {
+            if (err) {
+              reject(err);
+            } else {
+              savedSubscriptions.push(newExpenditure);
+              resolve(newExpenditure);
+            }
+          });
+        });
+
+      } catch (error) {
+        errors.push(`Subscription ${subscription.productTitle}: ${error.message}`);
+        console.warn('⚠️ Failed to save subscription:', subscription.productTitle, error.message);
+      }
+    }
+
+    // Generate processing report
+    const report = parser.generateReport();
+    
+    res.json({
+      success: true,
+      message: `${zipTypeInfo} processed successfully`,
+      fileName: req.file.originalname,
+      zipType: analysis.isValid ? analysis.type : 'unknown',
+      zipTypeInfo: zipTypeInfo,
+      detectionConfidence: analysis.confidence || 0,
+      summary: {
+        totalFiles: result.stats.totalFiles,
+        processedFiles: result.stats.processedFiles,
+        ordersFound: result.data.orders.length,
+        ordersSaved: savedOrders.length,
+        subscriptionsFound: result.data.subscriptions.length,
+        subscriptionsSaved: savedSubscriptions.length,
+        errors: errors.length
+      },
+      data: {
+        orders: savedOrders.slice(0, 5), // First 5 orders as sample
+        subscriptions: savedSubscriptions.slice(0, 5), // First 5 subscriptions as sample
+        errors: errors
+      },
+      processingReport: report,
+      fileName: req.file.originalname
+    });
+
+  } catch (error) {
+    console.error('❌ Amazon ZIP import error:', error);
+    
+    // Clean up uploaded file on error
+    if (req.file && req.file.path) {
+      try {
+        fs.unlinkSync(req.file.path);
+      } catch (cleanupError) {
+        console.warn('⚠️ Could not cleanup uploaded file after error:', cleanupError.message);
+      }
+    }
+
+    res.status(500).json({
+      error: 'Amazon ZIP import failed',
+      message: error.message,
+      stack: process.env.NODE_ENV === 'development' ? error.stack : undefined
+    });
+  }
 });
 
 // 404 handler
