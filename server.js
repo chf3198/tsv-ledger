@@ -96,7 +96,81 @@ const upload = multer({
 });
 
 // Serve static files from the 'public' directory
+// Middleware: inject client-side shell initializer into HTML pages that lack the sidebar
+app.use((req, res, next) => {
+  try {
+    // Only consider GET requests for HTML files
+    if (req.method !== 'GET') return next();
+
+    let reqPath = req.path;
+    if (reqPath === '/') reqPath = '/index.html';
+    if (!reqPath.endsWith('.html')) return next();
+
+    const filePath = path.join(__dirname, 'public', decodeURIComponent(reqPath));
+    if (!fs.existsSync(filePath)) return next();
+
+    const content = fs.readFileSync(filePath, 'utf8');
+
+    // If the page already references the init-shell script or marker, serve as-is
+    if (/\/js\/init-shell\.js/i.test(content) || /id=["']?tsv-shell-injected["']?/i.test(content)) {
+      return res.send(content);
+    }
+
+    // Use shared menu module
+        const serverMenu = require('./src/menu');
+
+    // Helper to render menu to HTML string
+    function renderMenuHtml(menu) {
+      const header = `\n  <div class="sidebar-header">\n    <h4><i class="fas fa-chart-line me-2"></i>TSV Ledger</h4>\n    <small class="text-muted">Financial Intelligence Platform</small>\n  </div>`;
+      const items = menu.map(item => {
+        const ds = item.dataSection ? ` data-section="${item.dataSection}"` : '';
+        return `\n    <li class="nav-item"><a class="nav-link" href="${item.href}"${ds}><i class="${item.icon} me-2"></i>${item.text}</a></li>`;
+      }).join('');
+      const ul = `\n  <ul class="sidebar-nav nav flex-column p-3">${items}\n  </ul>`;
+      return `<nav id="sidebar" class="sidebar">${header}${ul}\n</nav>`;
+    }
+
+    let out = content;
+
+    // If the page contains the app-menu placeholder, replace it with server-rendered HTML
+    if (/id=["']?app-menu["']?/i.test(content)) {
+      try {
+        const menuHtml = renderMenuHtml(serverMenu);
+        out = content.replace(/<div[^>]*id=["']app-menu["'][^>]*>[\s\S]*?<\/div>/i, menuHtml);
+
+        // Progressive enhancement: ensure client-side scripts are present (menu-data + widget)
+        // If the page doesn't already include them, append script tags before </body>
+        if (!/\/js\/menu-data\.js/i.test(out)) {
+          out = out.replace(/<\/body>/i, `\n  <script src="/js/menu-data.js"></script>\n  <script src="/js/menu-widget.js"></script>\n</body>`);
+        }
+      } catch (e) {
+        console.warn('menu injection failed', e && e.message);
+      }
+    } else {
+      // Fallback behavior: if no placeholder, inject init-shell to normalize sidebars on the client
+      out = content.replace(/<\/body>/i, '\n    <script src="/js/init-shell.js"></script>\n</body>');
+    }
+
+    return res.send(out);
+  } catch (err) {
+    console.warn('Shell injection middleware error:', err && err.message);
+    return next();
+  }
+});
+
+// Serve static files from the 'public' directory
 app.use(express.static(path.join(__dirname, 'public')));
+
+// Expose canonical menu as JSON so clients can fetch a single source-of-truth
+app.get('/api/menu.json', (req, res) => {
+  try {
+    const menu = require('./src/menu');
+    res.json(menu);
+  } catch (err) {
+    console.error('Failed to load menu:', err && err.message);
+    res.status(500).json({ error: 'Failed to load menu' });
+  }
+});
 
 // API Routes
 

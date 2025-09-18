@@ -234,35 +234,42 @@
 
     <div class="container-fluid">
         <div class="row">
-            <!-- Sidebar -->
-            <div class="col-lg-3 col-xl-2">
-                <div class="sidebar">
-                    <h5 class="mb-3">
-                        <i class="fas fa-bars me-2"></i>
-                        Analysis Views
-                    </h5>
-                    <nav class="nav flex-column">
-                        <a class="nav-link active" href="#overview" onclick="showSection('overview')">
-                            <i class="fas fa-chart-pie"></i> Overview
-                        </a>
-                        <a class="nav-link" href="#locations" onclick="showSection('locations')">
-                            <i class="fas fa-map-marker-alt"></i> Top Locations
-                        </a>
-                        <a class="nav-link" href="#revenue" onclick="showSection('revenue')">
-                            <i class="fas fa-dollar-sign"></i> Revenue Analysis
-                        </a>
-                        <a class="nav-link" href="#shipping" onclick="showSection('shipping')">
-                            <i class="fas fa-truck"></i> Shipping Analysis
-                        </a>
-                        <a class="nav-link" href="#temporal" onclick="showSection('temporal')">
-                            <i class="fas fa-calendar"></i> Temporal Trends
-                        </a>
-                        <a class="nav-link" href="#recommendations" onclick="showSection('recommendations')">
-                            <i class="fas fa-lightbulb"></i> Recommendations
-                        </a>
-                    </nav>
-                </div>
-            </div>
+                        <!-- Sidebar -->
+                        <div class="col-lg-3 col-xl-2">
+                                <div class="sidebar">
+                                        <!-- Sidebar rendered by shared widget -->
+                                        <div id="app-menu" class="sidebar"></div>
+                                        <script src="/js/menu-data.js"></script>
+                                        <script src="/js/menu-widget.js"></script>
+
+                                        <hr />
+
+                                        <h5 class="mb-3">
+                                                <i class="fas fa-bars me-2"></i>
+                                                Analysis Views
+                                        </h5>
+                                        <nav class="nav flex-column">
+                                                <a class="nav-link active" href="#overview" onclick="showSection('overview')">
+                                                        <i class="fas fa-chart-pie"></i> Overview
+                                                </a>
+                                                <a class="nav-link" href="#locations" onclick="showSection('locations')">
+                                                        <i class="fas fa-map-marker-alt"></i> Top Locations
+                                                </a>
+                                                <a class="nav-link" href="#revenue" onclick="showSection('revenue')">
+                                                        <i class="fas fa-dollar-sign"></i> Revenue Analysis
+                                                </a>
+                                                <a class="nav-link" href="#shipping" onclick="showSection('shipping')">
+                                                        <i class="fas fa-truck"></i> Shipping Analysis
+                                                </a>
+                                                <a class="nav-link" href="#temporal" onclick="showSection('temporal')">
+                                                        <i class="fas fa-calendar"></i> Temporal Trends
+                                                </a>
+                                                <a class="nav-link" href="#recommendations" onclick="showSection('recommendations')">
+                                                        <i class="fas fa-lightbulb"></i> Recommendations
+                                                </a>
+                                        </nav>
+                                </div>
+                        </div>
 
             <!-- Main Content -->
             <div class="col-lg-9 col-xl-10">
