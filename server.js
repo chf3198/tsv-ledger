@@ -205,8 +205,23 @@ app.use((req, res, next) => {
 
           out = $.html();
         } catch (e) {
-          // fallback to original simple replacement if cheerio unavailable or fails
+          // fallback to original replacement and a best-effort regex merge if cheerio unavailable
           out = content.replace(/<div[^>]*id=["']app-menu["'][^>]*>[\s\S]*?<\/div>/i, menuHtml);
+
+          try {
+            const pageNavPattern = /(?:<hr\s*\/?>\s*)?<h([45])[^>]*>([\s\S]*?)<\/h\1>\s*<nav[^>]*class=["']nav(?: [^"']*)?["'][^>]*>([\s\S]*?)<\/nav>/i;
+            const match = content.match(pageNavPattern);
+            if (match) {
+              const pageHeading = match[2].trim();
+              const pageNavInner = match[3];
+              const sectionHtml = `\n  <div class="sidebar-section mt-2">\n    <div class="sidebar-section-header p-2"><strong>${escapeHtml(pageHeading)}</strong></div>\n    <nav class="nav flex-column p-2 page-tools">${pageNavInner}</nav>\n  </div>`;
+              out = out.replace(/(<nav[^>]*id=["']sidebar["'][^>]*>[\s\S]*?<\/nav>)/i, `$1${sectionHtml}`);
+              out = out.replace(pageNavPattern, '\n');
+            }
+          } catch (e2) {
+            // ignore fallback merge errors
+          }
+
           if (!/\/js\/menu-data\.js/i.test(out)) {
             out = out.replace(/<\/body>/i, `\n  <script src="/js/menu-data.js"></script>\n  <script src="/js/menu-widget.js"></script>\n</body>`);
           }
