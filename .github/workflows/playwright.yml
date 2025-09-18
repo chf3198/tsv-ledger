@@ -35,8 +35,10 @@ jobs:
             sleep 1
           done
 
-      - name: Run Playwright tests
-        run: npx playwright test tests/e2e/sidebar.spec.js -c tests/e2e/playwright.config.js --reporter=list
+      - name: Run Playwright tests (JS-enabled + non-JS)
+        run: |
+          # Run both the JS-enabled and non-JS specs to validate progressive enhancement
+          npx playwright test tests/e2e/sidebar.spec.js tests/e2e/sidebar-nonjs.spec.js -c tests/e2e/playwright.config.js --reporter=list
 
       - name: Upload Playwright report
         if: failure()
