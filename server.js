@@ -66,6 +66,14 @@ const AmazonZipParser = require('./src/amazon-zip-parser');
 const app = express();
 const port = 3000;
 
+// Small helper to escape text for safe HTML embedding
+function escapeHtml(str) {
+  if (!str) return '';
+  return String(str).replace(/[&<>"']/g, function (s) {
+    return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":"&#39;"})[s];
+  });
+}
+
 // API endpoint to get current import status
 app.get('/api/import-status', (req, res) => {
   res.json(importStatus);
@@ -136,12 +144,72 @@ app.use((req, res, next) => {
     if (/id=["']?app-menu["']?/i.test(content)) {
       try {
         const menuHtml = renderMenuHtml(serverMenu);
-        out = content.replace(/<div[^>]*id=["']app-menu["'][^>]*>[\s\S]*?<\/div>/i, menuHtml);
 
-        // Progressive enhancement: ensure client-side scripts are present (menu-data + widget)
-        // If the page doesn't already include them, append script tags before </body>
-        if (!/\/js\/menu-data\.js/i.test(out)) {
-          out = out.replace(/<\/body>/i, `\n  <script src="/js/menu-data.js"></script>\n  <script src="/js/menu-widget.js"></script>\n</body>`);
+        // Attempt DOM-based merging using cheerio for robust behavior
+        try {
+          const cheerio = require('cheerio');
+          const $ = cheerio.load(content, { decodeEntities: false });
+
+          // Replace placeholder with server-rendered sidebar
+          const $appMenu = $('#app-menu');
+          if ($appMenu && $appMenu.length) {
+            $appMenu.replaceWith(menuHtml);
+          } else {
+            // fallback string replacement if selector not found
+            content = content.replace(/<div[^>]*id=["']app-menu["'][^>]*>[\s\S]*?<\/div>/i, menuHtml);
+          }
+
+          // Find page-specific nav: prefer heading (h4/h5) immediately followed by nav.nav.flex-column outside sidebar
+          let $heading = null;
+          let $nav = null;
+
+          $('h4, h5').each((i, el) => {
+            const $h = $(el);
+            const $next = $h.next();
+            if ($next && $next.is('nav') && $next.hasClass('nav') && !$next.closest('#sidebar').length) {
+              $heading = $h; $nav = $next; return false;
+            }
+          });
+
+          if (!$nav) {
+            const candidates = $('nav.nav.flex-column').toArray();
+            for (const c of candidates) {
+              const $c = $(c);
+              if (!$c.closest('#sidebar').length) { $nav = $c; break; }
+            }
+            if ($nav && !$heading) {
+              const $prev = $nav.prevAll('h4, h5').first();
+              if ($prev && $prev.length) $heading = $prev;
+            }
+          }
+
+          if ($nav && $nav.length) {
+            const headingText = $heading && $heading.text() ? $heading.text().trim() : 'Page Tools';
+            if ($heading && $heading.length) $heading.remove();
+            const navHtml = $.html($nav);
+            $nav.remove();
+
+            const sectionHtml = `<div class="sidebar-section mt-2"><div class="sidebar-section-header p-2"><strong>${escapeHtml(headingText)}</strong></div>${navHtml}</div>`;
+            const $sidebar = $('#sidebar');
+            if ($sidebar && $sidebar.length) {
+              $sidebar.append(sectionHtml);
+            } else {
+              $('body').prepend(sectionHtml);
+            }
+          }
+
+          // Ensure client-side scripts exist for progressive enhancement
+          if ($('script[src="/js/menu-data.js"]').length === 0) {
+            $('body').append('\n  <script src="/js/menu-data.js"></script>\n  <script src="/js/menu-widget.js"></script>');
+          }
+
+          out = $.html();
+        } catch (e) {
+          // fallback to original simple replacement if cheerio unavailable or fails
+          out = content.replace(/<div[^>]*id=["']app-menu["'][^>]*>[\s\S]*?<\/div>/i, menuHtml);
+          if (!/\/js\/menu-data\.js/i.test(out)) {
+            out = out.replace(/<\/body>/i, `\n  <script src="/js/menu-data.js"></script>\n  <script src="/js/menu-widget.js"></script>\n</body>`);
+          }
         }
       } catch (e) {
         console.warn('menu injection failed', e && e.message);
