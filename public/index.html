@@ -28,7 +28,16 @@
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
 
-    /* Shoelace Drawer Styles */
+    /* Shoelace Drawer Styles - Navigation Sidebar Positioning
+     *
+     * The sidebar uses Shoelace's sl-drawer component with Shadow DOM.
+     * We need to override the default positioning to place it below the fixed navbar.
+     *
+     * Key positioning strategy:
+     * - Desktop: Fixed position below 60px navbar, full height minus navbar
+     * - Mobile: Default Shoelace overlay behavior
+     * - Content: 80px top padding to prevent overlap with navbar
+     */
     .sidebar-drawer::part(panel) {
       background: linear-gradient(135deg, var(--primary-color) 0%, #34495e 100%);
       color: white;
@@ -40,7 +49,12 @@
       background: rgba(0, 0, 0, 0.5);
     }
 
-    /* Desktop sidebar behavior */
+    /* Desktop sidebar positioning (≥992px)
+     * - Fixed position to keep sidebar visible during scroll
+     * - Top: 60px to account for Bootstrap navbar height
+     * - Height: calc(100vh - 60px) for full viewport minus navbar
+     * - Override Shoelace defaults with !important for Shadow DOM penetration
+     */
     @media (min-width: 992px) {
       .sidebar-drawer {
         --size: 100vh;
@@ -125,7 +139,13 @@
       text-align: center;
     }
 
-    /* Main Content */
+    /* Main Content Layout
+     *
+     * Content area positioning to prevent overlap with fixed navbar.
+     * - Desktop: margin-left for sidebar space, padding-top for navbar clearance
+     * - Mobile: margin-left: 0 when sidebar is collapsed
+     * - Padding-top: 80px (60px navbar + 20px spacing) prevents content overlap
+     */
     .main-content {
       margin-left: var(--sidebar-width);
       padding: 2rem;
