@@ -29,6 +29,7 @@ class EmployeeBenefitsManager {
       this.createSelectionModal();
       this.setupModalEventListeners();
       this.loadSavedSelection();
+      // Note: updateSelectionStatus() is called by the HTML after initialization
       this.initialized = true;
       console.log('✅ Benefits Manager initialized');
     } catch (error) {
@@ -86,6 +87,70 @@ class EmployeeBenefitsManager {
         // Final fallback to demo data
         this.loadDemoData();
       }
+    }
+  }
+
+  // Normalize progressive allocation shapes so older storage formats
+  // ({ allocated, remaining } or plain objects) are converted to the
+  // canonical { benefits, business, total } shape used throughout the UI.
+  normalizeProgressiveAllocations() {
+    try {
+      const allocs = this.itemProgressiveAllocations;
+      if (!allocs) return;
+
+      const normalizeEntry = (raw) => {
+        if (!raw || typeof raw !== 'object') return { benefits: 0, business: 100, total: 100 };
+        // Prefer explicit fields
+        let benefits = null;
+        let business = null;
+
+        if (raw.benefits != null) benefits = Number(raw.benefits);
+        if (raw.business != null) business = Number(raw.business);
+
+        // Backwards-compat: older shape used 'allocated' for benefits
+        if (benefits == null && raw.allocated != null) benefits = Number(raw.allocated);
+        // Backwards-compat: older shape used 'remaining' for business
+        if (business == null && raw.remaining != null) business = Number(raw.remaining);
+
+        if (benefits == null && business == null) {
+          // Last resort: try any numeric-like fields
+          benefits = Number(raw.benefits || raw.allocated || 0);
+          business = Number(raw.business || raw.remaining || (100 - benefits));
+        }
+
+        if (isNaN(benefits)) benefits = 0;
+        if (isNaN(business)) business = 100 - benefits;
+
+        // Normalize to integer percentages and ensure sum to 100
+        benefits = Math.max(0, Math.min(100, Math.round(benefits)));
+        business = Math.max(0, Math.min(100, Math.round(business)));
+        business = 100 - benefits;
+
+        return { benefits, business, total: 100 };
+      };
+
+      // Support Map-like and plain object storage
+      if (typeof allocs.forEach === 'function' && typeof allocs.get === 'function' && typeof allocs.set === 'function') {
+        // It's a Map
+        Array.from(allocs.keys()).forEach(id => {
+          try {
+            const raw = allocs.get(id);
+            const norm = normalizeEntry(raw);
+            allocs.set(id, norm);
+          } catch (e) {
+            // ignore per-entry errors
+          }
+        });
+      } else if (typeof allocs === 'object') {
+        Object.keys(allocs).forEach(id => {
+          try {
+            allocs[id] = normalizeEntry(allocs[id]);
+          } catch (e) {}
+        });
+      }
+    } catch (e) {
+      // non-fatal
+      console.warn('normalizeProgressiveAllocations failed', e);
     }
   }
 
@@ -604,6 +669,27 @@ class EmployeeBenefitsManager {
     this.amazonItems.forEach(item => {
       this.updateAddButtonText(item.id);
     });
+  }
+
+  updateSelectionStatus() {
+    const statusElement = document.getElementById('selectionStatus');
+    if (!statusElement) return;
+    
+    const total = this.amazonItems ? this.amazonItems.length : 0;
+    const businessItems = this.amazonItems ? 
+      this.amazonItems.filter(item => {
+        const alloc = this.itemProgressiveAllocations.get(item.id) || { benefits: 0, business: 100 };
+        return alloc.business > 0;
+      }).length : 0;
+    
+    const benefitsItems = this.amazonItems ?
+      this.amazonItems.filter(item => {
+        const alloc = this.itemProgressiveAllocations.get(item.id) || { benefits: 0, business: 100 };
+        return alloc.benefits > 0;
+      }).length : 0;
+    
+    const statusText = `<strong>${total}</strong> total items • <strong>${businessItems}</strong> business supplies • <strong>${benefitsItems}</strong> benefits`;
+    statusElement.innerHTML = statusText;
   }
 
   updateModalDisplay() {
@@ -1877,9 +1963,217 @@ class EmployeeBenefitsManager {
 
     console.log('🎯 Modal display updated');
   }
+
+  updateModalDisplay() {
+    console.log('🔄 Updating modal display with', this.amazonItems.length, 'items');
+    
+    if (this.amazonItems.length === 0) {
+      console.warn('⚠️ No Amazon items loaded yet');
+      return;
+    }
+
+    // Get containers
+    const businessContainer = document.getElementById('businessSuppliesList');
+    const benefitsContainer = document.getElementById('benefitsList');
+    
+    if (!businessContainer || !benefitsContainer) {
+      console.error('❌ Modal containers not found');
+      return;
+    }
+
+    // Clear containers
+    businessContainer.innerHTML = '';
+    benefitsContainer.innerHTML = '';
+
+    // BUG FIX: Benefits Allocation UI Issue (October 16, 2025)
+    // Previously, ALL items were shown in business column regardless of allocation,
+    // causing items with 0% business allocation to incorrectly appear in business column.
+    // Fixed by filtering items to only show in columns where they have >0% allocation.
+    //
+    // Before fix: const businessItems = this.amazonItems; // Showed ALL items
+    // After fix: Filter based on allocation.business > 0
+    const businessItems = [];
+    const benefitsItems = [];
+
+    this.amazonItems.forEach(item => {
+      const allocation = this.itemProgressiveAllocations.get(item.id) || { benefits: 0, business: 100 };
+      
+      // Only show item in business column if it has business allocation > 0
+      if (allocation.business > 0) {
+        businessItems.push(item);
+      }
+      
+      // Only show item in benefits column if it has benefits allocation > 0
+      if (allocation.benefits > 0) {
+        benefitsItems.push(item);
+      }
+    });
+
+    // Populate business supplies (show all items with their business allocation)
+    businessItems.forEach(item => {
+      const card = this.createBusinessCard(item);
+      businessContainer.appendChild(card);
+    });
+
+    // Populate benefits (only items with benefits allocation > 0)
+    if (benefitsItems.length === 0) {
+      benefitsContainer.innerHTML = `
+        <div class="col-12">
+          <div class="alert alert-info">
+            <i class="fas fa-info-circle me-2"></i>No benefits allocated yet. Use the sliders in Business Supplies to allocate portions to benefits.
+          </div>
+        </div>
+      `;
+    } else {
+      benefitsItems.forEach(item => {
+        const card = this.createBenefitsCard(item);
+        benefitsContainer.appendChild(card);
+      });
+    }
+
+    // Update summary stats
+    this.updateSummaryStats(businessItems, benefitsItems);
+
+    // Update counts
+    const businessCountEl = document.getElementById('businessItemsCount');
+    const benefitsCountEl = document.getElementById('benefitsItemsCount');
+    
+    if (businessCountEl) businessCountEl.textContent = `${businessItems.length} items`;
+    if (benefitsCountEl) benefitsCountEl.textContent = `${benefitsItems.length} items`;
+
+    console.log('✅ Modal display updated successfully');
+  }
 }
 
 // Global initialization
 if (typeof window !== 'undefined') {
   window.EmployeeBenefitsManager = EmployeeBenefitsManager;
+}
+
+// SPA / fragment navigation integration
+// Ensure the benefits manager initializes when the app navigates via hash
+function _initBenefitsIfNeeded() {
+  try {
+    const statusEl = document.getElementById('selectionStatus');
+    // If the status element isn't present on the page, nothing to do
+    if (!statusEl) return;
+
+    // If manager already exists, just refresh the status
+      if (window.employeeBenefitsManager) {
+        // If the existing global is a proper manager (has initialize fn), use it.
+        if (typeof window.employeeBenefitsManager.initialize === 'function') {
+          if (!window.employeeBenefitsManager.initialized) {
+            window.employeeBenefitsManager.initialize().then(() => {
+              try { window.employeeBenefitsManager.updateSelectionStatus(); } catch (e) {}
+            }).catch(err => console.error('Error initializing benefits manager on SPA navigation:', err));
+          } else {
+            try { window.employeeBenefitsManager.updateSelectionStatus(); } catch (e) {}
+          }
+          return;
+        }
+
+        // Otherwise the global appears to be a stub or older shape; replace with a real instance
+        try {
+          console.warn('Replacing stubbed employeeBenefitsManager with real instance');
+        } catch (e) {}
+        window.employeeBenefitsManager = new EmployeeBenefitsManager();
+        window.employeeBenefitsManager.initialize().then(() => {
+          try { window.employeeBenefitsManager.updateSelectionStatus(); } catch (e) {}
+        }).catch(err => console.error('Error initializing benefits manager on SPA navigation (replaced stub):', err));
+        return;
+      }
+
+    // Otherwise create and initialize the manager (only when the benefits UI is present)
+    window.employeeBenefitsManager = new EmployeeBenefitsManager();
+    window.employeeBenefitsManager.initialize().then(() => {
+      window.employeeBenefitsManager.updateSelectionStatus();
+    }).catch(err => console.error('Error initializing benefits manager on SPA navigation (new):', err));
+  } catch (e) {
+    console.error('Error in _initBenefitsIfNeeded:', e);
+  }
+}
+
+// Wire up common SPA navigation signals
+if (typeof window !== 'undefined') {
+  // Full page load should initialize (already performed by page script that calls updateSelectionStatus),
+  // but attaching ensures pages loaded via fragments also initialize.
+  window.addEventListener('hashchange', () => {
+    // small delay to let the view render
+    setTimeout(_initBenefitsIfNeeded, 50);
+  }, false);
+
+  // Some apps emit custom events when a section is shown — listen for common names.
+  document.addEventListener('section:shown', (ev) => {
+    const detail = ev && ev.detail ? ev.detail : '';
+    if (typeof detail === 'string' && detail.toLowerCase().includes('benefit')) {
+      setTimeout(_initBenefitsIfNeeded, 50);
+    }
+  }, false);
+
+  document.addEventListener('menu:section:shown', (ev) => {
+    const detail = ev && ev.detail ? ev.detail : '';
+    if (typeof detail === 'string' && detail.toLowerCase().includes('benefit')) {
+      setTimeout(_initBenefitsIfNeeded, 50);
+    }
+  }, false);
+
+  // Safety: call once shortly after load in case other scripts didn't call the inline initializer
+  if (document.readyState === 'complete' || document.readyState === 'interactive') {
+    setTimeout(_initBenefitsIfNeeded, 200);
+  } else {
+    document.addEventListener('DOMContentLoaded', () => setTimeout(_initBenefitsIfNeeded, 200));
+  }
+}
+
+// SPA-aware helpers: ensure the benefits manager initializes when the app
+// navigates by hash (single-page navigation), not only on full page load.
+if (typeof window !== 'undefined') {
+  // Avoid clobbering an existing helper
+  if (!window.ensureBenefitsInitialized) {
+    window.ensureBenefitsInitialized = async function() {
+      try {
+        // Prefer the page-scoped variable if present
+        const globalVar = window.employeeBenefitsManager || window._employeeBenefitsManager || null;
+        if (globalVar && globalVar.initialized) {
+          // Already initialized — just refresh status
+          try { globalVar.updateSelectionStatus(); } catch (e) {}
+          return globalVar;
+        }
+
+        // Create/use page-scoped variable if available. If an existing global is a stub
+        // (for example index page provides a thin shim), replace it with a real manager
+        if (!window.employeeBenefitsManager || typeof window.employeeBenefitsManager.initialize !== 'function') {
+          window.employeeBenefitsManager = new EmployeeBenefitsManager();
+        }
+
+        await window.employeeBenefitsManager.initialize();
+        try { window.employeeBenefitsManager.updateSelectionStatus(); } catch (e) {}
+        return window.employeeBenefitsManager;
+      } catch (err) {
+        console.error('ensureBenefitsInitialized failed:', err);
+        return null;
+      }
+    };
+  }
+
+  // When SPA hash changes, initialize/update the benefits manager if the
+  // benefits section becomes active.
+  window.addEventListener('hashchange', () => {
+    try {
+      const section = window.location.hash ? window.location.hash.replace('#', '') : '';
+      if (section === 'benefits-management') {
+        // Fire-and-forget initialization (don't block navigation)
+        window.ensureBenefitsInitialized().catch(() => {});
+      }
+    } catch (e) {}
+  });
+
+  // Also attempt initialization immediately if the current hash points to benefits
+  try {
+    const initialSection = window.location.hash ? window.location.hash.replace('#', '') : '';
+    if (initialSection === 'benefits-management') {
+      // Non-blocking
+      window.ensureBenefitsInitialized().catch(() => {});
+    }
+  } catch (e) {}
 }

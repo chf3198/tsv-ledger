@@ -60,7 +60,7 @@ let importStatus = {
   totalFiles: 0,
   lastUpdate: null
 };
-const AIAnalysisEngine = require('./src/ai-analysis-engine');
+const { AIAnalysisEngine } = require('./src/ai-analysis-engine');
 const AmazonZipParser = require('./src/amazon-zip-parser');
 
 const app = express();
@@ -127,12 +127,18 @@ app.use((req, res, next) => {
     // Use shared menu module
         const serverMenu = require('./src/menu');
 
-    // Helper to render menu to HTML string
-    function renderMenuHtml(menu) {
+    // Helper to render menu to HTML string. Accept current request path so we can mark the active link.
+    function renderMenuHtml(menu, currentPath) {
       const header = `\n  <div class="sidebar-header">\n    <h4><i class="fas fa-chart-line me-2"></i>TSV Ledger</h4>\n    <small class="text-muted">Financial Intelligence Platform</small>\n  </div>`;
       const items = menu.map(item => {
         const ds = item.dataSection ? ` data-section="${item.dataSection}"` : '';
-        return `\n    <li class="nav-item"><a class="nav-link" href="${item.href}"${ds}><i class="${item.icon} me-2"></i>${item.text}</a></li>`;
+        // Determine active link based on current request path. Normalize trailing slashes.
+        const normalize = p => String(p || '').replace(/\/index\.html$/i, '/').replace(/\/+$/, '') || '/';
+        const cur = normalize(currentPath);
+        const hrefNorm = normalize(item.href);
+        const isActive = (cur === hrefNorm);
+        const activeCls = isActive ? ' active' : '';
+        return `\n    <li class="nav-item"><a class="nav-link${activeCls}" href="${item.href}"${ds}><i class="${item.icon} me-2"></i>${item.text}</a></li>`;
       }).join('');
       const ul = `\n  <ul class="sidebar-nav nav flex-column p-3">${items}\n  </ul>`;
       return `<nav id="sidebar" class="sidebar">${header}${ul}\n</nav>`;
@@ -141,9 +147,9 @@ app.use((req, res, next) => {
     let out = content;
 
     // If the page contains the app-menu placeholder, replace it with server-rendered HTML
-    if (/id=["']?app-menu["']?/i.test(content)) {
+      if (/id=["']?app-menu["']?/i.test(content)) {
       try {
-        const menuHtml = renderMenuHtml(serverMenu);
+        const menuHtml = renderMenuHtml(serverMenu, reqPath);
 
         // Attempt DOM-based merging using cheerio for robust behavior
         try {
@@ -209,14 +215,27 @@ app.use((req, res, next) => {
           out = content.replace(/<div[^>]*id=["']app-menu["'][^>]*>[\s\S]*?<\/div>/i, menuHtml);
 
           try {
-            const pageNavPattern = /(?:<hr\s*\/?>\s*)?<h([45])[^>]*>([\s\S]*?)<\/h\1>\s*<nav[^>]*class=["']nav(?: [^"']*)?["'][^>]*>([\s\S]*?)<\/nav>/i;
+            // Improved regex fallback: match an optional <hr>, a heading (h4/h5) and the following nav.nav.flex-column
+            // Capture full raw HTML for removal and reuse.
+            const pageNavPattern = /(?:<hr\s*\/?>\s*)?(<h[45][^>]*>[\s\S]*?<\/h[45]>)\s*(<nav[^>]*class=["'][^"']*\bnav\b[^"']*["'][^>]*>[\s\S]*?<\/nav>)/i;
             const match = content.match(pageNavPattern);
             if (match) {
-              const pageHeading = match[2].trim();
-              const pageNavInner = match[3];
-              const sectionHtml = `\n  <div class="sidebar-section mt-2">\n    <div class="sidebar-section-header p-2"><strong>${escapeHtml(pageHeading)}</strong></div>\n    <nav class="nav flex-column p-2 page-tools">${pageNavInner}</nav>\n  </div>`;
+              const rawHeading = match[1];
+              const rawNav = match[2];
+
+              // Derive plain text heading for the sidebar section title
+              // Decode common HTML entities that may have been present then strip tags
+              const decodedHeading = rawHeading.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&');
+              const headingText = decodedHeading.replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim() || 'Page Tools';
+
+              // Remove the original occurrence from the output HTML to avoid duplication
+              out = out.replace(match[0], '\n');
+
+              // Create the sidebar section HTML using the extracted nav
+              const sectionHtml = `\n  <div class="sidebar-section mt-2">\n    <div class="sidebar-section-header p-2"><strong>${escapeHtml(headingText)}</strong></div>\n    ${rawNav}\n  </div>`;
+
+              // Inject the section right after the injected #sidebar nav block
               out = out.replace(/(<nav[^>]*id=["']sidebar["'][^>]*>[\s\S]*?<\/nav>)/i, `$1${sectionHtml}`);
-              out = out.replace(pageNavPattern, '\n');
             }
           } catch (e2) {
             // ignore fallback merge errors
@@ -230,16 +249,38 @@ app.use((req, res, next) => {
         console.warn('menu injection failed', e && e.message);
       }
     } else {
-      // Fallback behavior: if no placeholder, inject init-shell to normalize sidebars on the client
-      out = content.replace(/<\/body>/i, '\n    <script src="/js/init-shell.js"></script>\n</body>');
+      // No menu injection needed for pages with existing Bootstrap navigation
+      out = content;
     }
 
-    return res.send(out);
+  return res.send(ensureScrollCss(out));
   } catch (err) {
     console.warn('Shell injection middleware error:', err && err.message);
     return next();
   }
 });
+
+// Ensure pages served by the shell have minimal CSS to avoid content being
+// clipped behind fixed-position elements (navbar/sidebar) and to allow
+// vertical scrolling on tall sub-views. This is a conservative, non-invasive
+// fallback injected into HTML responses only when required.
+function ensureScrollCss(html) {
+  try {
+    if (!/<meta[^>]+name=["']viewport["']/.test(html)) {
+      // most pages already have viewport; if not, don't try to fix here
+    }
+
+    // If already injected scroll-fix, avoid duplicating the CSS. Otherwise, inject minimal CSS if needed.
+    if (html.indexOf('<!-- INJECTED: SCROLL-FIX -->') !== -1) {
+      return html;
+    }
+
+    // For pages without scroll-fix, just return as-is since we already injected the script
+    return html;
+  } catch (e) {
+    return html;
+  }
+}
 
 // Serve static files from the 'public' directory
 app.use(express.static(path.join(__dirname, 'public')));
@@ -1005,7 +1046,7 @@ app.get('/api/ai-analysis', async (req, res) => {
       console.log(`📊 Processing ${transactions.length} transactions with AI...`);
 
       // Run comprehensive AI analysis
-      const aiAnalysis = await aiEngine.runComprehensiveAIAnalysis(transactions);
+      const aiAnalysis = await aiEngine.analyzeExpenditures(transactions);
 
       // Get traditional analysis for comparison
       const categorizer = new TSVCategorizer();
@@ -1016,7 +1057,7 @@ app.get('/api/ai-analysis', async (req, res) => {
       const traditionalAnalysis = {
         totalTransactions: boaTransactions.length,
         totalAmount: Math.abs(boaTransactions.reduce((sum, t) => sum + t.amount, 0)),
-        categoryBreakdown: categorizer.getCategoryBreakdown(boaTransactions)
+        categoryBreakdown: categorizer.analyze(boaTransactions).categories
       };
 
       // Combine AI insights with traditional analysis
@@ -1024,31 +1065,26 @@ app.get('/api/ai-analysis', async (req, res) => {
         traditional: traditionalAnalysis,
         ai: aiAnalysis,
         recommendations: {
-          immediate: aiAnalysis.summary.recommendedActions.slice(0, 3),
-          longTerm: aiAnalysis.optimizations.slice(0, 3).map(opt => ({
-            category: opt.category,
-            strategy: opt.strategy,
-            potentialSavings: opt.potentialSavings,
-            timeframe: 'Monthly'
-          }))
+          immediate: (aiAnalysis.recommendations || []).slice(0, 3),
+          longTerm: [] // AI engine doesn't provide long-term optimizations yet
         },
-        riskAssessment: aiAnalysis.summary.riskAssessment,
+        riskAssessment: aiAnalysis.anomalies.length > 0 ? 'High' : 'Low',
         insights: {
-          topInsights: aiAnalysis.intelligentInsights.slice(0, 5),
-          patterns: aiAnalysis.patterns.slice(0, 3),
-          anomalies: aiAnalysis.anomalies.slice(0, 3)
+          topInsights: (aiAnalysis.insights || []).slice(0, 5),
+          patterns: [], // AI engine doesn't provide separate patterns yet
+          anomalies: (aiAnalysis.anomalies || []).slice(0, 3)
         },
         performance: {
-          aiConfidence: aiAnalysis.metadata.confidence,
-          analysisTime: aiAnalysis.metadata.analysisTime,
-          improvementsPossible: aiAnalysis.categorization.improved,
-          totalOptimizationValue: aiAnalysis.optimizations.reduce((sum, opt) => sum + opt.potentialSavings, 0)
+          aiConfidence: aiAnalysis.confidence || 0,
+          analysisTime: 0, // AI engine doesn't track analysis time yet
+          improvementsPossible: false, // AI engine doesn't provide this yet
+          totalOptimizationValue: 0 // AI engine doesn't provide optimizations yet
         }
       };
 
       console.log(`✅ AI Analysis Complete`);
-      console.log(`🎯 AI Confidence: ${(aiAnalysis.metadata.confidence * 100).toFixed(1)}%`);
-      console.log(`⚡ Analysis Time: ${aiAnalysis.metadata.analysisTime.toFixed(2)}s`);
+      console.log(`🎯 AI Confidence: ${(aiAnalysis.confidence * 100).toFixed(1)}%`);
+      console.log(`⚡ Analysis Time: N/A`);
       console.log(`💰 Optimization Potential: $${enhancedResponse.performance.totalOptimizationValue.toFixed(2)}/month`);
 
       res.json(enhancedResponse);
@@ -1062,6 +1098,93 @@ app.get('/api/ai-analysis', async (req, res) => {
     });
   }
 });
+
+// Function to load Amazon items directly from CSV files
+function loadAmazonItemsFromCSV(callback) {
+  const amazonItems = [];
+  const seenItems = new Set();
+  
+  // Try to load from amazon_order_history.csv first
+  const csvFilePath = path.join(__dirname, 'data', 'amazon_order_history.csv');
+  
+  if (!fs.existsSync(csvFilePath)) {
+    console.log('⚠️ Amazon CSV file not found:', csvFilePath);
+    return callback([]);
+  }
+
+  console.log('📖 Loading Amazon items from CSV file...');
+  
+  try {
+    const csvData = fs.readFileSync(csvFilePath, 'utf8');
+    const lines = csvData.split('\n');
+    const headers = lines[0].split(',');
+    
+    for (let i = 1; i < lines.length; i++) {
+      const line = lines[i].trim();
+      if (!line) continue;
+      
+      try {
+        // Simple CSV parsing (assuming no quoted fields with commas)
+        const values = line.split(',');
+        if (values.length < headers.length) continue;
+        
+        const row = {};
+        headers.forEach((header, index) => {
+          row[header.trim()] = values[index] ? values[index].trim() : '';
+        });
+        
+        // Parse the CSV row
+        const orderId = row['order id'] || '';
+        const orderUrl = row['order url'] || '';
+        const items = row.items || '';
+        const date = row.date || '';
+        const total = parseFloat(row.total) || 0;
+        const payments = row.payments || '';
+        
+        if (items && orderId) {
+          // Each order typically contains one item
+          const itemList = items.includes(';') ? items.split(';').filter(item => item.trim()) : [items];
+          
+          itemList.forEach((itemName, itemIndex) => {
+            const cleanItemName = itemName.trim();
+            if (cleanItemName) {
+              // Create a normalized version for duplicate detection
+              const normalized = cleanItemName.toLowerCase().substring(0, 60);
+              
+              if (!seenItems.has(normalized)) {
+                seenItems.add(normalized);
+                
+                const estimatedPrice = itemList.length > 1 ? 
+                  (total / itemList.length) : 
+                  total;
+
+                amazonItems.push({
+                  id: `amazon_${orderId}_${itemIndex}`,
+                  name: cleanItemName,
+                  price: parseFloat(estimatedPrice.toFixed(2)),
+                  priceFormatted: `$${estimatedPrice.toFixed(2)}`,
+                  date: date,
+                  orderId: orderId,
+                  orderUrl: orderUrl,
+                  payments: payments,
+                  category: categorizeItem(cleanItemName)
+                });
+              }
+            }
+          });
+        }
+      } catch (error) {
+        console.warn('⚠️ Error processing CSV row:', error);
+      }
+    }
+    
+    console.log(`✅ Loaded ${amazonItems.length} items from CSV`);
+    callback(amazonItems);
+  } catch (error) {
+    console.error('❌ Error reading Amazon CSV file:', error);
+    callback([]);
+  }
+}
 
 // GET /api/amazon-items - Get list of Amazon items for filtering (optionally filter by business card *5795)
 app.get('/api/amazon-items', (req, res) => {
@@ -1080,10 +1203,60 @@ app.get('/api/amazon-items', (req, res) => {
         const seenItems = new Set();
         const businessCardOnly = req.query.businessCard === 'true';
 
-        // Get all Amazon order details
+        // Get all Amazon order details from expenditures
         const amazonOrders = expenditures.filter(exp => 
           exp.description && exp.description.includes('Amazon Order')
         );
+
+        // If no Amazon orders in expenditures, try loading from CSV files
+        if (amazonOrders.length === 0) {
+          console.log('🔄 No Amazon orders found in expenditures, loading from CSV files...');
+          loadAmazonItemsFromCSV((csvItems) => {
+            if (csvItems && csvItems.length > 0) {
+              console.log(`📦 Loaded ${csvItems.length} Amazon items from CSV files`);
+              
+              // Filter for business card if requested
+              let filteredItems = csvItems;
+              if (businessCardOnly) {
+                filteredItems = csvItems.filter(item => 
+                  item.payments && item.payments.includes('5795')
+                );
+                console.log(`📦 Filtered to ${filteredItems.length} business card items`);
+              }
+
+              // Sort items alphabetically
+              filteredItems.sort((a, b) => a.name.localeCompare(b.name));
+
+              // Apply any stored edits to the items
+              try {
+                const editsFile = path.join(__dirname, 'data', 'amazon_item_edits.json');
+                if (fs.existsSync(editsFile)) {
+                  const edits = JSON.parse(fs.readFileSync(editsFile, 'utf8'));
+                  
+                  filteredItems.forEach(item => {
+                    if (edits[item.id]) {
+                      const edit = edits[item.id];
+                      if (edit.category) item.category = edit.category;
+                      if (edit.description) item.description = edit.description;
+                      if (edit.amount !== null && edit.amount !== undefined) {
+                        item.price = edit.amount;
+                        item.priceFormatted = `$${edit.amount.toFixed(2)}`;
+                      }
+                    }
+                  });
+                }
+              } catch (error) {
+                console.warn('⚠️ Could not apply edits:', error.message);
+              }
+
+              return res.json(filteredItems);
+            } else {
+              console.log('📦 No Amazon items found in CSV files either');
+              return res.json([]);
+            }
+          });
+          return;
+        }
 
         if (businessCardOnly) {
           // Get business card transactions for filtering

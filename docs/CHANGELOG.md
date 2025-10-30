@@ -8,6 +8,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Fixed
+- **Benefits Allocation UI Bug**: Fixed items with 0% allocation appearing in wrong columns
+  - Root cause: `EmployeeBenefitsManager.updateModalDisplay()` was showing ALL items in business column regardless of allocation
+  - Solution: Modified filtering logic to only display items in columns where they have >0% allocation
+  - Removed redundant client-side cleanup script from server.js as manager now handles filtering correctly
+  - Items now correctly appear only in Benefits column when allocated 100% to benefits (0% business)
+  - Items now correctly appear only in Business Supplies column when allocated 100% to business (0% benefits)
+
+### Changed
 - **Navigation Positioning**: Fixed sidebar overlap with navbar using Shoelace drawer CSS positioning
   - Desktop sidebar now positioned below 60px navbar with `top: 60px` and `height: calc(100vh - 60px)`
   - Added 80px top padding to main content to prevent overlap with fixed navbar

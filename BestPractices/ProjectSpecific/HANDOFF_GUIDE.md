@@ -1,7 +1,7 @@
 # TSV Ledger - Comprehensive Handoff Guide
 
-> **Last Updated:** September 8, 2025  
-> **Version:** 2.2.1  
+> **Last Updated:** October 16, 2025  
+> **Version:** 2.2.3  
 > **Project Status:** Production Ready with Complete Organization
 
 ## 🎯 Project Overview
@@ -173,7 +173,27 @@ npm run test-amazon
 - **Documentation-First:** Document before implementing
 - **Version Control:** Clean git history with meaningful commits
 
-## 🔄 Handoff Checklist
+## � Recent Bug Fixes & Improvements
+
+### Benefits Allocation UI Bug Fix (October 16, 2025)
+**Issue:** Items with 0% allocation were incorrectly appearing in wrong columns in the Employee Benefits modal.
+
+**Root Cause:** The `EmployeeBenefitsManager.updateModalDisplay()` method was showing ALL items in the business supplies column regardless of their allocation percentages, then adding benefits-eligible items to the benefits column. This caused items with 0% business allocation to still appear in the business column.
+
+**Solution:**
+- Modified `updateModalDisplay()` in `public/js/employee-benefits.js` to properly filter items
+- Items now only appear in columns where they have >0% allocation
+- Removed redundant client-side cleanup script from `server.js`
+- Added comprehensive comments explaining the filtering logic
+
+**Files Changed:**
+- `public/js/employee-benefits.js` - Fixed filtering logic in `updateModalDisplay()`
+- `server.js` - Removed redundant cleanup script injection
+- `docs/CHANGELOG.md` - Documented the fix
+
+**Testing:** Verified with Playwright tests and manual UX testing that items now correctly appear only in their allocated columns.
+
+## �🔄 Handoff Checklist
 
 ### For New Developer/Chat Session ✅
 - ✅ Complete directory structure documentation
