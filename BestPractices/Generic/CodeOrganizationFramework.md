@@ -198,6 +198,56 @@ fix: update import paths after reorganization
 - **Missing documentation** - Not updating docs during reorganization
 - **Breaking changes** - Disrupting team workflow unnecessarily
 
+## AI Development Considerations
+
+### File Size Optimization
+For optimal AI-assisted development, maintain files under 250 lines:
+
+**Benefits:**
+- Faster AI context loading and processing
+- Improved code comprehension and suggestions
+- Easier debugging and code review
+- Better maintainability and focus
+
+**Implementation:**
+- Split large files into focused modules
+- Extract utility functions into separate files
+- Use clear, descriptive naming conventions
+- Maintain single responsibility per file
+
+### Modular Architecture Patterns
+Organize code into focused modules with clear boundaries:
+
+```
+src/
+├── routes/          # API endpoints by domain
+├── services/        # Business logic services
+├── utils/          # Shared utilities
+├── models/         # Data models and schemas
+└── middleware/     # Express middleware
+```
+
+**Route Module Pattern:**
+```javascript
+// routes/example.js
+const express = require('express');
+const router = express.Router();
+
+// Domain-specific endpoints
+router.get('/examples', getExamples);
+router.post('/examples', createExample);
+
+module.exports = router;
+```
+
+### Documentation for AI Context
+Create comprehensive documentation to help AI agents:
+
+- **AGENTS.md** - AI-specific development guide
+- **JSDoc comments** - Detailed function documentation
+- **README files** - Clear module and directory descriptions
+- **Code examples** - Practical usage patterns
+
 ## Reusable Templates
 
 ### Directory README Template

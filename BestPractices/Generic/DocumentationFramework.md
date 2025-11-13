@@ -367,6 +367,80 @@ cd [project]
 - **Format inconsistency** making information hard to consume
 - **Access barriers** that prevent people from finding needed information
 
+## AI Coding Agent Documentation Standards
+
+### AI Knowledge Transfer Principles
+With the rise of AI coding assistants and automated development tools, documentation must be structured for both human and AI consumption. AI agents require:
+
+1. **Complete Implementation** - No placeholder code or "TODO" implementations
+2. **Comprehensive JSDoc** - Detailed parameter descriptions, return types, and examples
+3. **Context-Rich Comments** - Business logic explanations and design decisions
+4. **Usage Examples** - Practical code samples showing real-world application
+5. **Error Handling Documentation** - Expected error conditions and recovery patterns
+
+### AI-Optimized Code Documentation
+
+#### Class Documentation Template
+```javascript
+/**
+ * [ClassName] - [Brief business purpose]
+ *
+ * [Detailed description of class responsibilities and business context]
+ * [Explanation of how this fits into the overall system architecture]
+ *
+ * @class [ClassName]
+ * @version [Semantic version]
+ * @author [Team/Organization name]
+ * @since [Date]
+ *
+ * @example
+ * // Practical usage example with real data
+ * const instance = new [ClassName]([parameters]);
+ * const result = instance.[methodName]([args]);
+ * // Expected output and behavior description
+ */
+```
+
+#### Method Documentation Template
+```javascript
+/**
+ * [Method purpose] - [What it accomplishes for the business]
+ *
+ * [Detailed explanation of method behavior, edge cases, and business rules]
+ * [When and why to use this method vs alternatives]
+ *
+ * @param {[Type]} paramName - [Detailed description including format, constraints, examples]
+ * @param {[Type]} [optionalParam] - [Description of optional parameter]
+ * @returns {[Type]} [Detailed description of return value structure and meaning]
+ *
+ * @example
+ * // Real-world usage example
+ * const result = methodName([realisticArgs]);
+ * // Returns: [Expected structure with explanation]
+ *
+ * @example
+ * // Error case example
+ * const result = methodName([invalidArgs]);
+ * // Returns: [Error response with explanation]
+ */
+```
+
+#### AI Documentation Checklist
+- [ ] **Complete Implementation**: No empty functions or placeholder code
+- [ ] **Parameter Details**: Every parameter documented with type, purpose, and constraints
+- [ ] **Return Value Documentation**: Complete description of return structure and possible values
+- [ ] **Business Context**: Explanation of why the code exists and business value it provides
+- [ ] **Usage Examples**: Multiple practical examples showing real-world application
+- [ ] **Error Scenarios**: Documentation of expected errors and exception handling
+- [ ] **Dependencies**: Clear documentation of module dependencies and requirements
+- [ ] **Version Information**: Semantic versioning and change history
+
+### AI-Friendly File Organization
+- **Clear Module Boundaries**: Each file has a single, well-defined responsibility
+- **Consistent Naming**: Predictable naming patterns for classes, methods, and variables
+- **Logical Grouping**: Related functionality grouped in intuitive module structures
+- **Import/Export Clarity**: Explicit about what each module provides and requires
+
 ## Success Indicators
 
 ### Short-term Success

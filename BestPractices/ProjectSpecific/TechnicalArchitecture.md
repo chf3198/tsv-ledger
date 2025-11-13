@@ -13,11 +13,15 @@ Frontend (Vanilla JS)
 ├── Real-time Analytics Dashboard
 └── Interactive Data Visualization
 
-Backend API (Express.js)
-├── REST API Endpoints
-├── Business Logic Modules
-├── Data Processing Pipeline
-└── AI Analysis Engine
+Backend API (Express.js - MODULAR)
+├── server.js (165 lines) - Main application entry point
+├── routes/import.js - Data import operations (CSV, ZIP)
+├── routes/data.js - Basic CRUD operations
+├── routes/analytics.js - Premium analytics & AI analysis
+├── routes/amazon.js - Amazon-specific operations
+├── routes/employee-benefits.js - Benefits filtering & analysis
+├── routes/subscription.js - Subscription tracking
+└── routes/geographic.js - Geographic analysis
 
 Data Layer
 ├── JSON File Storage
@@ -33,20 +37,20 @@ External Integrations
 
 ### Core Components
 
-#### 1. Data Processing Engine (`src/database.js`)
-**Purpose**: Centralized data operations and persistence management
+#### 1. Modular Server Architecture (`server.js` + `src/routes/`)
+**Purpose**: Scalable, maintainable API architecture with separated concerns
 
 **Key Responsibilities:**
-- JSON file-based data storage and retrieval
-- Data validation and integrity checking
-- Backup and recovery operations
-- Performance optimization for large datasets
+- Route module orchestration and mounting
+- Middleware configuration and setup
+- Static file serving and HTML injection
+- Health check and monitoring endpoints
 
 **Technical Implementation:**
-- Synchronous file operations for data consistency
-- Error handling with fallback to empty datasets
-- Path management for organized file structure
-- Memory-efficient data processing
+- Express.js application with modular route mounting
+- Centralized middleware configuration
+- Error handling and logging integration
+- Performance optimization through modular loading
 
 #### 2. Business Intelligence Engine (`src/tsv-categorizer.js`)
 **Purpose**: Advanced categorization and business rule implementation

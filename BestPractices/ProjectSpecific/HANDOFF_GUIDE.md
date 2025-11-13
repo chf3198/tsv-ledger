@@ -12,17 +12,39 @@
 
 ### Core Design Principles
 1. **Modular Architecture** - Separated concerns across `src/`, `tests/`, `docs/`, `data/`
-2. **Professional Organization** - Industry-standard directory structure
-3. **Comprehensive Testing** - 20+ test files covering all features
-4. **Documentation-First** - Extensive JSDoc and markdown documentation
-5. **Git Best Practices** - Conventional commits, semantic versioning
+2. **AI-Optimized File Sizes** - All files under 250 lines for optimal AI processing
+3. **Route-Based API Organization** - Modular Express routes for scalability
+4. **Professional Organization** - Industry-standard directory structure
+5. **Comprehensive Testing** - 20+ test files covering all features
+6. **Documentation-First** - Extensive JSDoc and markdown documentation
+7. **Git Best Practices** - Conventional commits, semantic versioning
 
 ### Technology Stack
-- **Backend:** Node.js 22.19.0 + Express.js
+- **Backend:** Node.js 22.19.0 + Express.js with modular routing
 - **Frontend:** Vanilla JavaScript with modern ES6+ features
 - **Data Processing:** CSV parsing, JSON manipulation
 - **Testing:** Custom test framework with comprehensive coverage
 - **Documentation:** Markdown + JSDoc + README-driven development
+
+### Modular Route Architecture
+The API is organized into focused route modules for optimal maintainability:
+
+```
+src/routes/
+├── import.js           # Data import operations (CSV, ZIP)
+├── data.js            # Basic CRUD operations and menu
+├── analytics.js       # Premium analytics & AI analysis
+├── amazon.js          # Amazon-specific operations
+├── employee-benefits.js # Benefits filtering & analysis
+├── subscription.js    # Subscription tracking
+└── geographic.js      # Geographic analysis
+```
+
+Each route module follows consistent patterns:
+- Focused responsibility (single concern per module)
+- Comprehensive error handling
+- JSDoc documentation for all endpoints
+- Consistent response formats
 
 ## 📁 Directory Structure (Post-Organization)
 
@@ -57,7 +79,7 @@ tsv-ledger/
 ├── public/                 # Frontend assets
 │   ├── index.html          # Main application interface
 │   └── js/app.js           # Frontend JavaScript
-└── server.js               # Main application server
+└── server.js               # Main application server (165 lines - modular routes)
 ```
 
 ## 🚀 Key Features & Capabilities

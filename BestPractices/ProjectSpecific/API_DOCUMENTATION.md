@@ -1,12 +1,25 @@
 # TSV Ledger API Documentation
 
-> **Version:** 2.2.1  
-> **Base URL:** `http://localhost:3000`  
+> **Version:** 2.2.3 - Modular Architecture
+> **Base URL:** `http://localhost:3000`
 > **Content-Type:** `application/json`
+> **Architecture:** Modular Route System
 
 ## API Overview
 
 The TSV Ledger API provides comprehensive endpoints for expense tracking, Amazon order management, business intelligence analysis, and premium analytics for Texas Sunset Venues.
+
+### Modular Architecture
+
+The API is organized into focused route modules for optimal maintainability and AI development efficiency:
+
+- **`/api/import/*`** - Data import operations (CSV, ZIP files)
+- **`/api/data/*`** - Basic CRUD operations and menu
+- **`/api/analytics/*`** - Premium analytics and AI analysis
+- **`/api/amazon/*`** - Amazon-specific operations
+- **`/api/employee-benefits/*`** - Benefits filtering and analysis
+- **`/api/subscription/*`** - Subscription tracking
+- **`/api/geographic/*`** - Geographic analysis
 
 ## Authentication
 
@@ -14,40 +27,150 @@ Currently no authentication required for local development. Production deploymen
 
 ## Core Endpoints
 
-### Data Import & Export
+### Data Import Operations (`routes/import.js`)
 
-#### `POST /import`
-Import Amazon order history from CSV file.
+#### `GET /api/import-status`
+Get current import status and progress.
+
+**Response:**
+```json
+{
+  "isImporting": false,
+  "currentStep": "Import completed",
+  "progress": 100,
+  "totalRecords": 598,
+  "processedRecords": 598,
+  "errors": []
+}
+```
+
+#### `GET /api/import-history`
+Get import history with statistics.
+
+**Response:**
+```json
+{
+  "history": [
+    {
+      "timestamp": "2025-09-08T10:30:00.000Z",
+      "type": "csv",
+      "recordsProcessed": 150,
+      "recordsAdded": 145,
+      "errors": 5,
+      "source": "csv-import"
+    }
+  ],
+  "total": 1
+}
+```
+
+#### `POST /api/import-csv`
+Import expenditures from CSV/TSV/DAT file.
 
 **Request:**
 ```http
-POST /import
-Content-Type: multipart/form-data
+POST /api/import-csv
+Content-Type: application/json
 
-file: [CSV file with Amazon order data]
+{
+  "csvData": "date,amount,description\n2025-09-08,29.99,Office supplies"
+}
 ```
 
 **Response:**
 ```json
 {
   "success": true,
-  "message": "Data imported successfully",
-  "itemsProcessed": 598,
-  "errors": []
+  "message": "Import completed successfully",
+  "stats": {
+    "totalRows": 1,
+    "validRecords": 1,
+    "addedToDatabase": 1,
+    "errors": 0
+  }
 }
 ```
 
-#### `GET /api/data`
-Export all expenditure data.
+#### `POST /api/validate-amazon-zip`
+Validate Amazon ZIP file before import.
 
-**Response:**
+#### `POST /api/import-amazon-zip`
+Import data from Amazon ZIP file.
+
+### Basic Data Operations (`routes/data.js`)
+
+#### `GET /api/menu.json`
+Get navigation menu structure.
+
+#### `GET /api/expenditures`
+Get all expenditures with optional filtering.
+
+**Query Parameters:**
+- `startDate` - Filter by start date
+- `endDate` - Filter by end date
+- `category` - Filter by category
+- `source` - Filter by source
+- `limit` - Limit results
+
+#### `POST /api/expenditures`
+Add a new expenditure.
+
+**Request:**
 ```json
-[
-  {
-    "id": "unique-id",
-    "date": "2025-09-08",
-    "amount": 29.99,
-    "description": "Office supplies",
+{
+  "date": "2025-09-08",
+  "amount": 29.99,
+  "description": "Office supplies",
+  "category": "Office Supplies",
+  "source": "manual"
+}
+```
+
+### Analytics Operations (`routes/analytics.js`)
+
+#### `GET /api/premium-status`
+Get premium features availability.
+
+#### `GET /api/premium-analytics`
+Get premium analytics data.
+
+#### `GET /api/analysis`
+Get basic expenditure analysis.
+
+#### `GET /api/ai-analysis`
+Get AI-powered insights and recommendations.
+
+### Amazon Operations (`routes/amazon.js`)
+
+#### `GET /api/amazon-items`
+Get all Amazon items with filtering.
+
+#### `PUT /api/amazon-items/:id`
+Update an Amazon item.
+
+### Employee Benefits Operations (`routes/employee-benefits.js`)
+
+#### `POST /api/employee-benefits-filter`
+Filter expenditures for employee benefits analysis.
+
+### Subscription Operations (`routes/subscription.js`)
+
+#### `GET /api/subscription-dashboard`
+Get subscription dashboard data.
+
+#### `GET /api/subscription-analysis`
+Get detailed subscription analysis.
+
+#### `GET /api/subscription-for-order/:orderId`
+Get subscription information for a specific order.
+
+### Geographic Operations (`routes/geographic.js`)
+
+#### `GET /api/geographic-dashboard`
+Get geographic dashboard data.
+
+#### `GET /api/geographic-analysis`
+Get detailed geographic analysis.
     "category": "Business Expenses",
     "vendor": "Amazon"
   }
