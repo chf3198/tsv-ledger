@@ -1,35 +1,108 @@
 /**
  * TSV Categorizer - Business Intelligence Engine
- * Provides categorization and analysis for expense tracking
+ *
+ * Advanced categorization and analysis engine for Texas Sunset Venues expense tracking.
+ * Provides intelligent categorization of expenses using keyword matching and business rules,
+ * along with comprehensive analytics for spending patterns and business insights.
+ *
+ * @class TSVCategorizer
+ * @version 2.2.2
+ * @author TSV Ledger Team
+ * @since 2025-09-08
+ *
+ * @example
+ * const categorizer = new TSVCategorizer();
+ * const category = categorizer.categorize(expense);
+ * const analysis = categorizer.analyze(expenses);
  */
 
 class TSVCategorizer {
+    /**
+     * Initialize the TSV Categorizer with predefined business categories
+     *
+     * Categories are specifically tailored for Texas Sunset Venues business operations,
+     * including restaurant industry specifics and business expense patterns.
+     *
+     * @constructor
+     */
     constructor() {
+        /**
+         * Business category definitions with associated keywords
+         * Each category contains an array of keywords for pattern matching
+         *
+         * @type {Object.<string, string[]>}
+         */
         this.categories = {
-            'Food & Dining': ['restaurant', 'food', 'grocery', 'dining', 'meal'],
-            'Transportation': ['gas', 'fuel', 'uber', 'lyft', 'taxi', 'bus', 'train', 'parking'],
-            'Entertainment': ['movie', 'theater', 'concert', 'game', 'entertainment'],
-            'Shopping': ['amazon', 'shopping', 'retail', 'store', 'purchase'],
-            'Utilities': ['electric', 'water', 'gas', 'internet', 'phone', 'utility'],
-            'Healthcare': ['medical', 'doctor', 'pharmacy', 'health', 'dental'],
-            'Education': ['book', 'course', 'education', 'school', 'university'],
-            'Travel': ['hotel', 'flight', 'travel', 'vacation', 'airbnb'],
-            'Other': []
+            'Food & Dining': [
+                'restaurant', 'food', 'grocery', 'dining', 'meal',
+                'catering', 'beverage', 'coffee', 'lunch', 'dinner',
+                'bakery', 'cafe', 'bar', 'pub', 'steakhouse'
+            ],
+            'Transportation': [
+                'gas', 'fuel', 'uber', 'lyft', 'taxi', 'bus', 'train',
+                'parking', 'mileage', 'vehicle', 'car', 'truck', 'delivery'
+            ],
+            'Entertainment': [
+                'movie', 'theater', 'concert', 'game', 'entertainment',
+                'event', 'party', 'celebration', 'music', 'show'
+            ],
+            'Shopping': [
+                'amazon', 'shopping', 'retail', 'store', 'purchase',
+                'merchandise', 'supplies', 'equipment', 'furniture'
+            ],
+            'Utilities': [
+                'electric', 'water', 'gas', 'internet', 'phone', 'utility',
+                'electricity', 'cable', 'wifi', 'cell', 'telephone'
+            ],
+            'Healthcare': [
+                'medical', 'doctor', 'pharmacy', 'health', 'dental',
+                'hospital', 'clinic', 'insurance', 'medicine', 'treatment'
+            ],
+            'Education': [
+                'book', 'course', 'education', 'school', 'university',
+                'training', 'workshop', 'seminar', 'conference', 'learning'
+            ],
+            'Travel': [
+                'hotel', 'flight', 'travel', 'vacation', 'airbnb',
+                'lodging', 'airline', 'ticket', 'reservation', 'trip'
+            ],
+            'Other': [] // Fallback category for unmatched expenses
         };
     }
 
     /**
-     * Categorize an expense based on description
-     * @param {Object} expense - Expense object with description
-     * @returns {string} - Category name
+     * Categorize a single expense based on its description using keyword matching
+     *
+     * This method performs case-insensitive keyword matching against the expense description
+     * to determine the most appropriate business category. It uses a first-match approach
+     * with predefined business rules for Texas Sunset Venues operations.
+     *
+     * @param {Object} expense - Expense object to categorize
+     * @param {string} expense.description - Description of the expense (required)
+     * @param {number} [expense.amount] - Expense amount (optional, for future enhancement)
+     * @param {string} [expense.vendor] - Vendor name (optional, for future enhancement)
+     * @returns {string} Business category name ('Food & Dining', 'Transportation', etc.)
+     *
+     * @example
+     * const expense = { description: 'Lunch at Texas Roadhouse' };
+     * const category = categorizer.categorize(expense);
+     * // Returns: 'Food & Dining'
+     *
+     * @example
+     * const expense = { description: 'Gas for company vehicle' };
+     * const category = categorizer.categorize(expense);
+     * // Returns: 'Transportation'
      */
     categorize(expense) {
+        // Input validation
         if (!expense || !expense.description) {
             return 'Other';
         }
 
+        // Normalize description for case-insensitive matching
         const description = expense.description.toLowerCase();
 
+        // Iterate through categories and keywords for first match
         for (const [category, keywords] of Object.entries(this.categories)) {
             for (const keyword of keywords) {
                 if (description.includes(keyword)) {
@@ -38,15 +111,45 @@ class TSVCategorizer {
             }
         }
 
+        // Return default category if no matches found
         return 'Other';
     }
 
     /**
-     * Analyze expenses and provide insights
-     * @param {Array} expenses - Array of expense objects
-     * @returns {Object} - Analysis results
+     * Perform comprehensive analysis on an array of expenses
+     *
+     * Provides business intelligence insights including spending patterns,
+     * category breakdowns, and statistical analysis for Texas Sunset Venues operations.
+     * This method processes expense data to generate actionable business insights.
+     *
+     * @param {Array<Object>} expenses - Array of expense objects to analyze
+     * @param {string} expenses[].description - Expense description (required)
+     * @param {number} expenses[].amount - Expense amount (required for calculations)
+     * @param {string} [expenses[].date] - Expense date (optional, for trend analysis)
+     * @param {string} [expenses[].vendor] - Vendor name (optional, for vendor analysis)
+     * @returns {Object} Analysis results with multiple insights and metrics
+     * @returns {number} returns.totalExpenses - Total number of expenses analyzed
+     * @returns {number} returns.totalAmount - Total spending across all expenses
+     * @returns {Object} returns.categories - Breakdown by category with count and total
+     * @returns {Object} returns.monthlyTrends - Spending trends over time (placeholder)
+     * @returns {Array} returns.insights - Business insights and recommendations
+     *
+     * @example
+     * const expenses = [
+     *   { description: 'Office supplies', amount: 150.00, vendor: 'Amazon', date: '2025-01-15' },
+     *   { description: 'Team lunch', amount: 200.00, vendor: 'Texas Roadhouse', date: '2025-01-16' }
+     * ];
+     * const analysis = categorizer.analyze(expenses);
+     * // Returns: {
+     * //   totalExpenses: 2,
+     * //   totalAmount: 350.00,
+     * //   categories: { 'Shopping': { count: 1, total: 150 }, 'Food & Dining': { count: 1, total: 200 } },
+     * //   monthlyTrends: {},
+     * //   insights: []
+     * // }
      */
     analyze(expenses) {
+        // Input validation
         if (!Array.isArray(expenses)) {
             return { error: 'Invalid expenses data' };
         }
@@ -73,9 +176,25 @@ class TSVCategorizer {
     }
 
     /**
-     * Categorize BoA transaction
-     * @param {Object} transaction - Bank of America transaction
-     * @returns {Object} - Analysis result with category and subcategory
+     * Categorize Bank of America transaction with enhanced analysis
+     *
+     * Specialized method for processing Bank of America transaction data,
+     * providing category classification with confidence scoring and subcategories.
+     * Used for integrating bank statement data into the expense tracking system.
+     *
+     * @param {Object} transaction - Bank of America transaction object
+     * @param {string} transaction.description - Transaction description (required)
+     * @param {number} [transaction.amount] - Transaction amount (optional)
+     * @param {string} [transaction.date] - Transaction date (optional)
+     * @returns {Object} Enhanced categorization result
+     * @returns {string} returns.category - Primary business category
+     * @returns {string|null} returns.subcategory - Detailed subcategory if available
+     * @returns {number} returns.confidence - Confidence score (0-1) for categorization
+     *
+     * @example
+     * const transaction = { description: 'TEXAS ROADHOUSE #123', amount: 45.67 };
+     * const result = categorizer.categorizeBoATransaction(transaction);
+     * // Returns: { category: 'Food & Dining', subcategory: 'Restaurant', confidence: 0.8 }
      */
     categorizeBoATransaction(transaction) {
         const category = this.categorize(transaction);
@@ -87,9 +206,34 @@ class TSVCategorizer {
     }
 
     /**
-     * Analyze Amazon order
-     * @param {Object} order - Amazon order object
-     * @returns {Object} - Analysis result
+     * Analyze Amazon order with business intelligence insights
+     *
+     * Comprehensive analysis of Amazon order data including categorization,
+     * subscription detection, and data quality assessment. Provides insights
+     * for optimizing Amazon business spending patterns.
+     *
+     * @param {Object} order - Amazon order object from data import
+     * @param {string} order.items - Order items description (required)
+     * @param {number} [order.amount] - Order total amount (optional)
+     * @param {string} [order.orderId] - Amazon order ID (optional)
+     * @param {string} [order.date] - Order date (optional)
+     * @returns {Object} Comprehensive Amazon order analysis
+     * @returns {string} returns.category - Business category classification
+     * @returns {Object} returns.subscribeAndSave - Subscription analysis
+     * @returns {boolean} returns.subscribeAndSave.isSubscribeAndSave - Whether order is subscription
+     * @returns {number} returns.subscribeAndSave.confidence - Confidence in subscription detection
+     * @returns {Array} returns.subscribeAndSave.indicators - Subscription indicators found
+     * @returns {Object} returns.dataQuality - Data completeness assessment
+     * @returns {number} returns.dataQuality.completeness - Completeness score (0-1)
+     *
+     * @example
+     * const order = {
+     *   items: 'Coffee subscription - monthly delivery',
+     *   orderId: '123-4567890-1234567',
+     *   amount: 29.99
+     * };
+     * const analysis = categorizer.analyzeAmazonOrder(order);
+     * // Returns detailed analysis with subscription detection and data quality
      */
     analyzeAmazonOrder(order) {
         return {
@@ -106,10 +250,25 @@ class TSVCategorizer {
     }
 
     /**
-     * Get subcategory for a transaction
-     * @param {Object} transaction - Transaction object
-     * @param {string} category - Main category
-     * @returns {string|null} - Subcategory or null
+     * Get detailed subcategory for a transaction within a main category
+     *
+     * Provides granular classification within major business categories,
+     * enabling more precise expense tracking and analysis for Texas Sunset Venues.
+     *
+     * @param {Object} transaction - Transaction object to subcategorize
+     * @param {string} transaction.description - Transaction description (required)
+     * @param {string} category - Main category from primary categorization
+     * @returns {string|null} Detailed subcategory or null if not applicable
+     *
+     * @example
+     * const transaction = { description: 'SHELL GAS STATION' };
+     * const subcategory = categorizer.getSubcategory(transaction, 'Transportation');
+     * // Returns: 'Fuel'
+     *
+     * @example
+     * const transaction = { description: 'UBER RIDE' };
+     * const subcategory = categorizer.getSubcategory(transaction, 'Transportation');
+     * // Returns: 'Ride Share'
      */
     getSubcategory(transaction, category) {
         if (!transaction || !transaction.description) {
@@ -136,9 +295,24 @@ class TSVCategorizer {
     }
 
     /**
-     * Check if order is Subscribe & Save
-     * @param {Object} order - Amazon order object
-     * @returns {boolean} - Whether it's Subscribe & Save
+     * Detect if Amazon order is part of Subscribe & Save program
+     *
+     * Analyzes order data to identify Amazon subscription purchases,
+     * which are important for business expense optimization and recurring cost analysis.
+     *
+     * @param {Object} order - Amazon order object to analyze
+     * @param {string} order.items - Items description from order (required)
+     * @returns {boolean} True if order appears to be Subscribe & Save, false otherwise
+     *
+     * @example
+     * const order = { items: 'Coffee beans - Subscribe & Save' };
+     * const isSub = categorizer.isSubscribeAndSave(order);
+     * // Returns: true
+     *
+     * @example
+     * const order = { items: 'One-time office supplies purchase' };
+     * const isSub = categorizer.isSubscribeAndSave(order);
+     * // Returns: false
      */
     isSubscribeAndSave(order) {
         if (!order || !order.items) {
@@ -151,9 +325,28 @@ class TSVCategorizer {
     }
 
     /**
-     * Calculate data completeness score
-     * @param {Object} order - Amazon order object
-     * @returns {number} - Completeness score (0-1)
+     * Calculate data completeness score for Amazon order
+     *
+     * Assesses the quality and completeness of imported Amazon order data,
+     * helping identify data gaps that may affect analysis accuracy.
+     *
+     * @param {Object} order - Amazon order object to evaluate
+     * @returns {number} Completeness score between 0 and 1 (1 = fully complete)
+     *
+     * @example
+     * const completeOrder = {
+     *   orderId: '123-4567890-1234567',
+     *   date: '2025-01-15',
+     *   amount: 29.99,
+     *   items: 'Coffee subscription'
+     * };
+     * const score = categorizer.calculateDataCompleteness(completeOrder);
+     * // Returns: 1.0 (fully complete)
+     *
+     * @example
+     * const incompleteOrder = { items: 'Unknown item' };
+     * const score = categorizer.calculateDataCompleteness(incompleteOrder);
+     * // Returns: 0.25 (only items field present)
      */
     calculateDataCompleteness(order) {
         if (!order) return 0;

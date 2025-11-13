@@ -299,7 +299,7 @@
 
     @media (min-width: 992px) {
       /* Desktop: sidebar is always visible, can be collapsed */
-      .navbar-toggler {
+      .navbar .navbar-toggler {
         display: block !important;
       }
 
@@ -1991,54 +1991,58 @@
 
     function updateImportHistoryDisplay() {
       const historyContainer = document.getElementById('importHistory');
-      const history = getImportHistory();
       
-      if (history.length === 0) {
-        historyContainer.innerHTML = '<p class="text-muted">No recent imports found. Import some data to see history here.</p>';
-        return;
-      }
-      
-      const historyHtml = history.map(record => {
-        const date = new Date(record.timestamp).toLocaleString();
-        const icon = record.zipType === 'orders' ? 'fas fa-shopping-bag text-primary' : 
-                    record.zipType === 'subscriptions' ? 'fas fa-sync-alt text-success' : 
-                    'fab fa-amazon text-warning';
-        
-        return `
-          <div class="card mb-2">
-            <div class="card-body py-2">
-              <div class="row align-items-center">
-                <div class="col-auto">
-                  <i class="${icon} fa-lg"></i>
-                </div>
-                <div class="col">
-                  <strong>${record.fileName}</strong><br>
-                  <small class="text-muted">
-                    ${record.zipTypeInfo || 'Amazon ZIP'} • 
-                    ${record.summary.ordersSaved} orders, ${record.summary.subscriptionsSaved} subscriptions • 
-                    ${date}
-                  </small>
-                </div>
-                <div class="col-auto">
-                  <span class="badge bg-success">Success</span>
+      // Fetch import history from server
+      fetch('/api/import-history')
+        .then(response => response.json())
+        .then(history => {
+          if (!history || history.length === 0) {
+            historyContainer.innerHTML = '<p class="text-muted">No recent imports found. Import some data to see history here.</p>';
+            return;
+          }
+          
+          const historyHtml = history.map(record => {
+            const date = new Date(record.timestamp).toLocaleString();
+            const icon = record.type === 'amazon-zip' ? 'fab fa-amazon text-warning' : 
+                        record.type === 'csv' ? 'fas fa-file-csv text-success' : 
+                        'fas fa-file text-primary';
+            
+            return `
+              <div class="card mb-2">
+                <div class="card-body py-2">
+                  <div class="row align-items-center">
+                    <div class="col-auto">
+                      <i class="${icon} fa-lg"></i>
+                    </div>
+                    <div class="col">
+                      <strong>${record.fileName}</strong><br>
+                      <small class="text-muted">
+                        ${record.type === 'amazon-zip' ? 'Amazon ZIP' : 'CSV/TSV/DAT'} • 
+                        ${record.imported} items imported • 
+                        ${record.errors || 0} errors • 
+                        ${date}
+                      </small>
+                    </div>
+                    <div class="col-auto">
+                      <span class="badge bg-success">Success</span>
+                    </div>
+                  </div>
                 </div>
               </div>
+            `;
+          }).join('');
+          
+          historyContainer.innerHTML = `
+            <div class="mb-2">
+              <small class="text-muted">Recent imports (last ${history.length})</small>
             </div>
-          </div>
-        `;
-      }).join('');
-      
-      historyContainer.innerHTML = `
-        <div class="mb-2">
-          <small class="text-muted">Recent imports (last ${history.length})</small>
-        </div>
-        ${historyHtml}
-        <div class="mt-2">
-          <button class="btn btn-sm btn-outline-secondary" onclick="clearImportHistory()">
-            <i class="fas fa-trash me-1"></i>Clear History
-          </button>
-        </div>
-      `;
+            ${historyHtml}
+          `;
+        })
+        .catch(error => {
+          console.warn('Failed to load import history:', error);
+          historyContainer.innerHTML = '<p class="text-muted">Unable to load import history.</p>';
+        });
     }
 
     function clearImportHistory() {

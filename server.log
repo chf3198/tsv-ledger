@@ -1,0 +1,45 @@
+nohup: ignoring input
+
+> tsv-ledger@2.2.2 start
+> node server.js
+
+🔄 Loading subscription data...
+🔄 Loading bank statement data...
+✅ Loaded 278 bank transactions
+🔄 Loading Amazon order data for geographic analysis...
+🔄 Loading Amazon order data...
+🚀 TSV Ledger server running at http://localhost:3000
+📊 Environment: development
+🏦 Bank reconciliation engine ready
+✅ Loaded 1 subscriptions
+✅ Loaded 1 subscription periods
+✅ Loaded 15 billing schedules
+🎯 Subscription data loading complete
+📊 Subscription analysis engine ready
+✅ Loaded 2785 orders for geographic analysis
+🗺️ Geographic analysis data processed
+🗺️ Geographic analysis engine ready
+✅ Loaded 2785 Amazon orders
+🔗 Amazon reconciliation data ready
+🔄 No Amazon orders found in expenditures, loading from CSV files...
+📖 Loading Amazon items from CSV file...
+✅ Loaded 335 items from CSV
+📦 Loaded 335 Amazon items from CSV files
+📦 Filtered to 32 business card items
+🔄 No Amazon orders found in expenditures, loading from CSV files...
+📖 Loading Amazon items from CSV file...
+✅ Loaded 335 items from CSV
+📦 Loaded 335 Amazon items from CSV files
+📦 Filtered to 32 business card items
+🔄 No Amazon orders found in expenditures, loading from CSV files...
+📖 Loading Amazon items from CSV file...
+✅ Loaded 335 items from CSV
+📦 Loaded 335 Amazon items from CSV files
+📦 Filtered to 32 business card items
+🔄 No Amazon orders found in expenditures, loading from CSV files...
+📖 Loading Amazon items from CSV file...
+✅ Loaded 335 items from CSV
+📦 Loaded 335 Amazon items from CSV files
+📦 Filtered to 32 business card items
+📡 SIGTERM received, shutting down gracefully...
+✅ Server closed

@@ -283,6 +283,54 @@ test_frontend_js() {
     return 0
 }
 
+# Function to test status loading functionality
+test_status_loading() {
+    echo -e "${BLUE}🔄 Testing status loading functionality...${NC}"
+
+    # Test that API returns data quickly
+    local start_time=$(date +%s)
+    local response=$(curl -s --max-time 10 "$SERVER_URL/api/amazon-items?businessCard=true" 2>/dev/null)
+    local end_time=$(date +%s)
+
+    if [ $? -ne 0 ]; then
+        log_test "Status Loading - API Response" "FAIL" "API call failed or timed out"
+        return 1
+    fi
+
+    local duration=$((end_time - start_time))
+    echo -e "${BLUE}API response time: ${duration}s${NC}"
+
+    if [ $duration -gt 5 ]; then
+        log_test "Status Loading - Response Time" "FAIL" "API response took longer than 5 seconds: ${duration}s"
+        return 1
+    else
+        log_test "Status Loading - Response Time" "PASS" "API responded in ${duration}s"
+    fi
+
+    # Test that response contains valid data
+    if [ -z "$response" ] || [ "$response" = "[]" ]; then
+        log_test "Status Loading - Data Validation" "FAIL" "API returned no items"
+        return 1
+    fi
+
+    # Count items by counting occurrences of "id": in the response
+    local item_count=$(echo "$response" | grep -o '"id":' | wc -l)
+    if [ "$item_count" -eq 0 ]; then
+        log_test "Status Loading - Data Validation" "FAIL" "API returned no items"
+        return 1
+    fi
+
+    log_test "Status Loading - Data Validation" "PASS" "API returned $item_count items"
+
+    # Test that items have required fields for status calculation
+    if ! echo "$response" | grep -q '"id":' || ! echo "$response" | grep -q '"price":' || ! echo "$response" | grep -q '"name":'; then
+        log_test "Status Loading - Data Structure" "FAIL" "Items missing required fields (id, price, name)"
+        return 1
+    fi
+
+    log_test "Status Loading - Data Structure" "PASS" "Items have required fields for status calculation"
+}
+
 # Function to setup test environment
 setup_test_environment() {
     echo -e "${BLUE}🔧 Setting up test environment...${NC}"
@@ -337,6 +385,7 @@ run_all_tests() {
         test_percentage_allocation_edge_cases
         test_cost_calculation_accuracy
         test_multiple_percentage_scenarios
+        test_status_loading
     else
         echo -e "${YELLOW}⚠️  Server not running - skipping API tests${NC}"
         echo -e "${YELLOW}💡 Start server with: npm start${NC}"
@@ -389,6 +438,9 @@ main() {
             ;;
         frontend)
             test_frontend_js
+            ;;
+        status)
+            test_status_loading
             ;;
         all)
             run_all_tests

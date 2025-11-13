@@ -19,12 +19,10 @@ if ! pgrep -f "node server.js" >/dev/null; then
   done
 fi
 
-# Run all Puppeteer tests in tests/pw/*.test.js
-echo "Running Puppeteer tests..."
-for t in tests/pw/*.test.js; do
-  echo "--> Running $t"
-  node "$t"
-done
+# Run Playwright tests in tests/pw
+echo "Running Playwright tests for tests/pw..."
+# Use local Playwright CLI so this works even without .bin wrappers
+node node_modules/@playwright/test/cli.js test tests/pw --project=chromium
 
 # If we started the server, leave it running; logs are in .pw-test-server.log
 exit 0

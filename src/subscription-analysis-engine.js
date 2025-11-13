@@ -52,6 +52,10 @@ class SubscriptionAnalysisEngine {
       await this.loadSubscriptions(subscriptionsZipPath);
       console.log(`✅ Loaded ${this.subscriptions.size} subscriptions`);
 
+      // Load Subscribe & Save subscriptions
+      await this.loadSubscribeAndSaveSubscriptions(subscriptionsZipPath);
+      console.log(`✅ Loaded ${this.subscriptions.size} total subscriptions (including Subscribe & Save)`);
+
       // Load subscription periods (contains OrderId links!)
       await this.loadSubscriptionPeriods(subscriptionsZipPath);
       console.log(`✅ Loaded ${this.subscriptionPeriods.size} subscription periods`);

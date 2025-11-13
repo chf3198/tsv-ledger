@@ -2,14 +2,13 @@ name: Playwright E2E
 
 on:
   push:
-    branches: [ feat/subscription-analysis, main ]
+    branches: [ feat/universal-menu, protocol-evolution-setup, main ]
   pull_request:
-    branches: [ feat/subscription-analysis, main ]
+    branches: [ protocol-evolution-setup, main ]
 
 jobs:
   e2e:
     runs-on: ubuntu-latest
-    permissions: write-all
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -17,7 +16,7 @@ jobs:
       - name: Use Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: '18'
 
       - name: Install dependencies
         run: npm ci
@@ -37,10 +36,11 @@ jobs:
 
       - name: Run Playwright tests (JS-enabled + non-JS)
         run: |
-          # Run both the JS-enabled and non-JS specs to validate progressive enhancement
-          npx playwright test tests/e2e/sidebar.spec.js tests/e2e/sidebar-nonjs.spec.js -c tests/e2e/playwright.config.js --reporter=list
+          # Default to the merged-menu spec; if you have a playwright.config.js in tests/e2e
+          # the runner will pick it up automatically.
+          npx playwright test tests/e2e/merged-menu.spec.js --reporter=list
 
-      - name: Upload Playwright report
+      - name: Upload Playwright report on failure
         if: failure()
         uses: actions/upload-artifact@v4
         with:

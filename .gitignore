@@ -8,6 +8,8 @@ yarn-error.log*
 *.tmp
 *.bak
 *.backup
+.fuse_hidden*
+temp-*.md
 
 # Exclude kt-cli-alpha (it's its own repository)
 kt-cli-alpha/
