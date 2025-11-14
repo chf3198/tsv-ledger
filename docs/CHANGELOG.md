@@ -24,6 +24,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `routes/subscription.js` - Subscription tracking
   - `routes/geographic.js` - Geographic analysis
 
+### Added
+- **Import History System**: Persistent tracking of all data import operations
+  - JSON file-based storage in `data/import-history.json`
+  - API endpoint `GET /api/import-history` for history retrieval
+  - Automatic persistence across server restarts
+  - Chronological ordering with 50-record retention limit
+  - Comprehensive import statistics tracking (processed, added, duplicates, errors)
+
+### Added
+- **Import History Testing Suite**: Comprehensive test coverage for persistence functionality
+  - API-level tests (`tests/import-history-api.test.js`)
+  - Playwright E2E tests (`tests/e2e/import-history-e2e.test.js`)
+  - Puppeteer visual tests (`tests/pw/import-history-ux.test.js`)
+  - Server lifecycle and persistence validation
+  - Error handling and edge case testing
+
 ### Changed
 - **Knowledge Transfer System**: Updated all documentation for new modular architecture
   - Updated `API_DOCUMENTATION.md` with new route endpoints

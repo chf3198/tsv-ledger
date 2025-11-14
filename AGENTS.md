@@ -23,6 +23,7 @@
 - AI-powered expense categorization
 - Employee benefits filtering
 - Subscribe & Save detection
+- Import history tracking with persistence
 - Comprehensive testing framework
 - Real-time data analysis
 
@@ -179,6 +180,56 @@ try {
   res.status(500).json({ success: false, error: error.message });
 }
 ```
+
+## Import History System
+
+### Overview
+The Import History system provides persistent tracking of all data import operations, maintaining a chronological record that survives server restarts.
+
+### Key Components
+- **Storage:** `data/import-history.json` - JSON file-based persistence
+- **API Endpoint:** `GET /api/import-history` - Returns history data
+- **Data Structure:** Timestamp, source type, record counts, error tracking
+- **Retention:** Last 50 imports maintained automatically
+
+### Implementation Pattern
+```javascript
+// Import History Persistence Pattern
+const IMPORT_HISTORY_FILE = path.join(__dirname, '../../data', 'import-history.json');
+
+// Load history on server start
+function loadImportHistory() {
+  try {
+    if (fs.existsSync(IMPORT_HISTORY_FILE)) {
+      const data = fs.readFileSync(IMPORT_HISTORY_FILE, 'utf8');
+      importHistory = JSON.parse(data);
+      console.log(`Loaded ${importHistory.length} import history records`);
+    }
+  } catch (error) {
+    console.error('Failed to load import history:', error);
+  }
+}
+
+// Save after each import
+function saveImportHistory() {
+  try {
+    const data = JSON.stringify(importHistory, null, 2);
+    fs.writeFileSync(IMPORT_HISTORY_FILE, data);
+  } catch (error) {
+    console.error('Failed to save import history:', error);
+  }
+}
+
+// Record import operation
+importHistory.unshift(importRecord);
+saveImportHistory();
+```
+
+### Testing Strategy
+- **API Tests:** Backend persistence verification
+- **E2E Tests:** Full workflow testing with Playwright
+- **Puppeteer Tests:** Visual browser automation
+- **Persistence Tests:** Server restart validation
 
 ## Performance Guidelines
 
