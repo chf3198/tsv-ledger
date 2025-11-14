@@ -185,13 +185,25 @@ This project is designed for seamless AI-to-AI handoffs. All documentation is ma
 - User authentication (if needed for multi-user)
 - Cloud backup options
 
-## Development Notes
+## 🤖 AI Agent Initialization
 
-This project is optimized for future AI Coding Assistants with:
-- Clear, descriptive comments in code
-- Modular file structure
-- Comprehensive documentation
-- Consistent naming conventions
+To fully initialize with the Knowledge Transfer System and gain complete familiarity with configuration, instruction-sets, data structures, and all available knowledge:
+
+1. **Read this README.md** for project overview and architecture
+2. **Read `BestPractices/README.md`** for framework overview and structure
+3. **Read all files in `BestPractices/Generic/`** for universal development patterns:
+   - CodeOrganizationFramework.md
+   - GitWorkflowPatterns.md  
+   - DocumentationFramework.md
+4. **Read all files in `BestPractices/ProjectSpecific/`** for TSV Ledger domain knowledge:
+   - HANDOFF_GUIDE.md
+   - BusinessDomainKnowledge.md
+   - TechnicalArchitecture.md
+   - API_DOCUMENTATION.md
+   - GIT_WORKFLOW.md
+   - AGENTS.md
+
+This ensures complete consumption of the Knowledge Transfer data, including all configurations, instruction-sets, and familiarity with data structure locations.
 
 ## License
 
