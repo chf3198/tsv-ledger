@@ -14,6 +14,9 @@ temp-*.md
 # Exclude kt-cli-alpha (it's its own repository)
 kt-cli-alpha/
 
+# Exclude Property Booking System (it's its own repository)
+Property Booking System/
+
 # Runtime data
 pids
 *.pid

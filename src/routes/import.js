@@ -27,6 +27,38 @@ let importStatus = {
 
 // Import history tracking
 let importHistory = [];
+const IMPORT_HISTORY_FILE = path.join(__dirname, '../../data', 'import-history.json');
+
+// Load import history from file
+function loadImportHistory() {
+  try {
+    if (fs.existsSync(IMPORT_HISTORY_FILE)) {
+      const data = fs.readFileSync(IMPORT_HISTORY_FILE, 'utf8');
+      importHistory = JSON.parse(data);
+      console.log(`Loaded ${importHistory.length} import history records`);
+    } else {
+      importHistory = [];
+      console.log('No import history file found, starting with empty history');
+    }
+  } catch (error) {
+    console.error('Failed to load import history:', error);
+    importHistory = [];
+  }
+}
+
+// Save import history to file
+function saveImportHistory() {
+  try {
+    const data = JSON.stringify(importHistory, null, 2);
+    fs.writeFileSync(IMPORT_HISTORY_FILE, data, 'utf8');
+    console.log(`Saved ${importHistory.length} import history records`);
+  } catch (error) {
+    console.error('Failed to save import history:', error);
+  }
+}
+
+// Initialize import history on module load
+loadImportHistory();
 
 // Configure multer for file uploads
 const upload = multer({
@@ -312,6 +344,7 @@ router.post('/import-csv', (req, res) => {
           source: 'csv-import'
         };
         importHistory.unshift(importRecord);
+        saveImportHistory();
 
         // Keep only last 50 imports
         if (importHistory.length > 50) {
@@ -409,6 +442,7 @@ router.post('/import-amazon-zip', upload.single('amazonZip'), async (req, res) =
       source: 'amazon-zip'
     };
     importHistory.unshift(importRecord);
+    saveImportHistory();
 
     // Keep only last 50 imports
     if (importHistory.length > 50) {

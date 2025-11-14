@@ -1,0 +1,92 @@
+[
+  {
+    "timestamp": "2025-11-13T05:34:26.577Z",
+    "type": "csv",
+    "recordsProcessed": 0,
+    "recordsAdded": 0,
+    "duplicatesSkipped": 0,
+    "errors": 0,
+    "source": "csv-import"
+  },
+  {
+    "timestamp": "2025-11-13T05:34:26.558Z",
+    "type": "csv",
+    "recordsProcessed": 2,
+    "recordsAdded": 2,
+    "duplicatesSkipped": 0,
+    "errors": 0,
+    "source": "csv-import"
+  },
+  {
+    "timestamp": "2025-11-13T05:34:26.538Z",
+    "type": "csv",
+    "recordsProcessed": 1,
+    "recordsAdded": 1,
+    "duplicatesSkipped": 0,
+    "errors": 0,
+    "source": "csv-import"
+  },
+  {
+    "timestamp": "2025-11-13T05:34:26.509Z",
+    "type": "csv",
+    "recordsProcessed": 2,
+    "recordsAdded": 2,
+    "duplicatesSkipped": 0,
+    "errors": 0,
+    "source": "csv-import"
+  },
+  {
+    "timestamp": "2025-11-13T05:29:37.398Z",
+    "type": "csv",
+    "recordsProcessed": 0,
+    "recordsAdded": 0,
+    "duplicatesSkipped": 0,
+    "errors": 0,
+    "source": "csv-import"
+  },
+  {
+    "timestamp": "2025-11-13T05:29:37.385Z",
+    "type": "csv",
+    "recordsProcessed": 2,
+    "recordsAdded": 2,
+    "duplicatesSkipped": 0,
+    "errors": 0,
+    "source": "csv-import"
+  },
+  {
+    "timestamp": "2025-11-13T05:29:37.361Z",
+    "type": "csv",
+    "recordsProcessed": 1,
+    "recordsAdded": 1,
+    "duplicatesSkipped": 0,
+    "errors": 0,
+    "source": "csv-import"
+  },
+  {
+    "timestamp": "2025-11-13T05:29:37.335Z",
+    "type": "csv",
+    "recordsProcessed": 2,
+    "recordsAdded": 2,
+    "duplicatesSkipped": 0,
+    "errors": 0,
+    "source": "csv-import"
+  },
+  {
+    "timestamp": "2025-11-13T05:24:42.015Z",
+    "type": "csv",
+    "recordsProcessed": 1,
+    "recordsAdded": 1,
+    "duplicatesSkipped": 0,
+    "errors": 0,
+    "source": "csv-import"
+  },
+  {
+    "timestamp": "2025-11-13T05:21:18.227Z",
+    "type": "csv",
+    "recordsProcessed": 2,
+    "recordsAdded": 2,
+    "duplicatesSkipped": 0,
+    "errors": 0,
+    "source": "csv-import"
+  }
+]
