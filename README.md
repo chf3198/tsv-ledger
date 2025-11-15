@@ -202,8 +202,9 @@ To fully initialize with the Knowledge Transfer System and gain complete familia
    - API_DOCUMENTATION.md
    - GIT_WORKFLOW.md
    - AGENTS.md
+   - TODO.md
 
-This ensures complete consumption of the Knowledge Transfer data, including all configurations, instruction-sets, and familiarity with data structure locations.
+This ensures complete consumption of the Knowledge Transfer data, including all configurations, instruction-sets, current TODO items, and familiarity with data structure locations.
 
 ## License
 
