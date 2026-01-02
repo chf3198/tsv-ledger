@@ -10,30 +10,37 @@
  * @version 2.2.2
  */
 
-const fs = require('fs');
-const path = require('path');
+const fs = require("fs");
+const path = require("path");
 
 // Data file path - support test database isolation
 const getDataFilePath = () => {
   // Use test database when NODE_ENV is 'test' or PROCESS.TEST_DB is set
-  if (process.env.NODE_ENV === 'test' || process.env.TEST_DB) {
-    return path.join(__dirname, '..', 'tests', 'data', 'test-expenditures.json');
+  if (process.env.NODE_ENV === "test" || process.env.TEST_DB) {
+    return path.join(
+      __dirname,
+      "..",
+      "tests",
+      "data",
+      "test-expenditures.json"
+    );
   }
-  return path.join(__dirname, '..', 'data', 'expenditures.json');
+  return path.join(__dirname, "..", "data", "expenditures.json");
 };
 
-const dataFile = getDataFilePath();
-
 // Ensure data directory exists
-const dataDir = path.dirname(dataFile);
-if (!fs.existsSync(dataDir)) {
-  fs.mkdirSync(dataDir, { recursive: true });
-}
+const ensureDataDir = () => {
+  const dataFile = getDataFilePath();
+  const dataDir = path.dirname(dataFile);
+  if (!fs.existsSync(dataDir)) {
+    fs.mkdirSync(dataDir, { recursive: true });
+  }
+  if (!fs.existsSync(dataFile)) {
+    fs.writeFileSync(dataFile, JSON.stringify([]));
+  }
+};
 
-// Initialize data file if it doesn't exist
-if (!fs.existsSync(dataFile)) {
-  fs.writeFileSync(dataFile, JSON.stringify([]));
-}
+ensureDataDir();
 
 /**
  * Reads expenditures from the JSON data file
@@ -50,10 +57,11 @@ if (!fs.existsSync(dataFile)) {
  */
 function readExpenditures() {
   try {
-    const data = fs.readFileSync(dataFile, 'utf8');
+    const dataFile = getDataFilePath();
+    const data = fs.readFileSync(dataFile, "utf8");
     return JSON.parse(data);
   } catch (err) {
-    console.error('Error reading expenditures file:', err);
+    console.error("Error reading expenditures file:", err);
     return [];
   }
 }
@@ -80,9 +88,10 @@ function readExpenditures() {
  */
 function writeExpenditures(expenditures) {
   try {
+    const dataFile = getDataFilePath();
     fs.writeFileSync(dataFile, JSON.stringify(expenditures, null, 2));
   } catch (err) {
-    console.error('Error writing expenditures file:', err);
+    console.error("Error writing expenditures file:", err);
   }
 }
 
@@ -151,21 +160,26 @@ function addExpenditure(expenditure, callback, options = {}) {
   if (existingIndex !== -1 && allowUpdates) {
     // Update existing record with smart merging
     const existing = expenditures[existingIndex];
-    const merged = mergeExpenditureData(existing, expenditure, preserveUserData);
+    const merged = mergeExpenditureData(
+      existing,
+      expenditure,
+      preserveUserData
+    );
 
     expenditures[existingIndex] = merged;
     writeExpenditures(expenditures);
     callback(null, merged, true); // true indicates this was an update
   } else {
     // Create new record
+    const { id: _, ...expenditureData } = expenditure;
     const newExpenditure = {
       id: expenditures.length + 1,
-      ...expenditure,
+      ...expenditureData,
       // Initialize user data fields if not present
-      userNotes: expenditure.userNotes || '',
+      userNotes: expenditure.userNotes || "",
       customFields: expenditure.customFields || {},
       lastModified: new Date().toISOString(),
-      createdAt: new Date().toISOString()
+      createdAt: new Date().toISOString(),
     };
     expenditures.push(newExpenditure);
     writeExpenditures(expenditures);
@@ -184,36 +198,42 @@ function addExpenditure(expenditure, callback, options = {}) {
 function findExistingExpenditureIndex(expenditures, newExpenditure) {
   // Priority 1: Check by Amazon Order ID (most reliable)
   if (newExpenditure.amazonOrderId) {
-    const index = expenditures.findIndex(exp =>
-      exp.amazonOrderId === newExpenditure.amazonOrderId
+    const index = expenditures.findIndex(
+      (exp) => exp.amazonOrderId === newExpenditure.amazonOrderId
     );
     if (index !== -1) return index;
   }
 
   // Priority 2: Check by Amazon Subscription ID
   if (newExpenditure.amazonSubscriptionId) {
-    const index = expenditures.findIndex(exp =>
-      exp.amazonSubscriptionId === newExpenditure.amazonSubscriptionId
+    const index = expenditures.findIndex(
+      (exp) => exp.amazonSubscriptionId === newExpenditure.amazonSubscriptionId
     );
     if (index !== -1) return index;
   }
 
   // Priority 3: Check by Amazon ASIN + Date (for item-level matching)
   if (newExpenditure.amazonASIN && newExpenditure.date) {
-    const index = expenditures.findIndex(exp =>
-      exp.amazonASIN === newExpenditure.amazonASIN &&
-      exp.date === newExpenditure.date
+    const index = expenditures.findIndex(
+      (exp) =>
+        exp.amazonASIN === newExpenditure.amazonASIN &&
+        exp.date === newExpenditure.date
     );
     if (index !== -1) return index;
   }
 
   // Priority 4: Fuzzy match by date, amount, and description (for bank transactions)
   // Only match if all three match exactly to avoid false positives
-  if (newExpenditure.date && newExpenditure.amount && newExpenditure.description) {
-    const index = expenditures.findIndex(exp =>
-      exp.date === newExpenditure.date &&
-      exp.amount === newExpenditure.amount &&
-      exp.description === newExpenditure.description
+  if (
+    newExpenditure.date &&
+    newExpenditure.amount &&
+    newExpenditure.description
+  ) {
+    const index = expenditures.findIndex(
+      (exp) =>
+        exp.date === newExpenditure.date &&
+        exp.amount === newExpenditure.amount &&
+        exp.description === newExpenditure.description
     );
     if (index !== -1) return index;
   }
@@ -235,7 +255,8 @@ function mergeExpenditureData(existing, imported, preserveUserData = true) {
 
   // Always update these fields from import (they're authoritative)
   merged.amazonOrderId = imported.amazonOrderId || merged.amazonOrderId;
-  merged.amazonSubscriptionId = imported.amazonSubscriptionId || merged.amazonSubscriptionId;
+  merged.amazonSubscriptionId =
+    imported.amazonSubscriptionId || merged.amazonSubscriptionId;
   merged.amazonASIN = imported.amazonASIN || merged.amazonASIN;
   merged.amazonCategory = imported.amazonCategory || merged.amazonCategory;
   merged.dataSource = imported.dataSource || merged.dataSource;
@@ -251,7 +272,7 @@ function mergeExpenditureData(existing, imported, preserveUserData = true) {
     // User-editable fields - keep existing values
     merged.category = merged.category || imported.category;
     merged.description = merged.description || imported.description;
-    merged.userNotes = merged.userNotes || imported.userNotes || '';
+    merged.userNotes = merged.userNotes || imported.userNotes || "";
     merged.customFields = { ...imported.customFields, ...merged.customFields };
 
     // Keep existing amount/date unless they're clearly wrong (zero/null)
@@ -272,7 +293,7 @@ function mergeExpenditureData(existing, imported, preserveUserData = true) {
     merged.description = imported.description || merged.description;
     merged.amount = imported.amount;
     merged.date = imported.date;
-    merged.userNotes = imported.userNotes || merged.userNotes || '';
+    merged.userNotes = imported.userNotes || merged.userNotes || "";
     merged.customFields = { ...merged.customFields, ...imported.customFields };
   }
 
@@ -297,8 +318,8 @@ function mergeExpenditureData(existing, imported, preserveUserData = true) {
  * @returns {boolean} True if cleared successfully, false if not in test mode
  */
 function clearTestData() {
-  if (process.env.NODE_ENV !== 'test' && !process.env.TEST_DB) {
-    console.warn('⚠️ clearTestData() only works in test environment');
+  if (process.env.NODE_ENV !== "test" && !process.env.TEST_DB) {
+    console.warn("⚠️ clearTestData() only works in test environment");
     return false;
   }
 
@@ -306,7 +327,7 @@ function clearTestData() {
     fs.writeFileSync(dataFile, JSON.stringify([]));
     return true;
   } catch (err) {
-    console.error('Error clearing test data:', err);
+    console.error("Error clearing test data:", err);
     return false;
   }
 }
@@ -318,13 +339,14 @@ function clearTestData() {
  * @returns {boolean} True if reset successfully
  */
 function resetTestDatabase() {
-  if (process.env.NODE_ENV !== 'test' && !process.env.TEST_DB) {
-    console.warn('⚠️ resetTestDatabase() only works in test environment');
+  if (process.env.NODE_ENV !== "test" && !process.env.TEST_DB) {
+    console.warn("⚠️ resetTestDatabase() only works in test environment");
     return false;
   }
 
   try {
     // Ensure directory exists
+    const dataFile = getDataFilePath();
     const dataDir = path.dirname(dataFile);
     if (!fs.existsSync(dataDir)) {
       fs.mkdirSync(dataDir, { recursive: true });
@@ -333,7 +355,7 @@ function resetTestDatabase() {
     fs.writeFileSync(dataFile, JSON.stringify([]));
     return true;
   } catch (err) {
-    console.error('Error resetting test database:', err);
+    console.error("Error resetting test database:", err);
     return false;
   }
 }
@@ -344,7 +366,7 @@ function resetTestDatabase() {
  * @returns {boolean} True if using test database
  */
 function isTestDatabase() {
-  return process.env.NODE_ENV === 'test' || !!process.env.TEST_DB;
+  return process.env.NODE_ENV === "test" || !!process.env.TEST_DB;
 }
 
 /**
@@ -353,15 +375,17 @@ function isTestDatabase() {
  * @returns {string} Absolute path to current database file
  */
 function getDatabasePath() {
-  return dataFile;
+  return getDataFilePath();
 }
 
 // Export the functions
 module.exports = {
   getAllExpenditures,
   addExpenditure,
+  writeExpenditures,
   clearTestData,
   resetTestDatabase,
   isTestDatabase,
-  getDatabasePath
+  getDatabasePath,
+  getDataFilePath,
 };

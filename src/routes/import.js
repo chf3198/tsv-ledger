@@ -5,79 +5,36 @@
  * Supports CSV, TSV, DAT files and Amazon ZIP archives.
  *
  * @module routes/import
- * @version 1.0.0
+ * @version 2.0.0
  */
 
-const express = require('express');
-const multer = require('multer');
-const path = require('path');
-const fs = require('fs');
-const csv = require('csv-parser');
-const { getAllExpenditures, addExpenditure } = require('../database');
-
-// Import status tracking
-let importStatus = {
-  isImporting: false,
-  currentStep: '',
-  progress: 0,
-  totalRecords: 0,
-  processedRecords: 0,
-  errors: []
-};
-
-// Import history tracking
-let importHistory = [];
-const IMPORT_HISTORY_FILE = path.join(__dirname, '../../data', 'import-history.json');
-
-// Load import history from file
-function loadImportHistory() {
-  try {
-    if (fs.existsSync(IMPORT_HISTORY_FILE)) {
-      const data = fs.readFileSync(IMPORT_HISTORY_FILE, 'utf8');
-      importHistory = JSON.parse(data);
-      console.log(`Loaded ${importHistory.length} import history records`);
-    } else {
-      importHistory = [];
-      console.log('No import history file found, starting with empty history');
-    }
-  } catch (error) {
-    console.error('Failed to load import history:', error);
-    importHistory = [];
-  }
-}
-
-// Save import history to file
-function saveImportHistory() {
-  try {
-    const data = JSON.stringify(importHistory, null, 2);
-    fs.writeFileSync(IMPORT_HISTORY_FILE, data, 'utf8');
-    console.log(`Saved ${importHistory.length} import history records`);
-  } catch (error) {
-    console.error('Failed to save import history:', error);
-  }
-}
-
-// Initialize import history on module load
-loadImportHistory();
+const express = require("express");
+const multer = require("multer");
+const path = require("path");
+const fs = require("fs");
+const { getDataFilePath, getAllExpenditures, addExpenditure } = require("../database");
+const { statusTracker, historyManager, csvParser, zipHandler } = require("../import");
 
 // Configure multer for file uploads
 const upload = multer({
-  dest: path.join(__dirname, '../../data', 'temp-uploads'),
+  dest: path.join(__dirname, "../../data", "temp-uploads"),
   limits: {
-    fileSize: 50 * 1024 * 1024 // 50MB limit for zip files
+    fileSize: 50 * 1024 * 1024, // 50MB limit for zip files
   },
   fileFilter: (req, file, cb) => {
     // Accept zip files and CSV files
-    if (file.mimetype === 'application/zip' ||
-        file.mimetype === 'application/x-zip-compressed' ||
-        file.mimetype === 'text/csv' ||
-        file.originalname.endsWith('.zip') ||
-        file.originalname.endsWith('.csv')) {
+    if (
+      file.mimetype === "application/zip" ||
+      file.mimetype === "application/x-zip-compressed" ||
+      file.mimetype === "text/csv" ||
+      file.originalname.endsWith(".zip") ||
+      file.originalname.endsWith(".csv")
+    ) {
       cb(null, true);
     } else {
-      cb(new Error('Only ZIP and CSV files are allowed'));
+      cb(new Error("Only ZIP and CSV files are allowed"));
     }
-  }
+  },
 });
 
 const router = express.Router();
@@ -86,23 +43,22 @@ const router = express.Router();
  * GET /api/import-status
  * Get current import status
  */
-router.get('/import-status', (req, res) => {
-  res.json(importStatus);
+router.get("/import-status", (req, res) => {
+  res.json(statusTracker.getImportStatus());
 });
 
 /**
  * GET /api/import-history
  * Get import history
  */
-router.get('/import-history', (req, res) => {
+router.get("/import-history", (req, res) => {
   try {
-    res.json({
-      history: importHistory,
-      total: importHistory.length
-    });
+    const dataFilePath = getDataFilePath();
+    const history = historyManager.getImportHistory(dataFilePath);
+    res.json(history);
   } catch (error) {
-    console.error('Failed to retrieve import history:', error);
-    res.status(500).json({ error: 'Failed to retrieve import history' });
+    console.error("Failed to retrieve import history:", error);
+    res.status(500).json({ error: "Failed to retrieve import history" });
   }
 });
 
@@ -110,277 +66,77 @@ router.get('/import-history', (req, res) => {
  * POST /api/import-csv
  * Import expenditures from CSV/TSV/DAT file
  */
-router.post('/import-csv', (req, res) => {
+router.post("/import-csv", async (req, res) => {
   try {
-    console.log('=== IMPORT REQUEST RECEIVED ===');
-    console.log('Request body size:', req.body ? JSON.stringify(req.body).length : 'N/A');
-
     const csvData = req.body.csvData;
     if (!csvData) {
-      console.log('ERROR: No csvData in request body');
       return res.status(400).json({
-        error: 'No data file provided',
-        message: 'csvData field is required'
+        error: "No data file provided",
+        message: "csvData field is required",
       });
     }
 
-    if (typeof csvData !== 'string') {
+    if (typeof csvData !== "string") {
       return res.status(400).json({
-        error: 'Invalid data format',
-        message: 'csvData must be a string'
+        error: "Invalid data format",
+        message: "csvData must be a string",
       });
     }
 
-    console.log('CSV Data length:', csvData.length);
-    console.log('First 200 chars of data:', csvData.substring(0, 200));
-    console.log('Contains tabs?', csvData.includes('\t'));
-    console.log('Contains commas?', csvData.includes(','));
+    statusTracker.startImport();
+    statusTracker.setImportStep("Parsing CSV data...");
 
-    const results = [];
-    const errors = [];
-    const skippedRows = [];
+    const parseResult = await csvParser.parseCSVData(csvData, {
+      onProgress: (processed, total) => {
+        statusTracker.updateImportProgress(processed, total);
+      },
+      onError: (error) => {
+        statusTracker.addImportError(error.message);
+      }
+    });
 
-    // Parse CSV/TSV data (handle both comma and tab delimiters)
-    const csvStream = require('stream').Readable.from(csvData);
-    let lineNumber = 0;
-    const separator = csvData.includes('\t') ? '\t' : ',';
+    statusTracker.setImportStep("Saving expenditures...");
 
-    console.log('Using separator:', separator === '\t' ? 'TAB' : 'COMMA');
+    const dataFilePath = getDataFilePath();
+    let savedCount = 0;
 
-    csvStream
-      .pipe(csv({
-        separator: separator,
-        skipEmptyLines: true
-      }))
-      .on('data', (data) => {
-        lineNumber++;
-        console.log(`\n=== LINE ${lineNumber} ===`);
-        console.log('Raw data keys:', Object.keys(data));
-        console.log('Raw data values:', Object.values(data));
+    for (const expenditure of parseResult.expenditures) {
+      try {
+        addExpenditure(expenditure);
+        savedCount++;
+        statusTracker.updateImportProgress(savedCount, parseResult.expenditures.length);
+      } catch (error) {
+        statusTracker.addImportError(`Failed to save expenditure: ${error.message}`);
+      }
+    }
 
-        // Detect file format based on column headers
-        const isAmazonFormat = data.hasOwnProperty('order id') || data.hasOwnProperty('Order ID') || data.hasOwnProperty('date');
-        const isAmazonOfficialFormat = data.hasOwnProperty('id') && data.hasOwnProperty('asin') && data.hasOwnProperty('source');
-        const isBankFormat = data.hasOwnProperty('Description') && data.hasOwnProperty('') && data.hasOwnProperty('Amount');
+    // Add to import history
+    const historyEntry = {
+      timestamp: new Date().toISOString(),
+      fileName: req.body.fileName || "CSV Import",
+      recordCount: savedCount,
+      importType: "csv",
+      status: parseResult.errors.length > 0 ? "partial" : "success",
+    };
+    historyManager.addImportHistoryEntry(dataFilePath, historyEntry);
 
-        console.log('Format detection - Amazon Chrome:', isAmazonFormat, 'Amazon Official:', isAmazonOfficialFormat, 'Bank:', isBankFormat);
+    statusTracker.completeImport();
 
-        let dateValue, amountValue, descValue, expenditure;
-
-        if (isAmazonOfficialFormat) {
-          // Amazon Official Data format handling (Rich Amazon Export)
-          console.log('🏆 Processing Amazon OFFICIAL data with rich metadata');
-
-          // Skip if no date or amount
-          dateValue = data.date || data.Date;
-          amountValue = data.amount || data.Amount;
-
-          if (!dateValue || !amountValue) {
-            console.log('Skipping row - missing date or amount');
-            skippedRows.push({ line: lineNumber, reason: 'Missing date or amount' });
-            return;
-          }
-
-          descValue = data.title || data.Title || data.description || data.Description || 'Amazon Purchase';
-
-          // Parse amount (remove $ and handle negative values)
-          const parsedAmount = parseFloat(String(amountValue).replace(/[$,]/g, ''));
-          if (isNaN(parsedAmount)) {
-            console.log('Skipping row - invalid amount:', amountValue);
-            skippedRows.push({ line: lineNumber, reason: 'Invalid amount format' });
-            return;
-          }
-
-          expenditure = {
-            date: dateValue,
-            amount: Math.abs(parsedAmount), // Store as positive for expenses
-            description: descValue,
-            category: 'Amazon',
-            source: 'amazon-official',
-            orderId: data.id || data.orderId,
-            asin: data.asin,
-            metadata: {
-              quantity: data.quantity || 1,
-              condition: data.condition || 'new',
-              seller: data.seller || 'Amazon',
-              tax: data.tax || 0,
-              shipping: data.shipping || 0
-            }
-          };
-
-        } else if (isAmazonFormat) {
-          // Amazon Chrome Extension format
-          console.log('📦 Processing Amazon CHROME data');
-
-          dateValue = data.date || data.Date;
-          amountValue = data.amount || data.Amount || data.total || data.Total;
-
-          if (!dateValue || !amountValue) {
-            console.log('Skipping row - missing date or amount');
-            skippedRows.push({ line: lineNumber, reason: 'Missing date or amount' });
-            return;
-          }
-
-          descValue = data.title || data.Title || data.description || data.Description || 'Amazon Purchase';
-
-          // Parse amount
-          const parsedAmount = parseFloat(String(amountValue).replace(/[$,]/g, ''));
-          if (isNaN(parsedAmount)) {
-            console.log('Skipping row - invalid amount:', amountValue);
-            skippedRows.push({ line: lineNumber, reason: 'Invalid amount format' });
-            return;
-          }
-
-          expenditure = {
-            date: dateValue,
-            amount: Math.abs(parsedAmount),
-            description: descValue,
-            category: 'Amazon',
-            source: 'amazon-chrome',
-            orderId: data['order id'] || data.orderId,
-            metadata: {
-              tax: data.tax || 0,
-              shipping: data.shipping || 0
-            }
-          };
-
-        } else if (isBankFormat) {
-          // Bank of America DAT format
-          console.log('🏦 Processing BANK data');
-
-          dateValue = data.Date || data.date;
-          amountValue = data.Amount || data.amount;
-          descValue = data.Description || data.description || 'Bank Transaction';
-
-          if (!dateValue || !amountValue) {
-            console.log('Skipping row - missing date or amount');
-            skippedRows.push({ line: lineNumber, reason: 'Missing date or amount' });
-            return;
-          }
-
-          // Parse amount (handle negative values for credits)
-          const parsedAmount = parseFloat(String(amountValue).replace(/[$,]/g, ''));
-          if (isNaN(parsedAmount)) {
-            console.log('Skipping row - invalid amount:', amountValue);
-            skippedRows.push({ line: lineNumber, reason: 'Invalid amount format' });
-            return;
-          }
-
-          expenditure = {
-            date: dateValue,
-            amount: Math.abs(parsedAmount),
-            description: descValue,
-            category: 'Bank',
-            source: 'bank-statement',
-            metadata: {}
-          };
-
-        } else {
-          // Generic CSV format
-          console.log('📄 Processing GENERIC CSV data');
-
-          // Try common column names
-          dateValue = data.date || data.Date || data['Date'] || data['date/time'] || data['Date/Time'];
-          amountValue = data.amount || data.Amount || data.total || data.Total || data.price || data.Price;
-          descValue = data.description || data.Description || data.title || data.Title || data.item || data.Item || 'Transaction';
-
-          if (!dateValue || !amountValue) {
-            console.log('Skipping row - missing date or amount');
-            skippedRows.push({ line: lineNumber, reason: 'Missing date or amount' });
-            return;
-          }
-
-          const parsedAmount = parseFloat(String(amountValue).replace(/[$,]/g, ''));
-          if (isNaN(parsedAmount)) {
-            console.log('Skipping row - invalid amount:', amountValue);
-            skippedRows.push({ line: lineNumber, reason: 'Invalid amount format' });
-            return;
-          }
-
-          expenditure = {
-            date: dateValue,
-            amount: Math.abs(parsedAmount),
-            description: descValue,
-            category: 'Other',
-            source: 'csv-import',
-            metadata: {}
-          };
-        }
-
-        console.log('Final expenditure object:', expenditure);
-        results.push(expenditure);
-
-      })
-      .on('end', () => {
-        console.log(`\n=== IMPORT COMPLETE ===`);
-        console.log('Total rows processed:', lineNumber);
-        console.log('Valid expenditures:', results.length);
-        console.log('Errors:', errors.length);
-        console.log('Skipped rows:', skippedRows.length);
-
-        // Add all valid expenditures to database
-        let addedCount = 0;
-        let duplicateCount = 0;
-
-        results.forEach(expenditure => {
-          addExpenditure(expenditure, (err) => {
-            if (err) {
-              console.error('Failed to add expenditure:', err);
-              errors.push({ expenditure, error: err.message });
-            } else {
-              addedCount++;
-            }
-          });
-        });
-
-        // Record import in history
-        const importRecord = {
-          timestamp: new Date().toISOString(),
-          type: 'csv',
-          recordsProcessed: results.length,
-          recordsAdded: addedCount,
-          duplicatesSkipped: duplicateCount,
-          errors: errors.length,
-          source: 'csv-import'
-        };
-        importHistory.unshift(importRecord);
-        saveImportHistory();
-
-        // Keep only last 50 imports
-        if (importHistory.length > 50) {
-          importHistory = importHistory.slice(0, 50);
-        }
-
-        res.json({
-          success: true,
-          message: `Import completed successfully`,
-          stats: {
-            totalRows: lineNumber,
-            validRecords: results.length,
-            addedToDatabase: addedCount,
-            duplicatesSkipped: duplicateCount,
-            errors: errors.length,
-            skippedRows: skippedRows.length
-          },
-          errors: errors.slice(0, 10), // Return first 10 errors
-          skippedRows: skippedRows.slice(0, 10) // Return first 10 skipped
-        });
-
-      })
-      .on('error', (error) => {
-        console.error('CSV parsing error:', error);
-        res.status(500).json({
-          error: 'Failed to parse CSV data',
-          message: error.message
-        });
-      });
+    res.json({
+      success: true,
+      message: `Imported ${savedCount} expenditures from CSV`,
+      data: {
+        imported: savedCount,
+        errors: parseResult.errors,
+        skipped: parseResult.skipped,
+      }
+    });
 
   } catch (error) {
-    console.error('Import processing error:', error);
-    res.status(500).json({
-      error: 'Import processing failed',
-      message: error.message
-    });
+    statusTracker.addImportError(error.message);
+    statusTracker.completeImport();
+    console.error("CSV import error:", error);
+    res.status(500).json({ error: "Import failed", message: error.message });
   }
 });
 
@@ -388,98 +144,100 @@ router.post('/import-csv', (req, res) => {
  * POST /api/validate-amazon-zip
  * Validate Amazon ZIP file before import
  */
-router.post('/validate-amazon-zip', upload.single('amazonZip'), async (req, res) => {
-  try {
-    if (!req.file) {
-      return res.status(400).json({ error: 'No file uploaded' });
+router.post(
+  "/validate-amazon-zip",
+  upload.single("amazonZip"),
+  async (req, res) => {
+    try {
+      if (!req.file) {
+        return res.status(400).json({ error: "No file uploaded" });
+      }
+
+      const validation = await zipHandler.validateZipFile(req.file.path);
+
+      // Cleanup temp file
+      zipHandler.cleanupTempFile(req.file.path);
+
+      res.json(validation);
+    } catch (error) {
+      console.error("ZIP validation error:", error);
+      if (req.file) {
+        zipHandler.cleanupTempFile(req.file.path);
+      }
+      res.status(500).json({ error: "Validation failed", message: error.message });
     }
-
-    const amazonZipParser = require('../amazon-zip-parser');
-    const validation = await amazonZipParser.validateZipFile(req.file.path);
-
-    res.json(validation);
-  } catch (error) {
-    console.error('ZIP validation error:', error);
-    res.status(500).json({
-      error: 'Validation failed',
-      message: error.message
-    });
   }
-});
+);
 
 /**
  * POST /api/import-amazon-zip
  * Import data from Amazon ZIP file
  */
-router.post('/import-amazon-zip', upload.single('amazonZip'), async (req, res) => {
-  try {
-    if (!req.file) {
-      return res.status(400).json({ error: 'No file uploaded' });
+router.post(
+  "/import-amazon-zip",
+  upload.single("amazonZip"),
+  async (req, res) => {
+    try {
+      if (!req.file) {
+        return res.status(400).json({ error: "No file uploaded" });
+      }
+
+      statusTracker.startImport();
+
+      const importResult = await zipHandler.importFromZip(req.file.path, {
+        onProgress: (progress) => {
+          statusTracker.updateImportProgress(progress, 100);
+        },
+        onStatus: (status) => {
+          statusTracker.setImportStep(status);
+        }
+      });
+
+      statusTracker.setImportStep("Saving expenditures...");
+
+      const dataFilePath = getDataFilePath();
+      let savedCount = 0;
+
+      for (const expenditure of importResult.expenditures) {
+        try {
+          addExpenditure(expenditure);
+          savedCount++;
+        } catch (error) {
+          statusTracker.addImportError(`Failed to save expenditure: ${error.message}`);
+        }
+      }
+
+      // Add to import history
+      const historyEntry = {
+        timestamp: new Date().toISOString(),
+        fileName: req.file.originalname,
+        recordCount: savedCount,
+        importType: "amazon-zip",
+        status: "success",
+      };
+      historyManager.addImportHistoryEntry(dataFilePath, historyEntry);
+
+      // Cleanup temp file
+      zipHandler.cleanupTempFile(req.file.path);
+
+      statusTracker.completeImport();
+
+      res.json({
+        success: true,
+        message: `Imported ${savedCount} expenditures from Amazon ZIP`,
+        data: importResult.metadata
+      });
+
+    } catch (error) {
+      statusTracker.addImportError(error.message);
+      statusTracker.completeImport();
+      console.error("ZIP import error:", error);
+      if (req.file) {
+        zipHandler.cleanupTempFile(req.file.path);
+      }
+      res.status(500).json({ error: "Import failed", message: error.message });
     }
-
-    importStatus = {
-      isImporting: true,
-      currentStep: 'Starting import...',
-      progress: 0,
-      totalRecords: 0,
-      processedRecords: 0,
-      errors: []
-    };
-
-    const amazonZipParser = require('../amazon-zip-parser');
-    const results = await amazonZipParser.processZipFile(req.file.path, (status) => {
-      importStatus = { ...importStatus, ...status };
-    });
-
-    // Record import in history
-    const importRecord = {
-      timestamp: new Date().toISOString(),
-      type: 'amazon-zip',
-      recordsProcessed: results.totalRecords,
-      recordsAdded: results.addedCount,
-      duplicatesSkipped: results.duplicateCount,
-      errors: results.errors.length,
-      source: 'amazon-zip'
-    };
-    importHistory.unshift(importRecord);
-    saveImportHistory();
-
-    // Keep only last 50 imports
-    if (importHistory.length > 50) {
-      importHistory = importHistory.slice(0, 50);
-    }
-
-    importStatus = {
-      isImporting: false,
-      currentStep: 'Import completed',
-      progress: 100,
-      totalRecords: results.totalRecords,
-      processedRecords: results.addedCount,
-      errors: results.errors
-    };
-
-    res.json({
-      success: true,
-      message: 'Amazon ZIP import completed',
-      stats: results
-    });
-
-  } catch (error) {
-    console.error('Amazon ZIP import error:', error);
-    importStatus = {
-      isImporting: false,
-      currentStep: 'Import failed',
-      progress: 0,
-      totalRecords: 0,
-      processedRecords: 0,
-      errors: [error.message]
-    };
-
-    res.status(500).json({
-      error: 'Import failed',
-      message: error.message
-    });
   }
-});
+);
 
 module.exports = router;

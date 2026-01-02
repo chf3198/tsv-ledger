@@ -7,7 +7,7 @@
  * allowing you to observe the benefits allocation fix in action.
  */
 
-const puppeteer = require('puppeteer');
+const puppeteer = require('puppeteer-core');
 
 async function performVisualTesting() {
   console.log('🚀 Starting Visual UX Testing for Benefits Allocation Fix\n');
@@ -19,9 +19,11 @@ async function performVisualTesting() {
     // Launch browser in non-headless mode so you can see it
     console.log('📱 Launching Chrome browser...');
     browser = await puppeteer.launch({
+      executablePath: '/home/curtisfranks/.cache/puppeteer/chrome/linux-121.0.6167.85/chrome-linux64/chrome',
       headless: false, // This makes the browser visible
       defaultViewport: { width: 1200, height: 800 },
-      args: ['--no-sandbox', '--disable-setuid-sandbox']
+      slowMo: 1000, // Human-speed interactions (1 second delay)
+      args: ['--no-sandbox', '--disable-setuid-sandbox', '--remote-debugging-port=9222']
     });
 
     console.log('🌐 Opening benefits page...');
@@ -69,6 +71,13 @@ async function performVisualTesting() {
     await page.waitForSelector('#businessSuppliesList', { timeout: 10000 });
     await page.waitForSelector('#benefitsList', { timeout: 10000 });
 
+    // Wait for items to load
+    await page.waitForFunction(() => {
+      const businessList = document.querySelector('#businessSuppliesList');
+      const benefitsList = document.querySelector('#benefitsList');
+      return businessList && benefitsList && businessList.querySelectorAll('[data-item-id]').length > 0;
+    }, { timeout: 10000 });
+
     console.log('✅ Modal opened with columns visible');
 
     // Get initial state
@@ -85,7 +94,11 @@ async function performVisualTesting() {
     // Select first business item
     console.log('🎯 Selecting first item from Business Supplies column...');
     const firstItem = await page.$('#businessSuppliesList [data-item-id]');
-    const itemId = await firstItem.getAttribute('data-item-id');
+    console.log('First item found:', !!firstItem);
+    if (!firstItem) {
+      throw new Error('No business items found to test');
+    }
+    const itemId = await firstItem.evaluate(el => el.getAttribute('data-item-id'));
 
     console.log(`📝 Testing item: ${itemId}`);
     await firstItem.click();
@@ -120,7 +133,7 @@ async function performVisualTesting() {
     }
 
     // Wait for UI update
-    await page.waitForTimeout(1000);
+    await new Promise(resolve => setTimeout(resolve, 1000));
 
     // Check results
     const businessItemsAfter = await page.$$eval('#businessSuppliesList [data-item-id]',
@@ -186,7 +199,7 @@ async function performVisualTesting() {
     }
 
     // Wait for UI update
-    await page.waitForTimeout(1000);
+    await new Promise(resolve => setTimeout(resolve, 1000));
 
     // Check final results
     const finalBusinessItems = await page.$$eval('#businessSuppliesList [data-item-id]',

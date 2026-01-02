@@ -37,8 +37,8 @@
     "test-menu-suite": "node tests/navigation-master-suite.js",
     "test-menu": "npm run test-menu-suite",
     "test:e2e:headed": "npx playwright test --headed",
-  "test:e2e:install": "npx playwright install",
-  "test:e2e:ci": "npx playwright install && npx playwright test --config=playwright.config.js",
+    "test:e2e:install": "npx playwright install",
+    "test:e2e:ci": "npx playwright install && npx playwright test --config=playwright.config.js",
     "playwright:headed-local": "node node_modules/@playwright/test/cli.js test --headed",
     "playwright:inspect-local": "PWDEBUG=1 node node_modules/@playwright/test/cli.js test",
     "playwright:trace-local": "node node_modules/@playwright/test/cli.js test --trace on",
@@ -50,17 +50,22 @@
     "toggler-maximized": "node tests/toggler-maximized.js",
     "server-start": "./smart-test.sh start",
     "server-stop": "./smart-test.sh stop",
-    "server-status": "./smart-test.sh status"
+    "server-status": "./smart-test.sh status",
+    "docs:generate": "npx jsdoc src/ -d docs/api/",
+    "index:check": "echo 'Run Copilot Chat with #codebase to validate indexing'"
   },
   "dependencies": {
+    "@playwright/test": "^1.57.0",
     "cheerio": "^1.0.0-rc.12",
     "csv-parser": "^3.0.0",
     "express": "^4.18.2",
     "form-data": "^4.0.4",
-    "multer": "^1.4.5-lts.1"
+    "jest-junit": "^16.0.0",
+    "multer": "^1.4.5-lts.1",
+    "puppeteer": "^24.34.0"
   },
   "devDependencies": {
-    "@playwright/test": "^1.55.0",
-    "nodemon": "^3.0.0"
+    "nodemon": "^3.0.0",
+    "puppeteer-core": "^23.0.0"
   }
 }

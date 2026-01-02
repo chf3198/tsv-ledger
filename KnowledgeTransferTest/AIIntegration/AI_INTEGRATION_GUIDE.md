@@ -11,6 +11,7 @@ This guide explains how to effectively share Knowledge Transfer Protocols with A
 ## 📋 Step 1: Initial Context Sharing
 
 ### Essential Context Message
+
 Start every new AI session with this context:
 
 ```
@@ -18,7 +19,7 @@ I'm working with the Knowledge Transfer Protocol Evolution system - a proven fra
 
 Please read and understand these core protocols:
 1. CodeOrganizationFramework.md - Universal project structure standards
-2. GitWorkflowPatterns.md - Professional version control practices  
+2. GitWorkflowPatterns.md - Professional version control practices
 3. DocumentationFramework.md - Knowledge capture and transfer standards
 
 These protocols have been proven effective in production projects and should guide all development decisions.
@@ -27,7 +28,9 @@ Are you ready to apply these protocols to our project?
 ```
 
 ### Protocol Files to Share
+
 Always share these files with your AI assistant:
+
 1. **CodeOrganizationFramework.md** - For project structure decisions
 2. **GitWorkflowPatterns.md** - For commit messages and version control
 3. **DocumentationFramework.md** - For documentation standards
@@ -36,6 +39,7 @@ Always share these files with your AI assistant:
 ## 🧠 Step 2: AI Understanding Validation
 
 ### Test AI Comprehension
+
 Ask these validation questions to ensure AI understands:
 
 ```
@@ -47,7 +51,9 @@ Before we begin development:
 ```
 
 ### Expected AI Responses
+
 The AI should demonstrate understanding by:
+
 - ✅ **Describing the modular directory structure** (src/, tests/, docs/, etc.)
 - ✅ **Explaining conventional commit format** (feat:, fix:, docs:, etc.)
 - ✅ **Listing required documentation** (README, API docs, development guides)
@@ -56,6 +62,7 @@ The AI should demonstrate understanding by:
 ## 🛠️ Step 3: Development Guidance
 
 ### Request Protocol-Compliant Implementation
+
 Use this pattern for development requests:
 
 ```
@@ -70,7 +77,9 @@ Ensure the implementation would pass our protocol validation checklist.
 ```
 
 ### Monitor Protocol Compliance
+
 Check that AI-generated code includes:
+
 - [ ] **Proper file placement** in correct directories
 - [ ] **Comprehensive comments** explaining functionality
 - [ ] **JSDoc documentation** for functions and classes
@@ -80,6 +89,7 @@ Check that AI-generated code includes:
 ## 🎯 Step 4: Quality Assurance
 
 ### AI Self-Validation Requests
+
 Ask AI to self-check protocol compliance:
 
 ```
@@ -91,25 +101,30 @@ Please review the code you just created and verify it follows our protocols:
 ```
 
 ### Protocol Adherence Checklist
+
 Validate AI output against these criteria:
 
 #### Code Organization ✅
+
 - [ ] Files in correct directories (src/, tests/, docs/, etc.)
 - [ ] Logical grouping of related functionality
 - [ ] Clear separation of concerns
 
 #### Documentation ✅
+
 - [ ] Comprehensive JSDoc comments
 - [ ] README updates for new features
 - [ ] API documentation for endpoints
 - [ ] Clear function and variable names
 
 #### Git Workflow ✅
+
 - [ ] Conventional commit message format
 - [ ] Semantic versioning considerations
 - [ ] Appropriate commit scope and description
 
 #### Knowledge Transfer ✅
+
 - [ ] Code is self-documenting
 - [ ] Complex logic is explained
 - [ ] Dependencies and requirements are documented
@@ -118,6 +133,7 @@ Validate AI output against these criteria:
 ## 🔄 Step 5: Continuous Protocol Application
 
 ### Maintaining Protocol Standards
+
 Throughout development, regularly remind AI:
 
 ```
@@ -131,6 +147,7 @@ These protocols ensure seamless knowledge transfer for future developers.
 ```
 
 ### Protocol Evolution Feedback
+
 Ask AI to identify protocol improvements:
 
 ```
@@ -140,12 +157,14 @@ Based on your experience applying these protocols, do you see any areas where th
 ## 📊 Success Indicators
 
 ### AI Understanding Success
+
 - ✅ AI correctly structures code without reminders
 - ✅ Documentation is created automatically
 - ✅ Git commit messages follow conventions
 - ✅ Code quality meets protocol standards
 
-### Protocol Effectiveness Success  
+### Protocol Effectiveness Success
+
 - ✅ New AI sessions can immediately understand existing code
 - ✅ Project handoffs require minimal explanation
 - ✅ Code organization facilitates easy navigation
@@ -154,30 +173,35 @@ Based on your experience applying these protocols, do you see any areas where th
 ## 🚫 Common AI Protocol Issues
 
 ### Issue 1: Incomplete Documentation
+
 **Problem:** AI skips documentation or provides minimal comments
 **Solution:** Explicitly request documentation: "Include comprehensive JSDoc and README updates"
 
 ### Issue 2: Incorrect File Placement
+
 **Problem:** AI puts files in wrong directories
 **Solution:** Reference specific protocol: "Following CodeOrganizationFramework.md, where should this file be placed?"
 
 ### Issue 3: Non-Standard Commits
+
 **Problem:** AI uses informal commit messages
 **Solution:** Remind of GitWorkflowPatterns.md: "Format this as a conventional commit message"
 
 ### Issue 4: Protocol Forgetting
+
 **Problem:** AI stops following protocols after several interactions
 **Solution:** Periodic reminders: "Continue following our Knowledge Transfer Protocols for this implementation"
 
 ## 🎯 Advanced AI Integration
 
 ### Protocol Template Sharing
+
 Share these templates with AI for consistency:
 
 ```javascript
 /**
  * [Function Description]
- * 
+ *
  * @param {type} param - Parameter description
  * @returns {type} Return value description
  * @example
@@ -190,6 +214,7 @@ function functionName(param) {
 ```
 
 ### Validation Automation
+
 Ask AI to create validation scripts:
 
 ```
@@ -199,6 +224,35 @@ Create a script that validates our project follows the Knowledge Transfer Protoc
 3. Validate README completeness
 4. Check git commit message format
 ```
+
+## 🤖 AI Self-Evolution and Iterative Improvement
+
+### DDTRE Cycle for Autonomous Development
+
+Use the DDTRE cycle to enable AI-driven self-improvement:
+
+1. **Discuss**: AI analyzes requirements and proposes design
+2. **Design**: AI creates detailed implementation plans
+3. **Develop**: AI implements code following protocols
+4. **Test**: AI runs tests and validates compliance
+5. **Revise**: AI fixes issues and updates protocols
+6. **Evolve**: AI improves KTS and instructions based on experience
+
+### Self-Evolution Guidelines
+
+- **Post-Task Updates**: After each task, AI updates relevant docs (e.g., CODEBASE_ARCHITECTURE.md)
+- **Protocol Refinement**: AI identifies protocol gaps and proposes improvements
+- **Tool Integration**: Use free/open-source tools for enhancements (e.g., Anima for UI)
+- **Minimal Human Input**: Aim for full autonomy on routine tasks
+
+### Evolution Tracking
+
+Maintain evolution logs in docs/:
+
+- Protocol improvements
+- Tool integrations
+- Performance metrics
+- Lessons learned
 
 ---
 

@@ -20,19 +20,48 @@ Advanced expense tracking and business intelligence platform for Texas Sunset Ve
 
 ```
 tsv-ledger/
-├── 📂 src/               # Core business logic (5 modules)
-├── 📂 tests/             # Testing framework (20+ files) 
-├── 📂 docs/              # Documentation hub (17 files)
-├── 📂 data/              # Data storage (10 files)
-├── 📂 utils/             # Utility scripts (11 tools)
-├── 📂 demos/             # Feature demonstrations
-├── 📂 servers/           # Alternative implementations
-├── 📂 scripts/           # Automation tools
-├── 📂 public/            # Frontend assets
-└── 📂 BestPractices/     # Knowledge transfer framework
-    ├── Generic/          # Framework-agnostic patterns
-    └── ProjectSpecific/  # TSV Ledger domain knowledge
+├── 📂 src/                          # Core business logic (8 modules)
+│   ├── amazon-integration/         #   Amazon data processing (modular)
+│   │   ├── amazon-zip-extractor.js #     ZIP file extraction
+│   │   ├── amazon-zip-processor.js #     Data processing orchestration
+│   │   └── parsers/                #     Individual data parsers
+│   │       ├── order-parser.js     #       Order history processing
+│   │       ├── cart-parser.js      #       Cart items processing
+│   │       ├── returns-parser.js   #       Returns processing
+│   │       └── subscription-parser.js #    Subscription processing
+│   ├── amazon-zip-parser.js        #   Main Amazon parser (modular integration)
+│   ├── database.js                 #   JSON database operations
+│   ├── tsv-categorizer.js          #   Business intelligence categorization
+│   ├── ai-analysis-engine.js       #   AI-powered analysis engine
+│   └── routes/                     #   API route handlers
+├── 📂 tests/                        # Testing framework (20+ files)
+├── 📂 docs/                         # Documentation hub (17 files)
+├── 📂 data/                         # Data storage (10 files)
+├── 📂 utils/                        # Utility scripts (11 tools)
+├── 📂 demos/                        # Feature demonstrations
+├── 📂 servers/                      # Alternative implementations
+├── 📂 scripts/                      # Automation tools
+├── 📂 public/                       # Frontend assets
+└── 📂 BestPractices/                # Knowledge transfer framework
+    ├── Generic/                     # Framework-agnostic patterns
+    └── ProjectSpecific/            # TSV Ledger domain knowledge
 ```
+
+### 🏗️ **AI-Optimized Modular Design**
+
+**File Size Standard:** All source files maintained under **300 lines** for optimal AI context consumption.
+
+**Architecture Principles:**
+- **Functional Programming**: Pure functions, immutability, composition over inheritance
+- **Modular Components**: Each feature as independent, testable modules
+- **Separation of Concerns**: Clear boundaries between extraction, processing, and transformation
+- **AI-Friendly Structure**: Small, focused files with single responsibilities
+
+**Amazon Integration Architecture:**
+- **Extractor Module**: Handles ZIP file operations and file discovery
+- **Processor Module**: Orchestrates data processing workflow
+- **Parser Modules**: Individual parsers for each Amazon data type (orders, subscriptions, cart, returns)
+- **Main Parser**: Integrates all modules with unified API
 
 ## 📚 **Knowledge Transfer & Documentation**
 
@@ -90,11 +119,20 @@ This project includes a comprehensive **BestPractices framework** for seamless k
 tsv-ledger/
 ├── server.js                    # Main Express server file
 ├── package.json                 # Node.js dependencies and scripts
-├── src/                         # Core source code
+├── src/                         # Core source code (AI-optimized, <300 lines each)
+│   ├── amazon-integration/     #   Amazon data processing (modular architecture)
+│   │   ├── amazon-zip-extractor.js     #     ZIP extraction utilities
+│   │   ├── amazon-zip-processor.js     #     Data processing orchestration
+│   │   └── parsers/                    #     Individual data type parsers
+│   │       ├── order-parser.js         #       Order history processing
+│   │       ├── subscription-parser.js  #       Subscription data processing
+│   │       ├── cart-parser.js          #       Cart items processing
+│   │       └── returns-parser.js       #       Returns data processing
+│   ├── amazon-zip-parser.js    #   Main Amazon parser (modular integration)
 │   ├── database.js             #   JSON database operations
 │   ├── tsv-categorizer.js      #   Business intelligence categorization
 │   └── ai-analysis-engine.js   #   AI-powered analysis engine
-├── tests/                       # Test suite
+├── tests/                       # Test suite (20+ files)
 │   ├── test-amazon-edit-feature.js  # Amazon editing tests
 │   ├── test-ux-amazon-edit.js       # UX validation tests
 │   └── test-complete.js             # Complete test runner

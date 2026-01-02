@@ -1,34 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TSV Ledger - Expenditure Tracker</title>
-  <!-- Bootstrap 5 CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <!-- Font Awesome for icons -->
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-  <!-- Tippy.js for tooltips -->
-  <script src="https://unpkg.com/@popperjs/core@2"></script>
-  <script src="https://unpkg.com/tippy.js@6"></script>
-  <link rel="stylesheet" href="https://unpkg.com/tippy.js@6/themes/light-border.css">
-  
-  <style>
-    :root {
-      --primary-color: #2c3e50;
-      --secondary-color: #3498db;
-      --success-color: #27ae60;
-      --warning-color: #f39c12;
-      --danger-color: #e74c3c;
-      --sidebar-width: 280px;
-    }
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TSV Ledger - Expenditure Tracker</title>
+    <!-- Bootstrap 5 CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <!-- Font Awesome for icons -->
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <!-- Tippy.js for tooltips -->
+    <script src="https://unpkg.com/@popperjs/core@2"></script>
+    <script src="https://unpkg.com/tippy.js@6"></script>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/tippy.js@6/themes/light-border.css"
+    />
 
-    body {
-      background-color: #f8f9fa;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
+    <style>
+      :root {
+        --primary-color: #2c3e50;
+        --secondary-color: #3498db;
+        --success-color: #27ae60;
+        --warning-color: #f39c12;
+        --danger-color: #e74c3c;
+        --sidebar-width: 280px;
+      }
 
-    /* Shoelace Drawer Styles - Navigation Sidebar Positioning
+      body {
+        background-color: #f8f9fa;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      }
+
+      /* Shoelace Drawer Styles - Navigation Sidebar Positioning
      *
      * The sidebar uses Shoelace's sl-drawer component with Shadow DOM.
      * We need to override the default positioning to place it below the fixed navbar.
@@ -38,1742 +47,2224 @@
      * - Mobile: Default Shoelace overlay behavior
      * - Content: 80px top padding to prevent overlap with navbar
      */
-    .sidebar-drawer::part(panel) {
-      background: linear-gradient(135deg, var(--primary-color) 0%, #34495e 100%);
-      color: white;
-      width: var(--sidebar-width);
-      border: none;
-    }
+      .sidebar-drawer::part(panel) {
+        background: linear-gradient(
+          135deg,
+          var(--primary-color) 0%,
+          #34495e 100%
+        );
+        color: white;
+        width: var(--sidebar-width);
+        border: none;
+      }
 
-    .sidebar-drawer::part(overlay) {
-      background: rgba(0, 0, 0, 0.5);
-    }
+      .sidebar-drawer::part(overlay) {
+        background: rgba(0, 0, 0, 0.5);
+      }
 
-    /* Desktop sidebar positioning (≥992px)
+      /* Desktop sidebar positioning (≥992px)
      * - Fixed position to keep sidebar visible during scroll
      * - Top: 60px to account for Bootstrap navbar height
      * - Height: calc(100vh - 60px) for full viewport minus navbar
      * - Override Shoelace defaults with !important for Shadow DOM penetration
      */
-    @media (min-width: 992px) {
-      .sidebar-drawer {
-        --size: 100vh;
-        position: fixed;
-        top: 60px; /* Account for navbar height */
-        left: 0;
-        height: calc(100vh - 60px); /* Subtract navbar height */
-        z-index: 1000;
-        transform: none !important;
-        visibility: visible !important;
-        opacity: 1 !important;
+      @media (min-width: 992px) {
+        .sidebar-drawer {
+          --size: 100vh;
+          position: fixed;
+          top: 60px; /* Account for navbar height */
+          left: 0;
+          height: calc(100vh - 60px); /* Subtract navbar height */
+          z-index: 1000;
+          transform: none !important;
+          visibility: visible !important;
+          opacity: 1 !important;
+        }
+
+        .sidebar-drawer::part(panel) {
+          top: 0px !important; /* Position relative to the drawer host */
+          height: 100% !important; /* Fill the drawer height */
+          position: fixed !important;
+          left: 0 !important;
+          top: 60px !important; /* Position below navbar */
+          height: calc(100vh - 60px) !important; /* Full height minus navbar */
+          width: var(--sidebar-width) !important;
+        }
+
+        .sidebar-drawer[open] {
+          transform: translateX(0) !important;
+        }
+
+        .sidebar-drawer:not([open]) {
+          transform: translateX(-100%) !important;
+        }
+
+        .sidebar-drawer::part(overlay) {
+          display: none;
+        }
       }
 
-      .sidebar-drawer::part(panel) {
-        top: 0px !important; /* Position relative to the drawer host */
-        height: 100% !important; /* Fill the drawer height */
-        position: fixed !important;
-        left: 0 !important;
-        top: 60px !important; /* Position below navbar */
-        height: calc(100vh - 60px) !important; /* Full height minus navbar */
-        width: var(--sidebar-width) !important;
+      /* Mobile sidebar behavior */
+      @media (max-width: 991px) {
+        .sidebar-drawer {
+          --size: var(--sidebar-width);
+        }
+
+        .sidebar-drawer::part(panel) {
+          top: 60px !important; /* Position below navbar on mobile */
+          height: calc(100vh - 60px) !important; /* Full height minus navbar */
+        }
       }
 
-      .sidebar-drawer[open] {
-        transform: translateX(0) !important;
+      .sidebar-header {
+        padding: 1.5rem;
+        background: rgba(0, 0, 0, 0.1);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
       }
 
-      .sidebar-drawer:not([open]) {
-        transform: translateX(-100%) !important;
+      .sidebar-nav {
+        padding: 1rem 0;
       }
 
-      .sidebar-drawer::part(overlay) {
-        display: none;
-      }
-    }
-
-    /* Mobile sidebar behavior */
-    @media (max-width: 991px) {
-      .sidebar-drawer {
-        --size: var(--sidebar-width);
+      .sidebar-nav .nav-item {
+        margin: 0.25rem 0;
       }
 
-      .sidebar-drawer::part(panel) {
-        top: 60px !important; /* Position below navbar on mobile */
-        height: calc(100vh - 60px) !important; /* Full height minus navbar */
+      .sidebar-nav .nav-link {
+        color: rgba(255, 255, 255, 0.8);
+        padding: 0.75rem 1.5rem;
+        border-radius: 0;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
       }
-    }
 
-    .sidebar-header {
-      padding: 1.5rem;
-      background: rgba(0,0,0,0.1);
-      border-bottom: 1px solid rgba(255,255,255,0.1);
-    }
+      .sidebar-nav .nav-link:hover,
+      .sidebar-nav .nav-link.active {
+        color: white;
+        background: rgba(255, 255, 255, 0.1);
+        border-left: 3px solid var(--secondary-color);
+      }
 
-    .sidebar-nav {
-      padding: 1rem 0;
-    }
+      .sidebar-nav .nav-link i {
+        margin-right: 0.75rem;
+        width: 20px;
+        text-align: center;
+      }
 
-    .sidebar-nav .nav-item {
-      margin: 0.25rem 0;
-    }
-
-    .sidebar-nav .nav-link {
-      color: rgba(255,255,255,0.8);
-      padding: 0.75rem 1.5rem;
-      border-radius: 0;
-      transition: all 0.3s ease;
-      display: flex;
-      align-items: center;
-    }
-
-    .sidebar-nav .nav-link:hover,
-    .sidebar-nav .nav-link.active {
-      color: white;
-      background: rgba(255,255,255,0.1);
-      border-left: 3px solid var(--secondary-color);
-    }
-
-    .sidebar-nav .nav-link i {
-      margin-right: 0.75rem;
-      width: 20px;
-      text-align: center;
-    }
-
-    /* Main Content Layout
+      /* Main Content Layout
      *
      * Content area positioning to prevent overlap with fixed navbar.
      * - Desktop: margin-left for sidebar space, padding-top for navbar clearance
      * - Mobile: margin-left: 0 when sidebar is collapsed
      * - Padding-top: 80px (60px navbar + 20px spacing) prevents content overlap
      */
-    .main-content {
-      margin-left: var(--sidebar-width);
-      padding: 2rem;
-      padding-top: 80px; /* Account for navbar height (60px) + extra spacing */
-      transition: margin-left 0.3s ease;
-      min-height: 100vh;
-    }
-
-    .main-content.expanded {
-      margin-left: 0;
-    }
-
-    /* Top Bar */
-    .top-bar {
-      background: white;
-      padding: 1rem 2rem;
-      margin: -2rem -2rem 2rem -2rem;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .sidebar-toggle {
-      background: none;
-      border: none;
-      font-size: 1.2rem;
-      color: var(--primary-color);
-      margin-right: 1rem;
-    }
-
-    /* Navbar Toggler Styles */
-    .navbar-toggler {
-      border: 1px solid rgba(0,0,0,0.125);
-      padding: 0.375rem 0.75rem;
-      background: transparent;
-      border-radius: 0.375rem;
-    }
-
-    .navbar-toggler:focus {
-      box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
-    }
-
-    .navbar-toggler-icon {
-      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%2833, 37, 41, 0.75%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
-      display: inline-block;
-      width: 1.5em;
-      height: 1.5em;
-      vertical-align: middle;
-      background-repeat: no-repeat;
-      background-position: center;
-      background-size: 100%;
-    }
-
-    /* Content Sections */
-    .content-section {
-      display: none;
-      animation: fadeIn 0.3s ease;
-    }
-
-    .content-section.active {
-      display: block;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    /* Cards */
-    .feature-card {
-      border: none;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-      transition: all 0.3s ease;
-      margin-bottom: 1.5rem;
-    }
-
-    .feature-card:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 15px rgba(0,0,0,0.15);
-    }
-
-    .card-header {
-      background: linear-gradient(135deg, var(--secondary-color) 0%, #5dade2 100%);
-      color: white;
-      border-bottom: none;
-      padding: 1rem 1.5rem;
-    }
-
-    .card-header h5 {
-      margin: 0;
-      font-weight: 600;
-    }
-
-    /* Utility Classes */
-    .status-indicator {
-      display: inline-block;
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      margin-right: 0.5rem;
-    }
-
-    .status-indicator.online {
-      background-color: var(--success-color);
-      animation: pulse 2s infinite;
-    }
-
-    .status-indicator.processing {
-      background-color: var(--warning-color);
-    }
-
-    .status-indicator.offline {
-      background-color: var(--danger-color);
-    }
-
-    @keyframes pulse {
-      0% { box-shadow: 0 0 0 0 rgba(39, 174, 96, 0.7); }
-      70% { box-shadow: 0 0 0 10px rgba(39, 174, 96, 0); }
-      100% { box-shadow: 0 0 0 0 rgba(39, 174, 96, 0); }
-    }
-
-    /* Responsive Design */
-    @media (max-width: 991px) {
-      .sidebar {
-        transform: translateX(-100%);
-      }
-      
-      .sidebar.show {
-        transform: translateX(0);
-      }
-      
-      .main-content {
-        margin-left: 0;
-      }
-      
-      .navbar-toggler {
-        display: block !important;
-      }
-      
-      .top-bar {
-        margin: -2rem -1rem 2rem -1rem;
-        padding: 1rem;
-      }
-      
-      .main-content {
-        padding: 2rem 1rem;
-        padding-top: 80px; /* Account for navbar height */
-      }
-    }
-
-    @media (min-width: 992px) {
-      /* Desktop: sidebar is always visible, can be collapsed */
-      .navbar .navbar-toggler {
-        display: block !important;
-      }
-
       .main-content {
         margin-left: var(--sidebar-width);
+        padding: 2rem;
+        padding-top: 80px; /* Account for navbar height (60px) + extra spacing */
+        transition: margin-left 0.3s ease;
+        min-height: 100vh;
       }
 
       .main-content.expanded {
         margin-left: 0;
       }
-    }
 
-    @media (max-width: 991px) {
-      /* Mobile: sidebar is hidden by default, shown as drawer */
-      .main-content {
-        margin-left: 0;
+      /* Top Bar */
+      .top-bar {
+        background: white;
+        padding: 1rem 2rem;
+        margin: -2rem -2rem 2rem -2rem;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
       }
 
+      .sidebar-toggle {
+        background: none;
+        border: none;
+        font-size: 1.2rem;
+        color: var(--primary-color);
+        margin-right: 1rem;
+      }
+
+      /* Navbar Toggler Styles */
       .navbar-toggler {
-        display: block !important;
+        border: 1px solid rgba(0, 0, 0, 0.125);
+        padding: 0.375rem 0.75rem;
+        background: transparent;
+        border-radius: 0.375rem;
       }
-    }
 
-    /* Ensure offcanvas backdrop sits behind the navbar toggler in case of z-index issues */
-    .offcanvas-backdrop {
-      z-index: 1040; /* slightly below navbar (which is usually 1050) */
-    }
+      .navbar-toggler:focus {
+        box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+      }
 
-    /* Utility Classes */
-    .tooltip-trigger {
-      cursor: help;
-      border-bottom: 1px dotted #007bff;
-      position: relative;
-    }
+      .navbar-toggler-icon {
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%2833, 37, 41, 0.75%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+        display: inline-block;
+        width: 1.5em;
+        height: 1.5em;
+        vertical-align: middle;
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: 100%;
+      }
 
-    .data-quality-indicator {
-      font-size: 0.8em;
-      opacity: 0.7;
-    }
+      /* Content Sections */
+      .content-section {
+        display: none;
+        animation: fadeIn 0.3s ease;
+      }
 
-    .metric-card .card-body {
-      position: relative;
-    }
+      .content-section.active {
+        display: block;
+      }
 
-    .confidence-badge {
-      position: absolute;
-      top: 5px;
-      right: 5px;
-      font-size: 0.7em;
-    }
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
 
-    /* Loading States */
-    .loading-overlay {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(255,255,255,0.9);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 10;
-    }
+      /* Cards */
+      .feature-card {
+        border: none;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+        margin-bottom: 1.5rem;
+      }
 
-    /* Breadcrumb */
-    .breadcrumb {
-      background: transparent;
-      padding: 0;
-      margin-bottom: 1rem;
-    }
+      .feature-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
+      }
 
-    .breadcrumb-item.active {
-      color: var(--primary-color);
-      font-weight: 600;
-    }
+      .card-header {
+        background: linear-gradient(
+          135deg,
+          var(--secondary-color) 0%,
+          #5dade2 100%
+        );
+        color: white;
+        border-bottom: none;
+        padding: 1rem 1.5rem;
+      }
 
-    /* Bank Reconciliation Styles */
-    .border-left-primary { border-left: 4px solid var(--secondary-color) !important; }
-    .border-left-info { border-left: 4px solid #17a2b8 !important; }
-    .border-left-success { border-left: 4px solid var(--success-color) !important; }
-    .border-left-warning { border-left: 4px solid var(--warning-color) !important; }
-    
-    .reconciliation-item {
-      background: white;
-      border-radius: 8px;
-      padding: 1rem;
-      margin-bottom: 0.5rem;
-      border-left: 4px solid var(--success-color);
-      transition: all 0.3s ease;
-    }
+      .card-header h5 {
+        margin: 0;
+        font-weight: 600;
+      }
 
-    .reconciliation-item.unmatched {
-      border-left-color: var(--warning-color);
-      opacity: 0.8;
-    }
+      /* Utility Classes */
+      .status-indicator {
+        display: inline-block;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        margin-right: 0.5rem;
+      }
 
-    .reconciliation-item:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    }
+      .status-indicator.online {
+        background-color: var(--success-color);
+        animation: pulse 2s infinite;
+      }
 
-    .confidence-badge {
-      padding: 0.25rem 0.5rem;
-      border-radius: 12px;
-      font-size: 0.75rem;
-      font-weight: 600;
-    }
+      .status-indicator.processing {
+        background-color: var(--warning-color);
+      }
 
-    .loading-overlay {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(255,255,255,0.9);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 10;
-    }
-  </style>
-</head>
-<body>
-  <!-- Bootstrap Navigation -->
-  <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
-    <div class="container-fluid">
-      <a class="navbar-brand d-flex align-items-center" href="/">
-        <i class="fas fa-chart-line me-2"></i>
-        <span>TSV Ledger</span>
-      </a>
+      .status-indicator.offline {
+        background-color: var(--danger-color);
+      }
 
-      <div class="d-flex align-items-center">
-        <div class="d-none d-lg-flex me-3">
-          <span class="navbar-text">
-            <i class="fas fa-circle text-success me-1"></i>
-            System Online
-          </span>
+      @keyframes pulse {
+        0% {
+          box-shadow: 0 0 0 0 rgba(39, 174, 96, 0.7);
+        }
+        70% {
+          box-shadow: 0 0 0 10px rgba(39, 174, 96, 0);
+        }
+        100% {
+          box-shadow: 0 0 0 0 rgba(39, 174, 96, 0);
+        }
+      }
+
+      /* Responsive Design */
+      @media (max-width: 991px) {
+        .sidebar {
+          transform: translateX(-100%);
+        }
+
+        .sidebar.show {
+          transform: translateX(0);
+        }
+
+        .main-content {
+          margin-left: 0;
+        }
+
+        .navbar-toggler {
+          display: block !important;
+        }
+
+        .top-bar {
+          margin: -2rem -1rem 2rem -1rem;
+          padding: 1rem;
+        }
+
+        .main-content {
+          padding: 2rem 1rem;
+          padding-top: 80px; /* Account for navbar height */
+        }
+      }
+
+      @media (min-width: 992px) {
+        /* Desktop: sidebar is always visible, can be collapsed */
+        .navbar .navbar-toggler {
+          display: block !important;
+        }
+
+        .main-content {
+          margin-left: var(--sidebar-width);
+        }
+
+        .main-content.expanded {
+          margin-left: 0;
+        }
+      }
+
+      @media (max-width: 991px) {
+        /* Mobile: sidebar is hidden by default, shown as drawer */
+        .main-content {
+          margin-left: 0;
+        }
+
+        .navbar-toggler {
+          display: block !important;
+        }
+      }
+
+      /* Ensure offcanvas backdrop sits behind the navbar toggler in case of z-index issues */
+      .offcanvas-backdrop {
+        z-index: 1040; /* slightly below navbar (which is usually 1050) */
+      }
+
+      /* Utility Classes */
+      .tooltip-trigger {
+        cursor: help;
+        border-bottom: 1px dotted #007bff;
+        position: relative;
+      }
+
+      .data-quality-indicator {
+        font-size: 0.8em;
+        opacity: 0.7;
+      }
+
+      .metric-card .card-body {
+        position: relative;
+      }
+
+      .confidence-badge {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        font-size: 0.7em;
+      }
+
+      /* Loading States */
+      .loading-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(255, 255, 255, 0.9);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 10;
+      }
+
+      /* Breadcrumb */
+      .breadcrumb {
+        background: transparent;
+        padding: 0;
+        margin-bottom: 1rem;
+      }
+
+      .breadcrumb-item.active {
+        color: var(--primary-color);
+        font-weight: 600;
+      }
+
+      /* Bank Reconciliation Styles */
+      .border-left-primary {
+        border-left: 4px solid var(--secondary-color) !important;
+      }
+      .border-left-info {
+        border-left: 4px solid #17a2b8 !important;
+      }
+      .border-left-success {
+        border-left: 4px solid var(--success-color) !important;
+      }
+      .border-left-warning {
+        border-left: 4px solid var(--warning-color) !important;
+      }
+
+      .reconciliation-item {
+        background: white;
+        border-radius: 8px;
+        padding: 1rem;
+        margin-bottom: 0.5rem;
+        border-left: 4px solid var(--success-color);
+        transition: all 0.3s ease;
+      }
+
+      .reconciliation-item.unmatched {
+        border-left-color: var(--warning-color);
+        opacity: 0.8;
+      }
+
+      .reconciliation-item:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      }
+
+      .confidence-badge {
+        padding: 0.25rem 0.5rem;
+        border-radius: 12px;
+        font-size: 0.75rem;
+        font-weight: 600;
+      }
+
+      .loading-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(255, 255, 255, 0.9);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 10;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Bootstrap Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
+      <div class="container-fluid">
+        <a class="navbar-brand d-flex align-items-center" href="/">
+          <i class="fas fa-chart-line me-2"></i>
+          <span>TSV Ledger</span>
+        </a>
+
+        <div class="d-flex align-items-center">
+          <div class="d-none d-lg-flex me-3">
+            <span class="navbar-text">
+              <i class="fas fa-circle text-success me-1"></i>
+              System Online
+            </span>
+          </div>
+
+          <button
+            class="navbar-toggler"
+            type="button"
+            aria-controls="sidebar"
+            aria-label="Toggle navigation"
+          >
+            <span class="navbar-toggler-icon"></span>
+          </button>
         </div>
-        
-        <button class="navbar-toggler" type="button" aria-controls="sidebar" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
       </div>
-    </div>
-  </nav>
-
-  <!-- Shoelace Drawer Sidebar -->
-  <sl-drawer id="sidebar" placement="start" class="sidebar-drawer" no-header>
-    <nav class="nav nav-pills flex-column p-3" id="main-navigation">
-      <!-- Navigation items will be populated by JavaScript (shoelace-navigation.js) -->
     </nav>
-  </sl-drawer>
 
-  <!-- Main Content Area -->
-  <main class="main-content">
-    <div class="content-wrapper">
+    <!-- Shoelace Drawer Sidebar -->
+    <sl-drawer id="sidebar" placement="start" class="sidebar-drawer" no-header>
+      <nav class="nav nav-pills flex-column p-3" id="main-navigation">
+        <!-- Navigation items will be populated by JavaScript (shoelace-navigation.js) -->
+      </nav>
+    </sl-drawer>
 
-    <!-- Dashboard Section -->
-    <section id="dashboard" class="content-section active">
-      <div class="row">
-        <div class="col-12">
-          <h2><i class="fas fa-tachometer-alt me-2"></i>Financial Dashboard</h2>
-          <p class="text-muted">Overview of your financial data and key metrics</p>
-        </div>
-      </div>
-
-      <div class="row">
-        <div class="col-lg-8">
-          <div class="card feature-card">
-            <div class="card-header">
-              <h5><i class="fas fa-chart-line me-2"></i>Quick Analysis</h5>
-            </div>
-            <div class="card-body">
-              <button id="loadAnalysis" class="btn btn-primary mb-3">
-                <i class="fas fa-play me-2"></i>Load Analysis
-              </button>
-              <div id="analysisResults" style="display: none;">
-                <!-- Analysis content will be loaded here -->
-              </div>
-            </div>
-          </div>
-        </div>
-        
-        <div class="col-lg-4">
-          <div class="card feature-card">
-            <div class="card-header">
-              <h5><i class="fas fa-list me-2"></i>Recent Transactions</h5>
-            </div>
-            <div class="card-body">
-              <ul id="expenditureList" class="list-group list-group-flush">
-                <!-- Expenditures will be loaded here -->
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Analysis Section -->
-    <section id="analysis" class="content-section">
-      <div class="row">
-        <div class="col-12">
-          <h2><i class="fas fa-chart-bar me-2"></i>Analysis & Reports</h2>
-          <p class="text-muted">Comprehensive financial analysis and reporting tools</p>
-        </div>
-      </div>
-
-      <div class="row">
-        <div class="col-12">
-          <div class="card feature-card">
-            <div class="card-header">
-              <h5><i class="fas fa-chart-pie me-2"></i>Detailed Analysis</h5>
-            </div>
-            <div class="card-body">
-              <div id="detailedAnalysisContent">
-                <!-- Detailed analysis content -->
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- AI Insights Section -->
-    <section id="ai-insights" class="content-section">
-      <div class="row">
-        <div class="col-12">
-          <h2><i class="fas fa-brain me-2"></i>AI-Powered Insights</h2>
-          <p class="text-muted">Machine learning powered financial intelligence</p>
-        </div>
-      </div>
-
-      <div class="card feature-card">
-        <div class="card-header d-flex align-items-center">
-          <h5 class="mb-0">
-            <span class="badge bg-primary me-2">AI</span>
-            🤖 AI-Enhanced Analysis
-          </h5>
-          <button id="loadAIAnalysis" class="btn btn-light btn-sm ms-auto">
-            <i class="fas fa-brain me-2"></i>Run AI Analysis
-          </button>
-        </div>
-        <div class="card-body">
-          <div class="alert alert-info" role="alert">
-            <h6 class="alert-heading">🚀 Artificial Intelligence Integration</h6>
-            Advanced machine learning algorithms provide intelligent categorization, predictive analytics, 
-            anomaly detection, and optimization recommendations to enhance your financial analysis.
-          </div>
-          
-          <!-- AI Dashboard Container -->
-          <div id="ai-dashboard-container">
-            <!-- AI Dashboard will be loaded here -->
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Data Import Section -->
-    <section id="data-import" class="content-section">
-      <div class="row">
-        <div class="col-12">
-          <h2><i class="fas fa-upload me-2"></i>Data Import</h2>
-          <p class="text-muted">Import data from multiple sources including bank statements and Amazon exports</p>
-        </div>
-      </div>
-
-      <!-- Bank Data Import -->
-      <div class="card feature-card">
-        <div class="card-header">
-          <h5><i class="fas fa-university me-2"></i>Bank of America Data Import</h5>
-        </div>
-        <div class="card-body">
-          <div class="alert alert-info" role="alert">
-            <i class="fas fa-info-circle me-2"></i>
-            <strong>Supported Formats:</strong> CSV, DAT, TSV, and TXT files from Bank of America online banking
-          </div>
-          <form id="csvImportForm">
-            <div class="mb-3">
-              <label for="csvFile" class="form-label">Select Bank Statement File</label>
-              <input type="file" class="form-control" id="csvFile" accept=".csv,.dat,.txt,.tsv" required>
-              <div class="form-text">Upload your Bank of America transaction export file</div>
-            </div>
-            <button type="submit" class="btn btn-success">
-              <i class="fas fa-upload me-2"></i>Import Bank Data
-            </button>
-          </form>
-          <div id="importStatus" class="mt-3" style="display: none;"></div>
-        </div>
-      </div>
-
-      <!-- Amazon ZIP Import -->
-      <div class="card feature-card mt-4">
-        <div class="card-header">
-          <h5><i class="fab fa-amazon me-2"></i>Amazon ZIP Import</h5>
-        </div>
-        <div class="card-body">
-          <div class="alert alert-info" role="alert">
-            <i class="fas fa-info-circle me-2"></i>
-            <strong>Two ZIP Types Supported:</strong> Amazon provides separate exports for Orders and Subscriptions
-          </div>
-          
-          <div class="row mb-3">
-            <div class="col-md-6">
-              <div class="card border-primary">
-                <div class="card-body">
-                  <h6 class="card-title">
-                    <i class="fas fa-shopping-bag text-primary me-2"></i>Your Orders Export
-                  </h6>
-                  <p class="card-text small">
-                    Complete purchase history with digital orders, retail purchases, returns, and delivery photos.
-                    <strong>Size:</strong> 15-30MB
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="card border-success">
-                <div class="card-body">
-                  <h6 class="card-title">
-                    <i class="fas fa-sync-alt text-success me-2"></i>Subscriptions Export
-                  </h6>
-                  <p class="card-text small">
-                    All subscription data including Subscribe & Save, digital subscriptions, and billing information.
-                    <strong>Size:</strong> 100-500KB
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="row mb-3">
-            <div class="col-md-6">
-              <h6><i class="fas fa-question-circle me-2"></i>How to Get Your Amazon Data</h6>
-              <ol class="small">
-                <li>Go to <strong>Amazon.com</strong> → <strong>Your Account</strong></li>
-                <li>Navigate to <strong>Privacy & Data Protection</strong></li>
-                <li>Click <strong>"Request my data"</strong></li>
-                <li>Select <strong>"Your Orders"</strong> and <strong>"Subscriptions"</strong></li>
-                <li>Amazon will email ZIP files within 30 days</li>
-              </ol>
-            </div>
-            <div class="col-md-6">
-              <h6><i class="fas fa-cogs me-2"></i>Processing Features</h6>
-              <ul class="small">
-                <li><i class="fas fa-check text-success me-1"></i> Smart ZIP type detection</li>
-                <li><i class="fas fa-check text-success me-1"></i> Instant file validation</li>
-                <li><i class="fas fa-check text-success me-1"></i> Automatic categorization</li>
-                <li><i class="fas fa-check text-success me-1"></i> Rich metadata preservation</li>
-              </ul>
-            </div>
-          </div>
-
-          <div class="mt-3">
-            <form id="amazonZipImportForm" enctype="multipart/form-data">
-              <div class="mb-3">
-                <label for="amazonZipFile" class="form-label">Select Amazon ZIP File</label>
-                <input type="file" class="form-control" id="amazonZipFile" accept=".zip" required>
-                <div class="form-text">Upload either "Your Orders.zip" or "Subscriptions.zip" from Amazon</div>
-              </div>
-
-              <!-- File Validation Results -->
-              <div id="fileValidationResult" class="mb-3" style="display: none;">
-                <!-- Validation results will be inserted here -->
-              </div>
-
-              <div class="d-flex gap-2">
-                <button type="submit" class="btn btn-warning" id="amazonImportBtn" disabled>
-                  <i class="fab fa-amazon me-2"></i>Import Amazon ZIP
-                </button>
-                <a href="/amazon-zip-import.html" class="btn btn-outline-primary" target="_blank">
-                  <i class="fas fa-external-link-alt me-2"></i>Advanced Import Interface
-                </a>
-              </div>
-            </form>
-            
-            <!-- Progress and Results for Amazon Import -->
-
-            <div id="amazonImportProgress" class="mt-3" style="display: none;">
-              <div class="progress">
-                <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%"></div>
-              </div>
-              <div class="text-center mt-2">
-                <small class="text-muted">Processing Amazon data...</small>
-              </div>
-              <div id="amazonImportStatus" class="text-center mt-2" style="font-size:0.95em; color:#555; display:none;"></div>
-            </div>
-            
-            <div id="amazonImportResults" class="mt-3" style="display: none;">
-              <!-- Results will be populated here -->
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Import History -->
-      <div class="card feature-card mt-4">
-        <div class="card-header">
-          <h5><i class="fas fa-history me-2"></i>Import History</h5>
-        </div>
-        <div class="card-body">
-          <div id="importHistory">
-            <p class="text-muted">No recent imports found. Import some data to see history here.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Manual Entry Section -->
-    <section id="manual-entry" class="content-section">
-      <div class="row">
-        <div class="col-12">
-          <h2><i class="fas fa-edit me-2"></i>Manual Entry</h2>
-          <p class="text-muted">Add individual expenditures manually</p>
-        </div>
-      </div>
-
-      <div class="card feature-card">
-        <div class="card-header">
-          <h5><i class="fas fa-plus me-2"></i>Add New Expenditure</h5>
-        </div>
-        <div class="card-body">
-          <form id="expenditureForm">
-            <div class="row">
-              <div class="col-md-3 mb-3">
-                <label for="date" class="form-label">Date</label>
-                <input type="date" class="form-control" id="date" required>
-              </div>
-              <div class="col-md-3 mb-3">
-                <label for="amount" class="form-label">Amount ($)</label>
-                <input type="number" step="0.01" class="form-control" id="amount" required>
-              </div>
-              <div class="col-md-3 mb-3">
-                <label for="category" class="form-label">Category</label>
-                <select class="form-select" id="category" required>
-                  <option value="">Select Category</option>
-                  <option value="tool subscriptions">Tool Subscriptions</option>
-                  <option value="maintenance payments">Maintenance Payments</option>
-                  <option value="supplies restocking">Supplies Restocking</option>
-                  <option value="employee benefits">Employee Benefits</option>
-                </select>
-              </div>
-              <div class="col-md-3 mb-3">
-                <label for="description" class="form-label">Description</label>
-                <input type="text" class="form-control" id="description" required>
-              </div>
-            </div>
-            <button type="submit" class="btn btn-primary">
-              <i class="fas fa-save me-2"></i>Add Expenditure
-            </button>
-          </form>
-        </div>
-      </div>
-    </section>
-
-    <!-- Premium Features Section -->
-    <section id="premium-features" class="content-section">
-      <div class="row">
-        <div class="col-12">
-          <h2><i class="fas fa-crown me-2"></i>Premium Features</h2>
-          <p class="text-muted">Enhanced analysis with premium data integration</p>
-        </div>
-      </div>
-
-      <div class="card feature-card">
-        <div class="card-header d-flex align-items-center bg-warning">
-          <h5 class="mb-0">
-            <span class="badge bg-success me-2">Premium</span>
-            Enhanced Amazon Analysis
-          </h5>
-        </div>
-        <div class="card-body">
-          <div class="alert alert-success" role="alert">
-            <h6 class="alert-heading">🎉 Premium Extension Active!</h6>
-            Enhanced analysis is now available with detailed Amazon order data including shipping costs, 
-            payment methods, delivery status, and improved Subscribe & Save detection.
-          </div>
-          
+    <!-- Main Content Area -->
+    <main class="main-content">
+      <div class="content-wrapper">
+        <!-- Dashboard Section -->
+        <section id="dashboard" class="content-section active">
           <div class="row">
-            <div class="col-md-4">
-              <div class="card bg-light">
-                <div class="card-body text-center">
-                  <h5 class="card-title text-success">41.5%</h5>
-                  <p class="card-text">Subscribe & Save Detection Rate</p>
-                  <small class="text-muted">Up from 26% with premium data</small>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-4">
-              <div class="card bg-light">
-                <div class="card-body text-center">
-                  <h5 class="card-title text-info">99%</h5>
-                  <p class="card-text">Detection Confidence</p>
-                  <small class="text-muted">High accuracy with premium fields</small>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-4">
-              <div class="card bg-light">
-                <div class="card-body text-center">
-                  <h5 class="card-title text-warning">249</h5>
-                  <p class="card-text">S&S Orders Detected</p>
-                  <small class="text-muted">From 598 total orders</small>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <button id="loadPremiumAnalytics" class="btn btn-primary mt-3">
-            <i class="fas fa-chart-line me-2"></i>Run Premium Analysis
-          </button>
-          <div id="premiumAnalyticsResults" style="display: none;">
-            <!-- Premium analytics content will be loaded here -->
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Settings Section -->
-    <section id="settings" class="content-section">
-      <div class="row">
-        <div class="col-12">
-          <h2><i class="fas fa-cog me-2"></i>Settings</h2>
-          <p class="text-muted">Configure application preferences and data sources</p>
-        </div>
-      </div>
-
-      <div class="card feature-card">
-        <div class="card-header">
-          <h5><i class="fas fa-sliders-h me-2"></i>Application Settings</h5>
-        </div>
-        <div class="card-body">
-          <div class="row">
-            <div class="col-md-6">
-              <h6>Data Processing</h6>
-              <div class="form-check">
-                <input class="form-check-input" type="checkbox" id="autoImport" checked>
-                <label class="form-check-label" for="autoImport">
-                  Auto-process imported files
-                </label>
-              </div>
-              <div class="form-check">
-                <input class="form-check-input" type="checkbox" id="enableAI" checked>
-                <label class="form-check-label" for="enableAI">
-                  Enable AI analysis
-                </label>
-              </div>
-            </div>
-            <div class="col-md-6">
-              <h6>Display Options</h6>
-              <div class="form-check">
-                <input class="form-check-input" type="checkbox" id="showTooltips" checked>
-                <label class="form-check-label" for="showTooltips">
-                  Show tooltips
-                </label>
-              </div>
-              <div class="form-check">
-                <input class="form-check-input" type="checkbox" id="compactView">
-                <label class="form-check-label" for="compactView">
-                  Compact view
-                </label>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Bank Reconciliation Section -->
-    <section id="bank-reconciliation" class="content-section">
-      <div class="row">
-        <div class="col-12">
-          <div class="d-flex justify-content-between align-items-center mb-4">
-            <div>
-              <h2><i class="fas fa-balance-scale me-2"></i>Bank Reconciliation</h2>
-              <p class="text-muted">Automated matching of bank transactions with Amazon orders</p>
-            </div>
-            <div>
-              <button class="btn btn-primary me-2" onclick="performReconciliation()">
-                <i class="fas fa-sync me-2"></i>Reconcile Now
-              </button>
-              <button class="btn btn-outline-secondary" onclick="exportReconciliationReport()">
-                <i class="fas fa-download me-2"></i>Export Report
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Loading Overlay -->
-      <div id="reconciliationLoadingOverlay" class="loading-overlay" style="display: none;">
-        <div class="text-center">
-          <div class="spinner-border text-primary" role="status">
-            <span class="visually-hidden">Loading...</span>
-          </div>
-          <div class="mt-2">
-            <strong>Performing reconciliation...</strong>
-            <div class="text-muted small">Matching bank transactions with Amazon orders</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Metrics Row -->
-      <div id="reconciliationMetricsRow" class="row" style="display: none;">
-        <div class="col-lg-3 col-md-6">
-          <div class="card feature-card border-left-primary">
-            <div class="card-body">
-              <div class="d-flex justify-content-between align-items-start">
-                <div>
-                  <div class="h3 text-primary" id="totalBank">-</div>
-                  <div class="text-muted small">Bank Transactions</div>
-                </div>
-                <i class="fas fa-university text-muted" style="font-size: 1.5rem;"></i>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-lg-3 col-md-6">
-          <div class="card feature-card border-left-info">
-            <div class="card-body">
-              <div class="d-flex justify-content-between align-items-start">
-                <div>
-                  <div class="h3 text-info" id="totalAmazon">-</div>
-                  <div class="text-muted small">Amazon Orders</div>
-                </div>
-                <i class="fas fa-shopping-cart text-muted" style="font-size: 1.5rem;"></i>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-lg-3 col-md-6">
-          <div class="card feature-card border-left-success">
-            <div class="card-body">
-              <div class="d-flex justify-content-between align-items-start">
-                <div>
-                  <div class="h3 text-success" id="matchedCount">-</div>
-                  <div class="text-muted small">Matched</div>
-                </div>
-                <i class="fas fa-check-circle text-success" style="font-size: 1.5rem;"></i>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-lg-3 col-md-6">
-          <div class="card feature-card border-left-warning">
-            <div class="card-body">
-              <div class="d-flex justify-content-between align-items-start">
-                <div>
-                  <div class="h3 text-warning" id="matchRate">-%</div>
-                  <div class="text-muted small">Match Rate</div>
-                </div>
-                <i class="fas fa-percentage text-warning" style="font-size: 1.5rem;"></i>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Charts Row -->
-      <div id="reconciliationChartsRow" class="row" style="display: none;">
-        <div class="col-lg-6">
-          <div class="card feature-card">
-            <div class="card-header">
-              <h5><i class="fas fa-chart-pie me-2"></i>Match Confidence Distribution</h5>
-            </div>
-            <div class="card-body">
-              <canvas id="confidenceChart"></canvas>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-lg-6">
-          <div class="card feature-card">
-            <div class="card-header">
-              <h5><i class="fas fa-chart-bar me-2"></i>Reconciliation Summary</h5>
-            </div>
-            <div class="card-body">
-              <canvas id="summaryChart"></canvas>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Matched Transactions -->
-      <div id="matchedContainer" class="card feature-card" style="display: none;">
-        <div class="card-header">
-          <div class="d-flex justify-content-between align-items-center">
-            <h5><i class="fas fa-check-circle me-2"></i>Matched Transactions</h5>
-            <div class="btn-group btn-group-sm">
-              <button class="btn btn-outline-success active" onclick="filterMatches('all')">All</button>
-              <button class="btn btn-outline-primary" onclick="filterMatches('high')">High Confidence</button>
-              <button class="btn btn-outline-warning" onclick="filterMatches('medium')">Medium</button>
-              <button class="btn btn-outline-danger" onclick="filterMatches('low')">Low</button>
-            </div>
-          </div>
-        </div>
-        <div class="card-body">
-          <div id="matchedList" style="max-height: 400px; overflow-y: auto;">
-            <!-- Matched transactions will be displayed here -->
-          </div>
-        </div>
-      </div>
-
-      <!-- Unmatched Transactions -->
-      <div id="unmatchedContainer" class="card feature-card" style="display: none;">
-        <div class="card-header">
-          <h5><i class="fas fa-exclamation-triangle me-2"></i>Unmatched Transactions</h5>
-        </div>
-        <div class="card-body">
-          <div id="unmatchedList" style="max-height: 300px; overflow-y: auto;">
-            <!-- Unmatched transactions will be displayed here -->
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Subscription Analysis Section -->
-    <section id="subscription-analysis" class="content-section">
-      <div class="row">
-        <div class="col-12">
-          <div class="d-flex justify-content-between align-items-center mb-4">
-            <div>
-              <h2><i class="fas fa-link me-2"></i>Subscription Analysis</h2>
-              <p class="text-muted">Link subscriptions to orders and analyze subscription performance</p>
-            </div>
-            <div>
-              <button class="btn btn-primary" onclick="loadSubscriptionAnalysis()">
-                <i class="fas fa-sync me-2"></i>Refresh Analysis
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Loading Overlay -->
-      <div id="subscriptionLoadingOverlay" class="loading-overlay" style="display: none;">
-        <div class="text-center">
-          <div class="spinner-border text-primary" role="status">
-            <span class="visually-hidden">Loading...</span>
-          </div>
-          <div class="mt-2">
-            <strong>Analyzing subscription data...</strong>
-            <div class="text-muted small">This may take a moment</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Metrics Row -->
-      <div id="subscriptionMetricsRow" class="row" style="display: none;">
-        <div class="col-lg-3 col-md-6">
-          <div class="card feature-card border-left-primary">
-            <div class="card-body">
-              <div class="d-flex justify-content-between align-items-start">
-                <div>
-                  <div class="h3 text-primary" id="totalSubscriptions">-</div>
-                  <div class="text-muted small">Total Subscriptions</div>
-                </div>
-                <i class="fas fa-list text-muted" style="font-size: 1.5rem;"></i>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-lg-3 col-md-6">
-          <div class="card feature-card border-left-info">
-            <div class="card-body">
-              <div class="d-flex justify-content-between align-items-start">
-                <div>
-                  <div class="h3 text-info" id="linkedOrders">-</div>
-                  <div class="text-muted small">Linked Orders</div>
-                </div>
-                <i class="fas fa-link text-muted" style="font-size: 1.5rem;"></i>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-lg-3 col-md-6">
-          <div class="card feature-card border-left-success">
-            <div class="card-body">
-              <div class="d-flex justify-content-between align-items-start">
-                <div>
-                  <div class="h3 text-success" id="monthlyTotal">$-</div>
-                  <div class="text-muted small">Monthly Total</div>
-                </div>
-                <i class="fas fa-dollar-sign text-success" style="font-size: 1.5rem;"></i>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-lg-3 col-md-6">
-          <div class="card feature-card border-left-warning">
-            <div class="card-body">
-              <div class="d-flex justify-content-between align-items-start">
-                <div>
-                  <div class="h3 text-warning" id="linkageRate">-%</div>
-                  <div class="text-muted small">Linkage Rate</div>
-                </div>
-                <i class="fas fa-percentage text-warning" style="font-size: 1.5rem;"></i>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Analysis Results -->
-      <div id="subscriptionResultsRow" class="row" style="display: none;">
-        <div class="col-lg-6">
-          <div class="card feature-card">
-            <div class="card-header">
-              <h5><i class="fas fa-chart-pie me-2"></i>Subscription Distribution</h5>
-            </div>
-            <div class="card-body">
-              <canvas id="subscriptionChart"></canvas>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-lg-6">
-          <div class="card feature-card">
-            <div class="card-header">
-              <h5><i class="fas fa-chart-line me-2"></i>Monthly Trends</h5>
-            </div>
-            <div class="card-body">
-              <canvas id="trendsChart"></canvas>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Subscription Details -->
-      <div id="subscriptionDetails" class="card feature-card" style="display: none;">
-        <div class="card-header">
-          <div class="d-flex justify-content-between align-items-center">
-            <h5><i class="fas fa-list-ul me-2"></i>Subscription Details</h5>
-            <div class="btn-group btn-group-sm">
-              <button class="btn btn-outline-primary active" onclick="filterSubscriptions('all')">All</button>
-              <button class="btn btn-outline-success" onclick="filterSubscriptions('active')">Active</button>
-              <button class="btn btn-outline-warning" onclick="filterSubscriptions('pending')">Pending</button>
-              <button class="btn btn-outline-danger" onclick="filterSubscriptions('inactive')">Inactive</button>
-            </div>
-          </div>
-        </div>
-        <div class="card-body">
-          <div id="subscriptionList" style="max-height: 400px; overflow-y: auto;">
-            <!-- Subscription details will be displayed here -->
-          </div>
-        </div>
-      </div>
-
-      <!-- Performance Summary -->
-      <div id="performanceSummary" class="card feature-card" style="display: none;">
-        <div class="card-header">
-          <h5><i class="fas fa-chart-bar me-2"></i>Performance Summary</h5>
-        </div>
-        <div class="card-body">
-          <div class="row">
-            <div class="col-md-4">
-              <div class="text-center">
-                <h6>Top Performing</h6>
-                <div id="topPerforming" class="small">
-                  <!-- Top performing subscriptions -->
-                </div>
-              </div>
-            </div>
-            <div class="col-md-4">
-              <div class="text-center">
-                <h6>Most Frequent</h6>
-                <div id="mostFrequent" class="small">
-                  <!-- Most frequent subscriptions -->
-                </div>
-              </div>
-            </div>
-            <div class="col-md-4">
-              <div class="text-center">
-                <h6>Cost Analysis</h6>
-                <div id="costAnalysis" class="small">
-                  <!-- Cost analysis -->
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Benefits Management Section -->
-    <section id="benefits-management" class="content-section">
-      <div class="row">
-        <div class="col-12">
-          <h2><i class="fas fa-users me-2"></i>Benefits Management</h2>
-          <p class="text-muted">Manage Amazon items categorized as board/owner benefits</p>
-          <small class="badge bg-success">✨ Enhanced Two-Column Interface</small>
-        </div>
-      </div>
-
-      <div class="card feature-card">
-        <div class="card-header">
-          <h5><i class="fas fa-gift me-2"></i>Benefits Management</h5>
-        </div>
-        <div class="card-body">
-          <div class="row">
-            <div class="col-md-8">
-              <p>Configure which Amazon purchases should be categorized as benefits for board members and owners. 
-              Items are filtered to show only business card purchases (ending in 5795).</p>
-              
-              <div class="alert alert-info">
-                <i class="fas fa-info-circle me-2"></i>
-                <strong>Current Status:</strong> 
-                <span id="selectionStatus">Loading...</span>
-              </div>
-            </div>
-            <div class="col-md-4 text-end">
-              <button type="button" class="btn btn-primary btn-lg" id="openSelectionModal">
-                <i class="fas fa-cog me-2"></i>Configure Selection
-              </button>
-            </div>
-          </div>
-          
-          <div class="row mt-4">
             <div class="col-12">
-              <h5>Quick Actions</h5>
-              <div class="btn-group mb-3" role="group">
-                <button type="button" class="btn btn-outline-success" id="generateReport">
-                  <i class="fas fa-chart-bar me-2"></i>Generate Report
-                </button>
-                <button type="button" class="btn btn-outline-primary" id="exportData">
-                  <i class="fas fa-download me-2"></i>Export Data
-                </button>
-                <button type="button" class="btn btn-outline-info" id="viewSummary">
-                  <i class="fas fa-eye me-2"></i>View Summary
-                </button>
-              </div>
-              
-              <h6 class="mt-3">Quick Category Selection</h6>
-              <p class="text-muted small">Quickly select common employee benefit categories:</p>
-              <div class="btn-group-toggle d-flex flex-wrap gap-2" data-bs-toggle="buttons">
-                <button class="btn btn-outline-success btn-sm" onclick="employeeBenefitsManager.quickSelectCategory('employee_amenities')">
-                  <i class="fas fa-coffee me-1"></i>Board Amenities
-                </button>
-                <button class="btn btn-outline-info btn-sm" onclick="employeeBenefitsManager.quickSelectCategory('wellness_comfort')">
-                  <i class="fas fa-heart me-1"></i>Wellness & Comfort
-                </button>
-                <button class="btn btn-outline-primary btn-sm" onclick="employeeBenefitsManager.quickSelectCategory('kitchen_equipment')">
-                  <i class="fas fa-utensils me-1"></i>Kitchen Equipment
-                </button>
-                <button class="btn btn-outline-secondary btn-sm" onclick="employeeBenefitsManager.quickSelectCategory('office_supplies')">
-                  <i class="fas fa-clipboard me-1"></i>Office Supplies
-                </button>
-              </div>
+              <h2>
+                <i class="fas fa-tachometer-alt me-2"></i>Financial Dashboard
+              </h2>
+              <p class="text-muted">
+                Overview of your financial data and key metrics
+              </p>
             </div>
           </div>
-          
-          <div class="row mt-4">
-            <div class="col-12">
-              <div class="card">
+
+          <div class="row">
+            <div class="col-lg-8">
+              <div class="card feature-card">
                 <div class="card-header">
-                  <h6 class="mb-0"><i class="fas fa-lightbulb me-2"></i>Benefits Categories Guide</h6>
+                  <h5><i class="fas fa-chart-line me-2"></i>Quick Analysis</h5>
                 </div>
                 <div class="card-body">
-                  <div class="row">
-                    <div class="col-md-6">
-                      <h6 class="text-success">High-Priority Benefits</h6>
-                      <ul class="list-unstyled small">
-                        <li><i class="fas fa-coffee text-success me-2"></i><strong>Board Amenities:</strong> Coffee, snacks, beverages</li>
-                        <li><i class="fas fa-heart text-success me-2"></i><strong>Wellness & Comfort:</strong> Ergonomic items, air purifiers</li>
-                        <li><i class="fas fa-utensils text-info me-2"></i><strong>Kitchen Equipment:</strong> Microwaves, coffee makers</li>
-                      </ul>
-                    </div>
-                    <div class="col-md-6">
-                      <h6 class="text-primary">Standard Benefits</h6>
-                      <ul class="list-unstyled small">
-                        <li><i class="fas fa-clipboard text-primary me-2"></i><strong>Office Supplies:</strong> Paper, pens, storage</li>
-                        <li><i class="fas fa-laptop text-dark me-2"></i><strong>Employee Technology:</strong> Chargers, accessories</li>
-                        <li><i class="fas fa-spray-can text-warning me-2"></i><strong>Cleaning & Safety:</strong> Sanitizers, masks</li>
-                      </ul>
-                    </div>
+                  <button id="loadAnalysis" class="btn btn-primary mb-3">
+                    <i class="fas fa-play me-2"></i>Load Analysis
+                  </button>
+                  <div id="analysisResults" style="display: none">
+                    <!-- Analysis content will be loaded here -->
                   </div>
                 </div>
               </div>
             </div>
+
+            <div class="col-lg-4">
+              <div class="card feature-card">
+                <div class="card-header">
+                  <h5><i class="fas fa-list me-2"></i>Recent Transactions</h5>
+                </div>
+                <div class="card-body">
+                  <ul id="expenditureList" class="list-group list-group-flush">
+                    <!-- Expenditures will be loaded here -->
+                  </ul>
+                </div>
+              </div>
+            </div>
           </div>
-          
-          <div class="row mt-4">
+        </section>
+
+        <!-- Analysis Section -->
+        <section id="analysis" class="content-section">
+          <div class="row">
             <div class="col-12">
-              <div id="summaryContainer">
-                <!-- Summary will be displayed here -->
+              <h2><i class="fas fa-chart-bar me-2"></i>Analysis & Reports</h2>
+              <p class="text-muted">
+                Comprehensive financial analysis and reporting tools
+              </p>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-12">
+              <div class="card feature-card">
+                <div class="card-header">
+                  <h5>
+                    <i class="fas fa-chart-pie me-2"></i>Detailed Analysis
+                  </h5>
+                </div>
+                <div class="card-body">
+                  <div id="detailedAnalysisContent">
+                    <!-- Detailed analysis content -->
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </div>
-    </section>
+        </section>
 
-    <!-- Geographic Analysis Section -->
-    <section id="geographic-analysis" class="content-section">
-      <div class="row">
-        <div class="col-12">
-          <div class="d-flex justify-content-between align-items-center mb-4">
-            <div>
-              <h2><i class="fas fa-map-marked-alt me-2"></i>Geographic Analysis</h2>
-              <p class="text-muted">Analyze spending patterns by location and geography</p>
+        <!-- AI Insights Section -->
+        <section id="ai-insights" class="content-section">
+          <div class="row">
+            <div class="col-12">
+              <h2><i class="fas fa-brain me-2"></i>AI-Powered Insights</h2>
+              <p class="text-muted">
+                Machine learning powered financial intelligence
+              </p>
             </div>
-            <div>
-              <button class="btn btn-primary" onclick="loadGeographicAnalysis()">
-                <i class="fas fa-sync me-2"></i>Refresh Analysis
+          </div>
+
+          <div class="card feature-card">
+            <div class="card-header d-flex align-items-center">
+              <h5 class="mb-0">
+                <span class="badge bg-primary me-2">AI</span>
+                🤖 AI-Enhanced Analysis
+              </h5>
+              <button id="loadAIAnalysis" class="btn btn-light btn-sm ms-auto">
+                <i class="fas fa-brain me-2"></i>Run AI Analysis
               </button>
-              <button class="btn btn-outline-secondary ms-2" onclick="exportGeographicReport()">
-                <i class="fas fa-download me-2"></i>Export Report
-              </button>
             </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Loading Overlay -->
-      <div id="geographicLoadingOverlay" class="loading-overlay" style="display: none;">
-        <div class="text-center">
-          <div class="spinner-border text-primary" role="status">
-            <span class="visually-hidden">Loading...</span>
-          </div>
-          <div class="mt-2">
-            <strong>Analyzing geographic data...</strong>
-            <div class="text-muted small">Processing location information</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Metrics Row -->
-      <div id="geographicMetricsRow" class="row" style="display: none;">
-        <div class="col-lg-3 col-md-6">
-          <div class="card feature-card border-left-primary">
             <div class="card-body">
-              <div class="d-flex justify-content-between align-items-start">
-                <div>
-                  <div class="h3 text-primary" id="totalLocations">-</div>
-                  <div class="text-muted small">Unique Locations</div>
-                </div>
-                <i class="fas fa-map-marker-alt text-muted" style="font-size: 1.5rem;"></i>
+              <div class="alert alert-info" role="alert">
+                <h6 class="alert-heading">
+                  🚀 Artificial Intelligence Integration
+                </h6>
+                Advanced machine learning algorithms provide intelligent
+                categorization, predictive analytics, anomaly detection, and
+                optimization recommendations to enhance your financial analysis.
+              </div>
+
+              <!-- AI Dashboard Container -->
+              <div id="ai-dashboard-container">
+                <!-- AI Dashboard will be loaded here -->
               </div>
             </div>
           </div>
-        </div>
+        </section>
 
-        <div class="col-lg-3 col-md-6">
-          <div class="card feature-card border-left-info">
-            <div class="card-body">
-              <div class="d-flex justify-content-between align-items-start">
-                <div>
-                  <div class="h3 text-info" id="totalOrders">-</div>
-                  <div class="text-muted small">Total Orders</div>
-                </div>
-                <i class="fas fa-shopping-cart text-muted" style="font-size: 1.5rem;"></i>
-              </div>
+        <!-- Data Import Section -->
+        <section id="data-import" class="content-section">
+          <div class="row">
+            <div class="col-12">
+              <h2><i class="fas fa-upload me-2"></i>Data Import</h2>
+              <p class="text-muted">
+                Import data from multiple sources including bank statements and
+                Amazon exports
+              </p>
             </div>
           </div>
-        </div>
 
-        <div class="col-lg-3 col-md-6">
-          <div class="card feature-card border-left-success">
+          <!-- Bank Data Import -->
+          <div class="card feature-card">
+            <div class="card-header">
+              <h5>
+                <i class="fas fa-university me-2"></i>Bank of America Data
+                Import
+              </h5>
+            </div>
             <div class="card-body">
-              <div class="d-flex justify-content-between align-items-start">
-                <div>
-                  <div class="h3 text-success" id="totalSpending">$-</div>
-                  <div class="text-muted small">Total Spending</div>
-                </div>
-                <i class="fas fa-dollar-sign text-success" style="font-size: 1.5rem;"></i>
+              <div class="alert alert-info" role="alert">
+                <i class="fas fa-info-circle me-2"></i>
+                <strong>Supported Formats:</strong> CSV, DAT, TSV, and TXT files
+                from Bank of America online banking
               </div>
+              <form id="csvImportForm">
+                <div class="mb-3">
+                  <label for="csvFile" class="form-label"
+                    >Select Bank Statement File</label
+                  >
+                  <input
+                    type="file"
+                    class="form-control"
+                    id="csvFile"
+                    accept=".csv,.dat,.txt,.tsv"
+                    required
+                  />
+                  <div class="form-text">
+                    Upload your Bank of America transaction export file
+                  </div>
+                </div>
+                <button type="submit" class="btn btn-success">
+                  <i class="fas fa-upload me-2"></i>Import Bank Data
+                </button>
+              </form>
+              <div id="importStatus" class="mt-3" style="display: none"></div>
             </div>
           </div>
-        </div>
 
-        <div class="col-lg-3 col-md-6">
-          <div class="card feature-card border-left-warning">
-            <div class="card-body">
-              <div class="d-flex justify-content-between align-items-start">
-                <div>
-                  <div class="h3 text-warning" id="topCity">-</div>
-                  <div class="text-muted small">Top City</div>
-                </div>
-                <i class="fas fa-crown text-warning" style="font-size: 1.5rem;"></i>
-              </div>
+          <!-- Amazon ZIP Import -->
+          <div class="card feature-card mt-4">
+            <div class="card-header">
+              <h5><i class="fab fa-amazon me-2"></i>Amazon ZIP Import</h5>
             </div>
-          </div>
-        </div>
-      </div>
+            <div class="card-body">
+              <div class="alert alert-info" role="alert">
+                <i class="fas fa-info-circle me-2"></i>
+                <strong>Two ZIP Types Supported:</strong> Amazon provides
+                separate exports for Orders and Subscriptions
+              </div>
 
-      <div class="card feature-card">
-        <div class="card-header">
-          <h5><i class="fas fa-globe me-2"></i>Location-Based Spending Analysis</h5>
-        </div>
-        <div class="card-body">
-          <div id="geographic-dashboard">
-            <div class="row">
-              <div class="col-md-8">
-                <h6>Spending by Location</h6>
-                <div id="spending-map" class="border rounded p-3" style="height: 300px;">
-                  <!-- Interactive map will be loaded here -->
-                  <div class="d-flex align-items-center justify-content-center h-100 text-muted">
-                    <div class="text-center">
-                      <i class="fas fa-map fa-3x mb-3"></i>
-                      <p>Geographic spending map will be displayed here</p>
-                      <button class="btn btn-primary btn-sm" onclick="loadGeographicAnalysis()">
-                        <i class="fas fa-sync me-1"></i>Load Analysis
-                      </button>
+              <div class="row mb-3">
+                <div class="col-md-6">
+                  <div class="card border-primary">
+                    <div class="card-body">
+                      <h6 class="card-title">
+                        <i class="fas fa-shopping-bag text-primary me-2"></i
+                        >Your Orders Export
+                      </h6>
+                      <p class="card-text small">
+                        Complete purchase history with digital orders, retail
+                        purchases, returns, and delivery photos.
+                        <strong>Size:</strong> 15-30MB
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="card border-success">
+                    <div class="card-body">
+                      <h6 class="card-title">
+                        <i class="fas fa-sync-alt text-success me-2"></i
+                        >Subscriptions Export
+                      </h6>
+                      <p class="card-text small">
+                        All subscription data including Subscribe & Save,
+                        digital subscriptions, and billing information.
+                        <strong>Size:</strong> 100-500KB
+                      </p>
                     </div>
                   </div>
                 </div>
               </div>
-              <div class="col-md-4">
-                <h6>Top Locations</h6>
-                <div id="top-locations" class="border rounded p-3" style="height: 300px; overflow-y: auto;">
-                  <!-- Top spending locations will be listed here -->
-                  <div class="text-center text-muted mt-5">
-                    <i class="fas fa-list fa-2x mb-2"></i>
-                    <p>Run analysis to view top locations</p>
+
+              <div class="row mb-3">
+                <div class="col-md-6">
+                  <h6>
+                    <i class="fas fa-question-circle me-2"></i>How to Get Your
+                    Amazon Data
+                  </h6>
+                  <ol class="small">
+                    <li>
+                      Go to <strong>Amazon.com</strong> →
+                      <strong>Your Account</strong>
+                    </li>
+                    <li>
+                      Navigate to <strong>Privacy & Data Protection</strong>
+                    </li>
+                    <li>Click <strong>"Request my data"</strong></li>
+                    <li>
+                      Select <strong>"Your Orders"</strong> and
+                      <strong>"Subscriptions"</strong>
+                    </li>
+                    <li>Amazon will email ZIP files within 30 days</li>
+                  </ol>
+                </div>
+                <div class="col-md-6">
+                  <h6><i class="fas fa-cogs me-2"></i>Processing Features</h6>
+                  <ul class="small">
+                    <li>
+                      <i class="fas fa-check text-success me-1"></i> Smart ZIP
+                      type detection
+                    </li>
+                    <li>
+                      <i class="fas fa-check text-success me-1"></i> Instant
+                      file validation
+                    </li>
+                    <li>
+                      <i class="fas fa-check text-success me-1"></i> Automatic
+                      categorization
+                    </li>
+                    <li>
+                      <i class="fas fa-check text-success me-1"></i> Rich
+                      metadata preservation
+                    </li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="mt-3">
+                <form id="amazonZipImportForm" enctype="multipart/form-data">
+                  <div class="mb-3">
+                    <label for="amazonZipFile" class="form-label"
+                      >Select Amazon ZIP File</label
+                    >
+                    <input
+                      type="file"
+                      class="form-control"
+                      id="amazonZipFile"
+                      accept=".zip"
+                      required
+                    />
+                    <div class="form-text">
+                      Upload either "Your Orders.zip" or "Subscriptions.zip"
+                      from Amazon
+                    </div>
+                  </div>
+
+                  <!-- File Validation Results -->
+                  <div
+                    id="fileValidationResult"
+                    class="mb-3"
+                    style="display: none"
+                  >
+                    <!-- Validation results will be inserted here -->
+                  </div>
+
+                  <div class="d-flex gap-2">
+                    <button
+                      type="submit"
+                      class="btn btn-warning"
+                      id="amazonImportBtn"
+                      disabled
+                    >
+                      <i class="fab fa-amazon me-2"></i>Import Amazon ZIP
+                    </button>
+                    <a
+                      href="/amazon-zip-import.html"
+                      class="btn btn-outline-primary"
+                      target="_blank"
+                    >
+                      <i class="fas fa-external-link-alt me-2"></i>Advanced
+                      Import Interface
+                    </a>
+                  </div>
+                </form>
+
+                <!-- Progress and Results for Amazon Import -->
+
+                <div
+                  id="amazonImportProgress"
+                  class="mt-3"
+                  style="display: none"
+                >
+                  <div class="progress">
+                    <div
+                      class="progress-bar progress-bar-striped progress-bar-animated"
+                      role="progressbar"
+                      style="width: 0%"
+                    ></div>
+                  </div>
+                  <div class="text-center mt-2">
+                    <small class="text-muted">Processing Amazon data...</small>
+                  </div>
+                  <div
+                    id="amazonImportStatus"
+                    class="text-center mt-2"
+                    style="font-size: 0.95em; color: #555; display: none"
+                  ></div>
+                </div>
+
+                <div
+                  id="amazonImportResults"
+                  class="mt-3"
+                  style="display: none"
+                >
+                  <!-- Results will be populated here -->
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Import History -->
+          <div class="card feature-card mt-4">
+            <div class="card-header">
+              <h5><i class="fas fa-history me-2"></i>Import History</h5>
+            </div>
+            <div class="card-body">
+              <div id="importHistory">
+                <p class="text-muted">
+                  No recent imports found. Import some data to see history here.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Manual Entry Section -->
+        <section id="manual-entry" class="content-section">
+          <div class="row">
+            <div class="col-12">
+              <h2><i class="fas fa-edit me-2"></i>Manual Entry</h2>
+              <p class="text-muted">Add individual expenditures manually</p>
+            </div>
+          </div>
+
+          <div class="card feature-card">
+            <div class="card-header">
+              <h5><i class="fas fa-plus me-2"></i>Add New Expenditure</h5>
+            </div>
+            <div class="card-body">
+              <form id="expenditureForm">
+                <div class="row">
+                  <div class="col-md-3 mb-3">
+                    <label for="date" class="form-label">Date</label>
+                    <input
+                      type="date"
+                      class="form-control"
+                      id="date"
+                      required
+                    />
+                  </div>
+                  <div class="col-md-3 mb-3">
+                    <label for="amount" class="form-label">Amount ($)</label>
+                    <input
+                      type="number"
+                      step="0.01"
+                      class="form-control"
+                      id="amount"
+                      required
+                    />
+                  </div>
+                  <div class="col-md-3 mb-3">
+                    <label for="category" class="form-label">Category</label>
+                    <select class="form-select" id="category" required>
+                      <option value="">Select Category</option>
+                      <option value="tool subscriptions">
+                        Tool Subscriptions
+                      </option>
+                      <option value="maintenance payments">
+                        Maintenance Payments
+                      </option>
+                      <option value="supplies restocking">
+                        Supplies Restocking
+                      </option>
+                      <option value="employee benefits">
+                        Employee Benefits
+                      </option>
+                    </select>
+                  </div>
+                  <div class="col-md-3 mb-3">
+                    <label for="description" class="form-label"
+                      >Description</label
+                    >
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="description"
+                      required
+                    />
+                  </div>
+                </div>
+                <button type="submit" class="btn btn-primary">
+                  <i class="fas fa-save me-2"></i>Add Expenditure
+                </button>
+              </form>
+            </div>
+          </div>
+        </section>
+
+        <!-- Premium Features Section -->
+        <section id="premium-features" class="content-section">
+          <div class="row">
+            <div class="col-12">
+              <h2><i class="fas fa-crown me-2"></i>Premium Features</h2>
+              <p class="text-muted">
+                Enhanced analysis with premium data integration
+              </p>
+            </div>
+          </div>
+
+          <div class="card feature-card">
+            <div class="card-header d-flex align-items-center bg-warning">
+              <h5 class="mb-0">
+                <span class="badge bg-success me-2">Premium</span>
+                Enhanced Amazon Analysis
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="alert alert-success" role="alert">
+                <h6 class="alert-heading">🎉 Premium Extension Active!</h6>
+                Enhanced analysis is now available with detailed Amazon order
+                data including shipping costs, payment methods, delivery status,
+                and improved Subscribe & Save detection.
+              </div>
+
+              <div class="row">
+                <div class="col-md-4">
+                  <div class="card bg-light">
+                    <div class="card-body text-center">
+                      <h5 class="card-title text-success">41.5%</h5>
+                      <p class="card-text">Subscribe & Save Detection Rate</p>
+                      <small class="text-muted"
+                        >Up from 26% with premium data</small
+                      >
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="card bg-light">
+                    <div class="card-body text-center">
+                      <h5 class="card-title text-info">99%</h5>
+                      <p class="card-text">Detection Confidence</p>
+                      <small class="text-muted"
+                        >High accuracy with premium fields</small
+                      >
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="card bg-light">
+                    <div class="card-body text-center">
+                      <h5 class="card-title text-warning">249</h5>
+                      <p class="card-text">S&S Orders Detected</p>
+                      <small class="text-muted">From 598 total orders</small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <button id="loadPremiumAnalytics" class="btn btn-primary mt-3">
+                <i class="fas fa-chart-line me-2"></i>Run Premium Analysis
+              </button>
+              <div id="premiumAnalyticsResults" style="display: none">
+                <!-- Premium analytics content will be loaded here -->
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Settings Section -->
+        <section id="settings" class="content-section">
+          <div class="row">
+            <div class="col-12">
+              <h2><i class="fas fa-cog me-2"></i>Settings</h2>
+              <p class="text-muted">
+                Configure application preferences and data sources
+              </p>
+            </div>
+          </div>
+
+          <div class="card feature-card">
+            <div class="card-header">
+              <h5><i class="fas fa-sliders-h me-2"></i>Application Settings</h5>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-md-6">
+                  <h6>Data Processing</h6>
+                  <div class="form-check">
+                    <input
+                      class="form-check-input"
+                      type="checkbox"
+                      id="autoImport"
+                      checked
+                    />
+                    <label class="form-check-label" for="autoImport">
+                      Auto-process imported files
+                    </label>
+                  </div>
+                  <div class="form-check">
+                    <input
+                      class="form-check-input"
+                      type="checkbox"
+                      id="enableAI"
+                      checked
+                    />
+                    <label class="form-check-label" for="enableAI">
+                      Enable AI analysis
+                    </label>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <h6>Display Options</h6>
+                  <div class="form-check">
+                    <input
+                      class="form-check-input"
+                      type="checkbox"
+                      id="showTooltips"
+                      checked
+                    />
+                    <label class="form-check-label" for="showTooltips">
+                      Show tooltips
+                    </label>
+                  </div>
+                  <div class="form-check">
+                    <input
+                      class="form-check-input"
+                      type="checkbox"
+                      id="compactView"
+                    />
+                    <label class="form-check-label" for="compactView">
+                      Compact view
+                    </label>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
+        </section>
+
+        <!-- Bank Reconciliation Section -->
+        <section id="bank-reconciliation" class="content-section">
+          <div class="row">
+            <div class="col-12">
+              <div
+                class="d-flex justify-content-between align-items-center mb-4"
+              >
+                <div>
+                  <h2>
+                    <i class="fas fa-balance-scale me-2"></i>Bank Reconciliation
+                  </h2>
+                  <p class="text-muted">
+                    Automated matching of bank transactions with Amazon orders
+                  </p>
+                </div>
+                <div>
+                  <button
+                    class="btn btn-primary me-2"
+                    onclick="performReconciliation()"
+                  >
+                    <i class="fas fa-sync me-2"></i>Reconcile Now
+                  </button>
+                  <button
+                    class="btn btn-outline-secondary"
+                    onclick="exportReconciliationReport()"
+                  >
+                    <i class="fas fa-download me-2"></i>Export Report
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Loading Overlay -->
+          <div
+            id="reconciliationLoadingOverlay"
+            class="loading-overlay"
+            style="display: none"
+          >
+            <div class="text-center">
+              <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+              </div>
+              <div class="mt-2">
+                <strong>Performing reconciliation...</strong>
+                <div class="text-muted small">
+                  Matching bank transactions with Amazon orders
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Metrics Row -->
+          <div id="reconciliationMetricsRow" class="row" style="display: none">
+            <div class="col-lg-3 col-md-6">
+              <div class="card feature-card border-left-primary">
+                <div class="card-body">
+                  <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                      <div class="h3 text-primary" id="totalBank">-</div>
+                      <div class="text-muted small">Bank Transactions</div>
+                    </div>
+                    <i
+                      class="fas fa-university text-muted"
+                      style="font-size: 1.5rem"
+                    ></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6">
+              <div class="card feature-card border-left-info">
+                <div class="card-body">
+                  <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                      <div class="h3 text-info" id="totalAmazon">-</div>
+                      <div class="text-muted small">Amazon Orders</div>
+                    </div>
+                    <i
+                      class="fas fa-shopping-cart text-muted"
+                      style="font-size: 1.5rem"
+                    ></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6">
+              <div class="card feature-card border-left-success">
+                <div class="card-body">
+                  <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                      <div class="h3 text-success" id="matchedCount">-</div>
+                      <div class="text-muted small">Matched</div>
+                    </div>
+                    <i
+                      class="fas fa-check-circle text-success"
+                      style="font-size: 1.5rem"
+                    ></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6">
+              <div class="card feature-card border-left-warning">
+                <div class="card-body">
+                  <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                      <div class="h3 text-warning" id="matchRate">-%</div>
+                      <div class="text-muted small">Match Rate</div>
+                    </div>
+                    <i
+                      class="fas fa-percentage text-warning"
+                      style="font-size: 1.5rem"
+                    ></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Charts Row -->
+          <div id="reconciliationChartsRow" class="row" style="display: none">
+            <div class="col-lg-6">
+              <div class="card feature-card">
+                <div class="card-header">
+                  <h5>
+                    <i class="fas fa-chart-pie me-2"></i>Match Confidence
+                    Distribution
+                  </h5>
+                </div>
+                <div class="card-body">
+                  <canvas id="confidenceChart"></canvas>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-lg-6">
+              <div class="card feature-card">
+                <div class="card-header">
+                  <h5>
+                    <i class="fas fa-chart-bar me-2"></i>Reconciliation Summary
+                  </h5>
+                </div>
+                <div class="card-body">
+                  <canvas id="summaryChart"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Matched Transactions -->
+          <div
+            id="matchedContainer"
+            class="card feature-card"
+            style="display: none"
+          >
+            <div class="card-header">
+              <div class="d-flex justify-content-between align-items-center">
+                <h5>
+                  <i class="fas fa-check-circle me-2"></i>Matched Transactions
+                </h5>
+                <div class="btn-group btn-group-sm">
+                  <button
+                    class="btn btn-outline-success active"
+                    onclick="filterMatches('all')"
+                  >
+                    All
+                  </button>
+                  <button
+                    class="btn btn-outline-primary"
+                    onclick="filterMatches('high')"
+                  >
+                    High Confidence
+                  </button>
+                  <button
+                    class="btn btn-outline-warning"
+                    onclick="filterMatches('medium')"
+                  >
+                    Medium
+                  </button>
+                  <button
+                    class="btn btn-outline-danger"
+                    onclick="filterMatches('low')"
+                  >
+                    Low
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="card-body">
+              <div id="matchedList" style="max-height: 400px; overflow-y: auto">
+                <!-- Matched transactions will be displayed here -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Unmatched Transactions -->
+          <div
+            id="unmatchedContainer"
+            class="card feature-card"
+            style="display: none"
+          >
+            <div class="card-header">
+              <h5>
+                <i class="fas fa-exclamation-triangle me-2"></i>Unmatched
+                Transactions
+              </h5>
+            </div>
+            <div class="card-body">
+              <div
+                id="unmatchedList"
+                style="max-height: 300px; overflow-y: auto"
+              >
+                <!-- Unmatched transactions will be displayed here -->
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Subscription Analysis Section -->
+        <section id="subscription-analysis" class="content-section">
+          <div class="row">
+            <div class="col-12">
+              <div
+                class="d-flex justify-content-between align-items-center mb-4"
+              >
+                <div>
+                  <h2><i class="fas fa-link me-2"></i>Subscription Analysis</h2>
+                  <p class="text-muted">
+                    Link subscriptions to orders and analyze subscription
+                    performance
+                  </p>
+                </div>
+                <div>
+                  <button
+                    class="btn btn-primary"
+                    onclick="loadSubscriptionAnalysis()"
+                  >
+                    <i class="fas fa-sync me-2"></i>Refresh Analysis
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Loading Overlay -->
+          <div
+            id="subscriptionLoadingOverlay"
+            class="loading-overlay"
+            style="display: none"
+          >
+            <div class="text-center">
+              <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+              </div>
+              <div class="mt-2">
+                <strong>Analyzing subscription data...</strong>
+                <div class="text-muted small">This may take a moment</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Metrics Row -->
+          <div id="subscriptionMetricsRow" class="row" style="display: none">
+            <div class="col-lg-3 col-md-6">
+              <div class="card feature-card border-left-primary">
+                <div class="card-body">
+                  <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                      <div class="h3 text-primary" id="totalSubscriptions">
+                        -
+                      </div>
+                      <div class="text-muted small">Total Subscriptions</div>
+                    </div>
+                    <i
+                      class="fas fa-list text-muted"
+                      style="font-size: 1.5rem"
+                    ></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6">
+              <div class="card feature-card border-left-info">
+                <div class="card-body">
+                  <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                      <div class="h3 text-info" id="linkedOrders">-</div>
+                      <div class="text-muted small">Linked Orders</div>
+                    </div>
+                    <i
+                      class="fas fa-link text-muted"
+                      style="font-size: 1.5rem"
+                    ></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6">
+              <div class="card feature-card border-left-success">
+                <div class="card-body">
+                  <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                      <div class="h3 text-success" id="monthlyTotal">$-</div>
+                      <div class="text-muted small">Monthly Total</div>
+                    </div>
+                    <i
+                      class="fas fa-dollar-sign text-success"
+                      style="font-size: 1.5rem"
+                    ></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6">
+              <div class="card feature-card border-left-warning">
+                <div class="card-body">
+                  <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                      <div class="h3 text-warning" id="linkageRate">-%</div>
+                      <div class="text-muted small">Linkage Rate</div>
+                    </div>
+                    <i
+                      class="fas fa-percentage text-warning"
+                      style="font-size: 1.5rem"
+                    ></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Analysis Results -->
+          <div id="subscriptionResultsRow" class="row" style="display: none">
+            <div class="col-lg-6">
+              <div class="card feature-card">
+                <div class="card-header">
+                  <h5>
+                    <i class="fas fa-chart-pie me-2"></i>Subscription
+                    Distribution
+                  </h5>
+                </div>
+                <div class="card-body">
+                  <canvas id="subscriptionChart"></canvas>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-lg-6">
+              <div class="card feature-card">
+                <div class="card-header">
+                  <h5><i class="fas fa-chart-line me-2"></i>Monthly Trends</h5>
+                </div>
+                <div class="card-body">
+                  <canvas id="trendsChart"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Subscription Details -->
+          <div
+            id="subscriptionDetails"
+            class="card feature-card"
+            style="display: none"
+          >
+            <div class="card-header">
+              <div class="d-flex justify-content-between align-items-center">
+                <h5><i class="fas fa-list-ul me-2"></i>Subscription Details</h5>
+                <div class="btn-group btn-group-sm">
+                  <button
+                    class="btn btn-outline-primary active"
+                    onclick="filterSubscriptions('all')"
+                  >
+                    All
+                  </button>
+                  <button
+                    class="btn btn-outline-success"
+                    onclick="filterSubscriptions('active')"
+                  >
+                    Active
+                  </button>
+                  <button
+                    class="btn btn-outline-warning"
+                    onclick="filterSubscriptions('pending')"
+                  >
+                    Pending
+                  </button>
+                  <button
+                    class="btn btn-outline-danger"
+                    onclick="filterSubscriptions('inactive')"
+                  >
+                    Inactive
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="card-body">
+              <div
+                id="subscriptionList"
+                style="max-height: 400px; overflow-y: auto"
+              >
+                <!-- Subscription details will be displayed here -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Performance Summary -->
+          <div
+            id="performanceSummary"
+            class="card feature-card"
+            style="display: none"
+          >
+            <div class="card-header">
+              <h5><i class="fas fa-chart-bar me-2"></i>Performance Summary</h5>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-md-4">
+                  <div class="text-center">
+                    <h6>Top Performing</h6>
+                    <div id="topPerforming" class="small">
+                      <!-- Top performing subscriptions -->
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="text-center">
+                    <h6>Most Frequent</h6>
+                    <div id="mostFrequent" class="small">
+                      <!-- Most frequent subscriptions -->
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="text-center">
+                    <h6>Cost Analysis</h6>
+                    <div id="costAnalysis" class="small">
+                      <!-- Cost analysis -->
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Benefits Management Section -->
+        <section id="benefits-management" class="content-section">
+          <div class="row">
+            <div class="col-12">
+              <h2><i class="fas fa-users me-2"></i>Benefits Management</h2>
+              <p class="text-muted">
+                Manage Amazon items categorized as board/owner benefits
+              </p>
+              <small class="badge bg-success"
+                >✨ Enhanced Two-Column Interface</small
+              >
+            </div>
+          </div>
+
+          <div class="card feature-card">
+            <div class="card-header">
+              <h5><i class="fas fa-gift me-2"></i>Benefits Management</h5>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-md-8">
+                  <p>
+                    Configure which Amazon purchases should be categorized as
+                    benefits for board members and owners. Items are filtered to
+                    show only business card purchases (ending in 5795).
+                  </p>
+
+                  <div class="alert alert-info">
+                    <i class="fas fa-info-circle me-2"></i>
+                    <strong>Current Status:</strong>
+                    <span id="selectionStatus">Loading...</span>
+                  </div>
+                </div>
+                <div class="col-md-4 text-end">
+                  <button
+                    type="button"
+                    class="btn btn-primary btn-lg"
+                    id="openSelectionModal"
+                  >
+                    <i class="fas fa-cog me-2"></i>Configure Selection
+                  </button>
+                </div>
+              </div>
+
+              <div class="row mt-4">
+                <div class="col-12">
+                  <h5>Quick Actions</h5>
+                  <div class="btn-group mb-3" role="group">
+                    <button
+                      type="button"
+                      class="btn btn-outline-success"
+                      id="generateReport"
+                    >
+                      <i class="fas fa-chart-bar me-2"></i>Generate Report
+                    </button>
+                    <button
+                      type="button"
+                      class="btn btn-outline-primary"
+                      id="exportData"
+                    >
+                      <i class="fas fa-download me-2"></i>Export Data
+                    </button>
+                    <button
+                      type="button"
+                      class="btn btn-outline-info"
+                      id="viewSummary"
+                    >
+                      <i class="fas fa-eye me-2"></i>View Summary
+                    </button>
+                  </div>
+
+                  <h6 class="mt-3">Quick Category Selection</h6>
+                  <p class="text-muted small">
+                    Quickly select common employee benefit categories:
+                  </p>
+                  <div
+                    class="btn-group-toggle d-flex flex-wrap gap-2"
+                    data-bs-toggle="buttons"
+                  >
+                    <button
+                      class="btn btn-outline-success btn-sm"
+                      onclick="employeeBenefitsManager.quickSelectCategory('employee_amenities')"
+                    >
+                      <i class="fas fa-coffee me-1"></i>Board Amenities
+                    </button>
+                    <button
+                      class="btn btn-outline-info btn-sm"
+                      onclick="employeeBenefitsManager.quickSelectCategory('wellness_comfort')"
+                    >
+                      <i class="fas fa-heart me-1"></i>Wellness & Comfort
+                    </button>
+                    <button
+                      class="btn btn-outline-primary btn-sm"
+                      onclick="employeeBenefitsManager.quickSelectCategory('kitchen_equipment')"
+                    >
+                      <i class="fas fa-utensils me-1"></i>Kitchen Equipment
+                    </button>
+                    <button
+                      class="btn btn-outline-secondary btn-sm"
+                      onclick="employeeBenefitsManager.quickSelectCategory('office_supplies')"
+                    >
+                      <i class="fas fa-clipboard me-1"></i>Office Supplies
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row mt-4">
+                <div class="col-12">
+                  <div class="card">
+                    <div class="card-header">
+                      <h6 class="mb-0">
+                        <i class="fas fa-lightbulb me-2"></i>Benefits Categories
+                        Guide
+                      </h6>
+                    </div>
+                    <div class="card-body">
+                      <div class="row">
+                        <div class="col-md-6">
+                          <h6 class="text-success">High-Priority Benefits</h6>
+                          <ul class="list-unstyled small">
+                            <li>
+                              <i class="fas fa-coffee text-success me-2"></i
+                              ><strong>Board Amenities:</strong> Coffee, snacks,
+                              beverages
+                            </li>
+                            <li>
+                              <i class="fas fa-heart text-success me-2"></i
+                              ><strong>Wellness & Comfort:</strong> Ergonomic
+                              items, air purifiers
+                            </li>
+                            <li>
+                              <i class="fas fa-utensils text-info me-2"></i
+                              ><strong>Kitchen Equipment:</strong> Microwaves,
+                              coffee makers
+                            </li>
+                          </ul>
+                        </div>
+                        <div class="col-md-6">
+                          <h6 class="text-primary">Standard Benefits</h6>
+                          <ul class="list-unstyled small">
+                            <li>
+                              <i class="fas fa-clipboard text-primary me-2"></i
+                              ><strong>Office Supplies:</strong> Paper, pens,
+                              storage
+                            </li>
+                            <li>
+                              <i class="fas fa-laptop text-dark me-2"></i
+                              ><strong>Employee Technology:</strong> Chargers,
+                              accessories
+                            </li>
+                            <li>
+                              <i class="fas fa-spray-can text-warning me-2"></i
+                              ><strong>Cleaning & Safety:</strong> Sanitizers,
+                              masks
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row mt-4">
+                <div class="col-12">
+                  <div id="summaryContainer">
+                    <!-- Summary will be displayed here -->
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Geographic Analysis Section -->
+        <section id="geographic-analysis" class="content-section">
+          <div class="row">
+            <div class="col-12">
+              <div
+                class="d-flex justify-content-between align-items-center mb-4"
+              >
+                <div>
+                  <h2>
+                    <i class="fas fa-map-marked-alt me-2"></i>Geographic
+                    Analysis
+                  </h2>
+                  <p class="text-muted">
+                    Analyze spending patterns by location and geography
+                  </p>
+                </div>
+                <div>
+                  <button
+                    class="btn btn-primary"
+                    onclick="loadGeographicAnalysis()"
+                  >
+                    <i class="fas fa-sync me-2"></i>Refresh Analysis
+                  </button>
+                  <button
+                    class="btn btn-outline-secondary ms-2"
+                    onclick="exportGeographicReport()"
+                  >
+                    <i class="fas fa-download me-2"></i>Export Report
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Loading Overlay -->
+          <div
+            id="geographicLoadingOverlay"
+            class="loading-overlay"
+            style="display: none"
+          >
+            <div class="text-center">
+              <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+              </div>
+              <div class="mt-2">
+                <strong>Analyzing geographic data...</strong>
+                <div class="text-muted small">
+                  Processing location information
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Metrics Row -->
+          <div id="geographicMetricsRow" class="row" style="display: none">
+            <div class="col-lg-3 col-md-6">
+              <div class="card feature-card border-left-primary">
+                <div class="card-body">
+                  <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                      <div class="h3 text-primary" id="totalLocations">-</div>
+                      <div class="text-muted small">Unique Locations</div>
+                    </div>
+                    <i
+                      class="fas fa-map-marker-alt text-muted"
+                      style="font-size: 1.5rem"
+                    ></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6">
+              <div class="card feature-card border-left-info">
+                <div class="card-body">
+                  <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                      <div class="h3 text-info" id="totalOrders">-</div>
+                      <div class="text-muted small">Total Orders</div>
+                    </div>
+                    <i
+                      class="fas fa-shopping-cart text-muted"
+                      style="font-size: 1.5rem"
+                    ></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6">
+              <div class="card feature-card border-left-success">
+                <div class="card-body">
+                  <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                      <div class="h3 text-success" id="totalSpending">$-</div>
+                      <div class="text-muted small">Total Spending</div>
+                    </div>
+                    <i
+                      class="fas fa-dollar-sign text-success"
+                      style="font-size: 1.5rem"
+                    ></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6">
+              <div class="card feature-card border-left-warning">
+                <div class="card-body">
+                  <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                      <div class="h3 text-warning" id="topCity">-</div>
+                      <div class="text-muted small">Top City</div>
+                    </div>
+                    <i
+                      class="fas fa-crown text-warning"
+                      style="font-size: 1.5rem"
+                    ></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card feature-card">
+            <div class="card-header">
+              <h5>
+                <i class="fas fa-globe me-2"></i>Location-Based Spending
+                Analysis
+              </h5>
+            </div>
+            <div class="card-body">
+              <div id="geographic-dashboard">
+                <div class="row">
+                  <div class="col-md-8">
+                    <h6>Spending by Location</h6>
+                    <div
+                      id="spending-map"
+                      class="border rounded p-3"
+                      style="height: 300px"
+                    >
+                      <!-- Interactive map will be loaded here -->
+                      <div
+                        class="d-flex align-items-center justify-content-center h-100 text-muted"
+                      >
+                        <div class="text-center">
+                          <i class="fas fa-map fa-3x mb-3"></i>
+                          <p>Geographic spending map will be displayed here</p>
+                          <button
+                            class="btn btn-primary btn-sm"
+                            onclick="loadGeographicAnalysis()"
+                          >
+                            <i class="fas fa-sync me-1"></i>Load Analysis
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    <h6>Top Locations</h6>
+                    <div
+                      id="top-locations"
+                      class="border rounded p-3"
+                      style="height: 300px; overflow-y: auto"
+                    >
+                      <!-- Top spending locations will be listed here -->
+                      <div class="text-center text-muted mt-5">
+                        <i class="fas fa-list fa-2x mb-2"></i>
+                        <p>Run analysis to view top locations</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
       </div>
-    </section>
-    </div>
-  </main>
+    </main>
 
-  <!-- Bootstrap 5 JS Bundle -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <!-- Navigation JavaScript -->
-  <script src="js/shoelace-navigation.js"></script>
-  <!-- Employee Benefits JavaScript -->
-  <script src="js/employee-benefits.js"></script>
-  <!-- Application JavaScript -->
-  <script src="js/app.js"></script>
-  <!-- AI Dashboard -->
-  <script src="js/ai-dashboard.js"></script>
-  
-  <script>
-    // Navigation Menu Management
-    function initializeNavigationMenu() {
-      console.log('🧭 Initializing navigation menu logic...');
-      
-      const navbar = document.querySelector('.navbar');
-      const sidebar = document.getElementById('sidebar');
-      const toggler = document.querySelector('.navbar-toggler');
-      
-      if (!sidebar || !toggler) {
-        console.error('❌ Navigation elements not found');
-        return;
-      }
+    <!-- Bootstrap 5 JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Navigation JavaScript -->
+    <script src="js/shoelace-navigation.js"></script>
+    <!-- Employee Benefits JavaScript -->
+    <script src="js/employee-benefits.js"></script>
+    <!-- Application JavaScript -->
+    <script src="js/app.js"></script>
+    <!-- AI Dashboard -->
+    <script src="js/ai-dashboard.js"></script>
 
-      // Function to check if we're on desktop viewport
-      function isDesktopViewport() {
-        return window.innerWidth >= 992;
-      }
+    <script>
+      // Navigation Menu Management
+      function initializeNavigationMenu() {
+        console.log("🧭 Initializing navigation menu logic...");
 
-      // Function to ensure toggler is always accessible when menu is open
-      function ensureMenuAccessibility() {
-        const isMenuOpen = sidebar.classList.contains('show');
-        const isDesktop = isDesktopViewport();
-        
-        if (isMenuOpen && isDesktop) {
-          // On desktop with menu open, force toggler to be visible
-          toggler.classList.add('force-visible');
-          toggler.style.opacity = '0.9';
-          toggler.setAttribute('title', 'Close menu');
-          console.log('🎯 Made toggler visible on desktop with open menu');
-        } else if (!isMenuOpen && isDesktop) {
-          // On desktop with menu closed, allow CSS to hide toggler
-          toggler.classList.remove('force-visible');
-          toggler.style.opacity = '';
-          toggler.setAttribute('title', 'Toggle navigation');
-          console.log('🎯 Allowed toggler to hide on desktop with closed menu');
-        } else {
-          // On mobile/tablet, use default Bootstrap behavior
-          toggler.classList.remove('force-visible');
-          toggler.style.opacity = '';
-          toggler.setAttribute('title', 'Toggle navigation');
-        }
-      }
-
-      // Function to handle window resize
-      function handleResize() {
-        console.log('📐 Window resized to:', window.innerWidth, 'x', window.innerHeight);
-        
-        // If resizing to desktop and menu is open, provide escape route
-        if (isDesktopViewport() && sidebar.classList.contains('show')) {
-          console.log('⚠️ Desktop resize with open menu - ensuring accessibility');
-          ensureMenuAccessibility();
-        } else {
-          ensureMenuAccessibility();
-        }
-      }
-
-      // Listen for Bootstrap offcanvas events
-      sidebar.addEventListener('show.bs.offcanvas', function() {
-        console.log('📱 Menu opening...');
-        setTimeout(ensureMenuAccessibility, 100);
-      });
-
-      sidebar.addEventListener('shown.bs.offcanvas', function() {
-        console.log('📱 Menu opened');
-        ensureMenuAccessibility();
-      });
-
-      sidebar.addEventListener('hide.bs.offcanvas', function() {
-        console.log('📱 Menu closing...');
-        setTimeout(ensureMenuAccessibility, 100);
-      });
-
-      sidebar.addEventListener('hidden.bs.offcanvas', function() {
-        console.log('📱 Menu closed');
-        ensureMenuAccessibility();
-      });
-
-      // Listen for window resize with debouncing
-      let resizeTimeout;
-      window.addEventListener('resize', function() {
-        clearTimeout(resizeTimeout);
-        resizeTimeout = setTimeout(handleResize, 250);
-      });
-
-      // Initial setup
-      ensureMenuAccessibility();
-      
-      console.log('✅ Navigation menu logic initialized');
-    }
-
-    // Initialize application components
-    document.addEventListener('DOMContentLoaded', function() {
-      // Note: Employee Benefits now handled by dedicated page at /employee-benefits.html
-
-      // Initialize Navigation Menu Logic
-      initializeNavigationMenu();
-
-      // Initialize AI Dashboard
-      const aiDashboard = window.initializeAIDashboard();
-
-      // Connect load button to AI analysis
-      document.getElementById('loadAIAnalysis').addEventListener('click', function() {
-        aiDashboard.loadAIAnalysis();
-      });
-
-      // Benefits Management Modal Handler
-      const openSelectionModal = document.getElementById('openSelectionModal');
-      if (openSelectionModal) {
-        openSelectionModal.addEventListener('click', async function() {
-          try {
-            // Initialize benefits manager if not already done
-            if (!employeeBenefitsManager) {
-              employeeBenefitsManager = new EmployeeBenefitsManager();
-            }
-            
-            if (!employeeBenefitsManager.initialized) {
-              console.log('Initializing Benefits Manager...');
-              await employeeBenefitsManager.initialize();
-            }
-            
-            // Show the modal
-            const modal = new bootstrap.Modal(document.getElementById('employeeBenefitsModal'));
-            modal.show();
-            
-            // Update the modal with items 
-            employeeBenefitsManager.updateModalDisplay();
-            
-          } catch (error) {
-            console.error('Error opening benefits modal:', error);
-            showToast('Error opening benefits configuration', 'error');
+        // Function to show a section
+        function showSection(sectionId) {
+          // Hide all sections
+          document.querySelectorAll(".content-section").forEach((section) => {
+            section.classList.remove("active");
+          });
+          // Show target section
+          const targetSection = document.getElementById(sectionId);
+          if (targetSection) {
+            targetSection.classList.add("active");
+            // Update URL hash
+            window.location.hash = sectionId;
+          } else {
+            console.error("Section not found:", sectionId);
           }
-        });
-      }
+        }
 
-      // Benefits percentage slider handler
-      const percentageSlider = document.getElementById('editItemPercentage');
-      const percentageValue = document.getElementById('percentageValue');
-      if (percentageSlider && percentageValue) {
-        percentageSlider.addEventListener('input', function() {
-          percentageValue.textContent = this.value + '%';
-        });
-      }
+        const navbar = document.querySelector(".navbar");
+        const sidebar = document.getElementById("sidebar");
+        const toggler = document.querySelector(".navbar-toggler");
 
-      // Benefits quick action handlers
-      const generateReport = document.getElementById('generateReport');
-      const exportData = document.getElementById('exportData');
-      const viewSummary = document.getElementById('viewSummary');
-      
-      if (generateReport) {
-        generateReport.addEventListener('click', function() {
-          showToast('Generating benefits report...', 'info');
-          // Add actual report generation logic here
-        });
-      }
-      
-      if (exportData) {
-        exportData.addEventListener('click', function() {
-          showToast('Exporting benefits data...', 'info');
-          // Add actual export logic here
-        });
-      }
-      
-      if (viewSummary) {
-        viewSummary.addEventListener('click', function() {
-          showToast('Loading benefits summary...', 'info');
-          // Add actual summary loading logic here
-        });
-      }
-
-      // Initialize Amazon ZIP import form
-      initializeAmazonZipImport();
-      
-      // Initialize CSV import form
-      initializeCsvImport();
-      
-      // Initialize import history display
-      updateImportHistoryDisplay();
-
-      // Load initial data
-      loadExpenditures();
-    });
-
-    // Employee Benefits functionality moved to dedicated page at /employee-benefits.html
-    // This provides a modern two-column interface with enhanced categorization
-    
-    function showToast(message, type = 'info') {
-      // Simple toast implementation
-      const toast = document.createElement('div');
-      toast.className = `alert alert-${type} position-fixed top-0 end-0 m-3`;
-      toast.style.zIndex = '1100';
-      toast.textContent = message;
-      
-      document.body.appendChild(toast);
-      
-      setTimeout(() => {
-        toast.remove();
-      }, 3000);
-    }
-
-    function initializeAmazonZipImport() {
-      const amazonZipForm = document.getElementById('amazonZipImportForm');
-      const fileInput = document.getElementById('amazonZipFile');
-      const importBtn = document.getElementById('amazonImportBtn');
-      const validationResult = document.getElementById('fileValidationResult');
-      const statusDiv = document.getElementById('amazonImportStatus');
-      let statusInterval = null;
-
-      if (!amazonZipForm || !fileInput || !importBtn) return;
-
-      // Handle file selection for immediate validation
-      fileInput.addEventListener('change', async function() {
-        const file = this.files[0];
-        
-        if (!file) {
-          hideValidationResult();
-          importBtn.disabled = true;
+        if (!sidebar || !toggler) {
+          console.error("❌ Navigation elements not found");
           return;
         }
 
-        // Show loading state
-        showValidationLoading();
-        importBtn.disabled = true;
+        // Function to check if we're on desktop viewport
+        function isDesktopViewport() {
+          return window.innerWidth >= 992;
+        }
 
-        try {
-          // Validate the selected file
-          const formData = new FormData();
-          formData.append('amazonZip', file);
+        // Function to ensure toggler is always accessible when menu is open
+        function ensureMenuAccessibility() {
+          const isMenuOpen = sidebar.classList.contains("show");
+          const isDesktop = isDesktopViewport();
 
-          const response = await fetch('/api/validate-amazon-zip', {
-            method: 'POST',
-            body: formData
+          if (isMenuOpen && isDesktop) {
+            // On desktop with menu open, force toggler to be visible
+            toggler.classList.add("force-visible");
+            toggler.style.opacity = "0.9";
+            toggler.setAttribute("title", "Close menu");
+            console.log("🎯 Made toggler visible on desktop with open menu");
+          } else if (!isMenuOpen && isDesktop) {
+            // On desktop with menu closed, allow CSS to hide toggler
+            toggler.classList.remove("force-visible");
+            toggler.style.opacity = "";
+            toggler.setAttribute("title", "Toggle navigation");
+            console.log(
+              "🎯 Allowed toggler to hide on desktop with closed menu"
+            );
+          } else {
+            // On mobile/tablet, use default Bootstrap behavior
+            toggler.classList.remove("force-visible");
+            toggler.style.opacity = "";
+            toggler.setAttribute("title", "Toggle navigation");
+          }
+        }
+
+        // Function to handle window resize
+        function handleResize() {
+          console.log(
+            "📐 Window resized to:",
+            window.innerWidth,
+            "x",
+            window.innerHeight
+          );
+
+          // If resizing to desktop and menu is open, provide escape route
+          if (isDesktopViewport() && sidebar.classList.contains("show")) {
+            console.log(
+              "⚠️ Desktop resize with open menu - ensuring accessibility"
+            );
+            ensureMenuAccessibility();
+          } else {
+            ensureMenuAccessibility();
+          }
+        }
+
+        // Listen for Bootstrap offcanvas events
+        sidebar.addEventListener("show.bs.offcanvas", function () {
+          console.log("📱 Menu opening...");
+          setTimeout(ensureMenuAccessibility, 100);
+        });
+
+        sidebar.addEventListener("shown.bs.offcanvas", function () {
+          console.log("📱 Menu opened");
+          ensureMenuAccessibility();
+        });
+
+        sidebar.addEventListener("hide.bs.offcanvas", function () {
+          console.log("📱 Menu closing...");
+          setTimeout(ensureMenuAccessibility, 100);
+        });
+
+        sidebar.addEventListener("hidden.bs.offcanvas", function () {
+          console.log("📱 Menu closed");
+          ensureMenuAccessibility();
+        });
+
+        // Listen for window resize with debouncing
+        let resizeTimeout;
+        window.addEventListener("resize", function () {
+          clearTimeout(resizeTimeout);
+          resizeTimeout = setTimeout(handleResize, 250);
+        });
+
+        // Initial setup
+        ensureMenuAccessibility();
+
+        // Handle section navigation clicks
+        document.addEventListener("click", function (e) {
+          const navLink = e.target.closest(".nav-link");
+          if (navLink && navLink.hasAttribute("data-section")) {
+            e.preventDefault();
+            const sectionId = navLink.getAttribute("data-section");
+            showSection(sectionId);
+          }
+        });
+
+        console.log("✅ Navigation menu logic initialized");
+      }
+
+      // Initialize application components
+      document.addEventListener("DOMContentLoaded", function () {
+        // Note: Employee Benefits now handled by dedicated page at /employee-benefits.html
+
+        // Initialize Navigation Menu Logic
+        initializeNavigationMenu();
+
+        // Initialize AI Dashboard
+        const aiDashboard = window.initializeAIDashboard();
+
+        // Connect load button to AI analysis
+        document
+          .getElementById("loadAIAnalysis")
+          .addEventListener("click", function () {
+            aiDashboard.loadAIAnalysis();
           });
 
-          const result = await response.json();
+        // Benefits Management Modal Handler
+        const openSelectionModal =
+          document.getElementById("openSelectionModal");
+        if (openSelectionModal) {
+          openSelectionModal.addEventListener("click", async function () {
+            try {
+              // Initialize benefits manager if not already done
+              if (!employeeBenefitsManager) {
+                employeeBenefitsManager = new EmployeeBenefitsManager();
+              }
 
-          if (response.ok && result.success) {
-            showValidationSuccess(result.analysis);
-            importBtn.disabled = false;
-          } else {
-            showValidationError(result.error || 'Validation failed', result.message);
+              if (!employeeBenefitsManager.initialized) {
+                console.log("Initializing Benefits Manager...");
+                await employeeBenefitsManager.initialize();
+              }
+
+              // Show the modal
+              const modal = new bootstrap.Modal(
+                document.getElementById("employeeBenefitsModal")
+              );
+              modal.show();
+
+              // Update the modal with items
+              employeeBenefitsManager.updateModalDisplay();
+            } catch (error) {
+              console.error("Error opening benefits modal:", error);
+              showToast("Error opening benefits configuration", "error");
+            }
+          });
+        }
+
+        // Benefits percentage slider handler
+        const percentageSlider = document.getElementById("editItemPercentage");
+        const percentageValue = document.getElementById("percentageValue");
+        if (percentageSlider && percentageValue) {
+          percentageSlider.addEventListener("input", function () {
+            percentageValue.textContent = this.value + "%";
+          });
+        }
+
+        // Benefits quick action handlers
+        const generateReport = document.getElementById("generateReport");
+        const exportData = document.getElementById("exportData");
+        const viewSummary = document.getElementById("viewSummary");
+
+        if (generateReport) {
+          generateReport.addEventListener("click", function () {
+            showToast("Generating benefits report...", "info");
+            // Add actual report generation logic here
+          });
+        }
+
+        if (exportData) {
+          exportData.addEventListener("click", function () {
+            showToast("Exporting benefits data...", "info");
+            // Add actual export logic here
+          });
+        }
+
+        if (viewSummary) {
+          viewSummary.addEventListener("click", function () {
+            showToast("Loading benefits summary...", "info");
+            // Add actual summary loading logic here
+          });
+        }
+
+        // Initialize Amazon ZIP import form
+        initializeAmazonZipImport();
+
+        // Initialize CSV import form
+        initializeCsvImport();
+
+        // Initialize import history display
+        updateImportHistoryDisplay();
+
+        // Load initial data
+        loadExpenditures();
+      });
+
+      // Employee Benefits functionality moved to dedicated page at /employee-benefits.html
+      // This provides a modern two-column interface with enhanced categorization
+
+      function showToast(message, type = "info") {
+        // Simple toast implementation
+        const toast = document.createElement("div");
+        toast.className = `alert alert-${type} position-fixed top-0 end-0 m-3`;
+        toast.style.zIndex = "1100";
+        toast.textContent = message;
+
+        document.body.appendChild(toast);
+
+        setTimeout(() => {
+          toast.remove();
+        }, 3000);
+      }
+
+      function initializeAmazonZipImport() {
+        const amazonZipForm = document.getElementById("amazonZipImportForm");
+        const fileInput = document.getElementById("amazonZipFile");
+        const importBtn = document.getElementById("amazonImportBtn");
+        const validationResult = document.getElementById(
+          "fileValidationResult"
+        );
+        const statusDiv = document.getElementById("amazonImportStatus");
+        let statusInterval = null;
+
+        if (!amazonZipForm || !fileInput || !importBtn) return;
+
+        // Handle file selection for immediate validation
+        fileInput.addEventListener("change", async function () {
+          const file = this.files[0];
+
+          if (!file) {
+            hideValidationResult();
+            importBtn.disabled = true;
+            return;
+          }
+
+          // Show loading state
+          showValidationLoading();
+          importBtn.disabled = true;
+
+          try {
+            // Validate the selected file
+            const formData = new FormData();
+            formData.append("amazonZip", file);
+
+            const response = await fetch("/api/validate-amazon-zip", {
+              method: "POST",
+              body: formData,
+            });
+
+            const result = await response.json();
+
+            if (response.ok && result.success) {
+              showValidationSuccess(result.analysis);
+              importBtn.disabled = false;
+            } else {
+              showValidationError(
+                result.error || "Validation failed",
+                result.message
+              );
+              importBtn.disabled = true;
+            }
+          } catch (error) {
+            showValidationError(
+              "Network Error",
+              "Failed to validate file: " + error.message
+            );
             importBtn.disabled = true;
           }
+        });
 
-        } catch (error) {
-          showValidationError('Network Error', 'Failed to validate file: ' + error.message);
-          importBtn.disabled = true;
-        }
-      });
+        // Handle form submission
+        amazonZipForm.addEventListener("submit", async function (e) {
+          e.preventDefault();
 
-      // Handle form submission
-      amazonZipForm.addEventListener('submit', async function(e) {
-        e.preventDefault();
-        
-        const file = fileInput.files[0];
-        
-        if (!file) {
-          showToast('Please select a ZIP file', 'warning');
-          return;
-        }
+          const file = fileInput.files[0];
 
-        const progressContainer = document.getElementById('amazonImportProgress');
-        const resultsContainer = document.getElementById('amazonImportResults');
-        const progressBar = progressContainer.querySelector('.progress-bar');
-        
-        // Show progress
-        progressContainer.style.display = 'block';
-        resultsContainer.style.display = 'none';
-        importBtn.disabled = true;
-        statusDiv.style.display = 'block';
-        statusDiv.textContent = '';
-
-        // Start polling for status
-        statusInterval = setInterval(async () => {
-          try {
-            const resp = await fetch('/api/import-status');
-            const stat = await resp.json();
-            if (stat.inProgress) {
-              statusDiv.textContent = `Processing: ${stat.currentFile} (${stat.processedFiles}/${stat.totalFiles})`;
-            } else {
-              statusDiv.textContent = '';
-            }
-          } catch (err) {
-            // ignore
+          if (!file) {
+            showToast("Please select a ZIP file", "warning");
+            return;
           }
-        }, 700);
 
-        // Simulate progress
-        let progress = 0;
-        const progressInterval = setInterval(() => {
-          progress += Math.random() * 15;
-          if (progress > 95) progress = 95;
-          progressBar.style.width = progress + '%';
-        }, 200);
+          const progressContainer = document.getElementById(
+            "amazonImportProgress"
+          );
+          const resultsContainer = document.getElementById(
+            "amazonImportResults"
+          );
+          const progressBar = progressContainer.querySelector(".progress-bar");
 
-        try {
-          const formData = new FormData();
-          formData.append('amazonZip', file);
+          // Show progress
+          progressContainer.style.display = "block";
+          resultsContainer.style.display = "none";
+          importBtn.disabled = true;
+          statusDiv.style.display = "block";
+          statusDiv.textContent = "";
 
-          const response = await fetch('/api/import-amazon-zip', {
-            method: 'POST',
-            body: formData
-          });
+          // Start polling for status
+          statusInterval = setInterval(async () => {
+            try {
+              const resp = await fetch("/api/import-status");
+              const stat = await resp.json();
+              if (stat.inProgress) {
+                statusDiv.textContent = `Processing: ${stat.currentFile} (${stat.processedFiles}/${stat.totalFiles})`;
+              } else {
+                statusDiv.textContent = "";
+              }
+            } catch (err) {
+              // ignore
+            }
+          }, 700);
 
-          const result = await response.json();
+          // Simulate progress
+          let progress = 0;
+          const progressInterval = setInterval(() => {
+            progress += Math.random() * 15;
+            if (progress > 95) progress = 95;
+            progressBar.style.width = progress + "%";
+          }, 200);
 
-          // Complete progress
-          clearInterval(progressInterval);
-          if (statusInterval) clearInterval(statusInterval);
-          progressBar.style.width = '100%';
-          statusDiv.style.display = 'none';
+          try {
+            const formData = new FormData();
+            formData.append("amazonZip", file);
 
-          setTimeout(() => {
-            progressContainer.style.display = 'none';
-            displayAmazonImportResults(result, response.ok);
+            const response = await fetch("/api/import-amazon-zip", {
+              method: "POST",
+              body: formData,
+            });
+
+            const result = await response.json();
+
+            // Complete progress
+            clearInterval(progressInterval);
+            if (statusInterval) clearInterval(statusInterval);
+            progressBar.style.width = "100%";
+            statusDiv.style.display = "none";
+
+            setTimeout(() => {
+              progressContainer.style.display = "none";
+              displayAmazonImportResults(result, response.ok);
+              importBtn.disabled = false;
+            }, 1000);
+          } catch (error) {
+            clearInterval(progressInterval);
+            if (statusInterval) clearInterval(statusInterval);
+            progressContainer.style.display = "none";
+            statusDiv.style.display = "none";
+            showToast("Upload failed: " + error.message, "danger");
             importBtn.disabled = false;
-          }, 1000);
+          }
+        });
 
-        } catch (error) {
-          clearInterval(progressInterval);
-          if (statusInterval) clearInterval(statusInterval);
-          progressContainer.style.display = 'none';
-          statusDiv.style.display = 'none';
-          showToast('Upload failed: ' + error.message, 'danger');
-          importBtn.disabled = false;
-        }
-      });
-
-      // Validation display functions
-      function showValidationLoading() {
-        validationResult.style.display = 'block';
-        validationResult.innerHTML = `
+        // Validation display functions
+        function showValidationLoading() {
+          validationResult.style.display = "block";
+          validationResult.innerHTML = `
           <div class="alert alert-info">
             <div class="d-flex align-items-center">
               <div class="spinner-border spinner-border-sm me-3" role="status">
@@ -1786,14 +2277,14 @@
             </div>
           </div>
         `;
-      }
+        }
 
-      function showValidationSuccess(analysis) {
-        const zipInfo = analysis.zipInfo;
-        const confidence = analysis.confidence;
-        
-        validationResult.style.display = 'block';
-        validationResult.innerHTML = `
+        function showValidationSuccess(analysis) {
+          const zipInfo = analysis.zipInfo;
+          const confidence = analysis.confidence;
+
+          validationResult.style.display = "block";
+          validationResult.innerHTML = `
           <div class="alert alert-success border-success">
             <div class="row align-items-center">
               <div class="col-md-8">
@@ -1804,27 +2295,39 @@
                 </h6>
                 <p class="mb-2 small">${zipInfo.description}</p>
                 <div class="small text-muted">
-                  <strong>File:</strong> ${analysis.fileStats.fileName} (${analysis.fileStats.fileSize}) |
-                  <strong>Files inside:</strong> ${analysis.contents.totalFiles} |
-                  <strong>Primary files found:</strong> ${analysis.contents.primaryFilesFound}
+                  <strong>File:</strong> ${analysis.fileStats.fileName} (${
+            analysis.fileStats.fileSize
+          }) |
+                  <strong>Files inside:</strong> ${
+                    analysis.contents.totalFiles
+                  } |
+                  <strong>Primary files found:</strong> ${
+                    analysis.contents.primaryFilesFound
+                  }
                 </div>
               </div>
               <div class="col-md-4 text-end">
                 <i class="fas fa-check-circle fa-2x text-success"></i>
               </div>
             </div>
-            ${analysis.recommendations.map(rec => `
-              <div class="alert alert-${rec.type === 'info' ? 'light' : rec.type} py-2 mt-2 mb-0">
+            ${analysis.recommendations
+              .map(
+                (rec) => `
+              <div class="alert alert-${
+                rec.type === "info" ? "light" : rec.type
+              } py-2 mt-2 mb-0">
                 <small><strong>${rec.title}:</strong> ${rec.message}</small>
               </div>
-            `).join('')}
+            `
+              )
+              .join("")}
           </div>
         `;
-      }
+        }
 
-      function showValidationError(error, message) {
-        validationResult.style.display = 'block';
-        validationResult.innerHTML = `
+        function showValidationError(error, message) {
+          validationResult.style.display = "block";
+          validationResult.innerHTML = `
           <div class="alert alert-danger">
             <div class="row align-items-center">
               <div class="col-md-8">
@@ -1833,7 +2336,11 @@
                   <strong>Validation Failed</strong>
                 </h6>
                 <p class="mb-0"><strong>Error:</strong> ${error}</p>
-                ${message ? `<p class="mb-0 small text-muted">${message}</p>` : ''}
+                ${
+                  message
+                    ? `<p class="mb-0 small text-muted">${message}</p>`
+                    : ""
+                }
               </div>
               <div class="col-md-4 text-end">
                 <i class="fas fa-times-circle fa-2x text-danger"></i>
@@ -1841,55 +2348,65 @@
             </div>
           </div>
         `;
+        }
+
+        function hideValidationResult() {
+          validationResult.style.display = "none";
+        }
       }
 
-      function hideValidationResult() {
-        validationResult.style.display = 'none';
-      }
-    }
+      function displayAmazonImportResults(result, success) {
+        const resultsContainer = document.getElementById("amazonImportResults");
+        resultsContainer.style.display = "block";
 
-    function displayAmazonImportResults(result, success) {
-      const resultsContainer = document.getElementById('amazonImportResults');
-      resultsContainer.style.display = 'block';
-
-      if (!success) {
-        resultsContainer.innerHTML = `
+        if (!success) {
+          resultsContainer.innerHTML = `
           <div class="alert alert-danger">
             <h6>Import Failed</h6>
             <strong>Error:</strong> ${result.error}<br>
             <strong>Message:</strong> ${result.message}
           </div>
         `;
-        return;
-      }
+          return;
+        }
 
-      // Store import history
-      const importRecord = {
-        id: Date.now(),
-        timestamp: new Date().toISOString(),
-        fileName: result.fileName,
-        zipType: result.zipType,
-        zipTypeInfo: result.zipTypeInfo,
-        detectionConfidence: result.detectionConfidence,
-        summary: result.summary,
-        success: true
-      };
-      
-      saveImportHistory(importRecord);
+        // Store import history
+        const importRecord = {
+          id: Date.now(),
+          timestamp: new Date().toISOString(),
+          fileName: result.fileName,
+          zipType: result.zipType,
+          zipTypeInfo: result.zipTypeInfo,
+          detectionConfidence: result.detectionConfidence,
+          summary: result.summary,
+          success: true,
+        };
 
-      resultsContainer.innerHTML = `
+        saveImportHistory(importRecord);
+
+        resultsContainer.innerHTML = `
         <div class="alert alert-success">
           <div class="row align-items-center">
             <div class="col-md-8">
               <h6><i class="fas fa-check-circle me-2"></i>Import Successful!</h6>
               <p class="mb-1"><strong>File:</strong> ${result.fileName}</p>
-              <p class="mb-1"><strong>Type:</strong> ${result.zipTypeInfo || 'Amazon ZIP'}</p>
-              ${result.detectionConfidence ? `<p class="mb-0"><strong>Detection Confidence:</strong> ${result.detectionConfidence}%</p>` : ''}
+              <p class="mb-1"><strong>Type:</strong> ${
+                result.zipTypeInfo || "Amazon ZIP"
+              }</p>
+              ${
+                result.detectionConfidence
+                  ? `<p class="mb-0"><strong>Detection Confidence:</strong> ${result.detectionConfidence}%</p>`
+                  : ""
+              }
             </div>
             <div class="col-md-4 text-end">
-              ${result.zipType === 'orders' ? '<i class="fas fa-shopping-bag fa-2x text-primary"></i>' : 
-                result.zipType === 'subscriptions' ? '<i class="fas fa-sync-alt fa-2x text-success"></i>' : 
-                '<i class="fab fa-amazon fa-2x text-warning"></i>'}
+              ${
+                result.zipType === "orders"
+                  ? '<i class="fas fa-shopping-bag fa-2x text-primary"></i>'
+                  : result.zipType === "subscriptions"
+                  ? '<i class="fas fa-sync-alt fa-2x text-success"></i>'
+                  : '<i class="fab fa-amazon fa-2x text-warning"></i>'
+              }
             </div>
           </div>
         </div>
@@ -1932,14 +2449,18 @@
           </div>
         </div>
         
-        ${result.data.orders.length > 0 ? `
+        ${
+          result.data.orders.length > 0
+            ? `
           <div class="mt-3">
             <h6>Sample Orders:</h6>
             <div class="card">
               <div class="card-body">
                 <div style="max-height: 200px; overflow-y: auto; font-size: 0.9em;">
-                  ${result.data.orders.map(order => 
-                    `<div class="border-bottom pb-2 mb-2">
+                  ${result.data.orders
+                    .map(
+                      (order) =>
+                        `<div class="border-bottom pb-2 mb-2">
                        <strong>${order.description}</strong><br>
                        <small class="text-muted">
                          Date: ${new Date(order.date).toLocaleDateString()} | 
@@ -1947,12 +2468,15 @@
                          Category: ${order.category}
                        </small>
                      </div>`
-                  ).join('')}
+                    )
+                    .join("")}
                 </div>
               </div>
             </div>
           </div>
-        ` : ''}
+        `
+            : ""
+        }
         
         <div class="mt-3">
           <button class="btn btn-primary" onclick="window.location.reload()">
@@ -1961,56 +2485,133 @@
         </div>
       `;
 
-      // Update import history display
-      updateImportHistoryDisplay();
-    }
-
-    // Import History Management
-    function saveImportHistory(importRecord) {
-      try {
-        const history = getImportHistory();
-        history.unshift(importRecord); // Add to beginning
-        
-        // Keep only last 10 imports
-        if (history.length > 10) {
-          history.splice(10);
-        }
-        
-        localStorage.setItem('tsv_import_history', JSON.stringify(history));
-      } catch (error) {
-        console.warn('Failed to save import history:', error);
+        // Update import history display
+        updateImportHistoryDisplay();
       }
-    }
 
-    function getImportHistory() {
-      try {
-        const history = localStorage.getItem('tsv_import_history');
-        return history ? JSON.parse(history) : [];
-      } catch (error) {
-        console.warn('Failed to load import history:', error);
-        return [];
-      }
-    }
+      function initializeCsvImport() {
+        const csvForm = document.getElementById("csvImportForm");
+        const fileInput = document.getElementById("csvFile");
+        const statusDiv = document.getElementById("importStatus");
 
-    function updateImportHistoryDisplay() {
-      const historyContainer = document.getElementById('importHistory');
-      
-      // Fetch import history from server
-      fetch('/api/import-history')
-        .then(response => response.json())
-        .then(history => {
-          if (!history || history.length === 0) {
-            historyContainer.innerHTML = '<p class="text-muted">No recent imports found. Import some data to see history here.</p>';
+        if (!csvForm || !fileInput) return;
+
+        csvForm.addEventListener("submit", async function (e) {
+          e.preventDefault();
+
+          const file = fileInput.files[0];
+          if (!file) {
+            showToast("Please select a file", "warning");
             return;
           }
-          
-          const historyHtml = history.map(record => {
-            const date = new Date(record.timestamp).toLocaleString();
-            const icon = record.type === 'amazon-zip' ? 'fab fa-amazon text-warning' : 
-                        record.type === 'csv' ? 'fas fa-file-csv text-success' : 
-                        'fas fa-file text-primary';
-            
-            return `
+
+          // Show loading
+          statusDiv.style.display = "block";
+          statusDiv.innerHTML =
+            '<div class="alert alert-info"><i class="fas fa-spinner fa-spin me-2"></i>Processing CSV file...</div>';
+
+          try {
+            // Read file content
+            const text = await file.text();
+
+            // Send to server
+            const response = await fetch("/api/import-csv", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ csvData: text }),
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+              statusDiv.innerHTML = `
+                <div class="alert alert-success">
+                  <i class="fas fa-check-circle me-2"></i>
+                  <strong>Import Successful!</strong><br>
+                  ${result.message || "Data imported successfully"}
+                </div>
+              `;
+
+              // Reset form
+              csvForm.reset();
+
+              // Reload expenditures
+              loadExpenditures();
+
+              // Update import history
+              updateImportHistoryDisplay();
+            } else {
+              statusDiv.innerHTML = `
+                <div class="alert alert-danger">
+                  <i class="fas fa-exclamation-triangle me-2"></i>
+                  <strong>Import Failed</strong><br>
+                  ${result.error || "Unknown error"}
+                </div>
+              `;
+            }
+          } catch (error) {
+            statusDiv.innerHTML = `
+              <div class="alert alert-danger">
+                <i class="fas fa-exclamation-triangle me-2"></i>
+                <strong>Network Error</strong><br>
+                ${error.message}
+              </div>
+            `;
+          }
+        });
+      }
+
+      // Import History Management
+      function saveImportHistory(importRecord) {
+        try {
+          const history = getImportHistory();
+          history.unshift(importRecord); // Add to beginning
+
+          // Keep only last 10 imports
+          if (history.length > 10) {
+            history.splice(10);
+          }
+
+          localStorage.setItem("tsv_import_history", JSON.stringify(history));
+        } catch (error) {
+          console.warn("Failed to save import history:", error);
+        }
+      }
+
+      function getImportHistory() {
+        try {
+          const history = localStorage.getItem("tsv_import_history");
+          return history ? JSON.parse(history) : [];
+        } catch (error) {
+          console.warn("Failed to load import history:", error);
+          return [];
+        }
+      }
+
+      function updateImportHistoryDisplay() {
+        const historyContainer = document.getElementById("importHistory");
+
+        // Fetch import history from server
+        fetch("/api/import-history")
+          .then((response) => response.json())
+          .then((history) => {
+            if (!history || history.length === 0) {
+              historyContainer.innerHTML =
+                '<p class="text-muted">No recent imports found. Import some data to see history here.</p>';
+              return;
+            }
+
+            const historyHtml = history
+              .map((record) => {
+                const date = new Date(record.timestamp).toLocaleString();
+                const icon =
+                  record.type === "amazon-zip"
+                    ? "fab fa-amazon text-warning"
+                    : record.type === "csv"
+                    ? "fas fa-file-csv text-success"
+                    : "fas fa-file text-primary";
+
+                return `
               <div class="card mb-2">
                 <div class="card-body py-2">
                   <div class="row align-items-center">
@@ -2020,8 +2621,14 @@
                     <div class="col">
                       <strong>${record.fileName}</strong><br>
                       <small class="text-muted">
-                        ${record.type === 'amazon-zip' ? 'Amazon ZIP' : 'CSV/TSV/DAT'} • 
-                        ${record.imported} items imported • 
+                        ${
+                          record.type === "amazon-zip"
+                            ? "Amazon ZIP"
+                            : "CSV/TSV/DAT"
+                        } • 
+                        ${
+                          record.recordsAdded || record.imported || 0
+                        } items imported • 
                         ${record.errors || 0} errors • 
                         ${date}
                       </small>
@@ -2033,220 +2640,267 @@
                 </div>
               </div>
             `;
-          }).join('');
-          
-          historyContainer.innerHTML = `
+              })
+              .join("");
+
+            historyContainer.innerHTML = `
             <div class="mb-2">
               <small class="text-muted">Recent imports (last ${history.length})</small>
             </div>
             ${historyHtml}
           `;
-        })
-        .catch(error => {
-          console.warn('Failed to load import history:', error);
-          historyContainer.innerHTML = '<p class="text-muted">Unable to load import history.</p>';
-        });
-    }
-
-    function clearImportHistory() {
-      if (confirm('Are you sure you want to clear the import history?')) {
-        localStorage.removeItem('tsv_import_history');
-        updateImportHistoryDisplay();
-        showToast('Import history cleared', 'info');
-      }
-    }
-
-    // Benefits Management Functions
-    let employeeBenefitsManager = null;
-
-    async function loadBenefitsData() {
-      try {
-        // Initialize the benefits manager if not already done
-        if (!employeeBenefitsManager) {
-          employeeBenefitsManager = new EmployeeBenefitsManager();
-          await employeeBenefitsManager.initialize();
-        }
-        
-        // Update status
-        const selectionStatus = document.getElementById('selectionStatus');
-        if (selectionStatus) {
-          selectionStatus.textContent = 'Ready for configuration';
-        }
-        
-        // Update modal counters if manager is initialized
-        if (employeeBenefitsManager.amazonItems) {
-          const totalItems = employeeBenefitsManager.amazonItems.length;
-          const businessItems = employeeBenefitsManager.amazonItems.filter(item => {
-            const alloc = employeeBenefitsManager.itemProgressiveAllocations.get(item.id) || { benefits: 0, business: 100 };
-            return alloc.business > 0;
+          })
+          .catch((error) => {
+            console.warn("Failed to load import history:", error);
+            historyContainer.innerHTML =
+              '<p class="text-muted">Unable to load import history.</p>';
           });
-          const benefitsItems = employeeBenefitsManager.amazonItems.filter(item => {
-            const alloc = employeeBenefitsManager.itemProgressiveAllocations.get(item.id) || { benefits: 0, business: 100 };
-            return alloc.benefits > 0;
-          });
-          
-          // Calculate values
-          const businessValue = businessItems.reduce((sum, item) => {
-            const alloc = employeeBenefitsManager.itemProgressiveAllocations.get(item.id) || { benefits: 0, business: 100 };
-            return sum + (item.price * alloc.business / 100);
-          }, 0);
-          
-          const benefitsValue = benefitsItems.reduce((sum, item) => {
-            const alloc = employeeBenefitsManager.itemProgressiveAllocations.get(item.id) || { benefits: 0, business: 100 };
-            return sum + (item.price * alloc.benefits / 100);
-          }, 0);
-          
-          const benefitsPercentage = totalItems > 0 ? Math.round((benefitsItems.length / totalItems) * 100) : 0;
-          
-          // Update modal statistics
-          const totalItemsCount = document.getElementById('totalItemsCount');
-          const businessSuppliesValue = document.getElementById('businessSuppliesValue');
-          const benefitsValueEl = document.getElementById('benefitsValue');
-          const benefitsPercentageEl = document.getElementById('benefitsPercentage');
-          const businessItemsCount = document.getElementById('businessItemsCount');
-          const benefitsItemsCount = document.getElementById('benefitsItemsCount');
-          
-          if (totalItemsCount) totalItemsCount.textContent = totalItems.toString();
-          if (businessSuppliesValue) businessSuppliesValue.textContent = `$${businessValue.toFixed(0)}`;
-          if (benefitsValueEl) benefitsValueEl.textContent = `$${benefitsValue.toFixed(0)}`;
-          if (benefitsPercentageEl) benefitsPercentageEl.textContent = `${benefitsPercentage}%`;
-          if (businessItemsCount) businessItemsCount.textContent = `${businessItems.length} items`;
-          if (benefitsItemsCount) benefitsItemsCount.textContent = `${benefitsItems.length} items`;
-        }
-        
-        showToast('Benefits data loaded', 'success');
-      } catch (error) {
-        console.error('Error loading benefits data:', error);
-        showToast('Error loading benefits data', 'error');
       }
-    }
 
-    // Replace the placeholder employeeBenefitsManager with proper initialization
-    window.employeeBenefitsManager = {
-      quickSelectCategory: function(category) {
-        showToast(`Quick selecting category: ${category}`, 'info');
-        if (employeeBenefitsManager && employeeBenefitsManager.quickSelectCategory) {
-          employeeBenefitsManager.quickSelectCategory(category);
+      function clearImportHistory() {
+        if (confirm("Are you sure you want to clear the import history?")) {
+          localStorage.removeItem("tsv_import_history");
+          updateImportHistoryDisplay();
+          showToast("Import history cleared", "info");
         }
       }
-    };
 
-    // Bank Reconciliation Functions
-    function performReconciliation() {
-      const loadingOverlay = document.getElementById('reconciliationLoadingOverlay');
-      const metricsRow = document.getElementById('reconciliationMetricsRow');
-      const chartsRow = document.getElementById('reconciliationChartsRow');
-      const matchedContainer = document.getElementById('matchedContainer');
-      
-      // Show loading overlay
-      if (loadingOverlay) loadingOverlay.style.display = 'flex';
-      
-      // Simulate reconciliation process
-      setTimeout(() => {
-        // Hide loading
-        if (loadingOverlay) loadingOverlay.style.display = 'none';
-        
-        // Show results
-        if (metricsRow) metricsRow.style.display = 'flex';
-        if (chartsRow) chartsRow.style.display = 'flex';
-        if (matchedContainer) matchedContainer.style.display = 'block';
-        
-        // Update metrics
-        document.getElementById('totalBank').textContent = '278';
-        document.getElementById('totalAmazon').textContent = '2785';
-        document.getElementById('matchedCount').textContent = '241';
-        document.getElementById('matchRate').textContent = '87%';
-        
-        showToast('Reconciliation completed successfully', 'success');
-      }, 2000);
-    }
+      // Benefits Management Functions
+      let employeeBenefitsManager = null;
 
-    function exportReconciliationReport() {
-      showToast('Exporting reconciliation report...', 'info');
-      // Add actual export logic here
-    }
+      async function loadBenefitsData() {
+        try {
+          // Initialize the benefits manager if not already done
+          if (!employeeBenefitsManager) {
+            employeeBenefitsManager = new EmployeeBenefitsManager();
+            await employeeBenefitsManager.initialize();
+          }
 
-    function filterMatches(type) {
-      // Remove active class from all buttons
-      document.querySelectorAll('.btn-group .btn').forEach(btn => btn.classList.remove('active'));
-      
-      // Add active class to clicked button
-      event.target.classList.add('active');
-      
-      showToast(`Filtering matches: ${type}`, 'info');
-      // Add actual filtering logic here
-    }
+          // Update status
+          const selectionStatus = document.getElementById("selectionStatus");
+          if (selectionStatus) {
+            selectionStatus.textContent = "Ready for configuration";
+          }
 
-    // Subscription Analysis Functions
-    function loadSubscriptionAnalysis() {
-      const loadingOverlay = document.getElementById('subscriptionLoadingOverlay');
-      const metricsRow = document.getElementById('subscriptionMetricsRow');
-      const resultsRow = document.getElementById('subscriptionResultsRow');
-      const details = document.getElementById('subscriptionDetails');
-      const summary = document.getElementById('performanceSummary');
-      
-      // Show loading overlay
-      if (loadingOverlay) loadingOverlay.style.display = 'flex';
-      
-      // Simulate analysis process
-      setTimeout(() => {
-        // Hide loading
-        if (loadingOverlay) loadingOverlay.style.display = 'none';
-        
-        // Show results
-        if (metricsRow) metricsRow.style.display = 'flex';
-        if (resultsRow) resultsRow.style.display = 'flex';
-        if (details) details.style.display = 'block';
-        if (summary) summary.style.display = 'block';
-        
-        // Update metrics
-        document.getElementById('totalSubscriptions').textContent = '15';
-        document.getElementById('linkedOrders').textContent = '127';
-        document.getElementById('monthlyTotal').textContent = '$247';
-        document.getElementById('linkageRate').textContent = '84%';
-        
-        showToast('Subscription analysis completed', 'success');
-      }, 1500);
-    }
+          // Update modal counters if manager is initialized
+          if (employeeBenefitsManager.amazonItems) {
+            const totalItems = employeeBenefitsManager.amazonItems.length;
+            const businessItems = employeeBenefitsManager.amazonItems.filter(
+              (item) => {
+                const alloc =
+                  employeeBenefitsManager.itemProgressiveAllocations.get(
+                    item.id
+                  ) || { benefits: 0, business: 100 };
+                return alloc.business > 0;
+              }
+            );
+            const benefitsItems = employeeBenefitsManager.amazonItems.filter(
+              (item) => {
+                const alloc =
+                  employeeBenefitsManager.itemProgressiveAllocations.get(
+                    item.id
+                  ) || { benefits: 0, business: 100 };
+                return alloc.benefits > 0;
+              }
+            );
 
-    function filterSubscriptions(type) {
-      // Remove active class from all buttons
-      document.querySelectorAll('#subscriptionDetails .btn-group .btn').forEach(btn => btn.classList.remove('active'));
-      
-      // Add active class to clicked button
-      event.target.classList.add('active');
-      
-      showToast(`Filtering subscriptions: ${type}`, 'info');
-      // Add actual filtering logic here
-    }
+            // Calculate values
+            const businessValue = businessItems.reduce((sum, item) => {
+              const alloc =
+                employeeBenefitsManager.itemProgressiveAllocations.get(
+                  item.id
+                ) || { benefits: 0, business: 100 };
+              return sum + (item.price * alloc.business) / 100;
+            }, 0);
 
-    // Geographic Analysis Functions
-    function loadGeographicAnalysis() {
-      const loadingOverlay = document.getElementById('geographicLoadingOverlay');
-      const metricsRow = document.getElementById('geographicMetricsRow');
-      const mapContainer = document.getElementById('spending-map');
-      const locationsContainer = document.getElementById('top-locations');
-      
-      // Show loading overlay
-      if (loadingOverlay) loadingOverlay.style.display = 'flex';
-      
-      // Simulate analysis process
-      setTimeout(() => {
-        // Hide loading
-        if (loadingOverlay) loadingOverlay.style.display = 'none';
-        
-        // Show results
-        if (metricsRow) metricsRow.style.display = 'flex';
-        
-        // Update metrics
-        document.getElementById('totalLocations').textContent = '47';
-        document.getElementById('totalOrders').textContent = '2785';
-        document.getElementById('totalSpending').textContent = '$42,356';
-        document.getElementById('topCity').textContent = 'Seattle';
-        
-        // Update map placeholder
-        if (mapContainer) {
-          mapContainer.innerHTML = `
+            const benefitsValue = benefitsItems.reduce((sum, item) => {
+              const alloc =
+                employeeBenefitsManager.itemProgressiveAllocations.get(
+                  item.id
+                ) || { benefits: 0, business: 100 };
+              return sum + (item.price * alloc.benefits) / 100;
+            }, 0);
+
+            const benefitsPercentage =
+              totalItems > 0
+                ? Math.round((benefitsItems.length / totalItems) * 100)
+                : 0;
+
+            // Update modal statistics
+            const totalItemsCount = document.getElementById("totalItemsCount");
+            const businessSuppliesValue = document.getElementById(
+              "businessSuppliesValue"
+            );
+            const benefitsValueEl = document.getElementById("benefitsValue");
+            const benefitsPercentageEl =
+              document.getElementById("benefitsPercentage");
+            const businessItemsCount =
+              document.getElementById("businessItemsCount");
+            const benefitsItemsCount =
+              document.getElementById("benefitsItemsCount");
+
+            if (totalItemsCount)
+              totalItemsCount.textContent = totalItems.toString();
+            if (businessSuppliesValue)
+              businessSuppliesValue.textContent = `$${businessValue.toFixed(
+                0
+              )}`;
+            if (benefitsValueEl)
+              benefitsValueEl.textContent = `$${benefitsValue.toFixed(0)}`;
+            if (benefitsPercentageEl)
+              benefitsPercentageEl.textContent = `${benefitsPercentage}%`;
+            if (businessItemsCount)
+              businessItemsCount.textContent = `${businessItems.length} items`;
+            if (benefitsItemsCount)
+              benefitsItemsCount.textContent = `${benefitsItems.length} items`;
+          }
+
+          showToast("Benefits data loaded", "success");
+        } catch (error) {
+          console.error("Error loading benefits data:", error);
+          showToast("Error loading benefits data", "error");
+        }
+      }
+
+      // Replace the placeholder employeeBenefitsManager with proper initialization
+      window.employeeBenefitsManager = {
+        quickSelectCategory: function (category) {
+          showToast(`Quick selecting category: ${category}`, "info");
+          if (
+            employeeBenefitsManager &&
+            employeeBenefitsManager.quickSelectCategory
+          ) {
+            employeeBenefitsManager.quickSelectCategory(category);
+          }
+        },
+      };
+
+      // Bank Reconciliation Functions
+      function performReconciliation() {
+        const loadingOverlay = document.getElementById(
+          "reconciliationLoadingOverlay"
+        );
+        const metricsRow = document.getElementById("reconciliationMetricsRow");
+        const chartsRow = document.getElementById("reconciliationChartsRow");
+        const matchedContainer = document.getElementById("matchedContainer");
+
+        // Show loading overlay
+        if (loadingOverlay) loadingOverlay.style.display = "flex";
+
+        // Simulate reconciliation process
+        setTimeout(() => {
+          // Hide loading
+          if (loadingOverlay) loadingOverlay.style.display = "none";
+
+          // Show results
+          if (metricsRow) metricsRow.style.display = "flex";
+          if (chartsRow) chartsRow.style.display = "flex";
+          if (matchedContainer) matchedContainer.style.display = "block";
+
+          // Update metrics
+          document.getElementById("totalBank").textContent = "278";
+          document.getElementById("totalAmazon").textContent = "2785";
+          document.getElementById("matchedCount").textContent = "241";
+          document.getElementById("matchRate").textContent = "87%";
+
+          showToast("Reconciliation completed successfully", "success");
+        }, 2000);
+      }
+
+      function exportReconciliationReport() {
+        showToast("Exporting reconciliation report...", "info");
+        // Add actual export logic here
+      }
+
+      function filterMatches(type) {
+        // Remove active class from all buttons
+        document
+          .querySelectorAll(".btn-group .btn")
+          .forEach((btn) => btn.classList.remove("active"));
+
+        // Add active class to clicked button
+        event.target.classList.add("active");
+
+        showToast(`Filtering matches: ${type}`, "info");
+        // Add actual filtering logic here
+      }
+
+      // Subscription Analysis Functions
+      function loadSubscriptionAnalysis() {
+        const loadingOverlay = document.getElementById(
+          "subscriptionLoadingOverlay"
+        );
+        const metricsRow = document.getElementById("subscriptionMetricsRow");
+        const resultsRow = document.getElementById("subscriptionResultsRow");
+        const details = document.getElementById("subscriptionDetails");
+        const summary = document.getElementById("performanceSummary");
+
+        // Show loading overlay
+        if (loadingOverlay) loadingOverlay.style.display = "flex";
+
+        // Simulate analysis process
+        setTimeout(() => {
+          // Hide loading
+          if (loadingOverlay) loadingOverlay.style.display = "none";
+
+          // Show results
+          if (metricsRow) metricsRow.style.display = "flex";
+          if (resultsRow) resultsRow.style.display = "flex";
+          if (details) details.style.display = "block";
+          if (summary) summary.style.display = "block";
+
+          // Update metrics
+          document.getElementById("totalSubscriptions").textContent = "15";
+          document.getElementById("linkedOrders").textContent = "127";
+          document.getElementById("monthlyTotal").textContent = "$247";
+          document.getElementById("linkageRate").textContent = "84%";
+
+          showToast("Subscription analysis completed", "success");
+        }, 1500);
+      }
+
+      function filterSubscriptions(type) {
+        // Remove active class from all buttons
+        document
+          .querySelectorAll("#subscriptionDetails .btn-group .btn")
+          .forEach((btn) => btn.classList.remove("active"));
+
+        // Add active class to clicked button
+        event.target.classList.add("active");
+
+        showToast(`Filtering subscriptions: ${type}`, "info");
+        // Add actual filtering logic here
+      }
+
+      // Geographic Analysis Functions
+      function loadGeographicAnalysis() {
+        const loadingOverlay = document.getElementById(
+          "geographicLoadingOverlay"
+        );
+        const metricsRow = document.getElementById("geographicMetricsRow");
+        const mapContainer = document.getElementById("spending-map");
+        const locationsContainer = document.getElementById("top-locations");
+
+        // Show loading overlay
+        if (loadingOverlay) loadingOverlay.style.display = "flex";
+
+        // Simulate analysis process
+        setTimeout(() => {
+          // Hide loading
+          if (loadingOverlay) loadingOverlay.style.display = "none";
+
+          // Show results
+          if (metricsRow) metricsRow.style.display = "flex";
+
+          // Update metrics
+          document.getElementById("totalLocations").textContent = "47";
+          document.getElementById("totalOrders").textContent = "2785";
+          document.getElementById("totalSpending").textContent = "$42,356";
+          document.getElementById("topCity").textContent = "Seattle";
+
+          // Update map placeholder
+          if (mapContainer) {
+            mapContainer.innerHTML = `
             <div class="d-flex align-items-center justify-content-center h-100 text-success">
               <div class="text-center">
                 <i class="fas fa-check-circle fa-3x mb-3"></i>
@@ -2255,11 +2909,11 @@
               </div>
             </div>
           `;
-        }
-        
-        // Update top locations
-        if (locationsContainer) {
-          locationsContainer.innerHTML = `
+          }
+
+          // Update top locations
+          if (locationsContainer) {
+            locationsContainer.innerHTML = `
             <div class="list-group list-group-flush">
               <div class="list-group-item d-flex justify-content-between align-items-center">
                 <div>
@@ -2284,185 +2938,263 @@
               </div>
             </div>
           `;
-        }
-        
-        showToast('Geographic analysis completed', 'success');
-      }, 1800);
-    }
+          }
 
-    function exportGeographicReport() {
-      showToast('Exporting geographic analysis report...', 'info');
-      // Add actual export logic here
-    }
+          showToast("Geographic analysis completed", "success");
+        }, 1800);
+      }
 
-  </script>
+      function exportGeographicReport() {
+        showToast("Exporting geographic analysis report...", "info");
+        // Add actual export logic here
+      }
+    </script>
 
-  <!-- Employee Benefits Selection Modal -->
-  <div class="modal fade" id="employeeBenefitsModal" tabindex="-1" aria-labelledby="employeeBenefitsModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-xl modal-fullscreen">
-      <div class="modal-content">
-        <div class="modal-header bg-primary text-white">
-          <h4 class="modal-title" id="employeeBenefitsModalLabel">
-            <i class="fas fa-balance-scale me-2"></i>Benefits Configuration Tool
-          </h4>
-          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body p-0">
-          <!-- Header with summary stats -->
-          <div class="bg-light p-3 border-bottom">
-            <div class="row text-center">
-              <div class="col-md-3">
-                <div class="card border-primary">
-                  <div class="card-body p-2">
-                    <h5 class="text-primary mb-1" id="totalItemsCount">-</h5>
-                    <small class="text-muted">Total Items</small>
+    <!-- Employee Benefits Selection Modal -->
+    <div
+      class="modal fade"
+      id="employeeBenefitsModal"
+      tabindex="-1"
+      aria-labelledby="employeeBenefitsModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-xl modal-fullscreen">
+        <div class="modal-content">
+          <div class="modal-header bg-primary text-white">
+            <h4 class="modal-title" id="employeeBenefitsModalLabel">
+              <i class="fas fa-balance-scale me-2"></i>Benefits Configuration
+              Tool
+            </h4>
+            <button
+              type="button"
+              class="btn-close btn-close-white"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body p-0">
+            <!-- Header with summary stats -->
+            <div class="bg-light p-3 border-bottom">
+              <div class="row text-center">
+                <div class="col-md-3">
+                  <div class="card border-primary">
+                    <div class="card-body p-2">
+                      <h5 class="text-primary mb-1" id="totalItemsCount">-</h5>
+                      <small class="text-muted">Total Items</small>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <div class="card border-info">
+                    <div class="card-body p-2">
+                      <h5 class="text-info mb-1" id="businessSuppliesValue">
+                        $-
+                      </h5>
+                      <small class="text-muted">Business Supplies</small>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <div class="card border-success">
+                    <div class="card-body p-2">
+                      <h5 class="text-success mb-1" id="benefitsValue">$-</h5>
+                      <small class="text-muted">Board Benefits</small>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <div class="card border-warning">
+                    <div class="card-body p-2">
+                      <h5 class="text-warning mb-1" id="benefitsPercentage">
+                        -%
+                      </h5>
+                      <small class="text-muted">Benefits %</small>
+                    </div>
                   </div>
                 </div>
               </div>
-              <div class="col-md-3">
-                <div class="card border-info">
-                  <div class="card-body p-2">
-                    <h5 class="text-info mb-1" id="businessSuppliesValue">$-</h5>
-                    <small class="text-muted">Business Supplies</small>
+            </div>
+
+            <div class="row g-0" style="min-height: 70vh">
+              <!-- Business Supplies Panel -->
+              <div class="col-md-6 border-end">
+                <div class="p-3 bg-light border-bottom">
+                  <div
+                    class="d-flex justify-content-between align-items-center"
+                  >
+                    <h5 class="mb-0 text-info">
+                      <i class="fas fa-briefcase me-2"></i>Business Supplies
+                    </h5>
+                    <span class="badge bg-info" id="businessItemsCount"
+                      >0 items</span
+                    >
+                  </div>
+                  <div class="mt-2">
+                    <input
+                      type="text"
+                      class="form-control form-control-sm"
+                      id="searchBusiness"
+                      placeholder="Search business supplies..."
+                    />
+                  </div>
+                </div>
+                <div class="p-3" style="max-height: 60vh; overflow-y: auto">
+                  <div id="businessSuppliesList" class="row g-3">
+                    <!-- Business supplies cards will be populated here -->
                   </div>
                 </div>
               </div>
-              <div class="col-md-3">
-                <div class="card border-success">
-                  <div class="card-body p-2">
-                    <h5 class="text-success mb-1" id="benefitsValue">$-</h5>
-                    <small class="text-muted">Board Benefits</small>
+
+              <!-- Benefits Panel -->
+              <div class="col-md-6">
+                <div class="p-3 bg-light border-bottom">
+                  <div
+                    class="d-flex justify-content-between align-items-center"
+                  >
+                    <h5 class="mb-0 text-success">
+                      <i class="fas fa-gift me-2"></i>Board Benefits
+                    </h5>
+                    <span class="badge bg-success" id="benefitsItemsCount"
+                      >0 items</span
+                    >
+                  </div>
+                  <div class="mt-2">
+                    <input
+                      type="text"
+                      class="form-control form-control-sm"
+                      id="searchBenefits"
+                      placeholder="Search benefits..."
+                    />
                   </div>
                 </div>
-              </div>
-              <div class="col-md-3">
-                <div class="card border-warning">
-                  <div class="card-body p-2">
-                    <h5 class="text-warning mb-1" id="benefitsPercentage">-%</h5>
-                    <small class="text-muted">Benefits %</small>
+                <div class="p-3" style="max-height: 60vh; overflow-y: auto">
+                  <div id="benefitsList" class="row g-3">
+                    <!-- Benefits cards will be populated here -->
                   </div>
                 </div>
               </div>
             </div>
           </div>
-
-          <div class="row g-0" style="min-height: 70vh;">
-            <!-- Business Supplies Panel -->
-            <div class="col-md-6 border-end">
-              <div class="p-3 bg-light border-bottom">
-                <div class="d-flex justify-content-between align-items-center">
-                  <h5 class="mb-0 text-info">
-                    <i class="fas fa-briefcase me-2"></i>Business Supplies
-                  </h5>
-                  <span class="badge bg-info" id="businessItemsCount">0 items</span>
-                </div>
-                <div class="mt-2">
-                  <input type="text" class="form-control form-control-sm" id="searchBusiness"
-                         placeholder="Search business supplies...">
-                </div>
-              </div>
-              <div class="p-3" style="max-height: 60vh; overflow-y: auto;">
-                <div id="businessSuppliesList" class="row g-3">
-                  <!-- Business supplies cards will be populated here -->
-                </div>
-              </div>
+          <div class="modal-footer bg-light">
+            <div class="me-auto">
+              <small class="text-muted">
+                <i class="fas fa-info-circle me-1"></i>
+                Drag sliders to allocate between Business Supplies and Board
+                Benefits
+              </small>
             </div>
-
-            <!-- Benefits Panel -->
-            <div class="col-md-6">
-              <div class="p-3 bg-light border-bottom">
-                <div class="d-flex justify-content-between align-items-center">
-                  <h5 class="mb-0 text-success">
-                    <i class="fas fa-gift me-2"></i>Board Benefits
-                  </h5>
-                  <span class="badge bg-success" id="benefitsItemsCount">0 items</span>
-                </div>
-                <div class="mt-2">
-                  <input type="text" class="form-control form-control-sm" id="searchBenefits"
-                         placeholder="Search benefits...">
-                </div>
-              </div>
-              <div class="p-3" style="max-height: 60vh; overflow-y: auto;">
-                <div id="benefitsList" class="row g-3">
-                  <!-- Benefits cards will be populated here -->
-                </div>
-              </div>
-            </div>
+            <button
+              type="button"
+              class="btn btn-outline-secondary"
+              id="resetAll"
+            >
+              <i class="fas fa-undo me-2"></i>Reset All
+            </button>
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Close
+            </button>
+            <button
+              type="button"
+              class="btn btn-success"
+              id="generateBenefitsReport"
+            >
+              <i class="fas fa-chart-bar me-2"></i>Generate Report
+            </button>
           </div>
-        </div>
-        <div class="modal-footer bg-light">
-          <div class="me-auto">
-            <small class="text-muted">
-              <i class="fas fa-info-circle me-1"></i>
-              Drag sliders to allocate between Business Supplies and Board Benefits
-            </small>
-          </div>
-          <button type="button" class="btn btn-outline-secondary" id="resetAll">
-            <i class="fas fa-undo me-2"></i>Reset All
-          </button>
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-success" id="generateBenefitsReport">
-            <i class="fas fa-chart-bar me-2"></i>Generate Report
-          </button>
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- Edit Amazon Item Modal -->
-  <div class="modal fade" id="editItemModal" tabindex="-1" aria-labelledby="editItemModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="editItemModalLabel">
-            <i class="fas fa-edit me-2"></i>Edit Amazon Purchase
-          </h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <form id="editItemForm">
-            <input type="hidden" id="editItemId" value="">
-            
-            <div class="mb-3">
-              <label for="editItemName" class="form-label">Item Name</label>
-              <input type="text" class="form-control" id="editItemName" readonly>
-            </div>
-            
-            <div class="mb-3">
-              <label for="editItemCategory" class="form-label">Budget Category</label>
-              <select class="form-select" id="editItemCategory" required>
-                <option value="">Select Category...</option>
-                <option value="Board Amenities">Board Amenities</option>
-                <option value="Venue Maintenance">Venue Maintenance</option>
-                <option value="Event Supplies">Event Supplies</option>
-                <option value="Board Technology">Board Technology</option>
-                <option value="Wellness & Health">Wellness & Health</option>
-                <option value="Office Supplies">Office Supplies</option>
-                <option value="Kitchen Equipment">Kitchen Equipment</option>
-                <option value="Cleaning & Safety">Cleaning & Safety</option>
-              </select>
-            </div>
-            
-            <div class="mb-3">
-              <label for="editItemPercentage" class="form-label">
-                Benefits Percentage: <span id="percentageValue">50%</span>
-              </label>
-              <input type="range" class="form-range" id="editItemPercentage" 
-                     min="0" max="100" value="50" step="5">
-              <div class="d-flex justify-content-between small text-muted">
-                <span>0% (Business)</span>
-                <span>100% (Benefits)</span>
+    <!-- Edit Amazon Item Modal -->
+    <div
+      class="modal fade"
+      id="editItemModal"
+      tabindex="-1"
+      aria-labelledby="editItemModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="editItemModalLabel">
+              <i class="fas fa-edit me-2"></i>Edit Amazon Purchase
+            </h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <form id="editItemForm">
+              <input type="hidden" id="editItemId" value="" />
+
+              <div class="mb-3">
+                <label for="editItemName" class="form-label">Item Name</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="editItemName"
+                  readonly
+                />
               </div>
-            </div>
-          </form>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-          <button type="button" class="btn btn-primary" id="saveItemChanges">Save Changes</button>
+
+              <div class="mb-3">
+                <label for="editItemCategory" class="form-label"
+                  >Budget Category</label
+                >
+                <select class="form-select" id="editItemCategory" required>
+                  <option value="">Select Category...</option>
+                  <option value="Board Amenities">Board Amenities</option>
+                  <option value="Venue Maintenance">Venue Maintenance</option>
+                  <option value="Event Supplies">Event Supplies</option>
+                  <option value="Board Technology">Board Technology</option>
+                  <option value="Wellness & Health">Wellness & Health</option>
+                  <option value="Office Supplies">Office Supplies</option>
+                  <option value="Kitchen Equipment">Kitchen Equipment</option>
+                  <option value="Cleaning & Safety">Cleaning & Safety</option>
+                </select>
+              </div>
+
+              <div class="mb-3">
+                <label for="editItemPercentage" class="form-label">
+                  Benefits Percentage: <span id="percentageValue">50%</span>
+                </label>
+                <input
+                  type="range"
+                  class="form-range"
+                  id="editItemPercentage"
+                  min="0"
+                  max="100"
+                  value="50"
+                  step="5"
+                />
+                <div class="d-flex justify-content-between small text-muted">
+                  <span>0% (Business)</span>
+                  <span>100% (Benefits)</span>
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Cancel
+            </button>
+            <button type="button" class="btn btn-primary" id="saveItemChanges">
+              Save Changes
+            </button>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-
-</body>
+  </body>
 </html>
