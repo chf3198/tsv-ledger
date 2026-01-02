@@ -1,85 +1,85 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites name="jest tests" tests="39" failures="0" errors="0" time="11.244">
-  <testsuite name="Database Module" errors="0" failures="0" skipped="0" timestamp="2026-01-02T20:24:02" time="10.72" tests="13">
-    <testcase classname="Database Module getAllExpenditures should return empty array when no data exists" name="Database Module getAllExpenditures should return empty array when no data exists" time="0.021">
+<testsuites name="jest tests" tests="39" failures="0" errors="0" time="10.865">
+  <testsuite name="Database Module" errors="0" failures="0" skipped="0" timestamp="2026-01-02T20:36:23" time="10.257" tests="13">
+    <testcase classname="Database Module getAllExpenditures should return empty array when no data exists" name="Database Module getAllExpenditures should return empty array when no data exists" time="0.02">
     </testcase>
-    <testcase classname="Database Module getAllExpenditures should return all expenditures when data exists" name="Database Module getAllExpenditures should return all expenditures when data exists" time="0.019">
+    <testcase classname="Database Module getAllExpenditures should return all expenditures when data exists" name="Database Module getAllExpenditures should return all expenditures when data exists" time="0.015">
     </testcase>
-    <testcase classname="Database Module getAllExpenditures should handle malformed JSON gracefully" name="Database Module getAllExpenditures should handle malformed JSON gracefully" time="0.03">
+    <testcase classname="Database Module getAllExpenditures should handle malformed JSON gracefully" name="Database Module getAllExpenditures should handle malformed JSON gracefully" time="0.02">
     </testcase>
-    <testcase classname="Database Module getAllExpenditures should handle file read errors gracefully" name="Database Module getAllExpenditures should handle file read errors gracefully" time="0.025">
+    <testcase classname="Database Module getAllExpenditures should handle file read errors gracefully" name="Database Module getAllExpenditures should handle file read errors gracefully" time="0.027">
     </testcase>
-    <testcase classname="Database Module addExpenditure should add new expenditure with generated ID" name="Database Module addExpenditure should add new expenditure with generated ID" time="0.03">
+    <testcase classname="Database Module addExpenditure should add new expenditure with generated ID" name="Database Module addExpenditure should add new expenditure with generated ID" time="0.015">
     </testcase>
-    <testcase classname="Database Module addExpenditure should increment ID for multiple additions" name="Database Module addExpenditure should increment ID for multiple additions" time="0.019">
+    <testcase classname="Database Module addExpenditure should increment ID for multiple additions" name="Database Module addExpenditure should increment ID for multiple additions" time="0.022">
     </testcase>
-    <testcase classname="Database Module addExpenditure should preserve existing properties when adding" name="Database Module addExpenditure should preserve existing properties when adding" time="0.02">
+    <testcase classname="Database Module addExpenditure should preserve existing properties when adding" name="Database Module addExpenditure should preserve existing properties when adding" time="0.016">
     </testcase>
-    <testcase classname="Database Module addExpenditure should handle file write errors gracefully" name="Database Module addExpenditure should handle file write errors gracefully" time="0.033">
+    <testcase classname="Database Module addExpenditure should handle file write errors gracefully" name="Database Module addExpenditure should handle file write errors gracefully" time="0.024">
     </testcase>
-    <testcase classname="Database Module addExpenditure should validate required fields are present" name="Database Module addExpenditure should validate required fields are present" time="0.014">
+    <testcase classname="Database Module addExpenditure should validate required fields are present" name="Database Module addExpenditure should validate required fields are present" time="0.04">
     </testcase>
-    <testcase classname="Database Module Data Persistence should persist data between operations" name="Database Module Data Persistence should persist data between operations" time="0.023">
+    <testcase classname="Database Module Data Persistence should persist data between operations" name="Database Module Data Persistence should persist data between operations" time="0.016">
     </testcase>
-    <testcase classname="Database Module Data Persistence should maintain data integrity across multiple operations" name="Database Module Data Persistence should maintain data integrity across multiple operations" time="0.041">
+    <testcase classname="Database Module Data Persistence should maintain data integrity across multiple operations" name="Database Module Data Persistence should maintain data integrity across multiple operations" time="0.038">
     </testcase>
-    <testcase classname="Database Module Error Handling should handle concurrent access gracefully" name="Database Module Error Handling should handle concurrent access gracefully" time="0.025">
+    <testcase classname="Database Module Error Handling should handle concurrent access gracefully" name="Database Module Error Handling should handle concurrent access gracefully" time="0.021">
     </testcase>
-    <testcase classname="Database Module Error Handling should handle large datasets efficiently" name="Database Module Error Handling should handle large datasets efficiently" time="10.176">
+    <testcase classname="Database Module Error Handling should handle large datasets efficiently" name="Database Module Error Handling should handle large datasets efficiently" time="9.751">
     </testcase>
   </testsuite>
-  <testsuite name="TSVCategorizer" errors="0" failures="0" skipped="0" timestamp="2026-01-02T20:24:13" time="0.326" tests="26">
-    <testcase classname="TSVCategorizer Categorization should categorize food-related expenses correctly" name="TSVCategorizer Categorization should categorize food-related expenses correctly" time="0.009">
+  <testsuite name="TSVCategorizer" errors="0" failures="0" skipped="0" timestamp="2026-01-02T20:36:34" time="0.408" tests="26">
+    <testcase classname="TSVCategorizer Categorization should categorize food-related expenses correctly" name="TSVCategorizer Categorization should categorize food-related expenses correctly" time="0.01">
     </testcase>
-    <testcase classname="TSVCategorizer Categorization should categorize transportation expenses correctly" name="TSVCategorizer Categorization should categorize transportation expenses correctly" time="0.005">
+    <testcase classname="TSVCategorizer Categorization should categorize transportation expenses correctly" name="TSVCategorizer Categorization should categorize transportation expenses correctly" time="0.004">
     </testcase>
-    <testcase classname="TSVCategorizer Categorization should categorize shopping expenses correctly" name="TSVCategorizer Categorization should categorize shopping expenses correctly" time="0.006">
+    <testcase classname="TSVCategorizer Categorization should categorize shopping expenses correctly" name="TSVCategorizer Categorization should categorize shopping expenses correctly" time="0.005">
     </testcase>
-    <testcase classname="TSVCategorizer Categorization should categorize utilities correctly" name="TSVCategorizer Categorization should categorize utilities correctly" time="0.007">
+    <testcase classname="TSVCategorizer Categorization should categorize utilities correctly" name="TSVCategorizer Categorization should categorize utilities correctly" time="0.004">
     </testcase>
     <testcase classname="TSVCategorizer Categorization should return Other for uncategorized expenses" name="TSVCategorizer Categorization should return Other for uncategorized expenses" time="0.005">
     </testcase>
-    <testcase classname="TSVCategorizer Categorization should handle case-insensitive matching" name="TSVCategorizer Categorization should handle case-insensitive matching" time="0.006">
+    <testcase classname="TSVCategorizer Categorization should handle case-insensitive matching" name="TSVCategorizer Categorization should handle case-insensitive matching" time="0.007">
     </testcase>
-    <testcase classname="TSVCategorizer Categorization should handle null/undefined inputs gracefully" name="TSVCategorizer Categorization should handle null/undefined inputs gracefully" time="0.003">
+    <testcase classname="TSVCategorizer Categorization should handle null/undefined inputs gracefully" name="TSVCategorizer Categorization should handle null/undefined inputs gracefully" time="0.017">
     </testcase>
-    <testcase classname="TSVCategorizer Analysis should analyze empty expense array" name="TSVCategorizer Analysis should analyze empty expense array" time="0.014">
+    <testcase classname="TSVCategorizer Analysis should analyze empty expense array" name="TSVCategorizer Analysis should analyze empty expense array" time="0.012">
     </testcase>
-    <testcase classname="TSVCategorizer Analysis should analyze null/undefined expenses" name="TSVCategorizer Analysis should analyze null/undefined expenses" time="0.005">
+    <testcase classname="TSVCategorizer Analysis should analyze null/undefined expenses" name="TSVCategorizer Analysis should analyze null/undefined expenses" time="0.016">
     </testcase>
-    <testcase classname="TSVCategorizer Analysis should analyze single expense correctly" name="TSVCategorizer Analysis should analyze single expense correctly" time="0.007">
+    <testcase classname="TSVCategorizer Analysis should analyze single expense correctly" name="TSVCategorizer Analysis should analyze single expense correctly" time="0.012">
     </testcase>
-    <testcase classname="TSVCategorizer Analysis should analyze multiple expenses with different categories" name="TSVCategorizer Analysis should analyze multiple expenses with different categories" time="0.006">
+    <testcase classname="TSVCategorizer Analysis should analyze multiple expenses with different categories" name="TSVCategorizer Analysis should analyze multiple expenses with different categories" time="0.008">
     </testcase>
-    <testcase classname="TSVCategorizer Analysis should handle expenses with invalid amounts" name="TSVCategorizer Analysis should handle expenses with invalid amounts" time="0.004">
+    <testcase classname="TSVCategorizer Analysis should handle expenses with invalid amounts" name="TSVCategorizer Analysis should handle expenses with invalid amounts" time="0.006">
     </testcase>
-    <testcase classname="TSVCategorizer Analysis should handle large datasets efficiently" name="TSVCategorizer Analysis should handle large datasets efficiently" time="0.016">
+    <testcase classname="TSVCategorizer Analysis should handle large datasets efficiently" name="TSVCategorizer Analysis should handle large datasets efficiently" time="0.035">
     </testcase>
-    <testcase classname="TSVCategorizer Bank of America Transaction Categorization should categorize BoA transactions with subcategories" name="TSVCategorizer Bank of America Transaction Categorization should categorize BoA transactions with subcategories" time="0.008">
+    <testcase classname="TSVCategorizer Bank of America Transaction Categorization should categorize BoA transactions with subcategories" name="TSVCategorizer Bank of America Transaction Categorization should categorize BoA transactions with subcategories" time="0.011">
     </testcase>
-    <testcase classname="TSVCategorizer Amazon Order Analysis should analyze Amazon orders correctly" name="TSVCategorizer Amazon Order Analysis should analyze Amazon orders correctly" time="0.007">
+    <testcase classname="TSVCategorizer Amazon Order Analysis should analyze Amazon orders correctly" name="TSVCategorizer Amazon Order Analysis should analyze Amazon orders correctly" time="0.008">
     </testcase>
-    <testcase classname="TSVCategorizer Amazon Order Analysis should detect Subscribe &amp; Save orders" name="TSVCategorizer Amazon Order Analysis should detect Subscribe &amp; Save orders" time="0.003">
+    <testcase classname="TSVCategorizer Amazon Order Analysis should detect Subscribe &amp; Save orders" name="TSVCategorizer Amazon Order Analysis should detect Subscribe &amp; Save orders" time="0.007">
     </testcase>
-    <testcase classname="TSVCategorizer Amazon Order Analysis should calculate data completeness accurately" name="TSVCategorizer Amazon Order Analysis should calculate data completeness accurately" time="0.004">
+    <testcase classname="TSVCategorizer Amazon Order Analysis should calculate data completeness accurately" name="TSVCategorizer Amazon Order Analysis should calculate data completeness accurately" time="0.006">
     </testcase>
-    <testcase classname="TSVCategorizer Subcategory Logic should assign correct subcategories for Food &amp; Dining" name="TSVCategorizer Subcategory Logic should assign correct subcategories for Food &amp; Dining" time="0.004">
+    <testcase classname="TSVCategorizer Subcategory Logic should assign correct subcategories for Food &amp; Dining" name="TSVCategorizer Subcategory Logic should assign correct subcategories for Food &amp; Dining" time="0.005">
     </testcase>
-    <testcase classname="TSVCategorizer Subcategory Logic should assign correct subcategories for Transportation" name="TSVCategorizer Subcategory Logic should assign correct subcategories for Transportation" time="0.008">
+    <testcase classname="TSVCategorizer Subcategory Logic should assign correct subcategories for Transportation" name="TSVCategorizer Subcategory Logic should assign correct subcategories for Transportation" time="0.005">
     </testcase>
-    <testcase classname="TSVCategorizer Subcategory Logic should handle null inputs for subcategories" name="TSVCategorizer Subcategory Logic should handle null inputs for subcategories" time="0.004">
+    <testcase classname="TSVCategorizer Subcategory Logic should handle null inputs for subcategories" name="TSVCategorizer Subcategory Logic should handle null inputs for subcategories" time="0.008">
     </testcase>
-    <testcase classname="TSVCategorizer Edge Cases should handle very long descriptions" name="TSVCategorizer Edge Cases should handle very long descriptions" time="0.005">
+    <testcase classname="TSVCategorizer Edge Cases should handle very long descriptions" name="TSVCategorizer Edge Cases should handle very long descriptions" time="0.011">
     </testcase>
-    <testcase classname="TSVCategorizer Edge Cases should handle special characters in descriptions" name="TSVCategorizer Edge Cases should handle special characters in descriptions" time="0.017">
+    <testcase classname="TSVCategorizer Edge Cases should handle special characters in descriptions" name="TSVCategorizer Edge Cases should handle special characters in descriptions" time="0.019">
     </testcase>
-    <testcase classname="TSVCategorizer Edge Cases should handle numeric descriptions" name="TSVCategorizer Edge Cases should handle numeric descriptions" time="0.004">
+    <testcase classname="TSVCategorizer Edge Cases should handle numeric descriptions" name="TSVCategorizer Edge Cases should handle numeric descriptions" time="0.005">
     </testcase>
-    <testcase classname="TSVCategorizer Edge Cases should handle emoji in descriptions" name="TSVCategorizer Edge Cases should handle emoji in descriptions" time="0.004">
+    <testcase classname="TSVCategorizer Edge Cases should handle emoji in descriptions" name="TSVCategorizer Edge Cases should handle emoji in descriptions" time="0.009">
     </testcase>
-    <testcase classname="TSVCategorizer Performance should categorize quickly" name="TSVCategorizer Performance should categorize quickly" time="0.011">
+    <testcase classname="TSVCategorizer Performance should categorize quickly" name="TSVCategorizer Performance should categorize quickly" time="0.01">
     </testcase>
-    <testcase classname="TSVCategorizer Performance should handle memory efficiently" name="TSVCategorizer Performance should handle memory efficiently" time="0.054">
+    <testcase classname="TSVCategorizer Performance should handle memory efficiently" name="TSVCategorizer Performance should handle memory efficiently" time="0.046">
     </testcase>
   </testsuite>
 </testsuites>
