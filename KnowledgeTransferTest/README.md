@@ -1,75 +1,101 @@
-# Knowledge Transfer Protocol Test Package
+# Knowledge Transfer System (KTS) - v2.0
 
-**Date:** September 9, 2025  
-**Purpose:** Complete package for testing Knowledge Transfer Protocol Evolution on fresh VS Code environment
+**Updated:** January 7, 2026  
+**Purpose:** Enable seamless handoffs between AI agent sessions and developers
 
-## 📦 Package Contents
+## Quick Reference
 
-This package contains everything needed to test our Knowledge Transfer Protocol Evolution system on a fresh Chromebook with VS Code.
+| File | Purpose | When to Read |
+|------|---------|--------------|
+| `AGENTS.md` | Entry point, validated commands | Start of ANY session |
+| `CURRENT_STATE.md` | Live project status | Continuing interrupted work |
+| `TODO.md` | Task tracking | Planning work |
+| `.github/copilot-instructions.md` | Detailed dev guidelines | When coding |
+| `.github/instructions/*.md` | Path-specific rules | When editing specific files |
 
-### 1. Core Protocols (Proven from TSV Ledger v2.2.2)
-- **CodeOrganizationFramework.md** - Universal project structure standards
-- **GitWorkflowPatterns.md** - Professional version control practices
-- **DocumentationFramework.md** - Knowledge capture and transfer standards
-- **ProtocolEvolutionFramework.md** - System for protocol improvement and sharing
+## For New AI Agent Sessions
 
-### 2. Test Project Specification
-- **PROJECT_SPEC.md** - Complete specification for validation test project
-- **SETUP_INSTRUCTIONS.md** - Step-by-step setup guide for new environment
-- **VALIDATION_CHECKLIST.md** - Success criteria and measurement framework
+### Step 1: Orientation (2 min)
+Read in this order:
+1. `AGENTS.md` - Quick project overview, validated commands
+2. `CURRENT_STATE.md` - What's currently happening
 
-### 3. AI Assistant Integration Kit
-- **AI_CONTEXT.md** - How to share protocols with AI assistant
-- **AI_VALIDATION.md** - Testing AI understanding and application of protocols
-- **AI_TRAINING.md** - Best practices for AI assistant protocol adoption
+### Step 2: Understand Context (5 min)
+If continuing existing work:
+- Check `TODO.md` for active tasks
+- Check `git status` and `git log --oneline -10`
+- Review `.github/copilot-instructions.md` for rules
 
-## 🎯 Test Objectives
+### Step 3: Start Work
+Follow the DO/DON'T patterns in `AGENTS.md`:
+- ✅ Use `isBackground: true` for servers
+- ✅ Run `npm test` before committing
+- ❌ Never use `open_simple_browser`
+- ❌ Never block the terminal with `node server.js`
 
-1. **Validate Protocol Portability** - Ensure framework works on any system
-2. **Test AI Assistant Integration** - Verify AI can understand and apply protocols
-3. **Measure Efficiency** - Benchmark setup and development time
-4. **Identify Improvements** - Find gaps for protocol evolution
+## Session End Checklist
 
-## 🚀 Quick Start for Test Environment
+Before ending a session, AI agent should:
+- [ ] Update `CURRENT_STATE.md` with progress
+- [ ] Update `TODO.md` with completed/new items
+- [ ] Commit changes with conventional commit message
+- [ ] Note any blockers in CURRENT_STATE.md
 
-### Step 1: Environment Setup
-1. **Copy this package** to your new Chromebook
-2. **Install required tools:** Node.js, Git, VS Code
-3. **Initialize project structure** following CodeOrganizationFramework.md
+## Architecture Overview
 
-### Step 2: AI Assistant Integration
-1. **Share Core Protocols** with your AI assistant
-2. **Provide Project Specification** for the test project
-3. **Request implementation** following protocol standards
+```
+tsv-ledger/
+├── AGENTS.md              # AI agent entry point
+├── CURRENT_STATE.md       # Live project status
+├── TODO.md                # Task tracking
+├── server.js              # Main entry point
+├── src/                   # Backend source
+│   ├── database.js        # JSON file operations
+│   ├── routes/            # API endpoints
+│   └── ...
+├── public/                # Frontend
+│   ├── index.html         # Main UI
+│   ├── components/        # Reusable HTML
+│   └── js/                # Client scripts
+├── tests/                 # All tests
+├── data/                  # Data files + metrics
+├── docs/                  # Documentation
+└── .github/
+    ├── copilot-instructions.md
+    └── instructions/      # Path-specific rules
+```
 
-### Step 3: Validation
-1. **Execute validation checklist** as you build
-2. **Measure success metrics** throughout development
-3. **Document lessons learned** for protocol improvement
+## Key Decisions (Why We Do Things)
 
-## 📊 Expected Results
+| Decision | Rationale |
+|----------|-----------|
+| JSON file storage | No database server needed, simple deployment |
+| 300-line limit | AI optimization, easier to understand/maintain |
+| Bootstrap 5 | Rapid UI development, no build step required |
+| Verbose instructions | Better for simpler/faster AI models |
+| Express.js | Lightweight, familiar, proven |
 
-### Success Indicators
-- ✅ **Setup Time** < 30 minutes from package to productive development
-- ✅ **AI Understanding** > 95% correct protocol application
-- ✅ **Code Quality** > 85% organization and documentation standards
-- ✅ **Knowledge Transfer** Complete project context captured for handoffs
+## Lessons Learned
 
-### Protocol Evolution
-Based on test results, we'll evolve the protocols to v1.1 with improvements identified during validation.
+### What Works
+- Explicit DO/DON'T patterns reduce agent errors
+- Validated commands table prevents command failures
+- Path-specific instructions provide targeted guidance
+- Session state tracking enables seamless handoffs
 
-## 📋 Package Transfer Instructions
+### What Doesn't Work
+- Creating tools without integrating them
+- Implicit rules (agents ignore them)
+- Files over 300 lines (hard to maintain/understand)
+- Assuming agents remember previous sessions
 
-### For Physical Transfer
-1. Copy entire `/KnowledgeTransferTest/` folder to USB drive
-2. Transfer to new Chromebook
-3. Extract and follow SETUP_INSTRUCTIONS.md
+## Evolution History
 
-### For Cloud Transfer
-1. Commit package to git repository
-2. Clone on new system
-3. Follow setup instructions
+| Version | Date | Changes |
+|---------|------|---------|
+| v2.0 | Jan 2026 | Added AGENTS.md, CURRENT_STATE.md, path-specific instructions |
+| v1.0 | Sept 2025 | Original KTS with CoreProtocols |
 
 ---
 
-**This package represents the v1.0 Knowledge Transfer Protocol Evolution system, proven effective in the TSV Ledger project and ready for validation on new systems.**
+*For detailed protocols, see the archived `CoreProtocols/` directory*

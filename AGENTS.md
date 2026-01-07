@@ -29,37 +29,39 @@ TSV Ledger is an expense tracking platform for Texas Sunset Venues with Amazon i
 
 ```
 tsv-ledger/
-├── server.js              # Main Express server - ALL routes registered here
-├── src/
+├── AGENTS.md              # ← YOU ARE HERE - Start here
+├── CURRENT_STATE.md       # Live project status - read for context
+├── TODO.md                # Task tracking - check before starting
+├── server.js              # Main Express server entry point
+├── src/                   # Backend source code
 │   ├── database.js        # JSON file CRUD operations
-│   ├── tsv-categorizer.js # AI categorization engine
-│   ├── ai-analysis-engine.js
-│   ├── routes/            # API route handlers
-│   │   ├── amazon.js      # /api/amazon/* endpoints
-│   │   ├── import.js      # /api/import/* endpoints
-│   │   └── ...
-│   └── amazon-integration/
-│       ├── amazon-zip-extractor.js  # ZIP file processing
-│       └── parsers/       # Order, cart, returns parsers
-├── public/
-│   ├── index.html         # Main frontend (3200 lines - being componentized)
-│   ├── js/
-│   │   └── app.js         # Main client-side JS
-│   └── components/        # Reusable HTML components
-├── tests/
-│   ├── unit/              # Jest unit tests
-│   ├── integration/       # API integration tests
-│   └── e2e/               # Playwright E2E tests
-├── data/
-│   └── expenditures.json  # Main data store
+│   ├── routes/            # API route handlers (/api/*)
+│   └── amazon-integration/# Amazon ZIP processing
+├── public/                # Frontend
+│   ├── index.html         # Main UI (componentizing)
+│   ├── components/        # Reusable HTML components
+│   └── js/                # Client-side JavaScript
+├── tests/                 # All tests (unit, integration, e2e)
+├── data/                  # Data storage + metrics
+├── docs/                  # Documentation
+├── tools/                 # Analysis tools (⚠️ needs cleanup)
 └── .github/
-    └── copilot-instructions.md  # Detailed AI instructions
+    ├── copilot-instructions.md  # Detailed guidelines
+    └── instructions/      # Path-specific rules
 ```
+
+## Session Start Checklist
+
+1. Read `CURRENT_STATE.md` for current project status
+2. Check `TODO.md` for active tasks
+3. Run `git status` to see uncommitted changes
+4. Follow DO/DON'T rules below
 
 ## Critical Files to Know
 
 | File | Purpose | When to Modify |
 |------|---------|----------------|
+| `CURRENT_STATE.md` | Project status | Update at session end |
 | `server.js` | Route registration, middleware | Adding new API routes |
 | `src/database.js` | All data operations | Changing data storage |
 | `src/routes/*.js` | API endpoint handlers | Adding/modifying endpoints |
@@ -70,6 +72,8 @@ tsv-ledger/
 ## DO This / DON'T Do That
 
 ### ✅ DO:
+- Read `CURRENT_STATE.md` at session start
+- Update `CURRENT_STATE.md` at session end
 - Run `npm test` before committing any changes
 - Use `isBackground: true` when starting server in terminal
 - Create tests for new functionality in `tests/` directory
