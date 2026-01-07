@@ -1,0 +1,787 @@
+{
+  "timestamp": "2026-01-07T06:23:33.041Z",
+  "pages": {
+    "dashboard": {
+      "url": "/",
+      "styles": {
+        "bodyFont": "\"Segoe UI\", Tahoma, Geneva, Verdana, sans-serif",
+        "bodyColor": "rgb(33, 37, 41)",
+        "bodyBg": "rgb(248, 249, 250)",
+        "headings": [
+          {
+            "tag": "H2",
+            "text": "\n                Financial Dashboard\n   ",
+            "fontSize": "24.575px",
+            "fontWeight": "500",
+            "color": "rgb(33, 37, 41)"
+          },
+          {
+            "tag": "H2",
+            "text": "Analysis & Reports",
+            "fontSize": "24.575px",
+            "fontWeight": "500",
+            "color": "rgb(33, 37, 41)"
+          },
+          {
+            "tag": "H2",
+            "text": "AI-Powered Insights",
+            "fontSize": "24.575px",
+            "fontWeight": "500",
+            "color": "rgb(33, 37, 41)"
+          },
+          {
+            "tag": "H2",
+            "text": "🤖 AI-Enhanced Analysis",
+            "fontSize": "24.575px",
+            "fontWeight": "500",
+            "color": "rgb(255, 255, 255)"
+          },
+          {
+            "tag": "H3",
+            "text": "🎯 AI Performance",
+            "fontSize": "23.05px",
+            "fontWeight": "500",
+            "color": "rgb(33, 37, 41)"
+          }
+        ],
+        "buttons": [
+          {
+            "text": "\n            \n      ",
+            "bg": "rgba(0, 0, 0, 0)",
+            "color": "rgba(255, 255, 255, 0.55)",
+            "borderRadius": "6px",
+            "padding": "6px 12px"
+          },
+          {
+            "text": "",
+            "bg": "rgba(0, 0, 0, 0)",
+            "color": "rgb(0, 0, 0)",
+            "borderRadius": "6px",
+            "padding": "8px"
+          },
+          {
+            "text": "\n              Cance",
+            "bg": "rgb(108, 117, 125)",
+            "color": "rgb(255, 255, 255)",
+            "borderRadius": "6px",
+            "padding": "6px 12px"
+          },
+          {
+            "text": "\n              Save ",
+            "bg": "rgb(13, 110, 253)",
+            "color": "rgb(255, 255, 255)",
+            "borderRadius": "6px",
+            "padding": "6px 12px"
+          },
+          {
+            "text": "\n                   ",
+            "bg": "rgb(13, 110, 253)",
+            "color": "rgb(255, 255, 255)",
+            "borderRadius": "6px",
+            "padding": "6px 12px"
+          }
+        ],
+        "cards": [
+          {
+            "bg": "rgb(255, 255, 255)",
+            "boxShadow": "rgba(0, 0, 0, 0.1) 0px 4px 6px 0px",
+            "borderRadius": "6px",
+            "border": "0px none rgb(33, 37, 41)"
+          },
+          {
+            "bg": "rgb(255, 255, 255)",
+            "boxShadow": "rgba(0, 0, 0, 0.1) 0px 4px 6px 0px",
+            "borderRadius": "6px",
+            "border": "0px none rgb(33, 37, 41)"
+          },
+          {
+            "bg": "rgb(255, 255, 255)",
+            "boxShadow": "rgba(0, 0, 0, 0.1) 0px 4px 6px 0px",
+            "borderRadius": "6px",
+            "border": "0px none rgb(33, 37, 41)"
+          }
+        ],
+        "icons": [
+          {
+            "class": "fas fa-chart-line me-2",
+            "fontFamily": "\"Font Awesome 6 Free\"",
+            "fontSize": "20px",
+            "color": "rgb(255, 255, 255)"
+          },
+          {
+            "class": "fas fa-circle text-success me-1",
+            "fontFamily": "\"Font Awesome 6 Free\"",
+            "fontSize": "16px",
+            "color": "rgb(25, 135, 84)"
+          },
+          {
+            "class": "fas fa-edit me-2",
+            "fontFamily": "\"Font Awesome 6 Free\"",
+            "fontSize": "20px",
+            "color": "rgb(33, 37, 41)"
+          },
+          {
+            "class": "fas fa-chart-line me-2",
+            "fontFamily": "\"Font Awesome 6 Free\"",
+            "fontSize": "21.525px",
+            "color": "rgb(33, 37, 41)"
+          },
+          {
+            "class": "fas fa-tachometer-alt me-2",
+            "fontFamily": "\"Font Awesome 6 Free\"",
+            "fontSize": "16px",
+            "color": "rgb(33, 37, 41)"
+          }
+        ],
+        "errors": []
+      },
+      "errors": [
+        "PAGE: loadExpenditures is not defined",
+        "CONSOLE: ❌ Navigation initialization failed: TypeError: drawer.show is not a function\n    at initializeSidebarState (http://localhost:3000/js/shoelace-navigation-new.js:107:16)\n    at HTMLDocument.init (http://localhost:3000/js/shoelace-navigation-new.js:28:7)",
+        "CONSOLE: Error loading import history: TypeError: Cannot read properties of undefined (reading 'length')\n    at loadImportHistory (http://localhost:3000/js/modules/import-history/import-history.js:18:22)",
+        "CONSOLE: ❌ Error loading Amazon items: TypeError: this.amazonItems.forEach is not a function\n    at EmployeeBenefitsManager.loadAmazonItems (http://localhost:3000/js/employee-benefits.js:57:24)\n    at async EmployeeBenefitsManager.initialize (http://localhost:3000/js/employee-benefits.js:28:7)",
+        "CONSOLE: ❌ Fallback also failed: TypeError: this.amazonItems.forEach is not a function\n    at EmployeeBenefitsManager.loadAmazonItems (http://localhost:3000/js/employee-benefits.js:82:26)\n    at async EmployeeBenefitsManager.initialize (http://localhost:3000/js/employee-benefits.js:28:7)"
+      ],
+      "screenshots": {
+        "desktop": "dashboard-desktop.png",
+        "mobile": "dashboard-mobile.png"
+      }
+    },
+    "employee-benefits": {
+      "url": "/employee-benefits.html",
+      "styles": {
+        "bodyFont": "system-ui, -apple-system, \"Segoe UI\", Roboto, \"Helvetica Neue\", \"Noto Sans\", \"Liberation Sans\", Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"",
+        "bodyColor": "rgb(33, 37, 41)",
+        "bodyBg": "rgb(255, 255, 255)",
+        "headings": [
+          {
+            "tag": "H3",
+            "text": "Benefits Management",
+            "fontSize": "23.05px",
+            "fontWeight": "500",
+            "color": "rgb(33, 37, 41)"
+          }
+        ],
+        "buttons": [
+          {
+            "text": "\n        \n      ",
+            "bg": "rgba(0, 0, 0, 0)",
+            "color": "rgba(255, 255, 255, 0.55)",
+            "borderRadius": "6px",
+            "padding": "4px 12px"
+          },
+          {
+            "text": "",
+            "bg": "rgba(0, 0, 0, 0)",
+            "color": "rgb(0, 0, 0)",
+            "borderRadius": "6px",
+            "padding": "8px"
+          },
+          {
+            "text": "\n                  C",
+            "bg": "rgb(13, 110, 253)",
+            "color": "rgb(255, 255, 255)",
+            "borderRadius": "8px",
+            "padding": "8px 16px"
+          },
+          {
+            "text": "\n                   ",
+            "bg": "rgba(0, 0, 0, 0)",
+            "color": "rgb(25, 135, 84)",
+            "borderRadius": "6px 0px 0px 6px",
+            "padding": "6px 12px"
+          },
+          {
+            "text": "\n                   ",
+            "bg": "rgba(0, 0, 0, 0)",
+            "color": "rgb(13, 110, 253)",
+            "borderRadius": "0px",
+            "padding": "6px 12px"
+          }
+        ],
+        "cards": [
+          {
+            "bg": "rgb(255, 255, 255)",
+            "boxShadow": "rgba(0, 0, 0, 0.1) 0px 2px 4px 0px",
+            "borderRadius": "6px",
+            "border": "0px none rgb(33, 37, 41)"
+          },
+          {
+            "bg": "rgb(255, 255, 255)",
+            "boxShadow": "rgba(0, 0, 0, 0.1) 0px 2px 4px 0px",
+            "borderRadius": "6px",
+            "border": "0px none rgb(33, 37, 41)"
+          },
+          {
+            "bg": "rgb(255, 255, 255)",
+            "boxShadow": "rgba(0, 0, 0, 0.1) 0px 2px 4px 0px",
+            "borderRadius": "6px",
+            "border": "0px none rgb(13, 110, 253)"
+          }
+        ],
+        "icons": [
+          {
+            "class": "fas fa-chart-line me-2",
+            "fontFamily": "\"Font Awesome 6 Free\"",
+            "fontSize": "20px",
+            "color": "rgb(255, 255, 255)"
+          },
+          {
+            "class": "fas fa-circle text-success me-1",
+            "fontFamily": "\"Font Awesome 6 Free\"",
+            "fontSize": "16px",
+            "color": "rgb(25, 135, 84)"
+          },
+          {
+            "class": "fas fa-chart-line me-2",
+            "fontFamily": "\"Font Awesome 6 Free\"",
+            "fontSize": "20px",
+            "color": "rgb(255, 255, 255)"
+          },
+          {
+            "class": "fas fa-tachometer-alt",
+            "fontFamily": "\"Font Awesome 6 Free\"",
+            "fontSize": "16px",
+            "color": "rgba(255, 255, 255, 0.75)"
+          },
+          {
+            "class": "fas fa-balance-scale",
+            "fontFamily": "\"Font Awesome 6 Free\"",
+            "fontSize": "16px",
+            "color": "rgba(255, 255, 255, 0.75)"
+          }
+        ],
+        "errors": []
+      },
+      "errors": [
+        "CONSOLE: ❌ Error loading Amazon items: TypeError: this.amazonItems.forEach is not a function\n    at EmployeeBenefitsManager.loadAmazonItems (http://localhost:3000/js/employee-benefits.js:57:24)\n    at async EmployeeBenefitsManager.initialize (http://localhost:3000/js/employee-benefits.js:28:7)\n    at async window.ensureBenefitsInitialized (http://localhost:3000/js/employee-benefits.js:2512:9)\n    at async HTMLDocument.<anonymous> (http://localhost:3000/employee-benefits.html:559:44)",
+        "CONSOLE: ❌ Fallback also failed: TypeError: this.amazonItems.forEach is not a function\n    at EmployeeBenefitsManager.loadAmazonItems (http://localhost:3000/js/employee-benefits.js:82:26)\n    at async EmployeeBenefitsManager.initialize (http://localhost:3000/js/employee-benefits.js:28:7)\n    at async window.ensureBenefitsInitialized (http://localhost:3000/js/employee-benefits.js:2512:9)\n    at async HTMLDocument.<anonymous> (http://localhost:3000/employee-benefits.html:559:44)",
+        "CONSOLE: Failed to initialize navigation: ReferenceError: toggler is not defined\n    at BootstrapNavigation.setupResponsiveBehavior (http://localhost:3000/js/bootstrap-navigation.js:400:7)\n    at BootstrapNavigation.setupEventListeners (http://localhost:3000/js/bootstrap-navigation.js:95:10)\n    at BootstrapNavigation.init (http://localhost:3000/js/bootstrap-navigation.js:17:12)"
+      ],
+      "screenshots": {
+        "desktop": "employee-benefits-desktop.png",
+        "mobile": "employee-benefits-mobile.png"
+      }
+    },
+    "reconciliation": {
+      "url": "/reconciliation.html",
+      "styles": {
+        "bodyFont": "\"Segoe UI\", Tahoma, Geneva, Verdana, sans-serif",
+        "bodyColor": "rgb(33, 37, 41)",
+        "bodyBg": "rgb(248, 249, 250)",
+        "headings": [
+          {
+            "tag": "H1",
+            "text": "Bank Reconciliation",
+            "fontSize": "27.625px",
+            "fontWeight": "500",
+            "color": "rgb(33, 37, 41)"
+          }
+        ],
+        "buttons": [
+          {
+            "text": "\n        \n      ",
+            "bg": "rgba(0, 0, 0, 0)",
+            "color": "rgba(255, 255, 255, 0.55)",
+            "borderRadius": "6px",
+            "padding": "4px 12px"
+          },
+          {
+            "text": "",
+            "bg": "rgba(0, 0, 0, 0)",
+            "color": "rgb(0, 0, 0)",
+            "borderRadius": "6px",
+            "padding": "8px"
+          },
+          {
+            "text": "",
+            "bg": "rgba(0, 0, 0, 0)",
+            "color": "rgb(0, 0, 0)",
+            "borderRadius": "6px",
+            "padding": "20px 16px"
+          },
+          {
+            "text": "\n            Reconci",
+            "bg": "rgb(13, 110, 253)",
+            "color": "rgb(255, 255, 255)",
+            "borderRadius": "6px",
+            "padding": "6px 12px"
+          },
+          {
+            "text": "\n          Export Re",
+            "bg": "rgba(0, 0, 0, 0)",
+            "color": "rgb(108, 117, 125)",
+            "borderRadius": "6px",
+            "padding": "6px 12px"
+          }
+        ],
+        "cards": [],
+        "icons": [
+          {
+            "class": "fas fa-chart-line me-2",
+            "fontFamily": "\"Font Awesome 6 Free\"",
+            "fontSize": "20px",
+            "color": "rgb(255, 255, 255)"
+          },
+          {
+            "class": "fas fa-circle text-success me-1",
+            "fontFamily": "\"Font Awesome 6 Free\"",
+            "fontSize": "16px",
+            "color": "rgb(25, 135, 84)"
+          },
+          {
+            "class": "fas fa-chart-line me-2",
+            "fontFamily": "\"Font Awesome 6 Free\"",
+            "fontSize": "20px",
+            "color": "rgb(255, 255, 255)"
+          },
+          {
+            "class": "fas fa-tachometer-alt",
+            "fontFamily": "\"Font Awesome 6 Free\"",
+            "fontSize": "16px",
+            "color": "rgba(255, 255, 255, 0.75)"
+          },
+          {
+            "class": "fas fa-balance-scale",
+            "fontFamily": "\"Font Awesome 6 Free\"",
+            "fontSize": "16px",
+            "color": "rgba(255, 255, 255, 0.75)"
+          }
+        ],
+        "errors": []
+      },
+      "errors": [
+        "CONSOLE: Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "CONSOLE: Error loading reconciliation dashboard: SyntaxError: Unexpected token '<', \"<!DOCTYPE \"... is not valid JSON",
+        "CONSOLE: Failed to initialize navigation: ReferenceError: toggler is not defined\n    at BootstrapNavigation.setupResponsiveBehavior (http://localhost:3000/js/bootstrap-navigation.js:400:7)\n    at BootstrapNavigation.setupEventListeners (http://localhost:3000/js/bootstrap-navigation.js:95:10)\n    at BootstrapNavigation.init (http://localhost:3000/js/bootstrap-navigation.js:17:12)"
+      ],
+      "screenshots": {
+        "desktop": "reconciliation-desktop.png",
+        "mobile": "reconciliation-mobile.png"
+      }
+    },
+    "subscription-analysis": {
+      "url": "/subscription-analysis.html",
+      "styles": {
+        "bodyFont": "\"Segoe UI\", Tahoma, Geneva, Verdana, sans-serif",
+        "bodyColor": "rgb(33, 37, 41)",
+        "bodyBg": "rgb(248, 249, 250)",
+        "headings": [
+          {
+            "tag": "H1",
+            "text": "Subscription Analysis",
+            "fontSize": "27.625px",
+            "fontWeight": "500",
+            "color": "rgb(33, 37, 41)"
+          }
+        ],
+        "buttons": [
+          {
+            "text": "\n        \n      ",
+            "bg": "rgba(0, 0, 0, 0)",
+            "color": "rgba(255, 255, 255, 0.55)",
+            "borderRadius": "6px",
+            "padding": "4px 12px"
+          },
+          {
+            "text": "",
+            "bg": "rgba(0, 0, 0, 0)",
+            "color": "rgb(0, 0, 0)",
+            "borderRadius": "6px",
+            "padding": "8px"
+          },
+          {
+            "text": "\n            Refresh",
+            "bg": "rgb(13, 110, 253)",
+            "color": "rgb(255, 255, 255)",
+            "borderRadius": "6px",
+            "padding": "6px 12px"
+          },
+          {
+            "text": "All",
+            "bg": "rgb(13, 110, 253)",
+            "color": "rgb(255, 255, 255)",
+            "borderRadius": "4px 0px 0px 4px",
+            "padding": "4px 8px"
+          },
+          {
+            "text": "Active",
+            "bg": "rgba(0, 0, 0, 0)",
+            "color": "rgb(25, 135, 84)",
+            "borderRadius": "0px",
+            "padding": "4px 8px"
+          }
+        ],
+        "cards": [],
+        "icons": [
+          {
+            "class": "fas fa-chart-line me-2",
+            "fontFamily": "\"Font Awesome 6 Free\"",
+            "fontSize": "20px",
+            "color": "rgb(255, 255, 255)"
+          },
+          {
+            "class": "fas fa-circle text-success me-1",
+            "fontFamily": "\"Font Awesome 6 Free\"",
+            "fontSize": "16px",
+            "color": "rgb(25, 135, 84)"
+          },
+          {
+            "class": "fas fa-chart-line me-2",
+            "fontFamily": "\"Font Awesome 6 Free\"",
+            "fontSize": "20px",
+            "color": "rgb(255, 255, 255)"
+          },
+          {
+            "class": "fas fa-tachometer-alt",
+            "fontFamily": "\"Font Awesome 6 Free\"",
+            "fontSize": "16px",
+            "color": "rgba(255, 255, 255, 0.75)"
+          },
+          {
+            "class": "fas fa-balance-scale",
+            "fontFamily": "\"Font Awesome 6 Free\"",
+            "fontSize": "16px",
+            "color": "rgba(255, 255, 255, 0.75)"
+          }
+        ],
+        "errors": []
+      },
+      "errors": [
+        "CONSOLE: Failed to initialize navigation: ReferenceError: toggler is not defined\n    at BootstrapNavigation.setupResponsiveBehavior (http://localhost:3000/js/bootstrap-navigation.js:400:7)\n    at BootstrapNavigation.setupEventListeners (http://localhost:3000/js/bootstrap-navigation.js:95:10)\n    at BootstrapNavigation.init (http://localhost:3000/js/bootstrap-navigation.js:17:12)"
+      ],
+      "screenshots": {
+        "desktop": "subscription-analysis-desktop.png",
+        "mobile": "subscription-analysis-mobile.png"
+      }
+    },
+    "geographic-analysis": {
+      "url": "/geographic-analysis.html",
+      "styles": {
+        "bodyFont": "\"Segoe UI\", Tahoma, Geneva, Verdana, sans-serif",
+        "bodyColor": "rgb(33, 37, 41)",
+        "bodyBg": "rgb(248, 250, 252)",
+        "headings": [
+          {
+            "tag": "H2",
+            "text": "Geographic Overview",
+            "fontSize": "24.575px",
+            "fontWeight": "500",
+            "color": "rgb(33, 37, 41)"
+          },
+          {
+            "tag": "H2",
+            "text": "Top Locations",
+            "fontSize": "24.575px",
+            "fontWeight": "500",
+            "color": "rgb(33, 37, 41)"
+          },
+          {
+            "tag": "H2",
+            "text": "Revenue Analysis",
+            "fontSize": "24.575px",
+            "fontWeight": "500",
+            "color": "rgb(33, 37, 41)"
+          },
+          {
+            "tag": "H2",
+            "text": "Shipping Analysis",
+            "fontSize": "24.575px",
+            "fontWeight": "500",
+            "color": "rgb(33, 37, 41)"
+          },
+          {
+            "tag": "H2",
+            "text": "Temporal Trends",
+            "fontSize": "24.575px",
+            "fontWeight": "500",
+            "color": "rgb(33, 37, 41)"
+          }
+        ],
+        "buttons": [
+          {
+            "text": "\n        \n      ",
+            "bg": "rgba(0, 0, 0, 0)",
+            "color": "rgba(255, 255, 255, 0.55)",
+            "borderRadius": "6px",
+            "padding": "4px 12px"
+          },
+          {
+            "text": "",
+            "bg": "rgba(0, 0, 0, 0)",
+            "color": "rgb(0, 0, 0)",
+            "borderRadius": "6px",
+            "padding": "8px"
+          },
+          {
+            "text": "\n                   ",
+            "bg": "rgba(0, 0, 0, 0)",
+            "color": "rgb(37, 99, 235)",
+            "borderRadius": "6px",
+            "padding": "6px 12px"
+          },
+          {
+            "text": "\n      \n    ",
+            "bg": "rgba(0, 0, 0, 0)",
+            "color": "rgb(108, 117, 125)",
+            "borderRadius": "6px",
+            "padding": "6px 12px"
+          }
+        ],
+        "cards": [
+          {
+            "bg": "rgba(0, 0, 0, 0)",
+            "boxShadow": "rgba(0, 0, 0, 0.1) 0px 4px 6px -1px",
+            "borderRadius": "12px",
+            "border": "0px none rgb(255, 255, 255)"
+          },
+          {
+            "bg": "rgba(0, 0, 0, 0)",
+            "boxShadow": "rgba(0, 0, 0, 0.1) 0px 4px 6px -1px",
+            "borderRadius": "12px",
+            "border": "0px none rgb(255, 255, 255)"
+          },
+          {
+            "bg": "rgba(0, 0, 0, 0)",
+            "boxShadow": "rgba(0, 0, 0, 0.1) 0px 4px 6px -1px",
+            "borderRadius": "12px",
+            "border": "0px none rgb(255, 255, 255)"
+          }
+        ],
+        "icons": [
+          {
+            "class": "fas fa-chart-line me-2",
+            "fontFamily": "\"Font Awesome 6 Free\"",
+            "fontSize": "20px",
+            "color": "rgb(255, 255, 255)"
+          },
+          {
+            "class": "fas fa-circle text-success me-1",
+            "fontFamily": "\"Font Awesome 6 Free\"",
+            "fontSize": "16px",
+            "color": "rgb(25, 135, 84)"
+          },
+          {
+            "class": "fas fa-chart-line me-2",
+            "fontFamily": "\"Font Awesome 6 Free\"",
+            "fontSize": "20px",
+            "color": "rgb(255, 255, 255)"
+          },
+          {
+            "class": "fas fa-tachometer-alt",
+            "fontFamily": "\"Font Awesome 6 Free\"",
+            "fontSize": "16px",
+            "color": "rgba(255, 255, 255, 0.75)"
+          },
+          {
+            "class": "fas fa-balance-scale",
+            "fontFamily": "\"Font Awesome 6 Free\"",
+            "fontSize": "16px",
+            "color": "rgba(255, 255, 255, 0.75)"
+          }
+        ],
+        "errors": []
+      },
+      "errors": [
+        "CONSOLE: Error loading geographic data: TypeError: Cannot read properties of null (reading 'insertBefore')\n    at showError (http://localhost:3000/geographic-analysis.html:575:25)\n    at loadGeographicData (http://localhost:3000/geographic-analysis.html:541:21)",
+        "PAGE: Cannot read properties of null (reading 'insertBefore')",
+        "CONSOLE: Failed to initialize navigation: ReferenceError: toggler is not defined\n    at BootstrapNavigation.setupResponsiveBehavior (http://localhost:3000/js/bootstrap-navigation.js:400:7)\n    at BootstrapNavigation.setupEventListeners (http://localhost:3000/js/bootstrap-navigation.js:95:10)\n    at BootstrapNavigation.init (http://localhost:3000/js/bootstrap-navigation.js:17:12)"
+      ],
+      "screenshots": {
+        "desktop": "geographic-analysis-desktop.png",
+        "mobile": "geographic-analysis-mobile.png"
+      }
+    },
+    "amazon-zip-import": {
+      "url": "/amazon-zip-import.html",
+      "styles": {
+        "bodyFont": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, sans-serif",
+        "bodyColor": "rgb(0, 0, 0)",
+        "bodyBg": "rgba(0, 0, 0, 0)",
+        "headings": [
+          {
+            "tag": "H1",
+            "text": "🏢 Amazon ZIP Import System",
+            "fontSize": "32px",
+            "fontWeight": "700",
+            "color": "rgb(255, 255, 255)"
+          },
+          {
+            "tag": "H3",
+            "text": "📋 How to Get Your Amazon Data",
+            "fontSize": "18.72px",
+            "fontWeight": "700",
+            "color": "rgb(0, 123, 255)"
+          },
+          {
+            "tag": "H3",
+            "text": "Upload Amazon ZIP File",
+            "fontSize": "18.72px",
+            "fontWeight": "700",
+            "color": "rgb(0, 0, 0)"
+          }
+        ],
+        "buttons": [
+          {
+            "text": "\n                   ",
+            "bg": "rgba(0, 0, 0, 0)",
+            "color": "rgb(255, 255, 255)",
+            "borderRadius": "10px",
+            "padding": "15px 30px"
+          },
+          {
+            "text": "\n                   ",
+            "bg": "rgba(0, 0, 0, 0)",
+            "color": "rgb(255, 255, 255)",
+            "borderRadius": "10px",
+            "padding": "15px 30px"
+          },
+          {
+            "text": "\n      \n    ",
+            "bg": "rgb(239, 239, 239)",
+            "color": "rgb(0, 0, 0)",
+            "borderRadius": "0px",
+            "padding": "0px"
+          }
+        ],
+        "cards": [],
+        "icons": [
+          {
+            "class": "fas fa-chart-line me-2",
+            "fontFamily": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, sans-serif",
+            "fontSize": "16px",
+            "color": "rgb(0, 0, 0)"
+          },
+          {
+            "class": "fas fa-tachometer-alt me-2",
+            "fontFamily": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, sans-serif",
+            "fontSize": "16px",
+            "color": "rgb(0, 0, 238)"
+          },
+          {
+            "class": "fas fa-balance-scale me-2",
+            "fontFamily": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, sans-serif",
+            "fontSize": "16px",
+            "color": "rgb(0, 0, 238)"
+          },
+          {
+            "class": "fas fa-link me-2",
+            "fontFamily": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, sans-serif",
+            "fontSize": "16px",
+            "color": "rgb(0, 0, 238)"
+          },
+          {
+            "class": "fas fa-users me-2",
+            "fontFamily": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, sans-serif",
+            "fontSize": "16px",
+            "color": "rgb(0, 0, 238)"
+          }
+        ],
+        "errors": []
+      },
+      "errors": [
+        "CONSOLE: Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "CONSOLE: Refused to execute script from 'http://localhost:3000/js/menu-data.js' because its MIME type ('text/html') is not executable, and strict MIME type checking is enabled.",
+        "CONSOLE: Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "CONSOLE: Refused to execute script from 'http://localhost:3000/js/menu-widget.js' because its MIME type ('text/html') is not executable, and strict MIME type checking is enabled."
+      ],
+      "screenshots": {
+        "desktop": "amazon-zip-import-desktop.png",
+        "mobile": "amazon-zip-import-mobile.png"
+      }
+    },
+    "about": {
+      "url": "/about.html",
+      "styles": {
+        "bodyFont": "system-ui, -apple-system, \"Segoe UI\", Roboto, \"Helvetica Neue\", \"Noto Sans\", \"Liberation Sans\", Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"",
+        "bodyColor": "rgb(33, 37, 41)",
+        "bodyBg": "rgb(255, 255, 255)",
+        "headings": [
+          {
+            "tag": "H1",
+            "text": "\n                About TSV Ledger\n      ",
+            "fontSize": "23.05px",
+            "fontWeight": "500",
+            "color": "rgb(255, 255, 255)"
+          },
+          {
+            "tag": "H2",
+            "text": "Advanced Business Intelligence Platform",
+            "fontSize": "21.525px",
+            "fontWeight": "500",
+            "color": "rgb(33, 37, 41)"
+          },
+          {
+            "tag": "H3",
+            "text": "Key Features",
+            "fontSize": "20px",
+            "fontWeight": "500",
+            "color": "rgb(33, 37, 41)"
+          },
+          {
+            "tag": "H3",
+            "text": "Technical Stack",
+            "fontSize": "20px",
+            "fontWeight": "500",
+            "color": "rgb(33, 37, 41)"
+          }
+        ],
+        "buttons": [
+          {
+            "text": "\n      \n    ",
+            "bg": "rgba(0, 0, 0, 0)",
+            "color": "rgb(108, 117, 125)",
+            "borderRadius": "6px",
+            "padding": "6px 12px"
+          }
+        ],
+        "cards": [
+          {
+            "bg": "rgb(255, 255, 255)",
+            "boxShadow": "rgba(0, 0, 0, 0.15) 0px 8px 16px 0px",
+            "borderRadius": "6px",
+            "border": "1px solid rgba(0, 0, 0, 0.176)"
+          }
+        ],
+        "icons": [
+          {
+            "class": "fas fa-chart-line me-2",
+            "fontFamily": "\"Font Awesome 6 Free\"",
+            "fontSize": "21.525px",
+            "color": "rgb(33, 37, 41)"
+          },
+          {
+            "class": "fas fa-tachometer-alt me-2",
+            "fontFamily": "\"Font Awesome 6 Free\"",
+            "fontSize": "16px",
+            "color": "rgb(33, 37, 41)"
+          },
+          {
+            "class": "fas fa-balance-scale me-2",
+            "fontFamily": "\"Font Awesome 6 Free\"",
+            "fontSize": "16px",
+            "color": "rgb(33, 37, 41)"
+          },
+          {
+            "class": "fas fa-link me-2",
+            "fontFamily": "\"Font Awesome 6 Free\"",
+            "fontSize": "16px",
+            "color": "rgb(33, 37, 41)"
+          },
+          {
+            "class": "fas fa-users me-2",
+            "fontFamily": "\"Font Awesome 6 Free\"",
+            "fontSize": "16px",
+            "color": "rgb(33, 37, 41)"
+          }
+        ],
+        "errors": []
+      },
+      "errors": [],
+      "screenshots": {
+        "desktop": "about-desktop.png",
+        "mobile": "about-mobile.png"
+      }
+    }
+  }
+}
