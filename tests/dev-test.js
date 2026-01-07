@@ -134,7 +134,9 @@ class ContinuousTester {
     ];
 
     this.watcher = fs.watch('.', { recursive: true }, (eventType, filename) => {
-      if (!filename) return;
+      if (!filename) {
+        return;
+      }
 
       const filePath = path.resolve(filename);
 

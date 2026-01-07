@@ -51,7 +51,9 @@ async function performVisualTesting() {
         const mgr = (typeof employeeBenefitsManager !== 'undefined') ?
           employeeBenefitsManager : (window.employeeBenefitsManager || null);
         return !!(mgr && typeof mgr.showSelectionModal === 'function');
-      } catch (e) { return false; }
+      } catch (e) {
+        return false;
+      }
     }, { timeout: 20000 });
 
     console.log('✅ Benefits manager ready');

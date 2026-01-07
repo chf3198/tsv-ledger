@@ -392,17 +392,17 @@ class AIVisualTester {
     let result;
     try {
       switch (testName) {
-        case 'navigation':
-          result = await this.testNavigation();
-          break;
-        case 'analysis':
-          result = await this.testQuickAnalysis();
-          break;
-        case 'responsive':
-          result = await this.testResponsiveDesign();
-          break;
-        default:
-          throw new Error(`Unknown test: ${testName}`);
+      case 'navigation':
+        result = await this.testNavigation();
+        break;
+      case 'analysis':
+        result = await this.testQuickAnalysis();
+        break;
+      case 'responsive':
+        result = await this.testResponsiveDesign();
+        break;
+      default:
+        throw new Error(`Unknown test: ${testName}`);
       }
     } finally {
       await this.closeBrowser();

@@ -116,23 +116,23 @@ class AutomatedTester {
     let testArgs;
 
     switch (testType) {
-      case 'unit':
-        testCommand = 'npx';
-        testArgs = ['jest', 'tests/unit', '--coverage', '--coverageDirectory=coverage/unit'];
-        break;
-      case 'integration':
-        testCommand = 'npx';
-        testArgs = ['jest', 'tests/integration', '--coverage', '--coverageDirectory=coverage/integration'];
-        break;
-      case 'e2e':
-        testCommand = 'npx';
-        testArgs = ['playwright', 'test', 'tests/e2e'];
-        break;
-      case 'all':
-      default:
-        testCommand = 'npm';
-        testArgs = ['run', 'test:all'];
-        break;
+    case 'unit':
+      testCommand = 'npx';
+      testArgs = ['jest', 'tests/unit', '--coverage', '--coverageDirectory=coverage/unit'];
+      break;
+    case 'integration':
+      testCommand = 'npx';
+      testArgs = ['jest', 'tests/integration', '--coverage', '--coverageDirectory=coverage/integration'];
+      break;
+    case 'e2e':
+      testCommand = 'npx';
+      testArgs = ['playwright', 'test', 'tests/e2e'];
+      break;
+    case 'all':
+    default:
+      testCommand = 'npm';
+      testArgs = ['run', 'test:all'];
+      break;
     }
 
     // Set environment variable to disable Jest global setup since we manage the server
@@ -146,7 +146,7 @@ class AutomatedTester {
       this.testProcess = spawn(testCommand, testArgs, {
         cwd: path.resolve(__dirname),
         stdio: 'inherit',
-        env: env
+        env
       });
 
       this.testProcess.on('exit', (code) => {

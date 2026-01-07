@@ -18,31 +18,32 @@ Universal navigation menu implementation with sidebar injection across all pages
 
 | Date | Summary |
 |------|---------|
+| Jan 7, 2026 | **BLOAT CLEANUP**: Deleted tools/analysis/ (39 files, 25,826 lines), src/classes/ bloat (2,208 lines), data/reports/ (29 stale JSONs) |
+| Jan 7, 2026 | KTS optimization - CURRENT_STATE.md, session checklists, updated AGENTS.md |
 | Jan 7, 2026 | Root directory reorganization - moved 80+ files to proper locations |
-| Jan 7, 2026 | Added AI agent optimization (AGENTS.md, path-specific instructions) |
-| Jan 6, 2026 | AI compliance analysis and tool creation |
 
 ## Known Issues
 
-- [ ] ~130 files exceed 300-line limit (many in tools/analysis/)
-- [ ] tools/analysis/ contains 39 unused/broken analysis scripts
+- [ ] Core src/ files still exceed 300-line limit (database.js, tsv-categorizer.js, etc.)
 - [ ] E2E tests may fail due to server port conflicts
-- [ ] KnowledgeTransferTest/ is outdated (Sept 2025)
+- [x] ~~tools/analysis/ contains 39 unused/broken scripts~~ DELETED
+- [x] ~~KnowledgeTransferTest/ outdated~~ UPDATED to v2.0
 
 ## Project Health
 
 | Metric | Current | Target |
 |--------|---------|--------|
-| Files > 300 lines | ~130 | 0 |
+| Files > 300 lines | ~15 (core src/) | 0 |
 | Unit test coverage | ~70% | 90%+ |
 | E2E tests passing | Partial | 100% |
-| Documentation | 60% | 95% |
+| Documentation | 75% | 95% |
+| Lines deleted (bloat) | 28,034 | - |
 
 ## Next Actions (Priority Order)
 
-1. [ ] Decide: Archive or fix tools/analysis/ scripts
+1. [x] ~~Decide: Archive or fix tools/analysis/ scripts~~ DELETED
 2. [ ] Fix file size violations in core src/ files
-3. [ ] Update KnowledgeTransferTest/ with current lessons
+3. [x] ~~Update KnowledgeTransferTest/~~ DONE (v2.0)
 4. [ ] Merge feat/universal-menu to main
 5. [ ] Complete navigation implementation
 

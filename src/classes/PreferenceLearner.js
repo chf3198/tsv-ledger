@@ -4,5 +4,5 @@
  */
 
 class PreferenceLearner {
-    // Implementation in main class
+  // Implementation in main class
 }

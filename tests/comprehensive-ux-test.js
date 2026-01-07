@@ -131,7 +131,9 @@ class UXTestingSuite {
         const passed = response.status === 200;
         this.recordTest(`API ${endpoint}`, passed,
           passed ? 'Endpoint responding correctly' : `Status: ${response.status}`);
-        if (!passed) allPassed = false;
+        if (!passed) {
+          allPassed = false;
+        }
       } catch (error) {
         this.recordTest(`API ${endpoint}`, false, error.message);
         allPassed = false;

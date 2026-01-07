@@ -1,11 +1,11 @@
-const puppeteer = require("puppeteer");
+const puppeteer = require('puppeteer');
 
 async function testBenefitsFieldMapping() {
-  console.log("🧪 Testing Employee Benefits Field Mapping Fix...");
+  console.log('🧪 Testing Employee Benefits Field Mapping Fix...');
 
   const browser = await puppeteer.launch({
     headless: true,
-    args: ["--no-sandbox", "--disable-setuid-sandbox"],
+    args: ['--no-sandbox', '--disable-setuid-sandbox']
   });
 
   const page = await browser.newPage();
@@ -13,9 +13,9 @@ async function testBenefitsFieldMapping() {
 
   try {
     // Navigate to employee benefits page
-    console.log("🏠 Navigating to employee benefits page...");
-    await page.goto("http://localhost:3000/employee-benefits.html", {
-      waitUntil: "networkidle2",
+    console.log('🏠 Navigating to employee benefits page...');
+    await page.goto('http://localhost:3000/employee-benefits.html', {
+      waitUntil: 'networkidle2'
     });
 
     // Wait for the page to initialize
@@ -31,7 +31,7 @@ async function testBenefitsFieldMapping() {
     );
 
     // Open the benefits modal
-    console.log("🔧 Opening benefits configuration modal...");
+    console.log('🔧 Opening benefits configuration modal...');
     await page.evaluate(() => {
       if (
         window.employeeBenefitsManager &&
@@ -48,21 +48,21 @@ async function testBenefitsFieldMapping() {
         elements.map((el) => ({
           id: el.id,
           class: el.className,
-          visible: el.offsetParent !== null,
+          visible: el.offsetParent !== null
         }))
     );
-    console.log("Available modals:", modals);
+    console.log('Available modals:', modals);
 
     // Wait for modal to be visible - but it might not be opening
     try {
-      await page.waitForSelector("#employeeBenefitsModal", {
+      await page.waitForSelector('#employeeBenefitsModal', {
         visible: true,
-        timeout: 2000,
+        timeout: 2000
       });
-      console.log("✅ Modal opened successfully");
+      console.log('✅ Modal opened successfully');
     } catch (e) {
       console.log(
-        "⚠️ Modal did not open, checking if cards are rendered elsewhere"
+        '⚠️ Modal did not open, checking if cards are rendered elsewhere'
       );
     }
 
@@ -70,21 +70,21 @@ async function testBenefitsFieldMapping() {
     await new Promise((resolve) => setTimeout(resolve, 1000));
 
     // Check if modal content exists
-    const modalContent = await page.$("#employeeBenefitsModal .modal-body");
+    const modalContent = await page.$('#employeeBenefitsModal .modal-body');
     if (modalContent) {
-      console.log("✅ Modal body found");
-      const businessList = await page.$("#businessSuppliesList");
-      const benefitsList = await page.$("#benefitsList");
+      console.log('✅ Modal body found');
+      const businessList = await page.$('#businessSuppliesList');
+      const benefitsList = await page.$('#benefitsList');
       console.log(
         `Business list found: ${!!businessList}, Benefits list found: ${!!benefitsList}`
       );
     } else {
-      console.log("⚠️ Modal body not found");
+      console.log('⚠️ Modal body not found');
     }
 
     // Check for NaN values in cards
-    console.log("🔍 Checking for $NaN values in item cards...");
-    const cardTexts = await page.$$eval(".card .badge", (badges) =>
+    console.log('🔍 Checking for $NaN values in item cards...');
+    const cardTexts = await page.$$eval('.card .badge', (badges) =>
       badges.map((badge) => badge.textContent)
     );
 
@@ -92,7 +92,7 @@ async function testBenefitsFieldMapping() {
     let hasNaN = false;
     cardTexts.forEach((text, i) => {
       console.log(`  Badge ${i + 1}: ${text}`);
-      if (text.includes("$NaN")) {
+      if (text.includes('$NaN')) {
         console.error(`❌ Found $NaN in badge: ${text}`);
         hasNaN = true;
       }
@@ -111,29 +111,29 @@ async function testBenefitsFieldMapping() {
             amount: item.amount,
             price: item.price,
             description: item.description,
-            name: item.name,
+            name: item.name
           }));
       }
       return [];
     });
 
-    console.log("Sample item data:", itemData);
+    console.log('Sample item data:', itemData);
 
     if (hasNaN) {
-      throw new Error("Found $NaN in badge elements");
+      throw new Error('Found $NaN in badge elements');
     }
     // Also check all elements with dollar signs
-    const allDollarElements = await page.$$eval("*", (elements) =>
+    const allDollarElements = await page.$$eval('*', (elements) =>
       elements
-        .filter((el) => el.textContent && el.textContent.includes("$"))
+        .filter((el) => el.textContent && el.textContent.includes('$'))
         .map((el) => ({
           text: el.textContent.trim(),
           tag: el.tagName,
-          class: el.className,
+          class: el.className
         }))
     );
 
-    console.log("All elements with $:", allDollarElements.slice(0, 10));
+    console.log('All elements with $:', allDollarElements.slice(0, 10));
     // Check that amounts are properly formatted
     const validAmounts = cardTexts.filter((text) => /^\$\d+\.\d{2}/.test(text));
     console.log(
@@ -141,11 +141,11 @@ async function testBenefitsFieldMapping() {
     );
 
     if (validAmounts.length === 0) {
-      throw new Error("No properly formatted dollar amounts found");
+      throw new Error('No properly formatted dollar amounts found');
     }
 
     // Test slider functionality
-    console.log("🎚️ Testing slider functionality...");
+    console.log('🎚️ Testing slider functionality...');
     const initialValues = await page.$$eval('input[type="range"]', (sliders) =>
       sliders.map((slider) => slider.value)
     );
@@ -160,8 +160,8 @@ async function testBenefitsFieldMapping() {
       await page.evaluate(() => {
         const slider = document.querySelector('input[type="range"]');
         if (slider) {
-          slider.value = "75";
-          slider.dispatchEvent(new Event("input", { bubbles: true }));
+          slider.value = '75';
+          slider.dispatchEvent(new Event('input', { bubbles: true }));
         }
       });
 
@@ -169,7 +169,7 @@ async function testBenefitsFieldMapping() {
 
       // Check if the display updated
       const updatedBadge = await page.$eval(
-        ".card .badge",
+        '.card .badge',
         (badge) => badge.textContent
       );
       console.log(
@@ -178,18 +178,18 @@ async function testBenefitsFieldMapping() {
     }
 
     // Test search functionality
-    console.log("🔍 Testing search functionality...");
-    const searchInput = await page.$("#searchBusiness");
+    console.log('🔍 Testing search functionality...');
+    const searchInput = await page.$('#searchBusiness');
     if (searchInput) {
-      await page.type("#searchBusiness", "test");
+      await page.type('#searchBusiness', 'test');
       await new Promise((resolve) => setTimeout(resolve, 500));
 
       const visibleCards = await page.$$eval(
-        ".card",
+        '.card',
         (cards) =>
           cards.filter((card) => {
             const style = window.getComputedStyle(card);
-            return style.display !== "none" && card.offsetParent !== null;
+            return style.display !== 'none' && card.offsetParent !== null;
           }).length
       );
 
@@ -198,9 +198,9 @@ async function testBenefitsFieldMapping() {
       );
     }
 
-    console.log("🎉 All field mapping and functionality tests passed!");
+    console.log('🎉 All field mapping and functionality tests passed!');
   } catch (error) {
-    console.error("❌ Field mapping test failed:", error.message);
+    console.error('❌ Field mapping test failed:', error.message);
     throw error;
   } finally {
     await browser.close();
@@ -210,11 +210,11 @@ async function testBenefitsFieldMapping() {
 // Run the test
 testBenefitsFieldMapping()
   .then(() => {
-    console.log("✅ Employee Benefits Field Mapping Test: PASSED");
+    console.log('✅ Employee Benefits Field Mapping Test: PASSED');
     process.exit(0);
   })
   .catch((error) => {
-    console.error("❌ Employee Benefits Field Mapping Test: FAILED");
+    console.error('❌ Employee Benefits Field Mapping Test: FAILED');
     console.error(error);
     process.exit(1);
   });

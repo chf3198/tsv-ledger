@@ -119,7 +119,7 @@ async function performUXTesting() {
     const itemInBusiness = businessItemsAfter.includes(itemId);
     const itemInBenefits = benefitsItemsAfter.includes(itemId);
 
-    console.log(`📊 After 100% Benefits allocation:`);
+    console.log('📊 After 100% Benefits allocation:');
     console.log(`   - Item in Business column: ${itemInBusiness ? '❌ FAIL' : '✅ PASS'}`);
     console.log(`   - Item in Benefits column: ${itemInBenefits ? '✅ PASS' : '❌ FAIL'}`);
 
@@ -159,7 +159,7 @@ async function performUXTesting() {
     const itemInBusinessFinal = businessItemsFinal.includes(itemId);
     const itemInBenefitsFinal = benefitsItemsFinal.includes(itemId);
 
-    console.log(`📊 After 100% Business allocation:`);
+    console.log('📊 After 100% Business allocation:');
     console.log(`   - Item in Business column: ${itemInBusinessFinal ? '✅ PASS' : '❌ FAIL'}`);
     console.log(`   - Item in Benefits column: ${itemInBenefitsFinal ? '❌ FAIL' : '✅ PASS'}`);
 

@@ -34,7 +34,7 @@ class UXTestingSuite {
             const result = {
               statusCode: res.statusCode,
               headers: res.headers,
-              body: body
+              body
             };
             resolve(result);
           } catch (e) {

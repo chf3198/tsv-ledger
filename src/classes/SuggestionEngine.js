@@ -4,9 +4,9 @@
  */
 
 class SuggestionEngine {
-    async trainOnCorrections(corrections) {
-        // Simulate training
-        this.trained = true;
-        return corrections.length;
-    }
+  async trainOnCorrections(corrections) {
+    // Simulate training
+    this.trained = true;
+    return corrections.length;
+  }
 }

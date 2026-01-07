@@ -3,11 +3,11 @@ const { JSDOM } = require('jsdom');
 
 // Mock the manager
 const mockManager = {
-    itemProgressiveAllocations: {
-        'test-item-1': { business: 0, benefits: 100 },
-        'test-item-2': { business: 100, benefits: 0 },
-        'test-item-3': { business: 50, benefits: 50 }
-    }
+  itemProgressiveAllocations: {
+    'test-item-1': { business: 0, benefits: 100 },
+    'test-item-2': { business: 100, benefits: 0 },
+    'test-item-3': { business: 50, benefits: 50 }
+  }
 };
 
 // Create mock DOM
@@ -32,51 +32,57 @@ global.employeeBenefitsManager = mockManager;
 
 // Test the moveFullyAllocatedItems function
 function moveFullyAllocatedItems() {
-    try {
-        const mgr = (typeof employeeBenefitsManager !== 'undefined') ? employeeBenefitsManager : (window.employeeBenefitsManager || null);
-        if (!mgr || !mgr.itemProgressiveAllocations) {
-            console.log('Benefits fix: manager or allocations not ready');
-            return;
-        }
-        const allocations = mgr.itemProgressiveAllocations;
-        const getAlloc = id => {
-            if (!allocations) return null;
-            if (typeof allocations.get === 'function') return allocations.get(id) || null;
-            return allocations[id] || null;
-        };
-        const benefitsList = document.getElementById('benefitsList');
-        const businessList = document.getElementById('businessSuppliesList');
-        if (!benefitsList || !businessList) {
-            console.log('Benefits fix: lists not found');
-            return;
-        }
-        let removed = 0;
-        // Remove items from business column if business allocation is 0%
-        Array.from(businessList.querySelectorAll('[data-item-id]')).forEach(el => {
-            const id = el.dataset.itemId;
-            const prog = getAlloc(id) || {};
-            const business = Number(prog.business || 0);
-            if (business === 0) {
-                el.remove();
-                removed++;
-                console.log('Benefits fix: removed', id, 'from business (business=0)');
-            }
-        });
-        // Remove items from benefits column if benefits allocation is 0%
-        Array.from(benefitsList.querySelectorAll('[data-item-id]')).forEach(el => {
-            const id = el.dataset.itemId;
-            const prog = getAlloc(id) || {};
-            const benefits = Number(prog.benefits || 0);
-            if (benefits === 0) {
-                el.remove();
-                removed++;
-                console.log('Benefits fix: removed', id, 'from benefits (benefits=0)');
-            }
-        });
-        if (removed > 0) {
-            console.log('Benefits fix: removed', removed, 'items with 0% allocation');
-        }
-    } catch (e) { console.warn('Benefits allocation fix failed', e); }
+  try {
+    const mgr = (typeof employeeBenefitsManager !== 'undefined') ? employeeBenefitsManager : (window.employeeBenefitsManager || null);
+    if (!mgr || !mgr.itemProgressiveAllocations) {
+      console.log('Benefits fix: manager or allocations not ready');
+      return;
+    }
+    const allocations = mgr.itemProgressiveAllocations;
+    const getAlloc = id => {
+      if (!allocations) {
+        return null;
+      }
+      if (typeof allocations.get === 'function') {
+        return allocations.get(id) || null;
+      }
+      return allocations[id] || null;
+    };
+    const benefitsList = document.getElementById('benefitsList');
+    const businessList = document.getElementById('businessSuppliesList');
+    if (!benefitsList || !businessList) {
+      console.log('Benefits fix: lists not found');
+      return;
+    }
+    let removed = 0;
+    // Remove items from business column if business allocation is 0%
+    Array.from(businessList.querySelectorAll('[data-item-id]')).forEach(el => {
+      const id = el.dataset.itemId;
+      const prog = getAlloc(id) || {};
+      const business = Number(prog.business || 0);
+      if (business === 0) {
+        el.remove();
+        removed++;
+        console.log('Benefits fix: removed', id, 'from business (business=0)');
+      }
+    });
+    // Remove items from benefits column if benefits allocation is 0%
+    Array.from(benefitsList.querySelectorAll('[data-item-id]')).forEach(el => {
+      const id = el.dataset.itemId;
+      const prog = getAlloc(id) || {};
+      const benefits = Number(prog.benefits || 0);
+      if (benefits === 0) {
+        el.remove();
+        removed++;
+        console.log('Benefits fix: removed', id, 'from benefits (benefits=0)');
+      }
+    });
+    if (removed > 0) {
+      console.log('Benefits fix: removed', removed, 'items with 0% allocation');
+    }
+  } catch (e) {
+    console.warn('Benefits allocation fix failed', e);
+  }
 }
 
 console.log('=== BEFORE CLEANUP ===');
