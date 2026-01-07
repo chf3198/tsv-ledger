@@ -4,7 +4,7 @@
  * Tests for navigation workflows including dashboard, menu, and page access
  */
 
-const BaseUXTest = require("./base-test-utils");
+const BaseUXTest = require('./base-test-utils');
 
 /**
  * Navigation workflow tests
@@ -25,10 +25,10 @@ class NavigationTests extends BaseUXTest {
    * @returns {Promise<void>}
    */
   async testDashboardNavigation() {
-    await this.runTest("Dashboard Navigation", async () => {
-      await this.navigateToPage("/");
+    await this.runTest('Dashboard Navigation', async () => {
+      await this.navigateToPage('/');
       const title = await this.page.title();
-      return title && title.includes("TSV");
+      return title && title.includes('TSV');
     });
   }
 
@@ -37,8 +37,8 @@ class NavigationTests extends BaseUXTest {
    * @returns {Promise<void>}
    */
   async testMenuNavigation() {
-    await this.runTest("Menu Navigation", async () => {
-      await this.navigateToPage("/");
+    await this.runTest('Menu Navigation', async () => {
+      await this.navigateToPage('/');
 
       // Look for navigation menu toggle (Shoelace drawer)
       const menuToggle = await this.page.$(
@@ -49,10 +49,10 @@ class NavigationTests extends BaseUXTest {
         await this.page.waitForTimeout(500);
 
         // Check if sidebar/drawer opened
-        const sidebar = await this.page.$("#sidebar, sl-drawer");
+        const sidebar = await this.page.$('#sidebar, sl-drawer');
         const isOpen = await this.page.evaluate(() => {
-          const drawer = document.querySelector("sl-drawer");
-          return drawer ? drawer.hasAttribute("open") : false;
+          const drawer = document.querySelector('sl-drawer');
+          return drawer ? drawer.hasAttribute('open') : false;
         });
 
         if (isOpen) {
@@ -73,19 +73,19 @@ class NavigationTests extends BaseUXTest {
    * @returns {Promise<void>}
    */
   async testEmployeeBenefitsAccess() {
-    await this.runTest("Employee Benefits Access", async () => {
-      await this.navigateToPage("/employee-benefits.html");
+    await this.runTest('Employee Benefits Access', async () => {
+      await this.navigateToPage('/employee-benefits.html');
 
       // Check if benefits page loaded
       const benefitsContent = await this.page.$$(
-        ".benefits-container, .employee-benefits, h1"
+        '.benefits-container, .employee-benefits, h1'
       );
       const hasBenefitsText = await this.page.evaluate(() => {
         const headings = Array.from(
-          document.querySelectorAll("h1, h2, h3, h4, h5, h6")
+          document.querySelectorAll('h1, h2, h3, h4, h5, h6')
         );
         return headings.some((h) =>
-          h.textContent.toLowerCase().includes("benefit")
+          h.textContent.toLowerCase().includes('benefit')
         );
       });
       return benefitsContent.length > 0 || hasBenefitsText;

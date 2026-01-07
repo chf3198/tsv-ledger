@@ -22,11 +22,11 @@
 /** @type {ImportStatus} */
 let importStatus = {
   isImporting: false,
-  currentStep: "",
+  currentStep: '',
   progress: 0,
   totalRecords: 0,
   processedRecords: 0,
-  errors: [],
+  errors: []
 };
 
 /**
@@ -36,11 +36,11 @@ let importStatus = {
 function resetImportStatus() {
   importStatus = {
     isImporting: false,
-    currentStep: "",
+    currentStep: '',
     progress: 0,
     totalRecords: 0,
     processedRecords: 0,
-    errors: [],
+    errors: []
   };
 }
 
@@ -99,7 +99,7 @@ function startImport() {
  */
 function completeImport() {
   importStatus.isImporting = false;
-  importStatus.currentStep = "Import completed";
+  importStatus.currentStep = 'Import completed';
   importStatus.progress = 100;
 }
 
@@ -110,5 +110,5 @@ module.exports = {
   addImportError,
   getImportStatus,
   startImport,
-  completeImport,
+  completeImport
 };

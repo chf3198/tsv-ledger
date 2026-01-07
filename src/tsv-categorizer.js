@@ -33,112 +33,112 @@ class TSVCategorizer {
      * @type {Object.<string, string[]>}
      */
     this.categories = {
-      "Food & Dining": [
-        "restaurant",
-        "food",
-        "grocery",
-        "dining",
-        "meal",
-        "catering",
-        "beverage",
-        "coffee",
-        "lunch",
-        "dinner",
-        "bakery",
-        "cafe",
-        "bar",
-        "pub",
-        "steakhouse",
-        "eats",
+      'Food & Dining': [
+        'restaurant',
+        'food',
+        'grocery',
+        'dining',
+        'meal',
+        'catering',
+        'beverage',
+        'coffee',
+        'lunch',
+        'dinner',
+        'bakery',
+        'cafe',
+        'bar',
+        'pub',
+        'steakhouse',
+        'eats'
       ],
       Transportation: [
-        "gas",
-        "fuel",
-        "uber",
-        "lyft",
-        "taxi",
-        "bus",
-        "train",
-        "parking",
-        "mileage",
-        "vehicle",
-        "car",
-        "truck",
-        "delivery",
+        'gas',
+        'fuel',
+        'uber',
+        'lyft',
+        'taxi',
+        'bus',
+        'train',
+        'parking',
+        'mileage',
+        'vehicle',
+        'car',
+        'truck',
+        'delivery'
       ],
       Entertainment: [
-        "movie",
-        "theater",
-        "concert",
-        "game",
-        "entertainment",
-        "event",
-        "party",
-        "celebration",
-        "music",
-        "show",
+        'movie',
+        'theater',
+        'concert',
+        'game',
+        'entertainment',
+        'event',
+        'party',
+        'celebration',
+        'music',
+        'show'
       ],
       Shopping: [
-        "amazon",
-        "shopping",
-        "retail",
-        "store",
-        "purchase",
-        "merchandise",
-        "supplies",
-        "equipment",
-        "furniture",
+        'amazon',
+        'shopping',
+        'retail',
+        'store',
+        'purchase',
+        'merchandise',
+        'supplies',
+        'equipment',
+        'furniture'
       ],
       Utilities: [
-        "electric",
-        "water",
-        "gas",
-        "internet",
-        "phone",
-        "utility",
-        "electricity",
-        "cable",
-        "wifi",
-        "cell",
-        "telephone",
+        'electric',
+        'water',
+        'gas',
+        'internet',
+        'phone',
+        'utility',
+        'electricity',
+        'cable',
+        'wifi',
+        'cell',
+        'telephone'
       ],
       Healthcare: [
-        "medical",
-        "doctor",
-        "pharmacy",
-        "health",
-        "dental",
-        "hospital",
-        "clinic",
-        "insurance",
-        "medicine",
-        "treatment",
+        'medical',
+        'doctor',
+        'pharmacy',
+        'health',
+        'dental',
+        'hospital',
+        'clinic',
+        'insurance',
+        'medicine',
+        'treatment'
       ],
       Education: [
-        "book",
-        "course",
-        "education",
-        "school",
-        "university",
-        "training",
-        "workshop",
-        "seminar",
-        "conference",
-        "learning",
+        'book',
+        'course',
+        'education',
+        'school',
+        'university',
+        'training',
+        'workshop',
+        'seminar',
+        'conference',
+        'learning'
       ],
       Travel: [
-        "hotel",
-        "flight",
-        "travel",
-        "vacation",
-        "airbnb",
-        "lodging",
-        "airline",
-        "ticket",
-        "reservation",
-        "trip",
+        'hotel',
+        'flight',
+        'travel',
+        'vacation',
+        'airbnb',
+        'lodging',
+        'airline',
+        'ticket',
+        'reservation',
+        'trip'
       ],
-      Other: [], // Fallback category for unmatched expenses
+      Other: [] // Fallback category for unmatched expenses
     };
   }
 
@@ -168,7 +168,7 @@ class TSVCategorizer {
   categorize(expense) {
     // Input validation
     if (!expense || !expense.description) {
-      return "Other";
+      return 'Other';
     }
 
     // Normalize description for case-insensitive matching
@@ -184,7 +184,7 @@ class TSVCategorizer {
     }
 
     // Return default category if no matches found
-    return "Other";
+    return 'Other';
   }
 
   /**
@@ -223,11 +223,11 @@ class TSVCategorizer {
   analyze(expenses) {
     // Input validation
     if (!Array.isArray(expenses)) {
-      return { error: "Invalid expenses data" };
+      return { error: 'Invalid expenses data' };
     }
 
     if (expenses.length === 0) {
-      return { error: "Invalid expenses data" };
+      return { error: 'Invalid expenses data' };
     }
 
     const analysis = {
@@ -238,7 +238,7 @@ class TSVCategorizer {
       ),
       categories: {},
       monthlyTrends: {},
-      insights: [],
+      insights: []
     };
 
     // Categorize expenses
@@ -278,9 +278,9 @@ class TSVCategorizer {
   categorizeBoATransaction(transaction) {
     const category = this.categorize(transaction);
     return {
-      category: category,
+      category,
       subcategory: this.getSubcategory(transaction, category),
-      confidence: 0.8,
+      confidence: 0.8
     };
   }
 
@@ -320,11 +320,11 @@ class TSVCategorizer {
       subscribeAndSave: {
         isSubscribeAndSave: this.isSubscribeAndSave(order),
         confidence: 0.7,
-        indicators: [],
+        indicators: []
       },
       dataQuality: {
-        completeness: this.calculateDataCompleteness(order),
-      },
+        completeness: this.calculateDataCompleteness(order)
+      }
     };
   }
 
@@ -357,18 +357,27 @@ class TSVCategorizer {
     const desc = transaction.description.toLowerCase();
 
     switch (category) {
-      case "Food & Dining":
-        if (desc.includes("restaurant") || desc.includes("dining"))
-          return "Restaurant";
-        if (desc.includes("grocery")) return "Grocery";
-        break;
-      case "Transportation":
-        if (desc.includes("gas") || desc.includes("fuel")) return "Fuel";
-        if (desc.includes("uber") || desc.includes("lyft")) return "Ride Share";
-        break;
-      case "Shopping":
-        if (desc.includes("amazon")) return "Amazon";
-        break;
+    case 'Food & Dining':
+      if (desc.includes('restaurant') || desc.includes('dining')) {
+        return 'Restaurant';
+      }
+      if (desc.includes('grocery')) {
+        return 'Grocery';
+      }
+      break;
+    case 'Transportation':
+      if (desc.includes('gas') || desc.includes('fuel')) {
+        return 'Fuel';
+      }
+      if (desc.includes('uber') || desc.includes('lyft')) {
+        return 'Ride Share';
+      }
+      break;
+    case 'Shopping':
+      if (desc.includes('amazon')) {
+        return 'Amazon';
+      }
+      break;
     }
 
     return null;
@@ -401,10 +410,10 @@ class TSVCategorizer {
 
     const items = order.items.toLowerCase();
     return (
-      items.includes("subscribe") ||
-      items.includes("save") ||
-      items.includes("subscription") ||
-      items.includes("monthly")
+      items.includes('subscribe') ||
+      items.includes('save') ||
+      items.includes('subscription') ||
+      items.includes('monthly')
     );
   }
 
@@ -433,19 +442,29 @@ class TSVCategorizer {
    * // Returns: 0.25 (only items field present)
    */
   calculateDataCompleteness(order) {
-    if (!order) return 0;
+    if (!order) {
+      return 0;
+    }
 
     let score = 0;
     let total = 0;
 
     // Check required fields
-    if (order.orderId) score++;
+    if (order.orderId) {
+      score++;
+    }
     total++;
-    if (order.date || order.orderDate) score++;
+    if (order.date || order.orderDate) {
+      score++;
+    }
     total++;
-    if (order.amount || order.total || order.price) score++;
+    if (order.amount || order.total || order.price) {
+      score++;
+    }
     total++;
-    if (order.items) score++;
+    if (order.items) {
+      score++;
+    }
     total++;
 
     return total > 0 ? score / total : 0;

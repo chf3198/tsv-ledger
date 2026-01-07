@@ -8,8 +8,8 @@
  * @version 1.0.0
  */
 
-const fs = require("fs");
-const path = require("path");
+const fs = require('fs');
+const path = require('path');
 
 /**
  * Import history entry
@@ -30,7 +30,7 @@ let importHistory = [];
  * @returns {string} Path to import history file
  */
 function getImportHistoryFile(dataFilePath) {
-  return dataFilePath.replace("expenditures.json", "import-history.json");
+  return dataFilePath.replace('expenditures.json', 'import-history.json');
 }
 
 /**
@@ -45,13 +45,13 @@ function loadImportHistory(dataFilePath) {
   }
 
   try {
-    const data = fs.readFileSync(historyFile, "utf8");
+    const data = fs.readFileSync(historyFile, 'utf8');
     const parsed = JSON.parse(data);
 
     // Handle legacy format where history was wrapped in an object
     if (
       parsed &&
-      typeof parsed === "object" &&
+      typeof parsed === 'object' &&
       parsed.history &&
       Array.isArray(parsed.history)
     ) {
@@ -65,7 +65,7 @@ function loadImportHistory(dataFilePath) {
 
     return [];
   } catch (error) {
-    console.error("Error loading import history:", error.message);
+    console.error('Error loading import history:', error.message);
     return [];
   }
 }
@@ -81,7 +81,7 @@ function saveImportHistory(dataFilePath, history) {
   try {
     fs.writeFileSync(historyFile, JSON.stringify(history, null, 2));
   } catch (error) {
-    console.error("Error saving import history:", error.message);
+    console.error('Error saving import history:', error.message);
   }
 }
 
@@ -126,5 +126,5 @@ module.exports = {
   saveImportHistory,
   addImportHistoryEntry,
   getImportHistory,
-  clearImportHistory,
+  clearImportHistory
 };

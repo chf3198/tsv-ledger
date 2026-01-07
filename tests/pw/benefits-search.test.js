@@ -20,19 +20,25 @@ const puppeteer = require('puppeteer');
       try {
         const mgr = (typeof employeeBenefitsManager !== 'undefined') ? employeeBenefitsManager : (window.employeeBenefitsManager || null);
         return !!(mgr && typeof mgr.showSelectionModal === 'function');
-      } catch (e) { return false; }
+      } catch (e) {
+        return false;
+      }
     }, { timeout: 20000 });
 
     await page.evaluate(() => {
       const mgr = (typeof employeeBenefitsManager !== 'undefined') ? employeeBenefitsManager : (window.employeeBenefitsManager || null);
-      if (mgr && typeof mgr.showSelectionModal === 'function') mgr.showSelectionModal();
+      if (mgr && typeof mgr.showSelectionModal === 'function') {
+        mgr.showSelectionModal();
+      }
     });
 
     await page.waitForSelector('#businessSuppliesList .col-md-6', { timeout: 10000 });
 
     // Grab a visible card title and search for a distinctive substring
     const sample = await page.$eval('#businessSuppliesList .col-md-6 .card-title', el => el && el.textContent ? el.textContent.trim() : '');
-    if (!sample) throw new Error('No sample card title found for search test');
+    if (!sample) {
+      throw new Error('No sample card title found for search test');
+    }
     const token = sample.split(' ').slice(0,2).join(' ').slice(0,6);
 
     // Apply search and ensure filtered set is <= original
@@ -48,7 +54,9 @@ const puppeteer = require('puppeteer');
     }).length);
 
     console.log('Search token:', token, 'counts', { before, after });
-    if (after > before) throw new Error('Search increased visible items unexpectedly');
+    if (after > before) {
+      throw new Error('Search increased visible items unexpectedly');
+    }
 
     // Clear search and ensure count returns to >= after
     await page.click('#searchBusiness', { clickCount: 3 });

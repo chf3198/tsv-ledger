@@ -7,9 +7,9 @@
  * @version 1.0.0
  */
 
-const express = require("express");
-const { getAllExpenditures, addExpenditure } = require("../database");
-const TSVCategorizer = require("../tsv-categorizer");
+const express = require('express');
+const { getAllExpenditures, addExpenditure } = require('../database');
+const TSVCategorizer = require('../tsv-categorizer');
 
 const router = express.Router();
 
@@ -17,14 +17,14 @@ const router = express.Router();
  * GET /api/menu.json
  * Get navigation menu structure
  */
-router.get("/menu.json", (req, res) => {
+router.get('/menu.json', (req, res) => {
   try {
     // Use the canonical menu from src/menu.js
-    const menu = require("../menu");
+    const menu = require('../menu');
     res.json(menu);
   } catch (error) {
-    console.error("Failed to retrieve menu:", error);
-    res.status(500).json({ error: "Failed to retrieve menu" });
+    console.error('Failed to retrieve menu:', error);
+    res.status(500).json({ error: 'Failed to retrieve menu' });
   }
 });
 
@@ -32,16 +32,16 @@ router.get("/menu.json", (req, res) => {
  * GET /api/expenditures
  * Get all expenditures with optional filtering
  */
-router.get("/expenditures", (req, res) => {
+router.get('/expenditures', (req, res) => {
   try {
     const { startDate, endDate, category, source, limit } = req.query;
 
     getAllExpenditures((err, expenditures) => {
       if (err) {
-        console.error("Failed to retrieve expenditures:", err);
+        console.error('Failed to retrieve expenditures:', err);
         return res
           .status(500)
-          .json({ error: "Failed to retrieve expenditures" });
+          .json({ error: 'Failed to retrieve expenditures' });
       }
 
       let filtered = expenditures;
@@ -75,14 +75,14 @@ router.get("/expenditures", (req, res) => {
       res.json({
         expenditures: filtered,
         total: filtered.length,
-        filters: { startDate, endDate, category, source, limit },
+        filters: { startDate, endDate, category, source, limit }
       });
     });
   } catch (error) {
-    console.error("Expenditures retrieval error:", error);
+    console.error('Expenditures retrieval error:', error);
     res.status(500).json({
-      error: "Failed to retrieve expenditures",
-      message: error.message,
+      error: 'Failed to retrieve expenditures',
+      message: error.message
     });
   }
 });
@@ -91,22 +91,22 @@ router.get("/expenditures", (req, res) => {
  * POST /api/expenditures
  * Add a new expenditure
  */
-router.post("/expenditures", (req, res) => {
+router.post('/expenditures', (req, res) => {
   try {
     const { date, amount, description, category, source, metadata } = req.body;
 
     // Validation
     if (!date || !amount || !description) {
       return res.status(400).json({
-        error: "Missing required fields",
-        message: "Date, amount, and description are required",
+        error: 'Missing required fields',
+        message: 'Date, amount, and description are required'
       });
     }
 
     if (isNaN(parseFloat(amount)) || parseFloat(amount) <= 0) {
       return res.status(400).json({
-        error: "Invalid amount",
-        message: "Amount must be a positive number",
+        error: 'Invalid amount',
+        message: 'Amount must be a positive number'
       });
     }
 
@@ -115,40 +115,40 @@ router.post("/expenditures", (req, res) => {
     if (!finalCategory) {
       const categorizer = new TSVCategorizer();
       finalCategory = categorizer.categorizeExpenditure({
-        description: description,
-        amount: parseFloat(amount),
+        description,
+        amount: parseFloat(amount)
       });
     }
 
     const expenditure = {
-      date: date,
+      date,
       amount: parseFloat(amount),
-      description: description,
-      category: finalCategory || "Other",
-      source: source || "manual",
-      metadata: metadata || {},
+      description,
+      category: finalCategory || 'Other',
+      source: source || 'manual',
+      metadata: metadata || {}
     };
 
     addExpenditure(expenditure, (err, result) => {
       if (err) {
-        console.error("Failed to add expenditure:", err);
+        console.error('Failed to add expenditure:', err);
         return res.status(500).json({
-          error: "Failed to add expenditure",
-          message: err.message,
+          error: 'Failed to add expenditure',
+          message: err.message
         });
       }
 
       res.json({
         success: true,
-        message: "Expenditure added successfully",
-        expenditure: expenditure,
+        message: 'Expenditure added successfully',
+        expenditure: result
       });
     });
   } catch (error) {
-    console.error("Add expenditure error:", error);
+    console.error('Add expenditure error:', error);
     res.status(500).json({
-      error: "Failed to add expenditure",
-      message: error.message,
+      error: 'Failed to add expenditure',
+      message: error.message
     });
   }
 });

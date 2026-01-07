@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Navigation Test</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.15.0/dist/themes/light.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body { background-color: #f8f9fa; font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif; }
+        .sidebar-drawer { --size: 280px; }
+        .main-content { margin-left: 280px; padding: 2rem; padding-top: 80px; }
+        #main-navigation { padding: 1rem 0; }
+        #main-navigation a { color: rgba(255,255,255,0.8); padding: 0.75rem 1.5rem; display: flex; align-items: center; }
+        #main-navigation a:hover { color: white; background: rgba(255,255,255,0.1); }
+        #main-navigation a i { margin-right: 0.75rem; width: 20px; }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">TSV Ledger</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </div>
+    </nav>
+
+    <sl-drawer id="sidebar" placement="start" class="sidebar-drawer" no-header>
+        <nav class="nav nav-pills flex-column p-3" id="main-navigation">
+            <!-- Navigation items will be populated by JavaScript -->
+        </nav>
+    </sl-drawer>
+
+    <main class="main-content">
+        <h1>Navigation Test</h1>
+        <p>This page tests the navigation functionality.</p>
+        <div id="test-results"></div>
+    </main>
+
+    <script type="module" src="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.15.0/dist/shoelace.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Mock menu data
+        const mockMenuData = [
+            { href: "#", text: "Dashboard", icon: "fas fa-tachometer-alt", dataSection: "dashboard" },
+            { href: "#", text: "Bank Reconciliation", icon: "fas fa-balance-scale", dataSection: "bank-reconciliation" },
+            { href: "#", text: "Subscription Analysis", icon: "fas fa-link", dataSection: "subscription-analysis" },
+            { href: "#", text: "Benefits Management", icon: "fas fa-users", dataSection: "benefits-management" },
+            { href: "#", text: "Geographic Analysis", icon: "fas fa-map-marked-alt", dataSection: "geographic-analysis" }
+        ];
+
+        // Navigation renderer
+        function renderNavigation(items) {
+            const container = document.getElementById("main-navigation");
+            if (!container) {
+                console.error("Navigation container not found");
+                return;
+            }
+            container.innerHTML = "";
+
+            items.forEach((item) => {
+                const a = document.createElement("a");
+                a.className = "nav-link d-flex align-items-center";
+                a.href = item.href || "#";
+                if (item.dataSection) a.setAttribute("data-section", item.dataSection);
+                a.innerHTML = `<i class="${item.icon} me-2"></i><span>${item.text}</span>`;
+                a.addEventListener("click", (e) => {
+                    if (item.dataSection) {
+                        e.preventDefault();
+                        showSection(item.dataSection);
+                    }
+                });
+                container.appendChild(a);
+            });
+        }
+
+        function showSection(sectionId) {
+            document.getElementById('test-results').innerHTML = `<div class="alert alert-success">Navigated to: ${sectionId}</div>`;
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('🔧 Initializing navigation...');
+            renderNavigation(mockMenuData);
+
+            // Setup sidebar toggle
+            const toggler = document.querySelector(".navbar-toggler");
+            const drawer = document.getElementById("sidebar");
+
+            if (toggler && drawer) {
+                toggler.addEventListener("click", () => {
+                    if (drawer.open) {
+                        drawer.hide();
+                    } else {
+                        drawer.show();
+                    }
+                });
+            }
+
+            console.log('✅ Navigation initialized');
+        });
+    </script>
+</body>
+</html>

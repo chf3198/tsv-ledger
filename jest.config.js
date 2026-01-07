@@ -69,7 +69,9 @@ module.exports = {
   // Transform configuration (for any future needs)
   transform: {},
 
-  // Global setup/teardown
-  globalSetup: "<rootDir>/tests/shared/global-setup.js",
-  globalTeardown: "<rootDir>/tests/shared/global-teardown.js",
+  // Global setup/teardown (disabled when server is managed externally)
+  ...(process.env.DISABLE_JEST_GLOBAL_SETUP ? {} : {
+    globalSetup: "<rootDir>/tests/shared/global-setup.js",
+    globalTeardown: "<rootDir>/tests/shared/global-teardown.js",
+  }),
 };

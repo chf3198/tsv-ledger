@@ -9,7 +9,7 @@ test.describe('Navigation Menu E2E UX Tests', () => {
   test.beforeEach(async ({ page }) => {
     // Monitor console errors during each test
     consoleErrors = [];
-    
+
     page.on('console', msg => {
       if (msg.type() === 'error') {
         consoleErrors.push(msg.text());
@@ -41,17 +41,17 @@ test.describe('Navigation Menu E2E UX Tests', () => {
       const item = menuItems.nth(i);
       const sectionId = await item.getAttribute('data-section');
       const text = await item.textContent();
-      
+
       console.log(`🔗 Testing: User clicks "${text}" menu`);
-      
+
       // User clicks menu item
       await item.click();
       await page.waitForTimeout(500);
-      
+
       // Verify section becomes active
       const targetSection = page.locator(`#${sectionId}`);
       await expect(targetSection).toHaveClass(/active/);
-      
+
       console.log(`✅ User successfully navigates to ${text}`);
     }
 
@@ -65,7 +65,7 @@ test.describe('Navigation Menu E2E UX Tests', () => {
 
     // Simulate mobile device
     await page.setViewportSize({ width: 375, height: 667 });
-    
+
     // USER STORY: As a mobile user, I want to access the menu via a toggle
     const toggleButton = page.locator('.navbar-toggler');
     await expect(toggleButton).toBeVisible();
@@ -74,7 +74,7 @@ test.describe('Navigation Menu E2E UX Tests', () => {
     // User taps toggle to open menu
     await toggleButton.click();
     await page.waitForTimeout(500);
-    
+
     // Menu should be accessible
     const mobileMenu = page.locator('#sidebar');
     await expect(mobileMenu).toBeVisible();
@@ -84,7 +84,7 @@ test.describe('Navigation Menu E2E UX Tests', () => {
     const mobileMenuItem = page.locator('[data-section="settings"]');
     await mobileMenuItem.click();
     await page.waitForTimeout(500);
-    
+
     const settingsSection = page.locator('#settings');
     await expect(settingsSection).toHaveClass(/active/);
     console.log('✅ User can navigate in mobile view');
@@ -98,17 +98,17 @@ test.describe('Navigation Menu E2E UX Tests', () => {
 
     // USER STORY: As a user using keyboard navigation, I want to access menu items
     await page.focus('#main-navigation');
-    
+
     // User presses Tab to navigate
     await page.keyboard.press('Tab');
     await page.waitForTimeout(200);
-    
+
     // User presses Enter to select
     await page.keyboard.press('Enter');
     await page.waitForTimeout(500);
-    
+
     console.log('✅ Keyboard navigation works');
-    
+
     // Should not cause console errors
     expect(consoleErrors.length).toBe(0);
   });
@@ -118,23 +118,23 @@ test.describe('Navigation Menu E2E UX Tests', () => {
 
     const menuItems = page.locator('[data-section]');
     const count = await menuItems.count();
-    
+
     // Measure navigation speed
     const startTime = Date.now();
-    
+
     // Click through first 3 menu items
     for (let i = 0; i < Math.min(3, count); i++) {
       await menuItems.nth(i).click();
       await page.waitForTimeout(100); // Minimal wait
     }
-    
+
     const totalTime = Date.now() - startTime;
     const avgTime = totalTime / Math.min(3, count);
-    
+
     // Performance expectation: < 500ms per navigation
     expect(avgTime).toBeLessThan(500);
     console.log(`✅ Average navigation time: ${avgTime.toFixed(0)}ms (under 500ms target)`);
-    
+
     // Should not cause console errors
     expect(consoleErrors.length).toBe(0);
   });

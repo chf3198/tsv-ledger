@@ -1,0 +1,105 @@
+{
+  "categories": {
+    "file_size_limits": {
+      "total": 4,
+      "violations": 2,
+      "corrections": 2
+    },
+    "organizational_compliance": {
+      "total": 0,
+      "violations": 0,
+      "corrections": 0
+    },
+    "git_practices": {
+      "total": 2,
+      "violations": 0,
+      "corrections": 0
+    },
+    "commenting_standards": {
+      "total": 0,
+      "violations": 0,
+      "corrections": 0
+    },
+    "functional_programming": {
+      "total": 0,
+      "violations": 0,
+      "corrections": 0
+    },
+    "error_handling": {
+      "total": 0,
+      "violations": 0,
+      "corrections": 0
+    },
+    "testing_requirements": {
+      "total": 0,
+      "violations": 0,
+      "corrections": 0
+    },
+    "documentation_standards": {
+      "total": 0,
+      "violations": 0,
+      "corrections": 0
+    }
+  },
+  "timeline": [
+    {
+      "timestamp": "2026-01-07T03:11:45.462Z",
+      "category": "file_size_limits",
+      "eventType": "violation",
+      "details": {
+        "file": "large-file.js",
+        "size": 350
+      },
+      "adherenceRate": 0
+    },
+    {
+      "timestamp": "2026-01-07T03:11:45.469Z",
+      "category": "file_size_limits",
+      "eventType": "correction",
+      "details": {
+        "file": "large-file.js",
+        "action": "refactored"
+      },
+      "adherenceRate": 100
+    },
+    {
+      "timestamp": "2026-01-07T03:11:45.477Z",
+      "category": "git_practices",
+      "eventType": "compliance",
+      "details": {
+        "commit": "feat: add new feature"
+      },
+      "adherenceRate": 100
+    },
+    {
+      "timestamp": "2026-01-07T03:16:15.212Z",
+      "category": "file_size_limits",
+      "eventType": "violation",
+      "details": {
+        "file": "large-file.js",
+        "size": 350
+      },
+      "adherenceRate": 66.66666666666666
+    },
+    {
+      "timestamp": "2026-01-07T03:16:15.221Z",
+      "category": "file_size_limits",
+      "eventType": "correction",
+      "details": {
+        "file": "large-file.js",
+        "action": "refactored"
+      },
+      "adherenceRate": 100
+    },
+    {
+      "timestamp": "2026-01-07T03:16:15.225Z",
+      "category": "git_practices",
+      "eventType": "compliance",
+      "details": {
+        "commit": "feat: add new feature"
+      },
+      "adherenceRate": 100
+    }
+  ],
+  "lastUpdated": "2026-01-07T03:16:15.225Z"
+}

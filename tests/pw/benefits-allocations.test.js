@@ -28,7 +28,9 @@ const puppeteer = require('puppeteer');
 
     await page.evaluate(() => {
       const mgr = (typeof employeeBenefitsManager !== 'undefined') ? employeeBenefitsManager : (window.employeeBenefitsManager || null);
-      if (mgr && typeof mgr.showSelectionModal === 'function') mgr.showSelectionModal();
+      if (mgr && typeof mgr.showSelectionModal === 'function') {
+        mgr.showSelectionModal();
+      }
     });
 
     await page.waitForSelector('#businessSuppliesList .col-md-6', { timeout: 10000 });
@@ -46,19 +48,25 @@ const puppeteer = require('puppeteer');
 
     // Pick the first business card's item id and set allocation to 50%
     const firstItemId = await page.$eval('#businessSuppliesList .col-md-6', el => el.dataset.itemId || el.querySelector('[data-item-id]')?.dataset.itemId || '');
-    if (!firstItemId) throw new Error('Could not determine first business item id');
+    if (!firstItemId) {
+      throw new Error('Could not determine first business item id');
+    }
 
     console.log('Setting allocation 50% for', firstItemId, 'by writing canonical allocation and refreshing display');
     await page.evaluate((id) => {
       try {
         const mgr = (typeof employeeBenefitsManager !== 'undefined') ? employeeBenefitsManager : (window.employeeBenefitsManager || null);
-        if (!mgr) return;
+        if (!mgr) {
+          return;
+        }
         // Set canonical allocation shape expected by updateModalDisplay
         mgr.itemProgressiveAllocations.set(id, { benefits: 50, business: 50, total: 100 });
         // ensure selected items state is consistent
         mgr.selectedItems.add(id);
         // Refresh UI
-        if (typeof mgr.updateModalDisplay === 'function') mgr.updateModalDisplay();
+        if (typeof mgr.updateModalDisplay === 'function') {
+          mgr.updateModalDisplay();
+        }
       } catch (e) {
         console.error('Error setting allocation in page context', e);
       }

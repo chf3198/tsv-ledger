@@ -1,0 +1,50 @@
+{
+  "total_tests": 12,
+  "passed": 9,
+  "failed": 3,
+  "errors": 0,
+  "total_execution_time": 36600,
+  "average_execution_time": 3050,
+  "coverage_percentage": 0.32,
+  "category_breakdown": {
+    "file": {
+      "total": 3,
+      "passed": 3,
+      "failed": 0,
+      "errors": 0
+    },
+    "testing": {
+      "total": 3,
+      "passed": 1,
+      "failed": 2,
+      "errors": 0
+    },
+    "version": {
+      "total": 3,
+      "passed": 3,
+      "failed": 0,
+      "errors": 0
+    },
+    "code": {
+      "total": 3,
+      "passed": 2,
+      "failed": 1,
+      "errors": 0
+    }
+  },
+  "failure_analysis": {
+    "by_category": {
+      "testing": 2,
+      "code": 1
+    },
+    "by_error_type": {
+      "validation_failure": 3
+    },
+    "common_failures": [
+      {
+        "error": "validation_failure",
+        "count": 3
+      }
+    ]
+  }
+}

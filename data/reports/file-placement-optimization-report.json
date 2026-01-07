@@ -1,0 +1,413 @@
+{
+  "timestamp": "2026-01-06T21:27:15.840Z",
+  "analysis": {
+    "filesAnalyzed": 163,
+    "suggestionsGenerated": 191,
+    "moveOperations": 147
+  },
+  "priorityBreakdown": {
+    "high": 43,
+    "medium": 146,
+    "low": 2
+  },
+  "suggestions": [
+    {
+      "type": "functional-grouping",
+      "priority": "medium",
+      "title": "Group related authentication files",
+      "description": "Files adherence-monitor.js, ai-dashboard.js, geographic-analysis-engine.js, tsv-categorizer.js, component-tester.js, iterative-analysis-tester.js are related but in different directories",
+      "files": [
+        "adherence-monitor.js",
+        "public/js/ai-dashboard.js",
+        "src/geographic-analysis-engine.js",
+        "src/tsv-categorizer.js",
+        "tests/component-tester.js",
+        "tests/iterative-analysis-tester.js"
+      ],
+      "suggestedDirectory": "src/authentication",
+      "impact": "improves code navigation and maintainability"
+    },
+    {
+      "type": "functional-grouping",
+      "priority": "medium",
+      "title": "Group related database files",
+      "description": "Files ai-visual-test.js, FeedbackProcessor.js, HumanAICollaborationSystem.js, commit-blocker.js, cross-validation-testing-system.js, dev-test.js, human-ai-collaboration-system.js, line-impact-calculator.js, multi-modal-reinforcement-learner.js, playwright.config.js, employee-benefits.js, shoelace-navigation-new.js, self-evolving-instruction-system.js, ai-analysis-engine.js, bank-reconciliation-engine.js, subscription-analysis-engine.js, test-benefits-e2e.js, test-benefits-field-mapping.js, test-visual-inspection.js, accessibility-scan.js, playwright.config.js, e2e-setup.js, e2e-teardown.js, jest.setup.js, test-helpers.js, browser-manager.js, data-integrity-tests.js, error-handling-tests.js, server-manager.js, visual-ux-test.js are related but in different directories",
+      "files": [
+        "ai-visual-test.js",
+        "classes/FeedbackProcessor.js",
+        "classes/HumanAICollaborationSystem.js",
+        "commit-blocker.js",
+        "cross-validation-testing-system.js",
+        "dev-test.js",
+        "human-ai-collaboration-system.js",
+        "line-impact-calculator.js",
+        "multi-modal-reinforcement-learner.js",
+        "playwright.config.js",
+        "public/js/employee-benefits.js",
+        "public/js/shoelace-navigation-new.js",
+        "self-evolving-instruction-system.js",
+        "src/ai-analysis-engine.js",
+        "src/bank-reconciliation-engine.js",
+        "src/subscription-analysis-engine.js",
+        "test-benefits-e2e.js",
+        "test-benefits-field-mapping.js",
+        "test-visual-inspection.js",
+        "tests/accessibility-scan.js",
+        "tests/e2e/playwright.config.js",
+        "tests/shared/e2e-setup.js",
+        "tests/shared/e2e-teardown.js",
+        "tests/shared/jest.setup.js",
+        "tests/shared/test-helpers.js",
+        "tests/ux/browser-manager.js",
+        "tests/ux/data-integrity-tests.js",
+        "tests/ux/error-handling-tests.js",
+        "tests/ux/server-manager.js",
+        "visual-ux-test.js"
+      ],
+      "suggestedDirectory": "src/database",
+      "impact": "improves code navigation and maintainability"
+    },
+    {
+      "type": "functional-grouping",
+      "priority": "medium",
+      "title": "Group related validation files",
+      "description": "Files automated-refactoring-applicator.js, catastrophic-forgetting-preventer.js, FileSizeManagementOptimizer.js, file-size-management-optimizer.js, gradual-size-reducer.js, neftune-noise-injector.js, amazon-zip-detector.js, amazon-zip-parser.js, csv-parser.js, zip-handler.js, cli-test-helpers.js, data-quality-tests.js, subscribe-save-tests.js, data-loader.js, results-processor.js, validation-rules.js, amazon-test-parser.js, density.js are related but in different directories",
+      "files": [
+        "automated-refactoring-applicator.js",
+        "catastrophic-forgetting-preventer.js",
+        "classes/FileSizeManagementOptimizer.js",
+        "file-size-management-optimizer.js",
+        "gradual-size-reducer.js",
+        "neftune-noise-injector.js",
+        "src/amazon-zip-detector.js",
+        "src/amazon-zip-parser.js",
+        "src/import/csv-parser.js",
+        "src/import/zip-handler.js",
+        "tests/cli/cli-test-helpers.js",
+        "tests/component/data-quality-tests.js",
+        "tests/component/subscribe-save-tests.js",
+        "tests/iterative/data-loader.js",
+        "tests/iterative/results-processor.js",
+        "tests/iterative/validation-rules.js",
+        "utils/amazon-test-parser.js",
+        "utils/density.js"
+      ],
+      "suggestedDirectory": "src/validation",
+      "impact": "improves code navigation and maintainability"
+    },
+    {
+      "type": "functional-grouping",
+      "priority": "medium",
+      "title": "Group related routing files",
+      "description": "Files best-practice-retrieval.js, kt-cli.js, server.js, database.js, amazon.js, analytics.js, data.js, employee-benefits.js, geographic.js, import.js, subscription.js are related but in different directories",
+      "files": [
+        "best-practice-retrieval.js",
+        "kt-cli-alpha/kt-cli.js",
+        "server.js",
+        "src/database.js",
+        "src/routes/amazon.js",
+        "src/routes/analytics.js",
+        "src/routes/data.js",
+        "src/routes/employee-benefits.js",
+        "src/routes/geographic.js",
+        "src/routes/import.js",
+        "src/routes/subscription.js"
+      ],
+      "suggestedDirectory": "src/routing",
+      "impact": "improves code navigation and maintainability"
+    },
+    {
+      "type": "functional-grouping",
+      "priority": "medium",
+      "title": "Group related optimization files",
+      "description": "Files ExplanationGenerator.js, comprehensive-ux-test.js, amazon-zip-import-demo.js, jest.config.js, dashboard.js, analysis-section.js, overview-section.js, api-client.js, dom-utils.js, app.js, analysis.js, premium-analytics.js, shoelace-navigation.js, menu.js, test-ux-e2e.js, amount-calculations-tests.js, category-classification-tests.js, analysis-runner.js, quick-test.js, test-parser.js, analysis-tests.js, base-test-utils.js, ux-testing-suite.js, count.js are related but in different directories",
+      "files": [
+        "classes/ExplanationGenerator.js",
+        "comprehensive-ux-test.js",
+        "demos/amazon-zip-import-demo.js",
+        "jest.config.js",
+        "public/components/dashboard/dashboard.js",
+        "public/components/dashboard/sections/analysis-section.js",
+        "public/components/dashboard/sections/overview-section.js",
+        "public/components/shared/api-client.js",
+        "public/components/shared/dom-utils.js",
+        "public/js/app.js",
+        "public/js/modules/analysis/analysis.js",
+        "public/js/modules/premium-analytics/premium-analytics.js",
+        "public/js/shoelace-navigation.js",
+        "src/menu.js",
+        "test-ux-e2e.js",
+        "tests/component/amount-calculations-tests.js",
+        "tests/component/category-classification-tests.js",
+        "tests/iterative/analysis-runner.js",
+        "tests/quick-test.js",
+        "tests/test-parser.js",
+        "tests/ux/analysis-tests.js",
+        "tests/ux/base-test-utils.js",
+        "tests/ux-testing-suite.js",
+        "utils/count.js"
+      ],
+      "suggestedDirectory": "src/optimization",
+      "impact": "improves code navigation and maintainability"
+    },
+    {
+      "type": "functional-grouping",
+      "priority": "medium",
+      "title": "Group related test files",
+      "description": "Files test-benefits-e2e.js, test-benefits-field-mapping.js, test-benefits-fix.js, test-benefits-ux-comprehensive.js, test-benefits-ux.js, test-fix-verification.js, test-script-logic.js, test-ux-e2e.js, test-visual-inspection.js, test-benefits-zero-allocation.js, test-helpers.js, test-ai-analysis.js, test-ai-button-iterative.js, test-ai-button-simple.js, test-amazon-edit-feature.js, test-amazon-import.js, test-analysis-unit.js, test-analysis.js, test-complete.js, test-corrected-analysis.js, test-database.js, test-frontend-fix.js, test-master.js, test-parser.js, test-server.js, test-ux-amazon-edit.js, test-runner.js are related but in different directories",
+      "files": [
+        "test-benefits-e2e.js",
+        "test-benefits-field-mapping.js",
+        "test-benefits-fix.js",
+        "test-benefits-ux-comprehensive.js",
+        "test-benefits-ux.js",
+        "test-fix-verification.js",
+        "test-script-logic.js",
+        "test-ux-e2e.js",
+        "test-visual-inspection.js",
+        "tests/cli/test-benefits-zero-allocation.js",
+        "tests/shared/test-helpers.js",
+        "tests/test-ai-analysis.js",
+        "tests/test-ai-button-iterative.js",
+        "tests/test-ai-button-simple.js",
+        "tests/test-amazon-edit-feature.js",
+        "tests/test-amazon-import.js",
+        "tests/test-analysis-unit.js",
+        "tests/test-analysis.js",
+        "tests/test-complete.js",
+        "tests/test-corrected-analysis.js",
+        "tests/test-database.js",
+        "tests/test-frontend-fix.js",
+        "tests/test-master.js",
+        "tests/test-parser.js",
+        "tests/test-server.js",
+        "tests/test-ux-amazon-edit.js",
+        "tests/ux/test-runner.js"
+      ],
+      "suggestedDirectory": "src/test",
+      "impact": "improves code navigation and maintainability"
+    },
+    {
+      "type": "separation-of-concerns",
+      "priority": "high",
+      "title": "Separate mixed concerns",
+      "description": "automated-indexing-system.js contains multiple concerns that should be separated",
+      "files": [
+        "automated-indexing-system.js"
+      ],
+      "suggestedAction": "Split into multiple focused files",
+      "impact": "improves maintainability and testability"
+    },
+    {
+      "type": "separation-of-concerns",
+      "priority": "high",
+      "title": "Separate mixed concerns",
+      "description": "best-practice-retrieval.js contains multiple concerns that should be separated",
+      "files": [
+        "best-practice-retrieval.js"
+      ],
+      "suggestedAction": "Split into multiple focused files",
+      "impact": "improves maintainability and testability"
+    },
+    {
+      "type": "separation-of-concerns",
+      "priority": "high",
+      "title": "Separate mixed concerns",
+      "description": "FileSizeManagementOptimizer.js contains multiple concerns that should be separated",
+      "files": [
+        "classes/FileSizeManagementOptimizer.js"
+      ],
+      "suggestedAction": "Split into multiple focused files",
+      "impact": "improves maintainability and testability"
+    },
+    {
+      "type": "separation-of-concerns",
+      "priority": "high",
+      "title": "Separate mixed concerns",
+      "description": "HumanAICollaborationSystem.js contains multiple concerns that should be separated",
+      "files": [
+        "classes/HumanAICollaborationSystem.js"
+      ],
+      "suggestedAction": "Split into multiple focused files",
+      "impact": "improves maintainability and testability"
+    },
+    {
+      "type": "separation-of-concerns",
+      "priority": "high",
+      "title": "Separate mixed concerns",
+      "description": "comprehensive-ux-test.js contains multiple concerns that should be separated",
+      "files": [
+        "comprehensive-ux-test.js"
+      ],
+      "suggestedAction": "Split into multiple focused files",
+      "impact": "improves maintainability and testability"
+    },
+    {
+      "type": "separation-of-concerns",
+      "priority": "high",
+      "title": "Separate mixed concerns",
+      "description": "prettify.js contains multiple concerns that should be separated",
+      "files": [
+        "docs/api/scripts/prettify/prettify.js"
+      ],
+      "suggestedAction": "Split into multiple focused files",
+      "impact": "improves maintainability and testability"
+    },
+    {
+      "type": "separation-of-concerns",
+      "priority": "high",
+      "title": "Separate mixed concerns",
+      "description": "file-size-management-optimizer.js contains multiple concerns that should be separated",
+      "files": [
+        "file-size-management-optimizer.js"
+      ],
+      "suggestedAction": "Split into multiple focused files",
+      "impact": "improves maintainability and testability"
+    },
+    {
+      "type": "separation-of-concerns",
+      "priority": "high",
+      "title": "Separate mixed concerns",
+      "description": "human-ai-collaboration-system.js contains multiple concerns that should be separated",
+      "files": [
+        "human-ai-collaboration-system.js"
+      ],
+      "suggestedAction": "Split into multiple focused files",
+      "impact": "improves maintainability and testability"
+    },
+    {
+      "type": "separation-of-concerns",
+      "priority": "high",
+      "title": "Separate mixed concerns",
+      "description": "kt-cli.js contains multiple concerns that should be separated",
+      "files": [
+        "kt-cli-alpha/kt-cli.js"
+      ],
+      "suggestedAction": "Split into multiple focused files",
+      "impact": "improves maintainability and testability"
+    },
+    {
+      "type": "separation-of-concerns",
+      "priority": "high",
+      "title": "Separate mixed concerns",
+      "description": "neftune-noise-injector.js contains multiple concerns that should be separated",
+      "files": [
+        "neftune-noise-injector.js"
+      ],
+      "suggestedAction": "Split into multiple focused files",
+      "impact": "improves maintainability and testability"
+    },
+    {
+      "type": "separation-of-concerns",
+      "priority": "high",
+      "title": "Separate mixed concerns",
+      "description": "dashboard.js contains multiple concerns that should be separated",
+      "files": [
+        "public/components/dashboard/dashboard.js"
+      ],
+      "suggestedAction": "Split into multiple focused files",
+      "impact": "improves maintainability and testability"
+    },
+    {
+      "type": "separation-of-concerns",
+      "priority": "high",
+      "title": "Separate mixed concerns",
+      "description": "ai-dashboard.js contains multiple concerns that should be separated",
+      "files": [
+        "public/js/ai-dashboard.js"
+      ],
+      "suggestedAction": "Split into multiple focused files",
+      "impact": "improves maintainability and testability"
+    },
+    {
+      "type": "separation-of-concerns",
+      "priority": "high",
+      "title": "Separate mixed concerns",
+      "description": "app.js contains multiple concerns that should be separated",
+      "files": [
+        "public/js/app.js"
+      ],
+      "suggestedAction": "Split into multiple focused files",
+      "impact": "improves maintainability and testability"
+    },
+    {
+      "type": "separation-of-concerns",
+      "priority": "high",
+      "title": "Separate mixed concerns",
+      "description": "bootstrap-navigation.js contains multiple concerns that should be separated",
+      "files": [
+        "public/js/bootstrap-navigation.js"
+      ],
+      "suggestedAction": "Split into multiple focused files",
+      "impact": "improves maintainability and testability"
+    }
+  ],
+  "moveOperations": [
+    {
+      "from": "adherence-monitor.js",
+      "to": "src/authentication/adherence-monitor.js",
+      "reason": "Group related authentication files",
+      "type": "functional-grouping"
+    },
+    {
+      "from": "public/js/ai-dashboard.js",
+      "to": "src/authentication/ai-dashboard.js",
+      "reason": "Group related authentication files",
+      "type": "functional-grouping"
+    },
+    {
+      "from": "src/geographic-analysis-engine.js",
+      "to": "src/authentication/geographic-analysis-engine.js",
+      "reason": "Group related authentication files",
+      "type": "functional-grouping"
+    },
+    {
+      "from": "src/tsv-categorizer.js",
+      "to": "src/authentication/tsv-categorizer.js",
+      "reason": "Group related authentication files",
+      "type": "functional-grouping"
+    },
+    {
+      "from": "tests/component-tester.js",
+      "to": "src/authentication/component-tester.js",
+      "reason": "Group related authentication files",
+      "type": "functional-grouping"
+    },
+    {
+      "from": "tests/iterative-analysis-tester.js",
+      "to": "src/authentication/iterative-analysis-tester.js",
+      "reason": "Group related authentication files",
+      "type": "functional-grouping"
+    },
+    {
+      "from": "ai-visual-test.js",
+      "to": "src/database/ai-visual-test.js",
+      "reason": "Group related database files",
+      "type": "functional-grouping"
+    },
+    {
+      "from": "classes/FeedbackProcessor.js",
+      "to": "src/database/FeedbackProcessor.js",
+      "reason": "Group related database files",
+      "type": "functional-grouping"
+    },
+    {
+      "from": "classes/HumanAICollaborationSystem.js",
+      "to": "src/database/HumanAICollaborationSystem.js",
+      "reason": "Group related database files",
+      "type": "functional-grouping"
+    },
+    {
+      "from": "commit-blocker.js",
+      "to": "src/database/commit-blocker.js",
+      "reason": "Group related database files",
+      "type": "functional-grouping"
+    }
+  ],
+  "impact": {
+    "maintainability": 100,
+    "performance": 100,
+    "collaboration": 100,
+    "testability": 100
+  }
+}

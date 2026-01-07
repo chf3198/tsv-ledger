@@ -1,0 +1,36 @@
+{
+  "timestamp": "2026-01-06T20:48:40.155Z",
+  "edgeCaseResults": {
+    "empty context handling": {
+      "baseline": 1,
+      "noisy": 1,
+      "improvement": 0
+    },
+    "corrupted data recovery": {
+      "baseline": 1,
+      "noisy": 1,
+      "improvement": 0
+    },
+    "extreme violation counts": {
+      "baseline": 1,
+      "noisy": 1,
+      "improvement": 0
+    },
+    "missing instruction steps": {
+      "baseline": 1,
+      "noisy": 1,
+      "improvement": 0
+    },
+    "inconsistent data types": {
+      "baseline": 1,
+      "noisy": 1,
+      "improvement": 0
+    }
+  },
+  "overallMetrics": {
+    "baselineAccuracy": 0,
+    "noiseAccuracy": 0,
+    "robustnessScore": 0,
+    "edgeCaseImprovement": 0
+  }
+}

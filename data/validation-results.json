@@ -1,0 +1,944 @@
+{
+  "validationResults": {
+    "lastRun": {
+      "runId": "run_1767754729160",
+      "timestamp": "2026-01-07T02:58:49.160Z",
+      "pipelines": {
+        "instructionCompliance": {
+          "pipelineId": "instructionCompliance",
+          "name": "Instruction Compliance Pipeline",
+          "status": "failed",
+          "tests": {
+            "file-size-limits": {
+              "testId": "file-size-limits",
+              "name": "File Size Limits Test",
+              "status": "failed",
+              "output": "",
+              "duration": 4110,
+              "error": "File size violations:\nsrc/amazon-zip-detector.js: 380 lines (limit: 300)\nsrc/amazon-zip-parser-original.js: 626 lines (limit: 300)\nsrc/bank-reconciliation-engine.js: 621 lines (limit: 300)\nsrc/database.js: 392 lines (limit: 300)\nsrc/geographic-analysis-engine.js: 614 lines (limit: 300)\nsrc/subscription-analysis-engine.js: 495 lines (limit: 300)\nsrc/tsv-categorizer.js: 456 lines (limit: 300)\ntests/accessibility/accessibility.test.js: 455 lines (limit: 300)\ntests/cli/cli-tests.test.js: 449 lines (limit: 300)\ntests/component-tester.js: 342 lines (limit: 300)\ntests/e2e/complete-workflow.test.js: 355 lines (limit: 300)\ntests/e2e/data-import-e2e.test.js: 390 lines (limit: 300)\ntests/import-history-api.test.js: 334 lines (limit: 300)\ntests/import-history-puppeteer.test.js: 313 lines (limit: 300)\ntests/integration/api.test.js: 491 lines (limit: 300)\ntests/performance/performance.test.js: 436 lines (limit: 300)\ntests/pw/import-history-ux.test.js: 386 lines (limit: 300)\ntests/reports/test-reporting.test.js: 543 lines (limit: 300)\ntests/shared/test-helpers.js: 423 lines (limit: 300)\ntests/unit/tsv-categorizer.test.js: 404 lines (limit: 300)\ntests/visual/visual-regression.test.js: 447 lines (limit: 300)\nadherence-monitor.js: 317 lines (limit: 300)\nai-visual-test.js: 434 lines (limit: 300)\napi-documentation-generator.js: 401 lines (limit: 300)\nautomated-commit-message-suggester.js: 672 lines (limit: 300)\nautomated-indexing-system.js: 810 lines (limit: 300)\nautomated-refactoring-applicator.js: 533 lines (limit: 300)\nautomated-validation-pipelines.js: 794 lines (limit: 300)\nbest-practice-retrieval.js: 379 lines (limit: 300)\nbranching-strategy-enforcer.js: 627 lines (limit: 300)\ncatastrophic-forgetting-preventer.js: 571 lines (limit: 300)\nclasses/FileSizeManagementOptimizer.js: 1176 lines (limit: 300)\nclasses/HumanAICollaborationSystem.js: 1008 lines (limit: 300)\ncomment-quality-assessor.js: 730 lines (limit: 300)\ncomment-style-consistency-validator.js: 429 lines (limit: 300)\ncommit-blocker.js: 548 lines (limit: 300)\ncomprehensive-ux-test.js: 312 lines (limit: 300)\ncontinuous-integration-instructions.js: 791 lines (limit: 300)\nconventional-commit-validator.js: 509 lines (limit: 300)\ncross-reference-database.js: 717 lines (limit: 300)\ncross-validation-testing-system.js: 952 lines (limit: 300)\ndocumentation-completeness-checker.js: 635 lines (limit: 300)\ndocumentation-update-suggester.js: 431 lines (limit: 300)\nfile-placement-optimizer.js: 665 lines (limit: 300)\nfile-size-management-optimizer.js: 1199 lines (limit: 300)\ngit-workflow-compliance.js: 798 lines (limit: 300)\ngradual-size-reducer.js: 779 lines (limit: 300)\nhuman-ai-collaboration-system.js: 1060 lines (limit: 300)\nhuman-feedback-integration.js: 515 lines (limit: 300)\ninstruction-testing-framework.js: 522 lines (limit: 300)\nkt-cli-alpha/kt-cli.js: 1173 lines (limit: 300)\nline-impact-calculator.js: 711 lines (limit: 300)\nmerge-conflict-resolver.js: 807 lines (limit: 300)\nmulti-modal-reinforcement-learner.js: 628 lines (limit: 300)\nneftune-noise-injector.js: 485 lines (limit: 300)\norganizational-validator.js: 639 lines (limit: 300)\nperformance-monitoring-tools.js: 566 lines (limit: 300)\npublic/js/ai-dashboard.js: 501 lines (limit: 300)\npublic/js/bootstrap-navigation.js: 441 lines (limit: 300)\npublic/js/employee-benefits.js: 2549 lines (limit: 300)\npublic/js/shoelace-navigation.js: 344 lines (limit: 300)\nreal-time-index-updater.js: 441 lines (limit: 300)\nself-evolving-instruction-system.js: 1087 lines (limit: 300)\nsrc/amazon-zip-detector.js: 380 lines (limit: 300)\nsrc/amazon-zip-parser-original.js: 626 lines (limit: 300)\nsrc/bank-reconciliation-engine.js: 621 lines (limit: 300)\nsrc/database.js: 392 lines (limit: 300)\nsrc/geographic-analysis-engine.js: 614 lines (limit: 300)\nsrc/subscription-analysis-engine.js: 495 lines (limit: 300)\nsrc/tsv-categorizer.js: 456 lines (limit: 300)\ntest-ux-e2e.js: 414 lines (limit: 300)\ntests/accessibility/accessibility.test.js: 455 lines (limit: 300)\ntests/cli/cli-tests.test.js: 449 lines (limit: 300)\ntests/component-tester.js: 342 lines (limit: 300)\ntests/e2e/complete-workflow.test.js: 355 lines (limit: 300)\ntests/e2e/data-import-e2e.test.js: 390 lines (limit: 300)\ntests/import-history-api.test.js: 334 lines (limit: 300)\ntests/import-history-puppeteer.test.js: 313 lines (limit: 300)\ntests/integration/api.test.js: 491 lines (limit: 300)\ntests/performance/performance.test.js: 436 lines (limit: 300)\ntests/pw/import-history-ux.test.js: 386 lines (limit: 300)\ntests/reports/test-reporting.test.js: 543 lines (limit: 300)\ntests/shared/test-helpers.js: 423 lines (limit: 300)\ntests/unit/tsv-categorizer.test.js: 404 lines (limit: 300)\ntests/visual/visual-regression.test.js: 447 lines (limit: 300)"
+            },
+            "comment-quality": {
+              "testId": "comment-quality",
+              "name": "Comment Quality Test",
+              "status": "failed",
+              "output": "",
+              "duration": 3422,
+              "error": "Comment quality issues:\ntests/global-setup.js: Missing JSDoc comments\ntests/global-teardown.js: Missing JSDoc comments\ntests/pw/import-history-ux.test.js: Missing JSDoc comments\ntests/reports/test-reporting.test.js: Missing JSDoc comments\ntests/shared/global-setup.js: Missing JSDoc comments\ntests/shared/global-teardown.js: Missing JSDoc comments\ncoverage/combined/block-navigation.js: Missing JSDoc comments\ncoverage/combined/lcov-report/block-navigation.js: Missing JSDoc comments\ncoverage/combined/lcov-report/prettify.js: Missing JSDoc comments\ncoverage/combined/lcov-report/sorter.js: Missing JSDoc comments\ncoverage/combined/prettify.js: Missing JSDoc comments\ncoverage/combined/sorter.js: Missing JSDoc comments\ncoverage/integration/block-navigation.js: Missing JSDoc comments\ncoverage/integration/lcov-report/block-navigation.js: Missing JSDoc comments\ncoverage/integration/lcov-report/prettify.js: Missing JSDoc comments\ncoverage/integration/lcov-report/sorter.js: Missing JSDoc comments\ncoverage/integration/prettify.js: Missing JSDoc comments\ncoverage/integration/sorter.js: Missing JSDoc comments\ncoverage/unit/block-navigation.js: Missing JSDoc comments\ncoverage/unit/lcov-report/block-navigation.js: Missing JSDoc comments\ncoverage/unit/lcov-report/prettify.js: Missing JSDoc comments\ncoverage/unit/lcov-report/sorter.js: Missing JSDoc comments\ncoverage/unit/prettify.js: Missing JSDoc comments\ncoverage/unit/sorter.js: Missing JSDoc comments\ndemos/amazon-zip-import-demo.js: Missing JSDoc comments\ndocs/api/scripts/prettify/prettify.js: Missing JSDoc comments\npublic/js/app.js: Missing JSDoc comments\npublic/js/shoelace-navigation-new.js: Missing JSDoc comments\npublic/js/shoelace-navigation.js: Missing JSDoc comments\nserver.js: Missing JSDoc comments\ntest-benefits-e2e.js: Missing JSDoc comments\ntest-benefits-field-mapping.js: Missing JSDoc comments\ntest-benefits-ux.js: Missing JSDoc comments\ntest-fix-verification.js: Missing JSDoc comments\ntest-script-logic.js: Missing JSDoc comments\ntest-visual-inspection.js: Missing JSDoc comments\ntests/global-setup.js: Missing JSDoc comments\ntests/global-teardown.js: Missing JSDoc comments\ntests/pw/import-history-ux.test.js: Missing JSDoc comments\ntests/reports/test-reporting.test.js: Missing JSDoc comments\ntests/shared/global-setup.js: Missing JSDoc comments\ntests/shared/global-teardown.js: Missing JSDoc comments"
+            },
+            "git-practices": {
+              "testId": "git-practices",
+              "name": "Git Practices Test",
+              "status": "passed",
+              "output": "✅ 10/10 commits follow conventional format",
+              "duration": 62
+            }
+          },
+          "duration": 7594,
+          "timestamp": "2026-01-07T02:58:49.161Z"
+        },
+        "codeQuality": {
+          "pipelineId": "codeQuality",
+          "name": "Code Quality Pipeline",
+          "status": "failed",
+          "tests": {
+            "eslint": {
+              "testId": "eslint",
+              "name": "ESLint Code Quality",
+              "status": "failed",
+              "output": "",
+              "duration": 1733,
+              "error": "ESLint failed:\n\nOops! Something went wrong! :(\n\nESLint: 9.39.2\n\nESLint couldn't find an eslint.config.(js|mjs|cjs) file.\n\nFrom ESLint v9.0.0, the default configuration file is now eslint.config.js.\nIf you are using a .eslintrc.* file, please follow the migration guide\nto update your configuration file to the new format:\n\nhttps://eslint.org/docs/latest/use/configure/migration-guide\n\nIf you still have problems after following the migration guide, please stop by\nhttps://eslint.org/chat/help to chat with the team.\n\n"
+            },
+            "prettier": {
+              "testId": "prettier",
+              "name": "Prettier Code Formatting",
+              "status": "failed",
+              "output": "",
+              "duration": 3654,
+              "error": "Prettier formatting issues found"
+            },
+            "jsdoc-validation": {
+              "testId": "jsdoc-validation",
+              "name": "JSDoc Validation",
+              "status": "failed",
+              "output": "",
+              "duration": 3731,
+              "error": "JSDoc validation issues:\nsrc/amazon-integration/amazon-zip-extractor.js: Functions without complete JSDoc\nsrc/amazon-integration/amazon-zip-processor.js: Functions without complete JSDoc\nsrc/amazon-integration/parsers/cart-parser.js: Functions without complete JSDoc\nsrc/amazon-integration/parsers/order-parser.js: Functions without complete JSDoc\nsrc/amazon-integration/parsers/returns-parser.js: Functions without complete JSDoc\nsrc/amazon-integration/parsers/subscription-parser.js: Functions without complete JSDoc\nsrc/database.js: Functions without complete JSDoc\nsrc/import/csv-parser.js: Functions without complete JSDoc\nsrc/import/history-manager.js: Functions without complete JSDoc\nsrc/import/status-tracker.js: Functions without complete JSDoc\nsrc/import/zip-handler.js: Functions without complete JSDoc\nsrc/routes/employee-benefits.js: Functions without complete JSDoc\nsrc/routes/geographic.js: Functions without complete JSDoc\nsrc/routes/subscription.js: Functions without complete JSDoc\ntests/global-setup.js: Functions without complete JSDoc\ntests/global-teardown.js: Functions without complete JSDoc\ntests/import-history-api.test.js: Functions without complete JSDoc\ntests/import-history-puppeteer.test.js: Functions without complete JSDoc\ntests/pw/import-history-ux.test.js: Functions without complete JSDoc\ntests/quick-test.js: Functions without complete JSDoc\ntests/reports/test-reporting.test.js: Functions without complete JSDoc\ntests/shared/global-setup.js: Functions without complete JSDoc\ntests/shared/global-teardown.js: Functions without complete JSDoc\ntests/ux-testing-suite.js: Functions without complete JSDoc\nadherence-monitor.js: Functions without complete JSDoc\nai-visual-test.js: Functions without complete JSDoc\napi-documentation-generator.js: Functions without complete JSDoc\nautomated-indexing-system.js: Functions without complete JSDoc\nautomated-refactoring-applicator.js: Functions without complete JSDoc\nautomated-validation-pipelines.js: Functions without complete JSDoc\nclasses/FileSizeManagementOptimizer.js: Functions without complete JSDoc\ncomment-style-consistency-validator.js: Functions without complete JSDoc\ncoverage/combined/block-navigation.js: Functions without complete JSDoc\ncoverage/combined/lcov-report/block-navigation.js: Functions without complete JSDoc\ncoverage/combined/lcov-report/prettify.js: Functions without complete JSDoc\ncoverage/combined/lcov-report/sorter.js: Functions without complete JSDoc\ncoverage/combined/prettify.js: Functions without complete JSDoc\ncoverage/combined/sorter.js: Functions without complete JSDoc\ncoverage/integration/block-navigation.js: Functions without complete JSDoc\ncoverage/integration/lcov-report/block-navigation.js: Functions without complete JSDoc\ncoverage/integration/lcov-report/prettify.js: Functions without complete JSDoc\ncoverage/integration/lcov-report/sorter.js: Functions without complete JSDoc\ncoverage/integration/prettify.js: Functions without complete JSDoc\ncoverage/integration/sorter.js: Functions without complete JSDoc\ncoverage/unit/block-navigation.js: Functions without complete JSDoc\ncoverage/unit/lcov-report/block-navigation.js: Functions without complete JSDoc\ncoverage/unit/lcov-report/prettify.js: Functions without complete JSDoc\ncoverage/unit/lcov-report/sorter.js: Functions without complete JSDoc\ncoverage/unit/prettify.js: Functions without complete JSDoc\ncoverage/unit/sorter.js: Functions without complete JSDoc\ndemos/amazon-zip-import-demo.js: Functions without complete JSDoc\ndocs/api/scripts/prettify/prettify.js: Functions without complete JSDoc\ndocumentation-completeness-checker.js: Functions without complete JSDoc\ndocumentation-update-suggester.js: Functions without complete JSDoc\nfile-size-management-optimizer.js: Functions without complete JSDoc\nmerge-conflict-resolver.js: Functions without complete JSDoc\nnavigation-demo.js: Functions without complete JSDoc\npublic/js/app.js: Functions without complete JSDoc\npublic/js/bootstrap-navigation.js: Functions without complete JSDoc\npublic/js/employee-benefits.js: Functions without complete JSDoc\npublic/js/modules/analysis/analysis.js: Functions without complete JSDoc\npublic/js/modules/expenditures/expenditures.js: Functions without complete JSDoc\npublic/js/modules/import-history/import-history.js: Functions without complete JSDoc\npublic/js/modules/premium-analytics/premium-analytics.js: Functions without complete JSDoc\npublic/js/shoelace-navigation-new.js: Functions without complete JSDoc\npublic/js/shoelace-navigation.js: Functions without complete JSDoc\nreal-time-index-updater.js: Functions without complete JSDoc\nserver.js: Functions without complete JSDoc\nsrc/amazon-integration/amazon-zip-extractor.js: Functions without complete JSDoc\nsrc/amazon-integration/amazon-zip-processor.js: Functions without complete JSDoc\nsrc/amazon-integration/parsers/cart-parser.js: Functions without complete JSDoc\nsrc/amazon-integration/parsers/order-parser.js: Functions without complete JSDoc\nsrc/amazon-integration/parsers/returns-parser.js: Functions without complete JSDoc\nsrc/amazon-integration/parsers/subscription-parser.js: Functions without complete JSDoc\nsrc/database.js: Functions without complete JSDoc\nsrc/import/csv-parser.js: Functions without complete JSDoc\nsrc/import/history-manager.js: Functions without complete JSDoc\nsrc/import/status-tracker.js: Functions without complete JSDoc\nsrc/import/zip-handler.js: Functions without complete JSDoc\nsrc/routes/employee-benefits.js: Functions without complete JSDoc\nsrc/routes/geographic.js: Functions without complete JSDoc\nsrc/routes/subscription.js: Functions without complete JSDoc\ntest-benefits-e2e.js: Functions without complete JSDoc\ntest-benefits-field-mapping.js: Functions without complete JSDoc\ntest-benefits-ux-comprehensive.js: Functions without complete JSDoc\ntest-benefits-ux.js: Functions without complete JSDoc\ntest-fix-verification.js: Functions without complete JSDoc\ntest-script-logic.js: Functions without complete JSDoc\ntest-ux-e2e.js: Functions without complete JSDoc\ntest-visual-inspection.js: Functions without complete JSDoc\ntests/global-setup.js: Functions without complete JSDoc\ntests/global-teardown.js: Functions without complete JSDoc\ntests/import-history-api.test.js: Functions without complete JSDoc\ntests/import-history-puppeteer.test.js: Functions without complete JSDoc\ntests/pw/import-history-ux.test.js: Functions without complete JSDoc\ntests/quick-test.js: Functions without complete JSDoc\ntests/reports/test-reporting.test.js: Functions without complete JSDoc\ntests/shared/global-setup.js: Functions without complete JSDoc\ntests/shared/global-teardown.js: Functions without complete JSDoc\ntests/ux-testing-suite.js: Functions without complete JSDoc\nutils/count.js: Functions without complete JSDoc\nvisual-ux-test.js: Functions without complete JSDoc\nutils/count.js: Functions without complete JSDoc"
+            }
+          },
+          "duration": 9118,
+          "timestamp": "2026-01-07T02:58:56.756Z"
+        },
+        "performanceValidation": {
+          "pipelineId": "performanceValidation",
+          "name": "Performance Validation Pipeline",
+          "status": "failed",
+          "tests": {
+            "response-time-check": {
+              "testId": "response-time-check",
+              "name": "Response Time Validation",
+              "status": "passed",
+              "output": "✅ Response time 0ms within acceptable range",
+              "duration": 5
+            },
+            "accuracy-threshold": {
+              "testId": "accuracy-threshold",
+              "name": "Accuracy Threshold Check",
+              "status": "failed",
+              "output": "",
+              "duration": 0,
+              "error": "Average accuracy 0.0% below 80% threshold"
+            },
+            "compliance-scoring": {
+              "testId": "compliance-scoring",
+              "name": "Compliance Scoring Validation",
+              "status": "failed",
+              "output": "",
+              "duration": 1,
+              "error": "Average compliance 0.0% below 90% threshold"
+            }
+          },
+          "duration": 6,
+          "timestamp": "2026-01-07T02:59:05.875Z"
+        },
+        "integrationTesting": {
+          "pipelineId": "integrationTesting",
+          "name": "Integration Testing Pipeline",
+          "status": "failed",
+          "tests": {
+            "api-endpoint-validation": {
+              "testId": "api-endpoint-validation",
+              "name": "API Endpoint Validation",
+              "status": "failed",
+              "output": "",
+              "duration": 11,
+              "error": "API health check failed"
+            },
+            "data-flow-testing": {
+              "testId": "data-flow-testing",
+              "name": "Data Flow Testing",
+              "status": "failed",
+              "output": "",
+              "duration": 4,
+              "error": "Data file missing: data/test-expenditures.json"
+            },
+            "ui-consistency": {
+              "testId": "ui-consistency",
+              "name": "UI Consistency Check",
+              "status": "failed",
+              "output": "",
+              "duration": 155,
+              "error": "UI consistency issues:\npublic/about.html: Missing navigation elements\npublic/amazon-zip-import.html: Missing navigation elements\npublic/api-debug.html: Missing navigation elements\npublic/benefits-refactor-complete.html: Missing navigation elements\npublic/components/ai-insights/ai-insights.html: Missing navigation elements\npublic/components/amazon-zip-import/amazon-zip-import.html: Missing navigation elements\npublic/components/analysis/analysis.html: Missing navigation elements\npublic/components/bank-reconciliation/bank-reconciliation.html: Missing navigation elements\npublic/components/dashboard/test.html: Missing navigation elements\npublic/components/data-import/data-import.html: Missing navigation elements\npublic/components/employee-benefits/employee-benefits.html: Missing navigation elements\npublic/components/geographic-analysis/geographic-analysis.html: Missing navigation elements\npublic/components/manual-entry/manual-entry.html: Missing navigation elements\npublic/components/navigation/head.html: Missing Bootstrap layout classes\npublic/components/premium-features/premium-features.html: Missing navigation elements\npublic/components/reconciliation/reconciliation.html: Missing navigation elements\npublic/components/settings/settings.html: Missing navigation elements\npublic/components/subscription-analysis/subscription-analysis.html: Missing navigation elements\npublic/debug-benefits.html: Missing navigation elements\npublic/debug-benefits.html: Missing Bootstrap layout classes\npublic/employee-benefits-test.html: Missing navigation elements\npublic/test-business-card.html: Missing navigation elements\npublic/view-separation-test.html: Missing navigation elements"
+            }
+          },
+          "duration": 170,
+          "timestamp": "2026-01-07T02:59:05.882Z"
+        }
+      },
+      "summary": {
+        "total": 4,
+        "passed": 0,
+        "failed": 4,
+        "skipped": 0,
+        "duration": 16893
+      }
+    },
+    "totalRuns": 1,
+    "successRate": -300,
+    "pipelineResults": {
+      "instructionCompliance": {
+        "pipelineId": "instructionCompliance",
+        "name": "Instruction Compliance Pipeline",
+        "status": "failed",
+        "tests": {
+          "file-size-limits": {
+            "testId": "file-size-limits",
+            "name": "File Size Limits Test",
+            "status": "failed",
+            "output": "",
+            "duration": 4110,
+            "error": "File size violations:\nsrc/amazon-zip-detector.js: 380 lines (limit: 300)\nsrc/amazon-zip-parser-original.js: 626 lines (limit: 300)\nsrc/bank-reconciliation-engine.js: 621 lines (limit: 300)\nsrc/database.js: 392 lines (limit: 300)\nsrc/geographic-analysis-engine.js: 614 lines (limit: 300)\nsrc/subscription-analysis-engine.js: 495 lines (limit: 300)\nsrc/tsv-categorizer.js: 456 lines (limit: 300)\ntests/accessibility/accessibility.test.js: 455 lines (limit: 300)\ntests/cli/cli-tests.test.js: 449 lines (limit: 300)\ntests/component-tester.js: 342 lines (limit: 300)\ntests/e2e/complete-workflow.test.js: 355 lines (limit: 300)\ntests/e2e/data-import-e2e.test.js: 390 lines (limit: 300)\ntests/import-history-api.test.js: 334 lines (limit: 300)\ntests/import-history-puppeteer.test.js: 313 lines (limit: 300)\ntests/integration/api.test.js: 491 lines (limit: 300)\ntests/performance/performance.test.js: 436 lines (limit: 300)\ntests/pw/import-history-ux.test.js: 386 lines (limit: 300)\ntests/reports/test-reporting.test.js: 543 lines (limit: 300)\ntests/shared/test-helpers.js: 423 lines (limit: 300)\ntests/unit/tsv-categorizer.test.js: 404 lines (limit: 300)\ntests/visual/visual-regression.test.js: 447 lines (limit: 300)\nadherence-monitor.js: 317 lines (limit: 300)\nai-visual-test.js: 434 lines (limit: 300)\napi-documentation-generator.js: 401 lines (limit: 300)\nautomated-commit-message-suggester.js: 672 lines (limit: 300)\nautomated-indexing-system.js: 810 lines (limit: 300)\nautomated-refactoring-applicator.js: 533 lines (limit: 300)\nautomated-validation-pipelines.js: 794 lines (limit: 300)\nbest-practice-retrieval.js: 379 lines (limit: 300)\nbranching-strategy-enforcer.js: 627 lines (limit: 300)\ncatastrophic-forgetting-preventer.js: 571 lines (limit: 300)\nclasses/FileSizeManagementOptimizer.js: 1176 lines (limit: 300)\nclasses/HumanAICollaborationSystem.js: 1008 lines (limit: 300)\ncomment-quality-assessor.js: 730 lines (limit: 300)\ncomment-style-consistency-validator.js: 429 lines (limit: 300)\ncommit-blocker.js: 548 lines (limit: 300)\ncomprehensive-ux-test.js: 312 lines (limit: 300)\ncontinuous-integration-instructions.js: 791 lines (limit: 300)\nconventional-commit-validator.js: 509 lines (limit: 300)\ncross-reference-database.js: 717 lines (limit: 300)\ncross-validation-testing-system.js: 952 lines (limit: 300)\ndocumentation-completeness-checker.js: 635 lines (limit: 300)\ndocumentation-update-suggester.js: 431 lines (limit: 300)\nfile-placement-optimizer.js: 665 lines (limit: 300)\nfile-size-management-optimizer.js: 1199 lines (limit: 300)\ngit-workflow-compliance.js: 798 lines (limit: 300)\ngradual-size-reducer.js: 779 lines (limit: 300)\nhuman-ai-collaboration-system.js: 1060 lines (limit: 300)\nhuman-feedback-integration.js: 515 lines (limit: 300)\ninstruction-testing-framework.js: 522 lines (limit: 300)\nkt-cli-alpha/kt-cli.js: 1173 lines (limit: 300)\nline-impact-calculator.js: 711 lines (limit: 300)\nmerge-conflict-resolver.js: 807 lines (limit: 300)\nmulti-modal-reinforcement-learner.js: 628 lines (limit: 300)\nneftune-noise-injector.js: 485 lines (limit: 300)\norganizational-validator.js: 639 lines (limit: 300)\nperformance-monitoring-tools.js: 566 lines (limit: 300)\npublic/js/ai-dashboard.js: 501 lines (limit: 300)\npublic/js/bootstrap-navigation.js: 441 lines (limit: 300)\npublic/js/employee-benefits.js: 2549 lines (limit: 300)\npublic/js/shoelace-navigation.js: 344 lines (limit: 300)\nreal-time-index-updater.js: 441 lines (limit: 300)\nself-evolving-instruction-system.js: 1087 lines (limit: 300)\nsrc/amazon-zip-detector.js: 380 lines (limit: 300)\nsrc/amazon-zip-parser-original.js: 626 lines (limit: 300)\nsrc/bank-reconciliation-engine.js: 621 lines (limit: 300)\nsrc/database.js: 392 lines (limit: 300)\nsrc/geographic-analysis-engine.js: 614 lines (limit: 300)\nsrc/subscription-analysis-engine.js: 495 lines (limit: 300)\nsrc/tsv-categorizer.js: 456 lines (limit: 300)\ntest-ux-e2e.js: 414 lines (limit: 300)\ntests/accessibility/accessibility.test.js: 455 lines (limit: 300)\ntests/cli/cli-tests.test.js: 449 lines (limit: 300)\ntests/component-tester.js: 342 lines (limit: 300)\ntests/e2e/complete-workflow.test.js: 355 lines (limit: 300)\ntests/e2e/data-import-e2e.test.js: 390 lines (limit: 300)\ntests/import-history-api.test.js: 334 lines (limit: 300)\ntests/import-history-puppeteer.test.js: 313 lines (limit: 300)\ntests/integration/api.test.js: 491 lines (limit: 300)\ntests/performance/performance.test.js: 436 lines (limit: 300)\ntests/pw/import-history-ux.test.js: 386 lines (limit: 300)\ntests/reports/test-reporting.test.js: 543 lines (limit: 300)\ntests/shared/test-helpers.js: 423 lines (limit: 300)\ntests/unit/tsv-categorizer.test.js: 404 lines (limit: 300)\ntests/visual/visual-regression.test.js: 447 lines (limit: 300)"
+          },
+          "comment-quality": {
+            "testId": "comment-quality",
+            "name": "Comment Quality Test",
+            "status": "failed",
+            "output": "",
+            "duration": 3422,
+            "error": "Comment quality issues:\ntests/global-setup.js: Missing JSDoc comments\ntests/global-teardown.js: Missing JSDoc comments\ntests/pw/import-history-ux.test.js: Missing JSDoc comments\ntests/reports/test-reporting.test.js: Missing JSDoc comments\ntests/shared/global-setup.js: Missing JSDoc comments\ntests/shared/global-teardown.js: Missing JSDoc comments\ncoverage/combined/block-navigation.js: Missing JSDoc comments\ncoverage/combined/lcov-report/block-navigation.js: Missing JSDoc comments\ncoverage/combined/lcov-report/prettify.js: Missing JSDoc comments\ncoverage/combined/lcov-report/sorter.js: Missing JSDoc comments\ncoverage/combined/prettify.js: Missing JSDoc comments\ncoverage/combined/sorter.js: Missing JSDoc comments\ncoverage/integration/block-navigation.js: Missing JSDoc comments\ncoverage/integration/lcov-report/block-navigation.js: Missing JSDoc comments\ncoverage/integration/lcov-report/prettify.js: Missing JSDoc comments\ncoverage/integration/lcov-report/sorter.js: Missing JSDoc comments\ncoverage/integration/prettify.js: Missing JSDoc comments\ncoverage/integration/sorter.js: Missing JSDoc comments\ncoverage/unit/block-navigation.js: Missing JSDoc comments\ncoverage/unit/lcov-report/block-navigation.js: Missing JSDoc comments\ncoverage/unit/lcov-report/prettify.js: Missing JSDoc comments\ncoverage/unit/lcov-report/sorter.js: Missing JSDoc comments\ncoverage/unit/prettify.js: Missing JSDoc comments\ncoverage/unit/sorter.js: Missing JSDoc comments\ndemos/amazon-zip-import-demo.js: Missing JSDoc comments\ndocs/api/scripts/prettify/prettify.js: Missing JSDoc comments\npublic/js/app.js: Missing JSDoc comments\npublic/js/shoelace-navigation-new.js: Missing JSDoc comments\npublic/js/shoelace-navigation.js: Missing JSDoc comments\nserver.js: Missing JSDoc comments\ntest-benefits-e2e.js: Missing JSDoc comments\ntest-benefits-field-mapping.js: Missing JSDoc comments\ntest-benefits-ux.js: Missing JSDoc comments\ntest-fix-verification.js: Missing JSDoc comments\ntest-script-logic.js: Missing JSDoc comments\ntest-visual-inspection.js: Missing JSDoc comments\ntests/global-setup.js: Missing JSDoc comments\ntests/global-teardown.js: Missing JSDoc comments\ntests/pw/import-history-ux.test.js: Missing JSDoc comments\ntests/reports/test-reporting.test.js: Missing JSDoc comments\ntests/shared/global-setup.js: Missing JSDoc comments\ntests/shared/global-teardown.js: Missing JSDoc comments"
+          },
+          "git-practices": {
+            "testId": "git-practices",
+            "name": "Git Practices Test",
+            "status": "passed",
+            "output": "✅ 10/10 commits follow conventional format",
+            "duration": 62
+          }
+        },
+        "duration": 7594,
+        "timestamp": "2026-01-07T02:58:49.161Z"
+      },
+      "codeQuality": {
+        "pipelineId": "codeQuality",
+        "name": "Code Quality Pipeline",
+        "status": "failed",
+        "tests": {
+          "eslint": {
+            "testId": "eslint",
+            "name": "ESLint Code Quality",
+            "status": "failed",
+            "output": "",
+            "duration": 1733,
+            "error": "ESLint failed:\n\nOops! Something went wrong! :(\n\nESLint: 9.39.2\n\nESLint couldn't find an eslint.config.(js|mjs|cjs) file.\n\nFrom ESLint v9.0.0, the default configuration file is now eslint.config.js.\nIf you are using a .eslintrc.* file, please follow the migration guide\nto update your configuration file to the new format:\n\nhttps://eslint.org/docs/latest/use/configure/migration-guide\n\nIf you still have problems after following the migration guide, please stop by\nhttps://eslint.org/chat/help to chat with the team.\n\n"
+          },
+          "prettier": {
+            "testId": "prettier",
+            "name": "Prettier Code Formatting",
+            "status": "failed",
+            "output": "",
+            "duration": 3654,
+            "error": "Prettier formatting issues found"
+          },
+          "jsdoc-validation": {
+            "testId": "jsdoc-validation",
+            "name": "JSDoc Validation",
+            "status": "failed",
+            "output": "",
+            "duration": 3731,
+            "error": "JSDoc validation issues:\nsrc/amazon-integration/amazon-zip-extractor.js: Functions without complete JSDoc\nsrc/amazon-integration/amazon-zip-processor.js: Functions without complete JSDoc\nsrc/amazon-integration/parsers/cart-parser.js: Functions without complete JSDoc\nsrc/amazon-integration/parsers/order-parser.js: Functions without complete JSDoc\nsrc/amazon-integration/parsers/returns-parser.js: Functions without complete JSDoc\nsrc/amazon-integration/parsers/subscription-parser.js: Functions without complete JSDoc\nsrc/database.js: Functions without complete JSDoc\nsrc/import/csv-parser.js: Functions without complete JSDoc\nsrc/import/history-manager.js: Functions without complete JSDoc\nsrc/import/status-tracker.js: Functions without complete JSDoc\nsrc/import/zip-handler.js: Functions without complete JSDoc\nsrc/routes/employee-benefits.js: Functions without complete JSDoc\nsrc/routes/geographic.js: Functions without complete JSDoc\nsrc/routes/subscription.js: Functions without complete JSDoc\ntests/global-setup.js: Functions without complete JSDoc\ntests/global-teardown.js: Functions without complete JSDoc\ntests/import-history-api.test.js: Functions without complete JSDoc\ntests/import-history-puppeteer.test.js: Functions without complete JSDoc\ntests/pw/import-history-ux.test.js: Functions without complete JSDoc\ntests/quick-test.js: Functions without complete JSDoc\ntests/reports/test-reporting.test.js: Functions without complete JSDoc\ntests/shared/global-setup.js: Functions without complete JSDoc\ntests/shared/global-teardown.js: Functions without complete JSDoc\ntests/ux-testing-suite.js: Functions without complete JSDoc\nadherence-monitor.js: Functions without complete JSDoc\nai-visual-test.js: Functions without complete JSDoc\napi-documentation-generator.js: Functions without complete JSDoc\nautomated-indexing-system.js: Functions without complete JSDoc\nautomated-refactoring-applicator.js: Functions without complete JSDoc\nautomated-validation-pipelines.js: Functions without complete JSDoc\nclasses/FileSizeManagementOptimizer.js: Functions without complete JSDoc\ncomment-style-consistency-validator.js: Functions without complete JSDoc\ncoverage/combined/block-navigation.js: Functions without complete JSDoc\ncoverage/combined/lcov-report/block-navigation.js: Functions without complete JSDoc\ncoverage/combined/lcov-report/prettify.js: Functions without complete JSDoc\ncoverage/combined/lcov-report/sorter.js: Functions without complete JSDoc\ncoverage/combined/prettify.js: Functions without complete JSDoc\ncoverage/combined/sorter.js: Functions without complete JSDoc\ncoverage/integration/block-navigation.js: Functions without complete JSDoc\ncoverage/integration/lcov-report/block-navigation.js: Functions without complete JSDoc\ncoverage/integration/lcov-report/prettify.js: Functions without complete JSDoc\ncoverage/integration/lcov-report/sorter.js: Functions without complete JSDoc\ncoverage/integration/prettify.js: Functions without complete JSDoc\ncoverage/integration/sorter.js: Functions without complete JSDoc\ncoverage/unit/block-navigation.js: Functions without complete JSDoc\ncoverage/unit/lcov-report/block-navigation.js: Functions without complete JSDoc\ncoverage/unit/lcov-report/prettify.js: Functions without complete JSDoc\ncoverage/unit/lcov-report/sorter.js: Functions without complete JSDoc\ncoverage/unit/prettify.js: Functions without complete JSDoc\ncoverage/unit/sorter.js: Functions without complete JSDoc\ndemos/amazon-zip-import-demo.js: Functions without complete JSDoc\ndocs/api/scripts/prettify/prettify.js: Functions without complete JSDoc\ndocumentation-completeness-checker.js: Functions without complete JSDoc\ndocumentation-update-suggester.js: Functions without complete JSDoc\nfile-size-management-optimizer.js: Functions without complete JSDoc\nmerge-conflict-resolver.js: Functions without complete JSDoc\nnavigation-demo.js: Functions without complete JSDoc\npublic/js/app.js: Functions without complete JSDoc\npublic/js/bootstrap-navigation.js: Functions without complete JSDoc\npublic/js/employee-benefits.js: Functions without complete JSDoc\npublic/js/modules/analysis/analysis.js: Functions without complete JSDoc\npublic/js/modules/expenditures/expenditures.js: Functions without complete JSDoc\npublic/js/modules/import-history/import-history.js: Functions without complete JSDoc\npublic/js/modules/premium-analytics/premium-analytics.js: Functions without complete JSDoc\npublic/js/shoelace-navigation-new.js: Functions without complete JSDoc\npublic/js/shoelace-navigation.js: Functions without complete JSDoc\nreal-time-index-updater.js: Functions without complete JSDoc\nserver.js: Functions without complete JSDoc\nsrc/amazon-integration/amazon-zip-extractor.js: Functions without complete JSDoc\nsrc/amazon-integration/amazon-zip-processor.js: Functions without complete JSDoc\nsrc/amazon-integration/parsers/cart-parser.js: Functions without complete JSDoc\nsrc/amazon-integration/parsers/order-parser.js: Functions without complete JSDoc\nsrc/amazon-integration/parsers/returns-parser.js: Functions without complete JSDoc\nsrc/amazon-integration/parsers/subscription-parser.js: Functions without complete JSDoc\nsrc/database.js: Functions without complete JSDoc\nsrc/import/csv-parser.js: Functions without complete JSDoc\nsrc/import/history-manager.js: Functions without complete JSDoc\nsrc/import/status-tracker.js: Functions without complete JSDoc\nsrc/import/zip-handler.js: Functions without complete JSDoc\nsrc/routes/employee-benefits.js: Functions without complete JSDoc\nsrc/routes/geographic.js: Functions without complete JSDoc\nsrc/routes/subscription.js: Functions without complete JSDoc\ntest-benefits-e2e.js: Functions without complete JSDoc\ntest-benefits-field-mapping.js: Functions without complete JSDoc\ntest-benefits-ux-comprehensive.js: Functions without complete JSDoc\ntest-benefits-ux.js: Functions without complete JSDoc\ntest-fix-verification.js: Functions without complete JSDoc\ntest-script-logic.js: Functions without complete JSDoc\ntest-ux-e2e.js: Functions without complete JSDoc\ntest-visual-inspection.js: Functions without complete JSDoc\ntests/global-setup.js: Functions without complete JSDoc\ntests/global-teardown.js: Functions without complete JSDoc\ntests/import-history-api.test.js: Functions without complete JSDoc\ntests/import-history-puppeteer.test.js: Functions without complete JSDoc\ntests/pw/import-history-ux.test.js: Functions without complete JSDoc\ntests/quick-test.js: Functions without complete JSDoc\ntests/reports/test-reporting.test.js: Functions without complete JSDoc\ntests/shared/global-setup.js: Functions without complete JSDoc\ntests/shared/global-teardown.js: Functions without complete JSDoc\ntests/ux-testing-suite.js: Functions without complete JSDoc\nutils/count.js: Functions without complete JSDoc\nvisual-ux-test.js: Functions without complete JSDoc\nutils/count.js: Functions without complete JSDoc"
+          }
+        },
+        "duration": 9118,
+        "timestamp": "2026-01-07T02:58:56.756Z"
+      },
+      "performanceValidation": {
+        "pipelineId": "performanceValidation",
+        "name": "Performance Validation Pipeline",
+        "status": "failed",
+        "tests": {
+          "response-time-check": {
+            "testId": "response-time-check",
+            "name": "Response Time Validation",
+            "status": "passed",
+            "output": "✅ Response time 0ms within acceptable range",
+            "duration": 5
+          },
+          "accuracy-threshold": {
+            "testId": "accuracy-threshold",
+            "name": "Accuracy Threshold Check",
+            "status": "failed",
+            "output": "",
+            "duration": 0,
+            "error": "Average accuracy 0.0% below 80% threshold"
+          },
+          "compliance-scoring": {
+            "testId": "compliance-scoring",
+            "name": "Compliance Scoring Validation",
+            "status": "failed",
+            "output": "",
+            "duration": 1,
+            "error": "Average compliance 0.0% below 90% threshold"
+          }
+        },
+        "duration": 6,
+        "timestamp": "2026-01-07T02:59:05.875Z"
+      },
+      "integrationTesting": {
+        "pipelineId": "integrationTesting",
+        "name": "Integration Testing Pipeline",
+        "status": "failed",
+        "tests": {
+          "api-endpoint-validation": {
+            "testId": "api-endpoint-validation",
+            "name": "API Endpoint Validation",
+            "status": "failed",
+            "output": "",
+            "duration": 11,
+            "error": "API health check failed"
+          },
+          "data-flow-testing": {
+            "testId": "data-flow-testing",
+            "name": "Data Flow Testing",
+            "status": "failed",
+            "output": "",
+            "duration": 4,
+            "error": "Data file missing: data/test-expenditures.json"
+          },
+          "ui-consistency": {
+            "testId": "ui-consistency",
+            "name": "UI Consistency Check",
+            "status": "failed",
+            "output": "",
+            "duration": 155,
+            "error": "UI consistency issues:\npublic/about.html: Missing navigation elements\npublic/amazon-zip-import.html: Missing navigation elements\npublic/api-debug.html: Missing navigation elements\npublic/benefits-refactor-complete.html: Missing navigation elements\npublic/components/ai-insights/ai-insights.html: Missing navigation elements\npublic/components/amazon-zip-import/amazon-zip-import.html: Missing navigation elements\npublic/components/analysis/analysis.html: Missing navigation elements\npublic/components/bank-reconciliation/bank-reconciliation.html: Missing navigation elements\npublic/components/dashboard/test.html: Missing navigation elements\npublic/components/data-import/data-import.html: Missing navigation elements\npublic/components/employee-benefits/employee-benefits.html: Missing navigation elements\npublic/components/geographic-analysis/geographic-analysis.html: Missing navigation elements\npublic/components/manual-entry/manual-entry.html: Missing navigation elements\npublic/components/navigation/head.html: Missing Bootstrap layout classes\npublic/components/premium-features/premium-features.html: Missing navigation elements\npublic/components/reconciliation/reconciliation.html: Missing navigation elements\npublic/components/settings/settings.html: Missing navigation elements\npublic/components/subscription-analysis/subscription-analysis.html: Missing navigation elements\npublic/debug-benefits.html: Missing navigation elements\npublic/debug-benefits.html: Missing Bootstrap layout classes\npublic/employee-benefits-test.html: Missing navigation elements\npublic/test-business-card.html: Missing navigation elements\npublic/view-separation-test.html: Missing navigation elements"
+          }
+        },
+        "duration": 170,
+        "timestamp": "2026-01-07T02:59:05.882Z"
+      }
+    },
+    "failures": [
+      {
+        "pipelineId": "instructionCompliance",
+        "timestamp": "2026-01-07T02:58:56.755Z",
+        "result": {
+          "pipelineId": "instructionCompliance",
+          "name": "Instruction Compliance Pipeline",
+          "status": "failed",
+          "tests": {
+            "file-size-limits": {
+              "testId": "file-size-limits",
+              "name": "File Size Limits Test",
+              "status": "failed",
+              "output": "",
+              "duration": 4110,
+              "error": "File size violations:\nsrc/amazon-zip-detector.js: 380 lines (limit: 300)\nsrc/amazon-zip-parser-original.js: 626 lines (limit: 300)\nsrc/bank-reconciliation-engine.js: 621 lines (limit: 300)\nsrc/database.js: 392 lines (limit: 300)\nsrc/geographic-analysis-engine.js: 614 lines (limit: 300)\nsrc/subscription-analysis-engine.js: 495 lines (limit: 300)\nsrc/tsv-categorizer.js: 456 lines (limit: 300)\ntests/accessibility/accessibility.test.js: 455 lines (limit: 300)\ntests/cli/cli-tests.test.js: 449 lines (limit: 300)\ntests/component-tester.js: 342 lines (limit: 300)\ntests/e2e/complete-workflow.test.js: 355 lines (limit: 300)\ntests/e2e/data-import-e2e.test.js: 390 lines (limit: 300)\ntests/import-history-api.test.js: 334 lines (limit: 300)\ntests/import-history-puppeteer.test.js: 313 lines (limit: 300)\ntests/integration/api.test.js: 491 lines (limit: 300)\ntests/performance/performance.test.js: 436 lines (limit: 300)\ntests/pw/import-history-ux.test.js: 386 lines (limit: 300)\ntests/reports/test-reporting.test.js: 543 lines (limit: 300)\ntests/shared/test-helpers.js: 423 lines (limit: 300)\ntests/unit/tsv-categorizer.test.js: 404 lines (limit: 300)\ntests/visual/visual-regression.test.js: 447 lines (limit: 300)\nadherence-monitor.js: 317 lines (limit: 300)\nai-visual-test.js: 434 lines (limit: 300)\napi-documentation-generator.js: 401 lines (limit: 300)\nautomated-commit-message-suggester.js: 672 lines (limit: 300)\nautomated-indexing-system.js: 810 lines (limit: 300)\nautomated-refactoring-applicator.js: 533 lines (limit: 300)\nautomated-validation-pipelines.js: 794 lines (limit: 300)\nbest-practice-retrieval.js: 379 lines (limit: 300)\nbranching-strategy-enforcer.js: 627 lines (limit: 300)\ncatastrophic-forgetting-preventer.js: 571 lines (limit: 300)\nclasses/FileSizeManagementOptimizer.js: 1176 lines (limit: 300)\nclasses/HumanAICollaborationSystem.js: 1008 lines (limit: 300)\ncomment-quality-assessor.js: 730 lines (limit: 300)\ncomment-style-consistency-validator.js: 429 lines (limit: 300)\ncommit-blocker.js: 548 lines (limit: 300)\ncomprehensive-ux-test.js: 312 lines (limit: 300)\ncontinuous-integration-instructions.js: 791 lines (limit: 300)\nconventional-commit-validator.js: 509 lines (limit: 300)\ncross-reference-database.js: 717 lines (limit: 300)\ncross-validation-testing-system.js: 952 lines (limit: 300)\ndocumentation-completeness-checker.js: 635 lines (limit: 300)\ndocumentation-update-suggester.js: 431 lines (limit: 300)\nfile-placement-optimizer.js: 665 lines (limit: 300)\nfile-size-management-optimizer.js: 1199 lines (limit: 300)\ngit-workflow-compliance.js: 798 lines (limit: 300)\ngradual-size-reducer.js: 779 lines (limit: 300)\nhuman-ai-collaboration-system.js: 1060 lines (limit: 300)\nhuman-feedback-integration.js: 515 lines (limit: 300)\ninstruction-testing-framework.js: 522 lines (limit: 300)\nkt-cli-alpha/kt-cli.js: 1173 lines (limit: 300)\nline-impact-calculator.js: 711 lines (limit: 300)\nmerge-conflict-resolver.js: 807 lines (limit: 300)\nmulti-modal-reinforcement-learner.js: 628 lines (limit: 300)\nneftune-noise-injector.js: 485 lines (limit: 300)\norganizational-validator.js: 639 lines (limit: 300)\nperformance-monitoring-tools.js: 566 lines (limit: 300)\npublic/js/ai-dashboard.js: 501 lines (limit: 300)\npublic/js/bootstrap-navigation.js: 441 lines (limit: 300)\npublic/js/employee-benefits.js: 2549 lines (limit: 300)\npublic/js/shoelace-navigation.js: 344 lines (limit: 300)\nreal-time-index-updater.js: 441 lines (limit: 300)\nself-evolving-instruction-system.js: 1087 lines (limit: 300)\nsrc/amazon-zip-detector.js: 380 lines (limit: 300)\nsrc/amazon-zip-parser-original.js: 626 lines (limit: 300)\nsrc/bank-reconciliation-engine.js: 621 lines (limit: 300)\nsrc/database.js: 392 lines (limit: 300)\nsrc/geographic-analysis-engine.js: 614 lines (limit: 300)\nsrc/subscription-analysis-engine.js: 495 lines (limit: 300)\nsrc/tsv-categorizer.js: 456 lines (limit: 300)\ntest-ux-e2e.js: 414 lines (limit: 300)\ntests/accessibility/accessibility.test.js: 455 lines (limit: 300)\ntests/cli/cli-tests.test.js: 449 lines (limit: 300)\ntests/component-tester.js: 342 lines (limit: 300)\ntests/e2e/complete-workflow.test.js: 355 lines (limit: 300)\ntests/e2e/data-import-e2e.test.js: 390 lines (limit: 300)\ntests/import-history-api.test.js: 334 lines (limit: 300)\ntests/import-history-puppeteer.test.js: 313 lines (limit: 300)\ntests/integration/api.test.js: 491 lines (limit: 300)\ntests/performance/performance.test.js: 436 lines (limit: 300)\ntests/pw/import-history-ux.test.js: 386 lines (limit: 300)\ntests/reports/test-reporting.test.js: 543 lines (limit: 300)\ntests/shared/test-helpers.js: 423 lines (limit: 300)\ntests/unit/tsv-categorizer.test.js: 404 lines (limit: 300)\ntests/visual/visual-regression.test.js: 447 lines (limit: 300)"
+            },
+            "comment-quality": {
+              "testId": "comment-quality",
+              "name": "Comment Quality Test",
+              "status": "failed",
+              "output": "",
+              "duration": 3422,
+              "error": "Comment quality issues:\ntests/global-setup.js: Missing JSDoc comments\ntests/global-teardown.js: Missing JSDoc comments\ntests/pw/import-history-ux.test.js: Missing JSDoc comments\ntests/reports/test-reporting.test.js: Missing JSDoc comments\ntests/shared/global-setup.js: Missing JSDoc comments\ntests/shared/global-teardown.js: Missing JSDoc comments\ncoverage/combined/block-navigation.js: Missing JSDoc comments\ncoverage/combined/lcov-report/block-navigation.js: Missing JSDoc comments\ncoverage/combined/lcov-report/prettify.js: Missing JSDoc comments\ncoverage/combined/lcov-report/sorter.js: Missing JSDoc comments\ncoverage/combined/prettify.js: Missing JSDoc comments\ncoverage/combined/sorter.js: Missing JSDoc comments\ncoverage/integration/block-navigation.js: Missing JSDoc comments\ncoverage/integration/lcov-report/block-navigation.js: Missing JSDoc comments\ncoverage/integration/lcov-report/prettify.js: Missing JSDoc comments\ncoverage/integration/lcov-report/sorter.js: Missing JSDoc comments\ncoverage/integration/prettify.js: Missing JSDoc comments\ncoverage/integration/sorter.js: Missing JSDoc comments\ncoverage/unit/block-navigation.js: Missing JSDoc comments\ncoverage/unit/lcov-report/block-navigation.js: Missing JSDoc comments\ncoverage/unit/lcov-report/prettify.js: Missing JSDoc comments\ncoverage/unit/lcov-report/sorter.js: Missing JSDoc comments\ncoverage/unit/prettify.js: Missing JSDoc comments\ncoverage/unit/sorter.js: Missing JSDoc comments\ndemos/amazon-zip-import-demo.js: Missing JSDoc comments\ndocs/api/scripts/prettify/prettify.js: Missing JSDoc comments\npublic/js/app.js: Missing JSDoc comments\npublic/js/shoelace-navigation-new.js: Missing JSDoc comments\npublic/js/shoelace-navigation.js: Missing JSDoc comments\nserver.js: Missing JSDoc comments\ntest-benefits-e2e.js: Missing JSDoc comments\ntest-benefits-field-mapping.js: Missing JSDoc comments\ntest-benefits-ux.js: Missing JSDoc comments\ntest-fix-verification.js: Missing JSDoc comments\ntest-script-logic.js: Missing JSDoc comments\ntest-visual-inspection.js: Missing JSDoc comments\ntests/global-setup.js: Missing JSDoc comments\ntests/global-teardown.js: Missing JSDoc comments\ntests/pw/import-history-ux.test.js: Missing JSDoc comments\ntests/reports/test-reporting.test.js: Missing JSDoc comments\ntests/shared/global-setup.js: Missing JSDoc comments\ntests/shared/global-teardown.js: Missing JSDoc comments"
+            },
+            "git-practices": {
+              "testId": "git-practices",
+              "name": "Git Practices Test",
+              "status": "passed",
+              "output": "✅ 10/10 commits follow conventional format",
+              "duration": 62
+            }
+          },
+          "duration": 7594,
+          "timestamp": "2026-01-07T02:58:49.161Z"
+        }
+      },
+      {
+        "pipelineId": "codeQuality",
+        "timestamp": "2026-01-07T02:59:05.874Z",
+        "result": {
+          "pipelineId": "codeQuality",
+          "name": "Code Quality Pipeline",
+          "status": "failed",
+          "tests": {
+            "eslint": {
+              "testId": "eslint",
+              "name": "ESLint Code Quality",
+              "status": "failed",
+              "output": "",
+              "duration": 1733,
+              "error": "ESLint failed:\n\nOops! Something went wrong! :(\n\nESLint: 9.39.2\n\nESLint couldn't find an eslint.config.(js|mjs|cjs) file.\n\nFrom ESLint v9.0.0, the default configuration file is now eslint.config.js.\nIf you are using a .eslintrc.* file, please follow the migration guide\nto update your configuration file to the new format:\n\nhttps://eslint.org/docs/latest/use/configure/migration-guide\n\nIf you still have problems after following the migration guide, please stop by\nhttps://eslint.org/chat/help to chat with the team.\n\n"
+            },
+            "prettier": {
+              "testId": "prettier",
+              "name": "Prettier Code Formatting",
+              "status": "failed",
+              "output": "",
+              "duration": 3654,
+              "error": "Prettier formatting issues found"
+            },
+            "jsdoc-validation": {
+              "testId": "jsdoc-validation",
+              "name": "JSDoc Validation",
+              "status": "failed",
+              "output": "",
+              "duration": 3731,
+              "error": "JSDoc validation issues:\nsrc/amazon-integration/amazon-zip-extractor.js: Functions without complete JSDoc\nsrc/amazon-integration/amazon-zip-processor.js: Functions without complete JSDoc\nsrc/amazon-integration/parsers/cart-parser.js: Functions without complete JSDoc\nsrc/amazon-integration/parsers/order-parser.js: Functions without complete JSDoc\nsrc/amazon-integration/parsers/returns-parser.js: Functions without complete JSDoc\nsrc/amazon-integration/parsers/subscription-parser.js: Functions without complete JSDoc\nsrc/database.js: Functions without complete JSDoc\nsrc/import/csv-parser.js: Functions without complete JSDoc\nsrc/import/history-manager.js: Functions without complete JSDoc\nsrc/import/status-tracker.js: Functions without complete JSDoc\nsrc/import/zip-handler.js: Functions without complete JSDoc\nsrc/routes/employee-benefits.js: Functions without complete JSDoc\nsrc/routes/geographic.js: Functions without complete JSDoc\nsrc/routes/subscription.js: Functions without complete JSDoc\ntests/global-setup.js: Functions without complete JSDoc\ntests/global-teardown.js: Functions without complete JSDoc\ntests/import-history-api.test.js: Functions without complete JSDoc\ntests/import-history-puppeteer.test.js: Functions without complete JSDoc\ntests/pw/import-history-ux.test.js: Functions without complete JSDoc\ntests/quick-test.js: Functions without complete JSDoc\ntests/reports/test-reporting.test.js: Functions without complete JSDoc\ntests/shared/global-setup.js: Functions without complete JSDoc\ntests/shared/global-teardown.js: Functions without complete JSDoc\ntests/ux-testing-suite.js: Functions without complete JSDoc\nadherence-monitor.js: Functions without complete JSDoc\nai-visual-test.js: Functions without complete JSDoc\napi-documentation-generator.js: Functions without complete JSDoc\nautomated-indexing-system.js: Functions without complete JSDoc\nautomated-refactoring-applicator.js: Functions without complete JSDoc\nautomated-validation-pipelines.js: Functions without complete JSDoc\nclasses/FileSizeManagementOptimizer.js: Functions without complete JSDoc\ncomment-style-consistency-validator.js: Functions without complete JSDoc\ncoverage/combined/block-navigation.js: Functions without complete JSDoc\ncoverage/combined/lcov-report/block-navigation.js: Functions without complete JSDoc\ncoverage/combined/lcov-report/prettify.js: Functions without complete JSDoc\ncoverage/combined/lcov-report/sorter.js: Functions without complete JSDoc\ncoverage/combined/prettify.js: Functions without complete JSDoc\ncoverage/combined/sorter.js: Functions without complete JSDoc\ncoverage/integration/block-navigation.js: Functions without complete JSDoc\ncoverage/integration/lcov-report/block-navigation.js: Functions without complete JSDoc\ncoverage/integration/lcov-report/prettify.js: Functions without complete JSDoc\ncoverage/integration/lcov-report/sorter.js: Functions without complete JSDoc\ncoverage/integration/prettify.js: Functions without complete JSDoc\ncoverage/integration/sorter.js: Functions without complete JSDoc\ncoverage/unit/block-navigation.js: Functions without complete JSDoc\ncoverage/unit/lcov-report/block-navigation.js: Functions without complete JSDoc\ncoverage/unit/lcov-report/prettify.js: Functions without complete JSDoc\ncoverage/unit/lcov-report/sorter.js: Functions without complete JSDoc\ncoverage/unit/prettify.js: Functions without complete JSDoc\ncoverage/unit/sorter.js: Functions without complete JSDoc\ndemos/amazon-zip-import-demo.js: Functions without complete JSDoc\ndocs/api/scripts/prettify/prettify.js: Functions without complete JSDoc\ndocumentation-completeness-checker.js: Functions without complete JSDoc\ndocumentation-update-suggester.js: Functions without complete JSDoc\nfile-size-management-optimizer.js: Functions without complete JSDoc\nmerge-conflict-resolver.js: Functions without complete JSDoc\nnavigation-demo.js: Functions without complete JSDoc\npublic/js/app.js: Functions without complete JSDoc\npublic/js/bootstrap-navigation.js: Functions without complete JSDoc\npublic/js/employee-benefits.js: Functions without complete JSDoc\npublic/js/modules/analysis/analysis.js: Functions without complete JSDoc\npublic/js/modules/expenditures/expenditures.js: Functions without complete JSDoc\npublic/js/modules/import-history/import-history.js: Functions without complete JSDoc\npublic/js/modules/premium-analytics/premium-analytics.js: Functions without complete JSDoc\npublic/js/shoelace-navigation-new.js: Functions without complete JSDoc\npublic/js/shoelace-navigation.js: Functions without complete JSDoc\nreal-time-index-updater.js: Functions without complete JSDoc\nserver.js: Functions without complete JSDoc\nsrc/amazon-integration/amazon-zip-extractor.js: Functions without complete JSDoc\nsrc/amazon-integration/amazon-zip-processor.js: Functions without complete JSDoc\nsrc/amazon-integration/parsers/cart-parser.js: Functions without complete JSDoc\nsrc/amazon-integration/parsers/order-parser.js: Functions without complete JSDoc\nsrc/amazon-integration/parsers/returns-parser.js: Functions without complete JSDoc\nsrc/amazon-integration/parsers/subscription-parser.js: Functions without complete JSDoc\nsrc/database.js: Functions without complete JSDoc\nsrc/import/csv-parser.js: Functions without complete JSDoc\nsrc/import/history-manager.js: Functions without complete JSDoc\nsrc/import/status-tracker.js: Functions without complete JSDoc\nsrc/import/zip-handler.js: Functions without complete JSDoc\nsrc/routes/employee-benefits.js: Functions without complete JSDoc\nsrc/routes/geographic.js: Functions without complete JSDoc\nsrc/routes/subscription.js: Functions without complete JSDoc\ntest-benefits-e2e.js: Functions without complete JSDoc\ntest-benefits-field-mapping.js: Functions without complete JSDoc\ntest-benefits-ux-comprehensive.js: Functions without complete JSDoc\ntest-benefits-ux.js: Functions without complete JSDoc\ntest-fix-verification.js: Functions without complete JSDoc\ntest-script-logic.js: Functions without complete JSDoc\ntest-ux-e2e.js: Functions without complete JSDoc\ntest-visual-inspection.js: Functions without complete JSDoc\ntests/global-setup.js: Functions without complete JSDoc\ntests/global-teardown.js: Functions without complete JSDoc\ntests/import-history-api.test.js: Functions without complete JSDoc\ntests/import-history-puppeteer.test.js: Functions without complete JSDoc\ntests/pw/import-history-ux.test.js: Functions without complete JSDoc\ntests/quick-test.js: Functions without complete JSDoc\ntests/reports/test-reporting.test.js: Functions without complete JSDoc\ntests/shared/global-setup.js: Functions without complete JSDoc\ntests/shared/global-teardown.js: Functions without complete JSDoc\ntests/ux-testing-suite.js: Functions without complete JSDoc\nutils/count.js: Functions without complete JSDoc\nvisual-ux-test.js: Functions without complete JSDoc\nutils/count.js: Functions without complete JSDoc"
+            }
+          },
+          "duration": 9118,
+          "timestamp": "2026-01-07T02:58:56.756Z"
+        }
+      },
+      {
+        "pipelineId": "performanceValidation",
+        "timestamp": "2026-01-07T02:59:05.881Z",
+        "result": {
+          "pipelineId": "performanceValidation",
+          "name": "Performance Validation Pipeline",
+          "status": "failed",
+          "tests": {
+            "response-time-check": {
+              "testId": "response-time-check",
+              "name": "Response Time Validation",
+              "status": "passed",
+              "output": "✅ Response time 0ms within acceptable range",
+              "duration": 5
+            },
+            "accuracy-threshold": {
+              "testId": "accuracy-threshold",
+              "name": "Accuracy Threshold Check",
+              "status": "failed",
+              "output": "",
+              "duration": 0,
+              "error": "Average accuracy 0.0% below 80% threshold"
+            },
+            "compliance-scoring": {
+              "testId": "compliance-scoring",
+              "name": "Compliance Scoring Validation",
+              "status": "failed",
+              "output": "",
+              "duration": 1,
+              "error": "Average compliance 0.0% below 90% threshold"
+            }
+          },
+          "duration": 6,
+          "timestamp": "2026-01-07T02:59:05.875Z"
+        }
+      },
+      {
+        "pipelineId": "integrationTesting",
+        "timestamp": "2026-01-07T02:59:06.052Z",
+        "result": {
+          "pipelineId": "integrationTesting",
+          "name": "Integration Testing Pipeline",
+          "status": "failed",
+          "tests": {
+            "api-endpoint-validation": {
+              "testId": "api-endpoint-validation",
+              "name": "API Endpoint Validation",
+              "status": "failed",
+              "output": "",
+              "duration": 11,
+              "error": "API health check failed"
+            },
+            "data-flow-testing": {
+              "testId": "data-flow-testing",
+              "name": "Data Flow Testing",
+              "status": "failed",
+              "output": "",
+              "duration": 4,
+              "error": "Data file missing: data/test-expenditures.json"
+            },
+            "ui-consistency": {
+              "testId": "ui-consistency",
+              "name": "UI Consistency Check",
+              "status": "failed",
+              "output": "",
+              "duration": 155,
+              "error": "UI consistency issues:\npublic/about.html: Missing navigation elements\npublic/amazon-zip-import.html: Missing navigation elements\npublic/api-debug.html: Missing navigation elements\npublic/benefits-refactor-complete.html: Missing navigation elements\npublic/components/ai-insights/ai-insights.html: Missing navigation elements\npublic/components/amazon-zip-import/amazon-zip-import.html: Missing navigation elements\npublic/components/analysis/analysis.html: Missing navigation elements\npublic/components/bank-reconciliation/bank-reconciliation.html: Missing navigation elements\npublic/components/dashboard/test.html: Missing navigation elements\npublic/components/data-import/data-import.html: Missing navigation elements\npublic/components/employee-benefits/employee-benefits.html: Missing navigation elements\npublic/components/geographic-analysis/geographic-analysis.html: Missing navigation elements\npublic/components/manual-entry/manual-entry.html: Missing navigation elements\npublic/components/navigation/head.html: Missing Bootstrap layout classes\npublic/components/premium-features/premium-features.html: Missing navigation elements\npublic/components/reconciliation/reconciliation.html: Missing navigation elements\npublic/components/settings/settings.html: Missing navigation elements\npublic/components/subscription-analysis/subscription-analysis.html: Missing navigation elements\npublic/debug-benefits.html: Missing navigation elements\npublic/debug-benefits.html: Missing Bootstrap layout classes\npublic/employee-benefits-test.html: Missing navigation elements\npublic/test-business-card.html: Missing navigation elements\npublic/view-separation-test.html: Missing navigation elements"
+            }
+          },
+          "duration": 170,
+          "timestamp": "2026-01-07T02:59:05.882Z"
+        }
+      }
+    ],
+    "alerts": [],
+    "validationResults": {
+      "lastRun": {
+        "runId": "run_1767754685206",
+        "timestamp": "2026-01-07T02:58:05.206Z",
+        "pipelines": {
+          "instructionCompliance": {
+            "pipelineId": "instructionCompliance",
+            "name": "Instruction Compliance Pipeline",
+            "status": "failed",
+            "tests": {
+              "file-size-limits": {
+                "testId": "file-size-limits",
+                "name": "File Size Limits Test",
+                "status": "failed",
+                "output": "",
+                "duration": 3770,
+                "error": "File size violations:\nsrc/amazon-zip-detector.js: 380 lines (limit: 300)\nsrc/amazon-zip-parser-original.js: 626 lines (limit: 300)\nsrc/bank-reconciliation-engine.js: 621 lines (limit: 300)\nsrc/database.js: 392 lines (limit: 300)\nsrc/geographic-analysis-engine.js: 614 lines (limit: 300)\nsrc/subscription-analysis-engine.js: 495 lines (limit: 300)\nsrc/tsv-categorizer.js: 456 lines (limit: 300)\ntests/accessibility/accessibility.test.js: 455 lines (limit: 300)\ntests/cli/cli-tests.test.js: 449 lines (limit: 300)\ntests/component-tester.js: 342 lines (limit: 300)\ntests/e2e/complete-workflow.test.js: 355 lines (limit: 300)\ntests/e2e/data-import-e2e.test.js: 390 lines (limit: 300)\ntests/import-history-api.test.js: 334 lines (limit: 300)\ntests/import-history-puppeteer.test.js: 313 lines (limit: 300)\ntests/integration/api.test.js: 491 lines (limit: 300)\ntests/performance/performance.test.js: 436 lines (limit: 300)\ntests/pw/import-history-ux.test.js: 386 lines (limit: 300)\ntests/reports/test-reporting.test.js: 543 lines (limit: 300)\ntests/shared/test-helpers.js: 423 lines (limit: 300)\ntests/unit/tsv-categorizer.test.js: 404 lines (limit: 300)\ntests/visual/visual-regression.test.js: 447 lines (limit: 300)\nadherence-monitor.js: 317 lines (limit: 300)\nai-visual-test.js: 434 lines (limit: 300)\napi-documentation-generator.js: 401 lines (limit: 300)\nautomated-commit-message-suggester.js: 672 lines (limit: 300)\nautomated-indexing-system.js: 810 lines (limit: 300)\nautomated-refactoring-applicator.js: 533 lines (limit: 300)\nautomated-validation-pipelines.js: 794 lines (limit: 300)\nbest-practice-retrieval.js: 379 lines (limit: 300)\nbranching-strategy-enforcer.js: 627 lines (limit: 300)\ncatastrophic-forgetting-preventer.js: 571 lines (limit: 300)\nclasses/FileSizeManagementOptimizer.js: 1176 lines (limit: 300)\nclasses/HumanAICollaborationSystem.js: 1008 lines (limit: 300)\ncomment-quality-assessor.js: 730 lines (limit: 300)\ncomment-style-consistency-validator.js: 429 lines (limit: 300)\ncommit-blocker.js: 548 lines (limit: 300)\ncomprehensive-ux-test.js: 312 lines (limit: 300)\ncontinuous-integration-instructions.js: 779 lines (limit: 300)\nconventional-commit-validator.js: 509 lines (limit: 300)\ncross-reference-database.js: 717 lines (limit: 300)\ncross-validation-testing-system.js: 952 lines (limit: 300)\ndocumentation-completeness-checker.js: 635 lines (limit: 300)\ndocumentation-update-suggester.js: 431 lines (limit: 300)\nfile-placement-optimizer.js: 665 lines (limit: 300)\nfile-size-management-optimizer.js: 1199 lines (limit: 300)\ngit-workflow-compliance.js: 798 lines (limit: 300)\ngradual-size-reducer.js: 779 lines (limit: 300)\nhuman-ai-collaboration-system.js: 1060 lines (limit: 300)\nhuman-feedback-integration.js: 515 lines (limit: 300)\ninstruction-testing-framework.js: 522 lines (limit: 300)\nkt-cli-alpha/kt-cli.js: 1173 lines (limit: 300)\nline-impact-calculator.js: 711 lines (limit: 300)\nmerge-conflict-resolver.js: 807 lines (limit: 300)\nmulti-modal-reinforcement-learner.js: 628 lines (limit: 300)\nneftune-noise-injector.js: 485 lines (limit: 300)\norganizational-validator.js: 639 lines (limit: 300)\nperformance-monitoring-tools.js: 566 lines (limit: 300)\npublic/js/ai-dashboard.js: 501 lines (limit: 300)\npublic/js/bootstrap-navigation.js: 441 lines (limit: 300)\npublic/js/employee-benefits.js: 2549 lines (limit: 300)\npublic/js/shoelace-navigation.js: 344 lines (limit: 300)\nreal-time-index-updater.js: 441 lines (limit: 300)\nself-evolving-instruction-system.js: 1087 lines (limit: 300)\nsrc/amazon-zip-detector.js: 380 lines (limit: 300)\nsrc/amazon-zip-parser-original.js: 626 lines (limit: 300)\nsrc/bank-reconciliation-engine.js: 621 lines (limit: 300)\nsrc/database.js: 392 lines (limit: 300)\nsrc/geographic-analysis-engine.js: 614 lines (limit: 300)\nsrc/subscription-analysis-engine.js: 495 lines (limit: 300)\nsrc/tsv-categorizer.js: 456 lines (limit: 300)\ntest-ux-e2e.js: 414 lines (limit: 300)\ntests/accessibility/accessibility.test.js: 455 lines (limit: 300)\ntests/cli/cli-tests.test.js: 449 lines (limit: 300)\ntests/component-tester.js: 342 lines (limit: 300)\ntests/e2e/complete-workflow.test.js: 355 lines (limit: 300)\ntests/e2e/data-import-e2e.test.js: 390 lines (limit: 300)\ntests/import-history-api.test.js: 334 lines (limit: 300)\ntests/import-history-puppeteer.test.js: 313 lines (limit: 300)\ntests/integration/api.test.js: 491 lines (limit: 300)\ntests/performance/performance.test.js: 436 lines (limit: 300)\ntests/pw/import-history-ux.test.js: 386 lines (limit: 300)\ntests/reports/test-reporting.test.js: 543 lines (limit: 300)\ntests/shared/test-helpers.js: 423 lines (limit: 300)\ntests/unit/tsv-categorizer.test.js: 404 lines (limit: 300)\ntests/visual/visual-regression.test.js: 447 lines (limit: 300)"
+              },
+              "comment-quality": {
+                "testId": "comment-quality",
+                "name": "Comment Quality Test",
+                "status": "failed",
+                "output": "",
+                "duration": 3967,
+                "error": "Comment quality issues:\ntests/global-setup.js: Missing JSDoc comments\ntests/global-teardown.js: Missing JSDoc comments\ntests/pw/import-history-ux.test.js: Missing JSDoc comments\ntests/reports/test-reporting.test.js: Missing JSDoc comments\ntests/shared/global-setup.js: Missing JSDoc comments\ntests/shared/global-teardown.js: Missing JSDoc comments\ncoverage/combined/block-navigation.js: Missing JSDoc comments\ncoverage/combined/lcov-report/block-navigation.js: Missing JSDoc comments\ncoverage/combined/lcov-report/prettify.js: Missing JSDoc comments\ncoverage/combined/lcov-report/sorter.js: Missing JSDoc comments\ncoverage/combined/prettify.js: Missing JSDoc comments\ncoverage/combined/sorter.js: Missing JSDoc comments\ncoverage/integration/block-navigation.js: Missing JSDoc comments\ncoverage/integration/lcov-report/block-navigation.js: Missing JSDoc comments\ncoverage/integration/lcov-report/prettify.js: Missing JSDoc comments\ncoverage/integration/lcov-report/sorter.js: Missing JSDoc comments\ncoverage/integration/prettify.js: Missing JSDoc comments\ncoverage/integration/sorter.js: Missing JSDoc comments\ncoverage/unit/block-navigation.js: Missing JSDoc comments\ncoverage/unit/lcov-report/block-navigation.js: Missing JSDoc comments\ncoverage/unit/lcov-report/prettify.js: Missing JSDoc comments\ncoverage/unit/lcov-report/sorter.js: Missing JSDoc comments\ncoverage/unit/prettify.js: Missing JSDoc comments\ncoverage/unit/sorter.js: Missing JSDoc comments\ndemos/amazon-zip-import-demo.js: Missing JSDoc comments\ndocs/api/scripts/prettify/prettify.js: Missing JSDoc comments\npublic/js/app.js: Missing JSDoc comments\npublic/js/shoelace-navigation-new.js: Missing JSDoc comments\npublic/js/shoelace-navigation.js: Missing JSDoc comments\nserver.js: Missing JSDoc comments\ntest-benefits-e2e.js: Missing JSDoc comments\ntest-benefits-field-mapping.js: Missing JSDoc comments\ntest-benefits-ux.js: Missing JSDoc comments\ntest-fix-verification.js: Missing JSDoc comments\ntest-script-logic.js: Missing JSDoc comments\ntest-visual-inspection.js: Missing JSDoc comments\ntests/global-setup.js: Missing JSDoc comments\ntests/global-teardown.js: Missing JSDoc comments\ntests/pw/import-history-ux.test.js: Missing JSDoc comments\ntests/reports/test-reporting.test.js: Missing JSDoc comments\ntests/shared/global-setup.js: Missing JSDoc comments\ntests/shared/global-teardown.js: Missing JSDoc comments"
+              },
+              "git-practices": {
+                "testId": "git-practices",
+                "name": "Git Practices Test",
+                "status": "passed",
+                "output": "✅ 10/10 commits follow conventional format",
+                "duration": 89
+              }
+            },
+            "duration": 7826,
+            "timestamp": "2026-01-07T02:58:05.207Z"
+          },
+          "codeQuality": {
+            "pipelineId": "codeQuality",
+            "name": "Code Quality Pipeline",
+            "status": "failed",
+            "tests": {
+              "eslint": {
+                "testId": "eslint",
+                "name": "ESLint Code Quality",
+                "status": "failed",
+                "output": "",
+                "duration": 2103,
+                "error": "ESLint failed:\n\nOops! Something went wrong! :(\n\nESLint: 9.39.2\n\nESLint couldn't find an eslint.config.(js|mjs|cjs) file.\n\nFrom ESLint v9.0.0, the default configuration file is now eslint.config.js.\nIf you are using a .eslintrc.* file, please follow the migration guide\nto update your configuration file to the new format:\n\nhttps://eslint.org/docs/latest/use/configure/migration-guide\n\nIf you still have problems after following the migration guide, please stop by\nhttps://eslint.org/chat/help to chat with the team.\n\n"
+              },
+              "prettier": {
+                "testId": "prettier",
+                "name": "Prettier Code Formatting",
+                "status": "failed",
+                "output": "",
+                "duration": 4223,
+                "error": "Prettier formatting issues found"
+              },
+              "jsdoc-validation": {
+                "testId": "jsdoc-validation",
+                "name": "JSDoc Validation",
+                "status": "failed",
+                "output": "",
+                "duration": 3321,
+                "error": "JSDoc validation issues:\nsrc/amazon-integration/amazon-zip-extractor.js: Functions without complete JSDoc\nsrc/amazon-integration/amazon-zip-processor.js: Functions without complete JSDoc\nsrc/amazon-integration/parsers/cart-parser.js: Functions without complete JSDoc\nsrc/amazon-integration/parsers/order-parser.js: Functions without complete JSDoc\nsrc/amazon-integration/parsers/returns-parser.js: Functions without complete JSDoc\nsrc/amazon-integration/parsers/subscription-parser.js: Functions without complete JSDoc\nsrc/database.js: Functions without complete JSDoc\nsrc/import/csv-parser.js: Functions without complete JSDoc\nsrc/import/history-manager.js: Functions without complete JSDoc\nsrc/import/status-tracker.js: Functions without complete JSDoc\nsrc/import/zip-handler.js: Functions without complete JSDoc\nsrc/routes/employee-benefits.js: Functions without complete JSDoc\nsrc/routes/geographic.js: Functions without complete JSDoc\nsrc/routes/subscription.js: Functions without complete JSDoc\ntests/global-setup.js: Functions without complete JSDoc\ntests/global-teardown.js: Functions without complete JSDoc\ntests/import-history-api.test.js: Functions without complete JSDoc\ntests/import-history-puppeteer.test.js: Functions without complete JSDoc\ntests/pw/import-history-ux.test.js: Functions without complete JSDoc\ntests/quick-test.js: Functions without complete JSDoc\ntests/reports/test-reporting.test.js: Functions without complete JSDoc\ntests/shared/global-setup.js: Functions without complete JSDoc\ntests/shared/global-teardown.js: Functions without complete JSDoc\ntests/ux-testing-suite.js: Functions without complete JSDoc\nadherence-monitor.js: Functions without complete JSDoc\nai-visual-test.js: Functions without complete JSDoc\napi-documentation-generator.js: Functions without complete JSDoc\nautomated-indexing-system.js: Functions without complete JSDoc\nautomated-refactoring-applicator.js: Functions without complete JSDoc\nautomated-validation-pipelines.js: Functions without complete JSDoc\nclasses/FileSizeManagementOptimizer.js: Functions without complete JSDoc\ncomment-style-consistency-validator.js: Functions without complete JSDoc\ncoverage/combined/block-navigation.js: Functions without complete JSDoc\ncoverage/combined/lcov-report/block-navigation.js: Functions without complete JSDoc\ncoverage/combined/lcov-report/prettify.js: Functions without complete JSDoc\ncoverage/combined/lcov-report/sorter.js: Functions without complete JSDoc\ncoverage/combined/prettify.js: Functions without complete JSDoc\ncoverage/combined/sorter.js: Functions without complete JSDoc\ncoverage/integration/block-navigation.js: Functions without complete JSDoc\ncoverage/integration/lcov-report/block-navigation.js: Functions without complete JSDoc\ncoverage/integration/lcov-report/prettify.js: Functions without complete JSDoc\ncoverage/integration/lcov-report/sorter.js: Functions without complete JSDoc\ncoverage/integration/prettify.js: Functions without complete JSDoc\ncoverage/integration/sorter.js: Functions without complete JSDoc\ncoverage/unit/block-navigation.js: Functions without complete JSDoc\ncoverage/unit/lcov-report/block-navigation.js: Functions without complete JSDoc\ncoverage/unit/lcov-report/prettify.js: Functions without complete JSDoc\ncoverage/unit/lcov-report/sorter.js: Functions without complete JSDoc\ncoverage/unit/prettify.js: Functions without complete JSDoc\ncoverage/unit/sorter.js: Functions without complete JSDoc\ndemos/amazon-zip-import-demo.js: Functions without complete JSDoc\ndocs/api/scripts/prettify/prettify.js: Functions without complete JSDoc\ndocumentation-completeness-checker.js: Functions without complete JSDoc\ndocumentation-update-suggester.js: Functions without complete JSDoc\nfile-size-management-optimizer.js: Functions without complete JSDoc\nmerge-conflict-resolver.js: Functions without complete JSDoc\nnavigation-demo.js: Functions without complete JSDoc\npublic/js/app.js: Functions without complete JSDoc\npublic/js/bootstrap-navigation.js: Functions without complete JSDoc\npublic/js/employee-benefits.js: Functions without complete JSDoc\npublic/js/modules/analysis/analysis.js: Functions without complete JSDoc\npublic/js/modules/expenditures/expenditures.js: Functions without complete JSDoc\npublic/js/modules/import-history/import-history.js: Functions without complete JSDoc\npublic/js/modules/premium-analytics/premium-analytics.js: Functions without complete JSDoc\npublic/js/shoelace-navigation-new.js: Functions without complete JSDoc\npublic/js/shoelace-navigation.js: Functions without complete JSDoc\nreal-time-index-updater.js: Functions without complete JSDoc\nserver.js: Functions without complete JSDoc\nsrc/amazon-integration/amazon-zip-extractor.js: Functions without complete JSDoc\nsrc/amazon-integration/amazon-zip-processor.js: Functions without complete JSDoc\nsrc/amazon-integration/parsers/cart-parser.js: Functions without complete JSDoc\nsrc/amazon-integration/parsers/order-parser.js: Functions without complete JSDoc\nsrc/amazon-integration/parsers/returns-parser.js: Functions without complete JSDoc\nsrc/amazon-integration/parsers/subscription-parser.js: Functions without complete JSDoc\nsrc/database.js: Functions without complete JSDoc\nsrc/import/csv-parser.js: Functions without complete JSDoc\nsrc/import/history-manager.js: Functions without complete JSDoc\nsrc/import/status-tracker.js: Functions without complete JSDoc\nsrc/import/zip-handler.js: Functions without complete JSDoc\nsrc/routes/employee-benefits.js: Functions without complete JSDoc\nsrc/routes/geographic.js: Functions without complete JSDoc\nsrc/routes/subscription.js: Functions without complete JSDoc\ntest-benefits-e2e.js: Functions without complete JSDoc\ntest-benefits-field-mapping.js: Functions without complete JSDoc\ntest-benefits-ux-comprehensive.js: Functions without complete JSDoc\ntest-benefits-ux.js: Functions without complete JSDoc\ntest-fix-verification.js: Functions without complete JSDoc\ntest-script-logic.js: Functions without complete JSDoc\ntest-ux-e2e.js: Functions without complete JSDoc\ntest-visual-inspection.js: Functions without complete JSDoc\ntests/global-setup.js: Functions without complete JSDoc\ntests/global-teardown.js: Functions without complete JSDoc\ntests/import-history-api.test.js: Functions without complete JSDoc\ntests/import-history-puppeteer.test.js: Functions without complete JSDoc\ntests/pw/import-history-ux.test.js: Functions without complete JSDoc\ntests/quick-test.js: Functions without complete JSDoc\ntests/reports/test-reporting.test.js: Functions without complete JSDoc\ntests/shared/global-setup.js: Functions without complete JSDoc\ntests/shared/global-teardown.js: Functions without complete JSDoc\ntests/ux-testing-suite.js: Functions without complete JSDoc\nutils/count.js: Functions without complete JSDoc\nvisual-ux-test.js: Functions without complete JSDoc\nutils/count.js: Functions without complete JSDoc"
+              }
+            },
+            "duration": 9647,
+            "timestamp": "2026-01-07T02:58:13.037Z"
+          },
+          "performanceValidation": {
+            "pipelineId": "performanceValidation",
+            "name": "Performance Validation Pipeline",
+            "status": "failed",
+            "tests": {
+              "response-time-check": {
+                "testId": "response-time-check",
+                "name": "Response Time Validation",
+                "status": "passed",
+                "output": "✅ Response time 0ms within acceptable range",
+                "duration": 5
+              },
+              "accuracy-threshold": {
+                "testId": "accuracy-threshold",
+                "name": "Accuracy Threshold Check",
+                "status": "failed",
+                "output": "",
+                "duration": 0,
+                "error": "Average accuracy 0.0% below 80% threshold"
+              },
+              "compliance-scoring": {
+                "testId": "compliance-scoring",
+                "name": "Compliance Scoring Validation",
+                "status": "failed",
+                "output": "",
+                "duration": 0,
+                "error": "Average compliance 0.0% below 90% threshold"
+              }
+            },
+            "duration": 5,
+            "timestamp": "2026-01-07T02:58:22.686Z"
+          },
+          "integrationTesting": {
+            "pipelineId": "integrationTesting",
+            "name": "Integration Testing Pipeline",
+            "status": "failed",
+            "tests": {
+              "api-endpoint-validation": {
+                "testId": "api-endpoint-validation",
+                "name": "API Endpoint Validation",
+                "status": "failed",
+                "output": "",
+                "duration": 32,
+                "error": "API health check failed"
+              },
+              "data-flow-testing": {
+                "testId": "data-flow-testing",
+                "name": "Data Flow Testing",
+                "status": "failed",
+                "output": "",
+                "duration": 7,
+                "error": "Data file missing: data/test-expenditures.json"
+              },
+              "ui-consistency": {
+                "testId": "ui-consistency",
+                "name": "UI Consistency Check",
+                "status": "failed",
+                "output": "",
+                "duration": 152,
+                "error": "UI consistency issues:\npublic/about.html: Missing navigation elements\npublic/amazon-zip-import.html: Missing navigation elements\npublic/api-debug.html: Missing navigation elements\npublic/benefits-refactor-complete.html: Missing navigation elements\npublic/components/ai-insights/ai-insights.html: Missing navigation elements\npublic/components/amazon-zip-import/amazon-zip-import.html: Missing navigation elements\npublic/components/analysis/analysis.html: Missing navigation elements\npublic/components/bank-reconciliation/bank-reconciliation.html: Missing navigation elements\npublic/components/dashboard/test.html: Missing navigation elements\npublic/components/data-import/data-import.html: Missing navigation elements\npublic/components/employee-benefits/employee-benefits.html: Missing navigation elements\npublic/components/geographic-analysis/geographic-analysis.html: Missing navigation elements\npublic/components/manual-entry/manual-entry.html: Missing navigation elements\npublic/components/navigation/head.html: Missing Bootstrap layout classes\npublic/components/premium-features/premium-features.html: Missing navigation elements\npublic/components/reconciliation/reconciliation.html: Missing navigation elements\npublic/components/settings/settings.html: Missing navigation elements\npublic/components/subscription-analysis/subscription-analysis.html: Missing navigation elements\npublic/debug-benefits.html: Missing navigation elements\npublic/debug-benefits.html: Missing Bootstrap layout classes\npublic/employee-benefits-test.html: Missing navigation elements\npublic/test-business-card.html: Missing navigation elements\npublic/view-separation-test.html: Missing navigation elements"
+              }
+            },
+            "duration": 191,
+            "timestamp": "2026-01-07T02:58:22.693Z"
+          }
+        },
+        "summary": {
+          "total": 4,
+          "passed": 0,
+          "failed": 4,
+          "skipped": 0,
+          "duration": 17679
+        }
+      },
+      "totalRuns": 1,
+      "successRate": -300,
+      "pipelineResults": {
+        "instructionCompliance": {
+          "pipelineId": "instructionCompliance",
+          "name": "Instruction Compliance Pipeline",
+          "status": "failed",
+          "tests": {
+            "file-size-limits": {
+              "testId": "file-size-limits",
+              "name": "File Size Limits Test",
+              "status": "failed",
+              "output": "",
+              "duration": 3770,
+              "error": "File size violations:\nsrc/amazon-zip-detector.js: 380 lines (limit: 300)\nsrc/amazon-zip-parser-original.js: 626 lines (limit: 300)\nsrc/bank-reconciliation-engine.js: 621 lines (limit: 300)\nsrc/database.js: 392 lines (limit: 300)\nsrc/geographic-analysis-engine.js: 614 lines (limit: 300)\nsrc/subscription-analysis-engine.js: 495 lines (limit: 300)\nsrc/tsv-categorizer.js: 456 lines (limit: 300)\ntests/accessibility/accessibility.test.js: 455 lines (limit: 300)\ntests/cli/cli-tests.test.js: 449 lines (limit: 300)\ntests/component-tester.js: 342 lines (limit: 300)\ntests/e2e/complete-workflow.test.js: 355 lines (limit: 300)\ntests/e2e/data-import-e2e.test.js: 390 lines (limit: 300)\ntests/import-history-api.test.js: 334 lines (limit: 300)\ntests/import-history-puppeteer.test.js: 313 lines (limit: 300)\ntests/integration/api.test.js: 491 lines (limit: 300)\ntests/performance/performance.test.js: 436 lines (limit: 300)\ntests/pw/import-history-ux.test.js: 386 lines (limit: 300)\ntests/reports/test-reporting.test.js: 543 lines (limit: 300)\ntests/shared/test-helpers.js: 423 lines (limit: 300)\ntests/unit/tsv-categorizer.test.js: 404 lines (limit: 300)\ntests/visual/visual-regression.test.js: 447 lines (limit: 300)\nadherence-monitor.js: 317 lines (limit: 300)\nai-visual-test.js: 434 lines (limit: 300)\napi-documentation-generator.js: 401 lines (limit: 300)\nautomated-commit-message-suggester.js: 672 lines (limit: 300)\nautomated-indexing-system.js: 810 lines (limit: 300)\nautomated-refactoring-applicator.js: 533 lines (limit: 300)\nautomated-validation-pipelines.js: 794 lines (limit: 300)\nbest-practice-retrieval.js: 379 lines (limit: 300)\nbranching-strategy-enforcer.js: 627 lines (limit: 300)\ncatastrophic-forgetting-preventer.js: 571 lines (limit: 300)\nclasses/FileSizeManagementOptimizer.js: 1176 lines (limit: 300)\nclasses/HumanAICollaborationSystem.js: 1008 lines (limit: 300)\ncomment-quality-assessor.js: 730 lines (limit: 300)\ncomment-style-consistency-validator.js: 429 lines (limit: 300)\ncommit-blocker.js: 548 lines (limit: 300)\ncomprehensive-ux-test.js: 312 lines (limit: 300)\ncontinuous-integration-instructions.js: 779 lines (limit: 300)\nconventional-commit-validator.js: 509 lines (limit: 300)\ncross-reference-database.js: 717 lines (limit: 300)\ncross-validation-testing-system.js: 952 lines (limit: 300)\ndocumentation-completeness-checker.js: 635 lines (limit: 300)\ndocumentation-update-suggester.js: 431 lines (limit: 300)\nfile-placement-optimizer.js: 665 lines (limit: 300)\nfile-size-management-optimizer.js: 1199 lines (limit: 300)\ngit-workflow-compliance.js: 798 lines (limit: 300)\ngradual-size-reducer.js: 779 lines (limit: 300)\nhuman-ai-collaboration-system.js: 1060 lines (limit: 300)\nhuman-feedback-integration.js: 515 lines (limit: 300)\ninstruction-testing-framework.js: 522 lines (limit: 300)\nkt-cli-alpha/kt-cli.js: 1173 lines (limit: 300)\nline-impact-calculator.js: 711 lines (limit: 300)\nmerge-conflict-resolver.js: 807 lines (limit: 300)\nmulti-modal-reinforcement-learner.js: 628 lines (limit: 300)\nneftune-noise-injector.js: 485 lines (limit: 300)\norganizational-validator.js: 639 lines (limit: 300)\nperformance-monitoring-tools.js: 566 lines (limit: 300)\npublic/js/ai-dashboard.js: 501 lines (limit: 300)\npublic/js/bootstrap-navigation.js: 441 lines (limit: 300)\npublic/js/employee-benefits.js: 2549 lines (limit: 300)\npublic/js/shoelace-navigation.js: 344 lines (limit: 300)\nreal-time-index-updater.js: 441 lines (limit: 300)\nself-evolving-instruction-system.js: 1087 lines (limit: 300)\nsrc/amazon-zip-detector.js: 380 lines (limit: 300)\nsrc/amazon-zip-parser-original.js: 626 lines (limit: 300)\nsrc/bank-reconciliation-engine.js: 621 lines (limit: 300)\nsrc/database.js: 392 lines (limit: 300)\nsrc/geographic-analysis-engine.js: 614 lines (limit: 300)\nsrc/subscription-analysis-engine.js: 495 lines (limit: 300)\nsrc/tsv-categorizer.js: 456 lines (limit: 300)\ntest-ux-e2e.js: 414 lines (limit: 300)\ntests/accessibility/accessibility.test.js: 455 lines (limit: 300)\ntests/cli/cli-tests.test.js: 449 lines (limit: 300)\ntests/component-tester.js: 342 lines (limit: 300)\ntests/e2e/complete-workflow.test.js: 355 lines (limit: 300)\ntests/e2e/data-import-e2e.test.js: 390 lines (limit: 300)\ntests/import-history-api.test.js: 334 lines (limit: 300)\ntests/import-history-puppeteer.test.js: 313 lines (limit: 300)\ntests/integration/api.test.js: 491 lines (limit: 300)\ntests/performance/performance.test.js: 436 lines (limit: 300)\ntests/pw/import-history-ux.test.js: 386 lines (limit: 300)\ntests/reports/test-reporting.test.js: 543 lines (limit: 300)\ntests/shared/test-helpers.js: 423 lines (limit: 300)\ntests/unit/tsv-categorizer.test.js: 404 lines (limit: 300)\ntests/visual/visual-regression.test.js: 447 lines (limit: 300)"
+            },
+            "comment-quality": {
+              "testId": "comment-quality",
+              "name": "Comment Quality Test",
+              "status": "failed",
+              "output": "",
+              "duration": 3967,
+              "error": "Comment quality issues:\ntests/global-setup.js: Missing JSDoc comments\ntests/global-teardown.js: Missing JSDoc comments\ntests/pw/import-history-ux.test.js: Missing JSDoc comments\ntests/reports/test-reporting.test.js: Missing JSDoc comments\ntests/shared/global-setup.js: Missing JSDoc comments\ntests/shared/global-teardown.js: Missing JSDoc comments\ncoverage/combined/block-navigation.js: Missing JSDoc comments\ncoverage/combined/lcov-report/block-navigation.js: Missing JSDoc comments\ncoverage/combined/lcov-report/prettify.js: Missing JSDoc comments\ncoverage/combined/lcov-report/sorter.js: Missing JSDoc comments\ncoverage/combined/prettify.js: Missing JSDoc comments\ncoverage/combined/sorter.js: Missing JSDoc comments\ncoverage/integration/block-navigation.js: Missing JSDoc comments\ncoverage/integration/lcov-report/block-navigation.js: Missing JSDoc comments\ncoverage/integration/lcov-report/prettify.js: Missing JSDoc comments\ncoverage/integration/lcov-report/sorter.js: Missing JSDoc comments\ncoverage/integration/prettify.js: Missing JSDoc comments\ncoverage/integration/sorter.js: Missing JSDoc comments\ncoverage/unit/block-navigation.js: Missing JSDoc comments\ncoverage/unit/lcov-report/block-navigation.js: Missing JSDoc comments\ncoverage/unit/lcov-report/prettify.js: Missing JSDoc comments\ncoverage/unit/lcov-report/sorter.js: Missing JSDoc comments\ncoverage/unit/prettify.js: Missing JSDoc comments\ncoverage/unit/sorter.js: Missing JSDoc comments\ndemos/amazon-zip-import-demo.js: Missing JSDoc comments\ndocs/api/scripts/prettify/prettify.js: Missing JSDoc comments\npublic/js/app.js: Missing JSDoc comments\npublic/js/shoelace-navigation-new.js: Missing JSDoc comments\npublic/js/shoelace-navigation.js: Missing JSDoc comments\nserver.js: Missing JSDoc comments\ntest-benefits-e2e.js: Missing JSDoc comments\ntest-benefits-field-mapping.js: Missing JSDoc comments\ntest-benefits-ux.js: Missing JSDoc comments\ntest-fix-verification.js: Missing JSDoc comments\ntest-script-logic.js: Missing JSDoc comments\ntest-visual-inspection.js: Missing JSDoc comments\ntests/global-setup.js: Missing JSDoc comments\ntests/global-teardown.js: Missing JSDoc comments\ntests/pw/import-history-ux.test.js: Missing JSDoc comments\ntests/reports/test-reporting.test.js: Missing JSDoc comments\ntests/shared/global-setup.js: Missing JSDoc comments\ntests/shared/global-teardown.js: Missing JSDoc comments"
+            },
+            "git-practices": {
+              "testId": "git-practices",
+              "name": "Git Practices Test",
+              "status": "passed",
+              "output": "✅ 10/10 commits follow conventional format",
+              "duration": 89
+            }
+          },
+          "duration": 7826,
+          "timestamp": "2026-01-07T02:58:05.207Z"
+        },
+        "codeQuality": {
+          "pipelineId": "codeQuality",
+          "name": "Code Quality Pipeline",
+          "status": "failed",
+          "tests": {
+            "eslint": {
+              "testId": "eslint",
+              "name": "ESLint Code Quality",
+              "status": "failed",
+              "output": "",
+              "duration": 2103,
+              "error": "ESLint failed:\n\nOops! Something went wrong! :(\n\nESLint: 9.39.2\n\nESLint couldn't find an eslint.config.(js|mjs|cjs) file.\n\nFrom ESLint v9.0.0, the default configuration file is now eslint.config.js.\nIf you are using a .eslintrc.* file, please follow the migration guide\nto update your configuration file to the new format:\n\nhttps://eslint.org/docs/latest/use/configure/migration-guide\n\nIf you still have problems after following the migration guide, please stop by\nhttps://eslint.org/chat/help to chat with the team.\n\n"
+            },
+            "prettier": {
+              "testId": "prettier",
+              "name": "Prettier Code Formatting",
+              "status": "failed",
+              "output": "",
+              "duration": 4223,
+              "error": "Prettier formatting issues found"
+            },
+            "jsdoc-validation": {
+              "testId": "jsdoc-validation",
+              "name": "JSDoc Validation",
+              "status": "failed",
+              "output": "",
+              "duration": 3321,
+              "error": "JSDoc validation issues:\nsrc/amazon-integration/amazon-zip-extractor.js: Functions without complete JSDoc\nsrc/amazon-integration/amazon-zip-processor.js: Functions without complete JSDoc\nsrc/amazon-integration/parsers/cart-parser.js: Functions without complete JSDoc\nsrc/amazon-integration/parsers/order-parser.js: Functions without complete JSDoc\nsrc/amazon-integration/parsers/returns-parser.js: Functions without complete JSDoc\nsrc/amazon-integration/parsers/subscription-parser.js: Functions without complete JSDoc\nsrc/database.js: Functions without complete JSDoc\nsrc/import/csv-parser.js: Functions without complete JSDoc\nsrc/import/history-manager.js: Functions without complete JSDoc\nsrc/import/status-tracker.js: Functions without complete JSDoc\nsrc/import/zip-handler.js: Functions without complete JSDoc\nsrc/routes/employee-benefits.js: Functions without complete JSDoc\nsrc/routes/geographic.js: Functions without complete JSDoc\nsrc/routes/subscription.js: Functions without complete JSDoc\ntests/global-setup.js: Functions without complete JSDoc\ntests/global-teardown.js: Functions without complete JSDoc\ntests/import-history-api.test.js: Functions without complete JSDoc\ntests/import-history-puppeteer.test.js: Functions without complete JSDoc\ntests/pw/import-history-ux.test.js: Functions without complete JSDoc\ntests/quick-test.js: Functions without complete JSDoc\ntests/reports/test-reporting.test.js: Functions without complete JSDoc\ntests/shared/global-setup.js: Functions without complete JSDoc\ntests/shared/global-teardown.js: Functions without complete JSDoc\ntests/ux-testing-suite.js: Functions without complete JSDoc\nadherence-monitor.js: Functions without complete JSDoc\nai-visual-test.js: Functions without complete JSDoc\napi-documentation-generator.js: Functions without complete JSDoc\nautomated-indexing-system.js: Functions without complete JSDoc\nautomated-refactoring-applicator.js: Functions without complete JSDoc\nautomated-validation-pipelines.js: Functions without complete JSDoc\nclasses/FileSizeManagementOptimizer.js: Functions without complete JSDoc\ncomment-style-consistency-validator.js: Functions without complete JSDoc\ncoverage/combined/block-navigation.js: Functions without complete JSDoc\ncoverage/combined/lcov-report/block-navigation.js: Functions without complete JSDoc\ncoverage/combined/lcov-report/prettify.js: Functions without complete JSDoc\ncoverage/combined/lcov-report/sorter.js: Functions without complete JSDoc\ncoverage/combined/prettify.js: Functions without complete JSDoc\ncoverage/combined/sorter.js: Functions without complete JSDoc\ncoverage/integration/block-navigation.js: Functions without complete JSDoc\ncoverage/integration/lcov-report/block-navigation.js: Functions without complete JSDoc\ncoverage/integration/lcov-report/prettify.js: Functions without complete JSDoc\ncoverage/integration/lcov-report/sorter.js: Functions without complete JSDoc\ncoverage/integration/prettify.js: Functions without complete JSDoc\ncoverage/integration/sorter.js: Functions without complete JSDoc\ncoverage/unit/block-navigation.js: Functions without complete JSDoc\ncoverage/unit/lcov-report/block-navigation.js: Functions without complete JSDoc\ncoverage/unit/lcov-report/prettify.js: Functions without complete JSDoc\ncoverage/unit/lcov-report/sorter.js: Functions without complete JSDoc\ncoverage/unit/prettify.js: Functions without complete JSDoc\ncoverage/unit/sorter.js: Functions without complete JSDoc\ndemos/amazon-zip-import-demo.js: Functions without complete JSDoc\ndocs/api/scripts/prettify/prettify.js: Functions without complete JSDoc\ndocumentation-completeness-checker.js: Functions without complete JSDoc\ndocumentation-update-suggester.js: Functions without complete JSDoc\nfile-size-management-optimizer.js: Functions without complete JSDoc\nmerge-conflict-resolver.js: Functions without complete JSDoc\nnavigation-demo.js: Functions without complete JSDoc\npublic/js/app.js: Functions without complete JSDoc\npublic/js/bootstrap-navigation.js: Functions without complete JSDoc\npublic/js/employee-benefits.js: Functions without complete JSDoc\npublic/js/modules/analysis/analysis.js: Functions without complete JSDoc\npublic/js/modules/expenditures/expenditures.js: Functions without complete JSDoc\npublic/js/modules/import-history/import-history.js: Functions without complete JSDoc\npublic/js/modules/premium-analytics/premium-analytics.js: Functions without complete JSDoc\npublic/js/shoelace-navigation-new.js: Functions without complete JSDoc\npublic/js/shoelace-navigation.js: Functions without complete JSDoc\nreal-time-index-updater.js: Functions without complete JSDoc\nserver.js: Functions without complete JSDoc\nsrc/amazon-integration/amazon-zip-extractor.js: Functions without complete JSDoc\nsrc/amazon-integration/amazon-zip-processor.js: Functions without complete JSDoc\nsrc/amazon-integration/parsers/cart-parser.js: Functions without complete JSDoc\nsrc/amazon-integration/parsers/order-parser.js: Functions without complete JSDoc\nsrc/amazon-integration/parsers/returns-parser.js: Functions without complete JSDoc\nsrc/amazon-integration/parsers/subscription-parser.js: Functions without complete JSDoc\nsrc/database.js: Functions without complete JSDoc\nsrc/import/csv-parser.js: Functions without complete JSDoc\nsrc/import/history-manager.js: Functions without complete JSDoc\nsrc/import/status-tracker.js: Functions without complete JSDoc\nsrc/import/zip-handler.js: Functions without complete JSDoc\nsrc/routes/employee-benefits.js: Functions without complete JSDoc\nsrc/routes/geographic.js: Functions without complete JSDoc\nsrc/routes/subscription.js: Functions without complete JSDoc\ntest-benefits-e2e.js: Functions without complete JSDoc\ntest-benefits-field-mapping.js: Functions without complete JSDoc\ntest-benefits-ux-comprehensive.js: Functions without complete JSDoc\ntest-benefits-ux.js: Functions without complete JSDoc\ntest-fix-verification.js: Functions without complete JSDoc\ntest-script-logic.js: Functions without complete JSDoc\ntest-ux-e2e.js: Functions without complete JSDoc\ntest-visual-inspection.js: Functions without complete JSDoc\ntests/global-setup.js: Functions without complete JSDoc\ntests/global-teardown.js: Functions without complete JSDoc\ntests/import-history-api.test.js: Functions without complete JSDoc\ntests/import-history-puppeteer.test.js: Functions without complete JSDoc\ntests/pw/import-history-ux.test.js: Functions without complete JSDoc\ntests/quick-test.js: Functions without complete JSDoc\ntests/reports/test-reporting.test.js: Functions without complete JSDoc\ntests/shared/global-setup.js: Functions without complete JSDoc\ntests/shared/global-teardown.js: Functions without complete JSDoc\ntests/ux-testing-suite.js: Functions without complete JSDoc\nutils/count.js: Functions without complete JSDoc\nvisual-ux-test.js: Functions without complete JSDoc\nutils/count.js: Functions without complete JSDoc"
+            }
+          },
+          "duration": 9647,
+          "timestamp": "2026-01-07T02:58:13.037Z"
+        },
+        "performanceValidation": {
+          "pipelineId": "performanceValidation",
+          "name": "Performance Validation Pipeline",
+          "status": "failed",
+          "tests": {
+            "response-time-check": {
+              "testId": "response-time-check",
+              "name": "Response Time Validation",
+              "status": "passed",
+              "output": "✅ Response time 0ms within acceptable range",
+              "duration": 5
+            },
+            "accuracy-threshold": {
+              "testId": "accuracy-threshold",
+              "name": "Accuracy Threshold Check",
+              "status": "failed",
+              "output": "",
+              "duration": 0,
+              "error": "Average accuracy 0.0% below 80% threshold"
+            },
+            "compliance-scoring": {
+              "testId": "compliance-scoring",
+              "name": "Compliance Scoring Validation",
+              "status": "failed",
+              "output": "",
+              "duration": 0,
+              "error": "Average compliance 0.0% below 90% threshold"
+            }
+          },
+          "duration": 5,
+          "timestamp": "2026-01-07T02:58:22.686Z"
+        },
+        "integrationTesting": {
+          "pipelineId": "integrationTesting",
+          "name": "Integration Testing Pipeline",
+          "status": "failed",
+          "tests": {
+            "api-endpoint-validation": {
+              "testId": "api-endpoint-validation",
+              "name": "API Endpoint Validation",
+              "status": "failed",
+              "output": "",
+              "duration": 32,
+              "error": "API health check failed"
+            },
+            "data-flow-testing": {
+              "testId": "data-flow-testing",
+              "name": "Data Flow Testing",
+              "status": "failed",
+              "output": "",
+              "duration": 7,
+              "error": "Data file missing: data/test-expenditures.json"
+            },
+            "ui-consistency": {
+              "testId": "ui-consistency",
+              "name": "UI Consistency Check",
+              "status": "failed",
+              "output": "",
+              "duration": 152,
+              "error": "UI consistency issues:\npublic/about.html: Missing navigation elements\npublic/amazon-zip-import.html: Missing navigation elements\npublic/api-debug.html: Missing navigation elements\npublic/benefits-refactor-complete.html: Missing navigation elements\npublic/components/ai-insights/ai-insights.html: Missing navigation elements\npublic/components/amazon-zip-import/amazon-zip-import.html: Missing navigation elements\npublic/components/analysis/analysis.html: Missing navigation elements\npublic/components/bank-reconciliation/bank-reconciliation.html: Missing navigation elements\npublic/components/dashboard/test.html: Missing navigation elements\npublic/components/data-import/data-import.html: Missing navigation elements\npublic/components/employee-benefits/employee-benefits.html: Missing navigation elements\npublic/components/geographic-analysis/geographic-analysis.html: Missing navigation elements\npublic/components/manual-entry/manual-entry.html: Missing navigation elements\npublic/components/navigation/head.html: Missing Bootstrap layout classes\npublic/components/premium-features/premium-features.html: Missing navigation elements\npublic/components/reconciliation/reconciliation.html: Missing navigation elements\npublic/components/settings/settings.html: Missing navigation elements\npublic/components/subscription-analysis/subscription-analysis.html: Missing navigation elements\npublic/debug-benefits.html: Missing navigation elements\npublic/debug-benefits.html: Missing Bootstrap layout classes\npublic/employee-benefits-test.html: Missing navigation elements\npublic/test-business-card.html: Missing navigation elements\npublic/view-separation-test.html: Missing navigation elements"
+            }
+          },
+          "duration": 191,
+          "timestamp": "2026-01-07T02:58:22.693Z"
+        }
+      },
+      "failures": [
+        {
+          "pipelineId": "instructionCompliance",
+          "timestamp": "2026-01-07T02:58:13.033Z",
+          "result": {
+            "pipelineId": "instructionCompliance",
+            "name": "Instruction Compliance Pipeline",
+            "status": "failed",
+            "tests": {
+              "file-size-limits": {
+                "testId": "file-size-limits",
+                "name": "File Size Limits Test",
+                "status": "failed",
+                "output": "",
+                "duration": 3770,
+                "error": "File size violations:\nsrc/amazon-zip-detector.js: 380 lines (limit: 300)\nsrc/amazon-zip-parser-original.js: 626 lines (limit: 300)\nsrc/bank-reconciliation-engine.js: 621 lines (limit: 300)\nsrc/database.js: 392 lines (limit: 300)\nsrc/geographic-analysis-engine.js: 614 lines (limit: 300)\nsrc/subscription-analysis-engine.js: 495 lines (limit: 300)\nsrc/tsv-categorizer.js: 456 lines (limit: 300)\ntests/accessibility/accessibility.test.js: 455 lines (limit: 300)\ntests/cli/cli-tests.test.js: 449 lines (limit: 300)\ntests/component-tester.js: 342 lines (limit: 300)\ntests/e2e/complete-workflow.test.js: 355 lines (limit: 300)\ntests/e2e/data-import-e2e.test.js: 390 lines (limit: 300)\ntests/import-history-api.test.js: 334 lines (limit: 300)\ntests/import-history-puppeteer.test.js: 313 lines (limit: 300)\ntests/integration/api.test.js: 491 lines (limit: 300)\ntests/performance/performance.test.js: 436 lines (limit: 300)\ntests/pw/import-history-ux.test.js: 386 lines (limit: 300)\ntests/reports/test-reporting.test.js: 543 lines (limit: 300)\ntests/shared/test-helpers.js: 423 lines (limit: 300)\ntests/unit/tsv-categorizer.test.js: 404 lines (limit: 300)\ntests/visual/visual-regression.test.js: 447 lines (limit: 300)\nadherence-monitor.js: 317 lines (limit: 300)\nai-visual-test.js: 434 lines (limit: 300)\napi-documentation-generator.js: 401 lines (limit: 300)\nautomated-commit-message-suggester.js: 672 lines (limit: 300)\nautomated-indexing-system.js: 810 lines (limit: 300)\nautomated-refactoring-applicator.js: 533 lines (limit: 300)\nautomated-validation-pipelines.js: 794 lines (limit: 300)\nbest-practice-retrieval.js: 379 lines (limit: 300)\nbranching-strategy-enforcer.js: 627 lines (limit: 300)\ncatastrophic-forgetting-preventer.js: 571 lines (limit: 300)\nclasses/FileSizeManagementOptimizer.js: 1176 lines (limit: 300)\nclasses/HumanAICollaborationSystem.js: 1008 lines (limit: 300)\ncomment-quality-assessor.js: 730 lines (limit: 300)\ncomment-style-consistency-validator.js: 429 lines (limit: 300)\ncommit-blocker.js: 548 lines (limit: 300)\ncomprehensive-ux-test.js: 312 lines (limit: 300)\ncontinuous-integration-instructions.js: 779 lines (limit: 300)\nconventional-commit-validator.js: 509 lines (limit: 300)\ncross-reference-database.js: 717 lines (limit: 300)\ncross-validation-testing-system.js: 952 lines (limit: 300)\ndocumentation-completeness-checker.js: 635 lines (limit: 300)\ndocumentation-update-suggester.js: 431 lines (limit: 300)\nfile-placement-optimizer.js: 665 lines (limit: 300)\nfile-size-management-optimizer.js: 1199 lines (limit: 300)\ngit-workflow-compliance.js: 798 lines (limit: 300)\ngradual-size-reducer.js: 779 lines (limit: 300)\nhuman-ai-collaboration-system.js: 1060 lines (limit: 300)\nhuman-feedback-integration.js: 515 lines (limit: 300)\ninstruction-testing-framework.js: 522 lines (limit: 300)\nkt-cli-alpha/kt-cli.js: 1173 lines (limit: 300)\nline-impact-calculator.js: 711 lines (limit: 300)\nmerge-conflict-resolver.js: 807 lines (limit: 300)\nmulti-modal-reinforcement-learner.js: 628 lines (limit: 300)\nneftune-noise-injector.js: 485 lines (limit: 300)\norganizational-validator.js: 639 lines (limit: 300)\nperformance-monitoring-tools.js: 566 lines (limit: 300)\npublic/js/ai-dashboard.js: 501 lines (limit: 300)\npublic/js/bootstrap-navigation.js: 441 lines (limit: 300)\npublic/js/employee-benefits.js: 2549 lines (limit: 300)\npublic/js/shoelace-navigation.js: 344 lines (limit: 300)\nreal-time-index-updater.js: 441 lines (limit: 300)\nself-evolving-instruction-system.js: 1087 lines (limit: 300)\nsrc/amazon-zip-detector.js: 380 lines (limit: 300)\nsrc/amazon-zip-parser-original.js: 626 lines (limit: 300)\nsrc/bank-reconciliation-engine.js: 621 lines (limit: 300)\nsrc/database.js: 392 lines (limit: 300)\nsrc/geographic-analysis-engine.js: 614 lines (limit: 300)\nsrc/subscription-analysis-engine.js: 495 lines (limit: 300)\nsrc/tsv-categorizer.js: 456 lines (limit: 300)\ntest-ux-e2e.js: 414 lines (limit: 300)\ntests/accessibility/accessibility.test.js: 455 lines (limit: 300)\ntests/cli/cli-tests.test.js: 449 lines (limit: 300)\ntests/component-tester.js: 342 lines (limit: 300)\ntests/e2e/complete-workflow.test.js: 355 lines (limit: 300)\ntests/e2e/data-import-e2e.test.js: 390 lines (limit: 300)\ntests/import-history-api.test.js: 334 lines (limit: 300)\ntests/import-history-puppeteer.test.js: 313 lines (limit: 300)\ntests/integration/api.test.js: 491 lines (limit: 300)\ntests/performance/performance.test.js: 436 lines (limit: 300)\ntests/pw/import-history-ux.test.js: 386 lines (limit: 300)\ntests/reports/test-reporting.test.js: 543 lines (limit: 300)\ntests/shared/test-helpers.js: 423 lines (limit: 300)\ntests/unit/tsv-categorizer.test.js: 404 lines (limit: 300)\ntests/visual/visual-regression.test.js: 447 lines (limit: 300)"
+              },
+              "comment-quality": {
+                "testId": "comment-quality",
+                "name": "Comment Quality Test",
+                "status": "failed",
+                "output": "",
+                "duration": 3967,
+                "error": "Comment quality issues:\ntests/global-setup.js: Missing JSDoc comments\ntests/global-teardown.js: Missing JSDoc comments\ntests/pw/import-history-ux.test.js: Missing JSDoc comments\ntests/reports/test-reporting.test.js: Missing JSDoc comments\ntests/shared/global-setup.js: Missing JSDoc comments\ntests/shared/global-teardown.js: Missing JSDoc comments\ncoverage/combined/block-navigation.js: Missing JSDoc comments\ncoverage/combined/lcov-report/block-navigation.js: Missing JSDoc comments\ncoverage/combined/lcov-report/prettify.js: Missing JSDoc comments\ncoverage/combined/lcov-report/sorter.js: Missing JSDoc comments\ncoverage/combined/prettify.js: Missing JSDoc comments\ncoverage/combined/sorter.js: Missing JSDoc comments\ncoverage/integration/block-navigation.js: Missing JSDoc comments\ncoverage/integration/lcov-report/block-navigation.js: Missing JSDoc comments\ncoverage/integration/lcov-report/prettify.js: Missing JSDoc comments\ncoverage/integration/lcov-report/sorter.js: Missing JSDoc comments\ncoverage/integration/prettify.js: Missing JSDoc comments\ncoverage/integration/sorter.js: Missing JSDoc comments\ncoverage/unit/block-navigation.js: Missing JSDoc comments\ncoverage/unit/lcov-report/block-navigation.js: Missing JSDoc comments\ncoverage/unit/lcov-report/prettify.js: Missing JSDoc comments\ncoverage/unit/lcov-report/sorter.js: Missing JSDoc comments\ncoverage/unit/prettify.js: Missing JSDoc comments\ncoverage/unit/sorter.js: Missing JSDoc comments\ndemos/amazon-zip-import-demo.js: Missing JSDoc comments\ndocs/api/scripts/prettify/prettify.js: Missing JSDoc comments\npublic/js/app.js: Missing JSDoc comments\npublic/js/shoelace-navigation-new.js: Missing JSDoc comments\npublic/js/shoelace-navigation.js: Missing JSDoc comments\nserver.js: Missing JSDoc comments\ntest-benefits-e2e.js: Missing JSDoc comments\ntest-benefits-field-mapping.js: Missing JSDoc comments\ntest-benefits-ux.js: Missing JSDoc comments\ntest-fix-verification.js: Missing JSDoc comments\ntest-script-logic.js: Missing JSDoc comments\ntest-visual-inspection.js: Missing JSDoc comments\ntests/global-setup.js: Missing JSDoc comments\ntests/global-teardown.js: Missing JSDoc comments\ntests/pw/import-history-ux.test.js: Missing JSDoc comments\ntests/reports/test-reporting.test.js: Missing JSDoc comments\ntests/shared/global-setup.js: Missing JSDoc comments\ntests/shared/global-teardown.js: Missing JSDoc comments"
+              },
+              "git-practices": {
+                "testId": "git-practices",
+                "name": "Git Practices Test",
+                "status": "passed",
+                "output": "✅ 10/10 commits follow conventional format",
+                "duration": 89
+              }
+            },
+            "duration": 7826,
+            "timestamp": "2026-01-07T02:58:05.207Z"
+          }
+        },
+        {
+          "pipelineId": "codeQuality",
+          "timestamp": "2026-01-07T02:58:22.684Z",
+          "result": {
+            "pipelineId": "codeQuality",
+            "name": "Code Quality Pipeline",
+            "status": "failed",
+            "tests": {
+              "eslint": {
+                "testId": "eslint",
+                "name": "ESLint Code Quality",
+                "status": "failed",
+                "output": "",
+                "duration": 2103,
+                "error": "ESLint failed:\n\nOops! Something went wrong! :(\n\nESLint: 9.39.2\n\nESLint couldn't find an eslint.config.(js|mjs|cjs) file.\n\nFrom ESLint v9.0.0, the default configuration file is now eslint.config.js.\nIf you are using a .eslintrc.* file, please follow the migration guide\nto update your configuration file to the new format:\n\nhttps://eslint.org/docs/latest/use/configure/migration-guide\n\nIf you still have problems after following the migration guide, please stop by\nhttps://eslint.org/chat/help to chat with the team.\n\n"
+              },
+              "prettier": {
+                "testId": "prettier",
+                "name": "Prettier Code Formatting",
+                "status": "failed",
+                "output": "",
+                "duration": 4223,
+                "error": "Prettier formatting issues found"
+              },
+              "jsdoc-validation": {
+                "testId": "jsdoc-validation",
+                "name": "JSDoc Validation",
+                "status": "failed",
+                "output": "",
+                "duration": 3321,
+                "error": "JSDoc validation issues:\nsrc/amazon-integration/amazon-zip-extractor.js: Functions without complete JSDoc\nsrc/amazon-integration/amazon-zip-processor.js: Functions without complete JSDoc\nsrc/amazon-integration/parsers/cart-parser.js: Functions without complete JSDoc\nsrc/amazon-integration/parsers/order-parser.js: Functions without complete JSDoc\nsrc/amazon-integration/parsers/returns-parser.js: Functions without complete JSDoc\nsrc/amazon-integration/parsers/subscription-parser.js: Functions without complete JSDoc\nsrc/database.js: Functions without complete JSDoc\nsrc/import/csv-parser.js: Functions without complete JSDoc\nsrc/import/history-manager.js: Functions without complete JSDoc\nsrc/import/status-tracker.js: Functions without complete JSDoc\nsrc/import/zip-handler.js: Functions without complete JSDoc\nsrc/routes/employee-benefits.js: Functions without complete JSDoc\nsrc/routes/geographic.js: Functions without complete JSDoc\nsrc/routes/subscription.js: Functions without complete JSDoc\ntests/global-setup.js: Functions without complete JSDoc\ntests/global-teardown.js: Functions without complete JSDoc\ntests/import-history-api.test.js: Functions without complete JSDoc\ntests/import-history-puppeteer.test.js: Functions without complete JSDoc\ntests/pw/import-history-ux.test.js: Functions without complete JSDoc\ntests/quick-test.js: Functions without complete JSDoc\ntests/reports/test-reporting.test.js: Functions without complete JSDoc\ntests/shared/global-setup.js: Functions without complete JSDoc\ntests/shared/global-teardown.js: Functions without complete JSDoc\ntests/ux-testing-suite.js: Functions without complete JSDoc\nadherence-monitor.js: Functions without complete JSDoc\nai-visual-test.js: Functions without complete JSDoc\napi-documentation-generator.js: Functions without complete JSDoc\nautomated-indexing-system.js: Functions without complete JSDoc\nautomated-refactoring-applicator.js: Functions without complete JSDoc\nautomated-validation-pipelines.js: Functions without complete JSDoc\nclasses/FileSizeManagementOptimizer.js: Functions without complete JSDoc\ncomment-style-consistency-validator.js: Functions without complete JSDoc\ncoverage/combined/block-navigation.js: Functions without complete JSDoc\ncoverage/combined/lcov-report/block-navigation.js: Functions without complete JSDoc\ncoverage/combined/lcov-report/prettify.js: Functions without complete JSDoc\ncoverage/combined/lcov-report/sorter.js: Functions without complete JSDoc\ncoverage/combined/prettify.js: Functions without complete JSDoc\ncoverage/combined/sorter.js: Functions without complete JSDoc\ncoverage/integration/block-navigation.js: Functions without complete JSDoc\ncoverage/integration/lcov-report/block-navigation.js: Functions without complete JSDoc\ncoverage/integration/lcov-report/prettify.js: Functions without complete JSDoc\ncoverage/integration/lcov-report/sorter.js: Functions without complete JSDoc\ncoverage/integration/prettify.js: Functions without complete JSDoc\ncoverage/integration/sorter.js: Functions without complete JSDoc\ncoverage/unit/block-navigation.js: Functions without complete JSDoc\ncoverage/unit/lcov-report/block-navigation.js: Functions without complete JSDoc\ncoverage/unit/lcov-report/prettify.js: Functions without complete JSDoc\ncoverage/unit/lcov-report/sorter.js: Functions without complete JSDoc\ncoverage/unit/prettify.js: Functions without complete JSDoc\ncoverage/unit/sorter.js: Functions without complete JSDoc\ndemos/amazon-zip-import-demo.js: Functions without complete JSDoc\ndocs/api/scripts/prettify/prettify.js: Functions without complete JSDoc\ndocumentation-completeness-checker.js: Functions without complete JSDoc\ndocumentation-update-suggester.js: Functions without complete JSDoc\nfile-size-management-optimizer.js: Functions without complete JSDoc\nmerge-conflict-resolver.js: Functions without complete JSDoc\nnavigation-demo.js: Functions without complete JSDoc\npublic/js/app.js: Functions without complete JSDoc\npublic/js/bootstrap-navigation.js: Functions without complete JSDoc\npublic/js/employee-benefits.js: Functions without complete JSDoc\npublic/js/modules/analysis/analysis.js: Functions without complete JSDoc\npublic/js/modules/expenditures/expenditures.js: Functions without complete JSDoc\npublic/js/modules/import-history/import-history.js: Functions without complete JSDoc\npublic/js/modules/premium-analytics/premium-analytics.js: Functions without complete JSDoc\npublic/js/shoelace-navigation-new.js: Functions without complete JSDoc\npublic/js/shoelace-navigation.js: Functions without complete JSDoc\nreal-time-index-updater.js: Functions without complete JSDoc\nserver.js: Functions without complete JSDoc\nsrc/amazon-integration/amazon-zip-extractor.js: Functions without complete JSDoc\nsrc/amazon-integration/amazon-zip-processor.js: Functions without complete JSDoc\nsrc/amazon-integration/parsers/cart-parser.js: Functions without complete JSDoc\nsrc/amazon-integration/parsers/order-parser.js: Functions without complete JSDoc\nsrc/amazon-integration/parsers/returns-parser.js: Functions without complete JSDoc\nsrc/amazon-integration/parsers/subscription-parser.js: Functions without complete JSDoc\nsrc/database.js: Functions without complete JSDoc\nsrc/import/csv-parser.js: Functions without complete JSDoc\nsrc/import/history-manager.js: Functions without complete JSDoc\nsrc/import/status-tracker.js: Functions without complete JSDoc\nsrc/import/zip-handler.js: Functions without complete JSDoc\nsrc/routes/employee-benefits.js: Functions without complete JSDoc\nsrc/routes/geographic.js: Functions without complete JSDoc\nsrc/routes/subscription.js: Functions without complete JSDoc\ntest-benefits-e2e.js: Functions without complete JSDoc\ntest-benefits-field-mapping.js: Functions without complete JSDoc\ntest-benefits-ux-comprehensive.js: Functions without complete JSDoc\ntest-benefits-ux.js: Functions without complete JSDoc\ntest-fix-verification.js: Functions without complete JSDoc\ntest-script-logic.js: Functions without complete JSDoc\ntest-ux-e2e.js: Functions without complete JSDoc\ntest-visual-inspection.js: Functions without complete JSDoc\ntests/global-setup.js: Functions without complete JSDoc\ntests/global-teardown.js: Functions without complete JSDoc\ntests/import-history-api.test.js: Functions without complete JSDoc\ntests/import-history-puppeteer.test.js: Functions without complete JSDoc\ntests/pw/import-history-ux.test.js: Functions without complete JSDoc\ntests/quick-test.js: Functions without complete JSDoc\ntests/reports/test-reporting.test.js: Functions without complete JSDoc\ntests/shared/global-setup.js: Functions without complete JSDoc\ntests/shared/global-teardown.js: Functions without complete JSDoc\ntests/ux-testing-suite.js: Functions without complete JSDoc\nutils/count.js: Functions without complete JSDoc\nvisual-ux-test.js: Functions without complete JSDoc\nutils/count.js: Functions without complete JSDoc"
+              }
+            },
+            "duration": 9647,
+            "timestamp": "2026-01-07T02:58:13.037Z"
+          }
+        },
+        {
+          "pipelineId": "performanceValidation",
+          "timestamp": "2026-01-07T02:58:22.691Z",
+          "result": {
+            "pipelineId": "performanceValidation",
+            "name": "Performance Validation Pipeline",
+            "status": "failed",
+            "tests": {
+              "response-time-check": {
+                "testId": "response-time-check",
+                "name": "Response Time Validation",
+                "status": "passed",
+                "output": "✅ Response time 0ms within acceptable range",
+                "duration": 5
+              },
+              "accuracy-threshold": {
+                "testId": "accuracy-threshold",
+                "name": "Accuracy Threshold Check",
+                "status": "failed",
+                "output": "",
+                "duration": 0,
+                "error": "Average accuracy 0.0% below 80% threshold"
+              },
+              "compliance-scoring": {
+                "testId": "compliance-scoring",
+                "name": "Compliance Scoring Validation",
+                "status": "failed",
+                "output": "",
+                "duration": 0,
+                "error": "Average compliance 0.0% below 90% threshold"
+              }
+            },
+            "duration": 5,
+            "timestamp": "2026-01-07T02:58:22.686Z"
+          }
+        },
+        {
+          "pipelineId": "integrationTesting",
+          "timestamp": "2026-01-07T02:58:22.884Z",
+          "result": {
+            "pipelineId": "integrationTesting",
+            "name": "Integration Testing Pipeline",
+            "status": "failed",
+            "tests": {
+              "api-endpoint-validation": {
+                "testId": "api-endpoint-validation",
+                "name": "API Endpoint Validation",
+                "status": "failed",
+                "output": "",
+                "duration": 32,
+                "error": "API health check failed"
+              },
+              "data-flow-testing": {
+                "testId": "data-flow-testing",
+                "name": "Data Flow Testing",
+                "status": "failed",
+                "output": "",
+                "duration": 7,
+                "error": "Data file missing: data/test-expenditures.json"
+              },
+              "ui-consistency": {
+                "testId": "ui-consistency",
+                "name": "UI Consistency Check",
+                "status": "failed",
+                "output": "",
+                "duration": 152,
+                "error": "UI consistency issues:\npublic/about.html: Missing navigation elements\npublic/amazon-zip-import.html: Missing navigation elements\npublic/api-debug.html: Missing navigation elements\npublic/benefits-refactor-complete.html: Missing navigation elements\npublic/components/ai-insights/ai-insights.html: Missing navigation elements\npublic/components/amazon-zip-import/amazon-zip-import.html: Missing navigation elements\npublic/components/analysis/analysis.html: Missing navigation elements\npublic/components/bank-reconciliation/bank-reconciliation.html: Missing navigation elements\npublic/components/dashboard/test.html: Missing navigation elements\npublic/components/data-import/data-import.html: Missing navigation elements\npublic/components/employee-benefits/employee-benefits.html: Missing navigation elements\npublic/components/geographic-analysis/geographic-analysis.html: Missing navigation elements\npublic/components/manual-entry/manual-entry.html: Missing navigation elements\npublic/components/navigation/head.html: Missing Bootstrap layout classes\npublic/components/premium-features/premium-features.html: Missing navigation elements\npublic/components/reconciliation/reconciliation.html: Missing navigation elements\npublic/components/settings/settings.html: Missing navigation elements\npublic/components/subscription-analysis/subscription-analysis.html: Missing navigation elements\npublic/debug-benefits.html: Missing navigation elements\npublic/debug-benefits.html: Missing Bootstrap layout classes\npublic/employee-benefits-test.html: Missing navigation elements\npublic/test-business-card.html: Missing navigation elements\npublic/view-separation-test.html: Missing navigation elements"
+              }
+            },
+            "duration": 191,
+            "timestamp": "2026-01-07T02:58:22.693Z"
+          }
+        }
+      ],
+      "alerts": []
+    },
+    "pipelines": {
+      "instructionCompliance": {
+        "name": "Instruction Compliance Pipeline",
+        "tests": [
+          "file-size-limits",
+          "comment-quality",
+          "git-practices"
+        ],
+        "schedule": "pre-commit",
+        "enabled": true
+      },
+      "codeQuality": {
+        "name": "Code Quality Pipeline",
+        "tests": [
+          "eslint",
+          "prettier",
+          "jsdoc-validation"
+        ],
+        "schedule": "continuous",
+        "enabled": true
+      },
+      "performanceValidation": {
+        "name": "Performance Validation Pipeline",
+        "tests": [
+          "response-time-check",
+          "accuracy-threshold",
+          "compliance-scoring"
+        ],
+        "schedule": "post-deployment",
+        "enabled": true
+      },
+      "integrationTesting": {
+        "name": "Integration Testing Pipeline",
+        "tests": [
+          "api-endpoint-validation",
+          "data-flow-testing",
+          "ui-consistency"
+        ],
+        "schedule": "daily",
+        "enabled": true
+      }
+    },
+    "lastUpdated": "2026-01-07T02:58:22.885Z"
+  },
+  "pipelines": {
+    "instructionCompliance": {
+      "name": "Instruction Compliance Pipeline",
+      "tests": [
+        "file-size-limits",
+        "comment-quality",
+        "git-practices"
+      ],
+      "schedule": "pre-commit",
+      "enabled": true
+    },
+    "codeQuality": {
+      "name": "Code Quality Pipeline",
+      "tests": [
+        "eslint",
+        "prettier",
+        "jsdoc-validation"
+      ],
+      "schedule": "continuous",
+      "enabled": true
+    },
+    "performanceValidation": {
+      "name": "Performance Validation Pipeline",
+      "tests": [
+        "response-time-check",
+        "accuracy-threshold",
+        "compliance-scoring"
+      ],
+      "schedule": "post-deployment",
+      "enabled": true
+    },
+    "integrationTesting": {
+      "name": "Integration Testing Pipeline",
+      "tests": [
+        "api-endpoint-validation",
+        "data-flow-testing",
+        "ui-consistency"
+      ],
+      "schedule": "daily",
+      "enabled": true
+    }
+  },
+  "lastUpdated": "2026-01-07T02:59:06.053Z"
+}

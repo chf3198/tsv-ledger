@@ -8,14 +8,14 @@
  * @version 1.0.0
  */
 
-const statusTracker = require("./status-tracker");
-const historyManager = require("./history-manager");
-const csvParser = require("./csv-parser");
-const zipHandler = require("./zip-handler");
+const statusTracker = require('./status-tracker');
+const historyManager = require('./history-manager');
+const csvParser = require('./csv-parser');
+const zipHandler = require('./zip-handler');
 
 module.exports = {
   statusTracker,
   historyManager,
   csvParser,
-  zipHandler,
+  zipHandler
 };

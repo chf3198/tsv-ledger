@@ -20,71 +20,71 @@ const { processReturnsCSV } = require('./parsers/returns-parser');
  * @returns {Object} - Processed data
  */
 async function processExtractedFiles(extractDir, options = {}, supportedFiles) {
-    const processedData = {
-        orders: [],
-        subscriptions: [],
-        cartItems: [],
-        returns: [],
-        metadata: {
-            processingDate: new Date().toISOString(),
-            fileCount: 0
-        }
-    };
+  const processedData = {
+    orders: [],
+    subscriptions: [],
+    cartItems: [],
+    returns: [],
+    metadata: {
+      processingDate: new Date().toISOString(),
+      fileCount: 0
+    }
+  };
 
-    const stats = {
-        totalFiles: 0,
-        processedFiles: 0,
-        orders: 0,
-        subscriptions: 0,
-        errors: []
-    };
+  const stats = {
+    totalFiles: 0,
+    processedFiles: 0,
+    orders: 0,
+    subscriptions: 0,
+    errors: []
+  };
 
-    const files = getAllFiles(extractDir);
-    stats.totalFiles = files.length;
+  const files = getAllFiles(extractDir);
+  stats.totalFiles = files.length;
 
-    for (let idx = 0; idx < files.length; idx++) {
-        const filePath = files[idx];
-        const fileName = path.basename(filePath);
+  for (let idx = 0; idx < files.length; idx++) {
+    const filePath = files[idx];
+    const fileName = path.basename(filePath);
 
-        if (options.onFileProcess) {
-            options.onFileProcess(fileName, idx + 1, files.length);
-        }
-
-        console.log(`📄 Processing: ${fileName}`);
-
-        try {
-            if (supportedFiles.orderHistory.includes(fileName)) {
-                const orders = await processOrderHistoryCSV(filePath);
-                processedData.orders.push(...orders);
-                stats.orders += orders.length;
-
-            } else if (supportedFiles.subscriptions.includes(fileName)) {
-                const subscriptions = await processSubscriptionsJSON(filePath);
-                processedData.subscriptions.push(...subscriptions);
-                stats.subscriptions += subscriptions.length;
-
-            } else if (supportedFiles.cartHistory.includes(fileName)) {
-                const cartItems = await processCartHistoryCSV(filePath);
-                processedData.cartItems.push(...cartItems);
-
-            } else if (supportedFiles.returns.includes(fileName)) {
-                const returns = await processReturnsCSV(filePath);
-                processedData.returns.push(...returns);
-
-            } else if (options.processAllFiles) {
-                console.log(`ℹ️  Unrecognized file: ${fileName}`);
-            }
-
-            stats.processedFiles++;
-
-        } catch (error) {
-            console.error(`❌ Error processing ${fileName}:`, error.message);
-            stats.errors.push(`${fileName}: ${error.message}`);
-        }
+    if (options.onFileProcess) {
+      options.onFileProcess(fileName, idx + 1, files.length);
     }
 
-    processedData.metadata.fileCount = stats.processedFiles;
-    return { processedData, stats };
+    console.log(`📄 Processing: ${fileName}`);
+
+    try {
+      if (supportedFiles.orderHistory.includes(fileName)) {
+        const orders = await processOrderHistoryCSV(filePath);
+        processedData.orders.push(...orders);
+        stats.orders += orders.length;
+
+      } else if (supportedFiles.subscriptions.includes(fileName)) {
+        const subscriptions = await processSubscriptionsJSON(filePath);
+        processedData.subscriptions.push(...subscriptions);
+        stats.subscriptions += subscriptions.length;
+
+      } else if (supportedFiles.cartHistory.includes(fileName)) {
+        const cartItems = await processCartHistoryCSV(filePath);
+        processedData.cartItems.push(...cartItems);
+
+      } else if (supportedFiles.returns.includes(fileName)) {
+        const returns = await processReturnsCSV(filePath);
+        processedData.returns.push(...returns);
+
+      } else if (options.processAllFiles) {
+        console.log(`ℹ️  Unrecognized file: ${fileName}`);
+      }
+
+      stats.processedFiles++;
+
+    } catch (error) {
+      console.error(`❌ Error processing ${fileName}:`, error.message);
+      stats.errors.push(`${fileName}: ${error.message}`);
+    }
+  }
+
+  processedData.metadata.fileCount = stats.processedFiles;
+  return { processedData, stats };
 }
 
 /**
@@ -93,26 +93,26 @@ async function processExtractedFiles(extractDir, options = {}, supportedFiles) {
  * @returns {string[]} - File paths
  */
 function getAllFiles(dir) {
-    const files = [];
+  const files = [];
 
-    function traverse(currentDir) {
-        const items = fs.readdirSync(currentDir);
-        for (const item of items) {
-            const fullPath = path.join(currentDir, item);
-            const stat = fs.statSync(fullPath);
-            if (stat.isDirectory()) {
-                traverse(fullPath);
-            } else {
-                files.push(fullPath);
-            }
-        }
+  function traverse(currentDir) {
+    const items = fs.readdirSync(currentDir);
+    for (const item of items) {
+      const fullPath = path.join(currentDir, item);
+      const stat = fs.statSync(fullPath);
+      if (stat.isDirectory()) {
+        traverse(fullPath);
+      } else {
+        files.push(fullPath);
+      }
     }
+  }
 
-    traverse(dir);
-    return files;
+  traverse(dir);
+  return files;
 }
 
 module.exports = {
-    processExtractedFiles,
-    getAllFiles
+  processExtractedFiles,
+  getAllFiles
 };

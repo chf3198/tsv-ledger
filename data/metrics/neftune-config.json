@@ -1,0 +1,38 @@
+{
+  "neftuneConfig": {
+    "embeddingNoise": {
+      "mean": 0,
+      "std": 0.005,
+      "probability": 0.05
+    }
+  },
+  "performanceMetrics": {
+    "baselineAccuracy": 0,
+    "noiseAccuracy": 0,
+    "robustnessScore": 0,
+    "edgeCaseImprovement": 0
+  },
+  "edgeCaseValidation": false,
+  "recommendedSettings": {
+    "embeddingNoise": {
+      "mean": 0,
+      "std": 0.005,
+      "probability": 0.05
+    },
+    "instructionNoise": {
+      "swapProbability": 0.05,
+      "dropProbability": 0.02,
+      "addProbability": 0.03
+    },
+    "contextNoise": {
+      "shuffleProbability": 0.1,
+      "maskProbability": 0.05
+    }
+  },
+  "implementationNotes": [
+    "Apply noise during instruction processing, not during final output generation",
+    "Use lower noise levels for production systems",
+    "Monitor performance metrics and adjust parameters based on real-world usage",
+    "Consider A/B testing with and without noise injection"
+  ]
+}

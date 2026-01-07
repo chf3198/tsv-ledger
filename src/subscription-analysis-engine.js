@@ -209,9 +209,15 @@ class SubscriptionAnalysisEngine {
 
     // Count subscription statuses
     this.subscriptions.forEach(sub => {
-      if (sub.status === 'Active') subscriptionStats.activeSubscriptions++;
-      if (sub.status === 'Cancelled') subscriptionStats.cancelledSubscriptions++;
-      if (sub.nextBillAmount) subscriptionStats.totalSubscriptionRevenue += sub.nextBillAmount;
+      if (sub.status === 'Active') {
+        subscriptionStats.activeSubscriptions++;
+      }
+      if (sub.status === 'Cancelled') {
+        subscriptionStats.cancelledSubscriptions++;
+      }
+      if (sub.nextBillAmount) {
+        subscriptionStats.totalSubscriptionRevenue += sub.nextBillAmount;
+      }
     });
 
     // Link orders to subscriptions via OrderId
@@ -227,8 +233,8 @@ class SubscriptionAnalysisEngine {
           const subscription = this.subscriptions.get(subId);
           if (subscription) {
             linkedOrders.set(orderId, {
-              order: order,
-              subscription: subscription,
+              order,
+              subscription,
               period: matchingPeriod,
               linked: true
             });
@@ -242,7 +248,7 @@ class SubscriptionAnalysisEngine {
       // If not linked to subscription, mark as regular purchase
       if (!linked) {
         linkedOrders.set(orderId, {
-          order: order,
+          order,
           subscription: null,
           period: null,
           linked: false
@@ -288,7 +294,9 @@ class SubscriptionAnalysisEngine {
       const stats = providerStats.get(provider);
       stats.count++;
       stats.revenue += sub.nextBillAmount || 0;
-      if (sub.status === 'Active') stats.active++;
+      if (sub.status === 'Active') {
+        stats.active++;
+      }
     });
 
     analysis.subscriptionPerformance = Object.fromEntries(providerStats);
@@ -333,7 +341,9 @@ class SubscriptionAnalysisEngine {
    * @returns {Object|null} Subscription details or null if not found
    */
   getSubscriptionForOrder(orderId) {
-    if (!this.dataLoaded) return null;
+    if (!this.dataLoaded) {
+      return null;
+    }
 
     for (const [subId, periods] of this.subscriptionPeriods) {
       const matchingPeriod = periods.find(period => period.orderId === orderId);
@@ -397,6 +407,97 @@ class SubscriptionAnalysisEngine {
       .map(([service, revenue]) => ({ service, revenue }));
 
     return dashboard;
+  }
+
+  /**
+   * Analyze expenditures for subscription patterns and insights
+   * @param {Array} expenditures - Array of expenditure objects
+   * @returns {Object} Subscription analysis results
+   */
+  async analyzeSubscriptions(expenditures) {
+    console.log('🔍 Analyzing expenditures for subscription patterns...');
+
+    // Filter subscription-related expenditures
+    const subscriptionItems = expenditures.filter(exp =>
+      exp.category === 'Subscription' ||
+      exp.description?.toLowerCase().includes('subscribe') ||
+      exp.description?.toLowerCase().includes('subscription') ||
+      (exp.metadata && exp.metadata.isSubscription)
+    );
+
+    // Analyze patterns
+    const analysis = {
+      summary: {
+        totalSubscriptions: subscriptionItems.length,
+        totalSpent: subscriptionItems.reduce((sum, exp) => sum + (exp.amount || 0), 0),
+        averageCost: 0,
+        uniqueServices: new Set()
+      },
+      monthlyBreakdown: {},
+      categoryBreakdown: {},
+      insights: [],
+      recommendations: []
+    };
+
+    // Calculate average cost
+    if (subscriptionItems.length > 0) {
+      analysis.summary.averageCost = analysis.summary.totalSpent / subscriptionItems.length;
+    }
+
+    // Monthly breakdown
+    subscriptionItems.forEach(exp => {
+      const date = new Date(exp.date);
+      const monthKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
+
+      if (!analysis.monthlyBreakdown[monthKey]) {
+        analysis.monthlyBreakdown[monthKey] = { count: 0, total: 0 };
+      }
+
+      analysis.monthlyBreakdown[monthKey].count++;
+      analysis.monthlyBreakdown[monthKey].total += exp.amount || 0;
+
+      // Track unique services
+      if (exp.description) {
+        analysis.summary.uniqueServices.add(exp.description.split(' ')[0]); // Simple service extraction
+      }
+    });
+
+    analysis.summary.uniqueServices = Array.from(analysis.summary.uniqueServices);
+
+    // Category breakdown
+    const categoryStats = {};
+    subscriptionItems.forEach(exp => {
+      const category = exp.subcategory || exp.category || 'Uncategorized';
+      if (!categoryStats[category]) {
+        categoryStats[category] = { count: 0, total: 0 };
+      }
+      categoryStats[category].count++;
+      categoryStats[category].total += exp.amount || 0;
+    });
+    analysis.categoryBreakdown = categoryStats;
+
+    // Generate insights
+    if (analysis.summary.totalSubscriptions > 0) {
+      analysis.insights.push(`Found ${analysis.summary.totalSubscriptions} subscription-related transactions`);
+      analysis.insights.push(`Total spent on subscriptions: $${analysis.summary.totalSpent.toFixed(2)}`);
+      analysis.insights.push(`Average subscription cost: $${analysis.summary.averageCost.toFixed(2)}`);
+      analysis.insights.push(`Unique services identified: ${analysis.summary.uniqueServices.length}`);
+    } else {
+      analysis.insights.push('No subscription transactions found in the dataset');
+    }
+
+    // Generate recommendations
+    if (analysis.summary.averageCost > 50) {
+      analysis.recommendations.push('Consider reviewing high-cost subscriptions for potential savings');
+    }
+
+    const monthlyTotals = Object.values(analysis.monthlyBreakdown);
+    if (monthlyTotals.length > 1) {
+      const avgMonthly = monthlyTotals.reduce((sum, month) => sum + month.total, 0) / monthlyTotals.length;
+      analysis.insights.push(`Average monthly subscription spending: $${avgMonthly.toFixed(2)}`);
+    }
+
+    return analysis;
   }
 }
 

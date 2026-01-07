@@ -1,0 +1,92 @@
+{
+  "timestamp": "2026-01-06T20:49:56.356Z",
+  "session": {
+    "sessionId": "ft_1767732596353",
+    "startTime": "2026-01-06T20:49:56.353Z",
+    "epochs": 3,
+    "knowledgeRetention": [
+      {
+        "epoch": 0,
+        "retention": 0.9499999998958334,
+        "type": "baseline"
+      },
+      {
+        "epoch": 1,
+        "retention": 0.9599999997916667,
+        "fineTuningLoss": 0.55
+      },
+      {
+        "epoch": 2,
+        "retention": 0.9699999998958335,
+        "fineTuningLoss": 0.5
+      },
+      {
+        "epoch": 3,
+        "retention": 0.9800000000000001,
+        "fineTuningLoss": 0.44999999999999996
+      }
+    ],
+    "forgettingPrevention": [
+      {
+        "epoch": 1,
+        "techniques": [
+          {
+            "name": "ewc_regularization",
+            "effectiveness": 0.8680061715431328
+          },
+          {
+            "name": "rehearsal_learning",
+            "effectiveness": 0.0008500000000000001
+          },
+          {
+            "name": "knowledge_distillation",
+            "effectiveness": 0.6817979052401695
+          }
+        ]
+      },
+      {
+        "epoch": 2,
+        "techniques": [
+          {
+            "name": "ewc_regularization",
+            "effectiveness": 0.8763941871968497
+          },
+          {
+            "name": "rehearsal_learning",
+            "effectiveness": 0.0008500000000000001
+          },
+          {
+            "name": "knowledge_distillation",
+            "effectiveness": 0.8029146028405609
+          }
+        ]
+      },
+      {
+        "epoch": 3,
+        "techniques": [
+          {
+            "name": "ewc_regularization",
+            "effectiveness": 0.8704014680300226
+          },
+          {
+            "name": "rehearsal_learning",
+            "effectiveness": 0.0008500000000000001
+          },
+          {
+            "name": "knowledge_distillation",
+            "effectiveness": 0.7077455404392984
+          }
+        ]
+      }
+    ],
+    "endTime": "2026-01-06T20:49:56.356Z"
+  },
+  "metrics": {
+    "knowledgeRetention": 0.9800000000000001,
+    "forgettingRate": 0,
+    "consolidationStrength": 1,
+    "rehearsalEffectiveness": 0.0008500000000000001
+  },
+  "knowledgeBaseSize": 5,
+  "rehearsalBufferSize": 4
+}

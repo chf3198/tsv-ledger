@@ -8,8 +8,8 @@
  * @version 1.0.0
  */
 
-const csv = require("csv-parser");
-const { Readable } = require("stream");
+const csv = require('csv-parser');
+const { Readable } = require('stream');
 
 /**
  * Expenditure object
@@ -39,19 +39,19 @@ async function parseCSVData(csvData, options = {}) {
     const skippedRows = [];
 
     let lineNumber = 0;
-    const separator = csvData.includes("\t") ? "\t" : ",";
+    const separator = csvData.includes('\t') ? '\t' : ',';
 
     const csvStream = Readable.from(csvData);
 
     csvStream
       .pipe(
         csv({
-          separator: separator,
+          separator,
           skipEmptyLines: true,
-          headers: true,
+          headers: true
         })
       )
-      .on("data", (data) => {
+      .on('data', (data) => {
         lineNumber++;
 
         try {
@@ -61,7 +61,7 @@ async function parseCSVData(csvData, options = {}) {
           } else {
             skippedRows.push({
               line: lineNumber,
-              reason: "Invalid or incomplete data",
+              reason: 'Invalid or incomplete data'
             });
           }
 
@@ -76,14 +76,14 @@ async function parseCSVData(csvData, options = {}) {
           }
         }
       })
-      .on("end", () => {
+      .on('end', () => {
         resolve({
           expenditures: results,
-          errors: errors,
-          skipped: skippedRows,
+          errors,
+          skipped: skippedRows
         });
       })
-      .on("error", (error) => {
+      .on('error', (error) => {
         reject(error);
       });
   });
@@ -98,54 +98,54 @@ async function parseCSVData(csvData, options = {}) {
 function parseRow(data, lineNumber) {
   // Detect file format based on column headers
   const isAmazonFormat =
-    data.hasOwnProperty("order id") ||
-    data.hasOwnProperty("Order ID") ||
-    data.hasOwnProperty("date") ||
-    data.hasOwnProperty("Order Date");
+    data.hasOwnProperty('order id') ||
+    data.hasOwnProperty('Order ID') ||
+    data.hasOwnProperty('date') ||
+    data.hasOwnProperty('Order Date');
   const isAmazonOfficialFormat =
-    data.hasOwnProperty("id") &&
-    data.hasOwnProperty("asin") &&
-    data.hasOwnProperty("source");
+    data.hasOwnProperty('id') &&
+    data.hasOwnProperty('asin') &&
+    data.hasOwnProperty('source');
   const isBankFormat =
-    data.hasOwnProperty("Description") &&
-    data.hasOwnProperty("") &&
-    data.hasOwnProperty("Amount");
+    data.hasOwnProperty('Description') &&
+    data.hasOwnProperty('') &&
+    data.hasOwnProperty('Amount');
 
   let dateValue, amountValue, descValue, source;
 
   if (isAmazonOfficialFormat) {
     // Amazon Official Data format
-    dateValue = data["Order Date"] || data.date || data.Date;
+    dateValue = data['Order Date'] || data.date || data.Date;
     amountValue =
-      data["Purchase Price Per Unit ($)"] || data.amount || data.Amount;
+      data['Purchase Price Per Unit ($)'] || data.amount || data.Amount;
     descValue =
-      data["Product Name"] ||
+      data['Product Name'] ||
       data.description ||
       data.Description ||
-      "Amazon Purchase";
-    source = "amazon-official";
+      'Amazon Purchase';
+    source = 'amazon-official';
   } else if (isAmazonFormat) {
     // Amazon Chrome export format
-    dateValue = data["Order Date"] || data.date || data.Date;
-    amountValue = data["Total Owed"] || data.amount || data.Amount;
+    dateValue = data['Order Date'] || data.date || data.Date;
+    amountValue = data['Total Owed'] || data.amount || data.Amount;
     descValue =
-      data["Product Name"] ||
+      data['Product Name'] ||
       data.description ||
       data.Description ||
-      "Amazon Purchase";
-    source = "amazon-chrome";
+      'Amazon Purchase';
+    source = 'amazon-chrome';
   } else if (isBankFormat) {
     // Bank statement format
-    dateValue = data["Date"] || data.date;
-    amountValue = data["Amount"] || data.amount;
-    descValue = data["Description"] || data.description;
-    source = "bank";
+    dateValue = data['Date'] || data.date;
+    amountValue = data['Amount'] || data.amount;
+    descValue = data['Description'] || data.description;
+    source = 'bank';
   } else {
     // Generic format
     dateValue = data.date || data.Date;
     amountValue = data.amount || data.Amount;
     descValue = data.description || data.Description;
-    source = "generic";
+    source = 'generic';
   }
 
   // Validate required fields
@@ -169,9 +169,9 @@ function parseRow(data, lineNumber) {
     id: generateId(),
     date: parsedDate,
     amount: parsedAmount,
-    description: descValue || "Unknown",
-    category: "Uncategorized", // Will be categorized later
-    source: source,
+    description: descValue || 'Unknown',
+    category: 'Uncategorized', // Will be categorized later
+    source
   };
 }
 
@@ -181,14 +181,18 @@ function parseRow(data, lineNumber) {
  * @returns {string|null} Formatted date or null if invalid
  */
 function parseDate(dateStr) {
-  if (!dateStr) return null;
+  if (!dateStr) {
+    return null;
+  }
 
   try {
     // Handle various date formats
     const date = new Date(dateStr);
-    if (isNaN(date.getTime())) return null;
+    if (isNaN(date.getTime())) {
+      return null;
+    }
 
-    return date.toISOString().split("T")[0];
+    return date.toISOString().split('T')[0];
   } catch {
     return null;
   }
@@ -200,10 +204,12 @@ function parseDate(dateStr) {
  * @returns {number|null} Parsed amount or null if invalid
  */
 function parseAmount(amountStr) {
-  if (amountStr === null || amountStr === undefined) return null;
+  if (amountStr === null || amountStr === undefined) {
+    return null;
+  }
 
   try {
-    const cleaned = String(amountStr).replace(/[$,\s]/g, "");
+    const cleaned = String(amountStr).replace(/[$,\s]/g, '');
     const parsed = parseFloat(cleaned);
     return isNaN(parsed) ? null : parsed;
   } catch {
@@ -223,5 +229,5 @@ module.exports = {
   parseCSVData,
   parseRow,
   parseDate,
-  parseAmount,
+  parseAmount
 };

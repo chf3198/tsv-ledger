@@ -1,0 +1,149 @@
+{
+  "responseTime": [
+    {
+      "timestamp": "2026-01-07T03:12:17.398Z",
+      "value": 850,
+      "context": {
+        "operation": "test"
+      }
+    },
+    {
+      "timestamp": "2026-01-07T03:12:25.641Z",
+      "value": 850,
+      "context": {
+        "operation": "test"
+      }
+    },
+    {
+      "timestamp": "2026-01-07T03:12:25.654Z",
+      "value": 780,
+      "context": {
+        "operation": "improved"
+      }
+    },
+    {
+      "timestamp": "2026-01-07T03:16:15.311Z",
+      "value": 850,
+      "context": {
+        "operation": "test"
+      }
+    },
+    {
+      "timestamp": "2026-01-07T03:16:15.323Z",
+      "value": 780,
+      "context": {
+        "operation": "improved"
+      }
+    }
+  ],
+  "accuracy": [
+    {
+      "timestamp": "2026-01-07T03:12:17.403Z",
+      "value": 96.5,
+      "context": {
+        "task": "classification"
+      }
+    },
+    {
+      "timestamp": "2026-01-07T03:12:25.647Z",
+      "value": 96.5,
+      "context": {
+        "task": "classification"
+      }
+    },
+    {
+      "timestamp": "2026-01-07T03:12:25.661Z",
+      "value": 98.1,
+      "context": {
+        "task": "classification"
+      }
+    },
+    {
+      "timestamp": "2026-01-07T03:16:15.314Z",
+      "value": 96.5,
+      "context": {
+        "task": "classification"
+      }
+    },
+    {
+      "timestamp": "2026-01-07T03:16:15.326Z",
+      "value": 98.1,
+      "context": {
+        "task": "classification"
+      }
+    }
+  ],
+  "errorRate": [
+    {
+      "timestamp": "2026-01-07T03:12:17.409Z",
+      "value": 1.2,
+      "context": {
+        "component": "api"
+      }
+    },
+    {
+      "timestamp": "2026-01-07T03:12:25.649Z",
+      "value": 1.2,
+      "context": {
+        "component": "api"
+      }
+    },
+    {
+      "timestamp": "2026-01-07T03:16:15.317Z",
+      "value": 1.2,
+      "context": {
+        "component": "api"
+      }
+    }
+  ],
+  "throughput": [],
+  "resourceUsage": [],
+  "lastUpdated": "2026-01-07T03:16:15.326Z",
+  "metrics": {
+    "responseTimes": [
+      {
+        "type": "responseTime",
+        "value": 1451.7546605389234,
+        "timestamp": "2026-01-07T02:58:25.280Z",
+        "metadata": {}
+      }
+    ],
+    "accuracyScores": [
+      {
+        "type": "accuracy",
+        "value": 0.9076629879499093,
+        "timestamp": "2026-01-07T02:58:25.282Z",
+        "metadata": {}
+      }
+    ],
+    "instructionCompliance": [
+      {
+        "type": "instructionCompliance",
+        "value": 0.9889258313231204,
+        "timestamp": "2026-01-07T02:58:25.284Z",
+        "metadata": {}
+      }
+    ],
+    "errorRates": [],
+    "resourceUsage": [],
+    "timestamps": [
+      "2026-01-07T02:58:25.280Z",
+      "2026-01-07T02:58:25.282Z",
+      "2026-01-07T02:58:25.284Z"
+    ]
+  },
+  "baselines": {
+    "averageResponseTime": 1000,
+    "targetAccuracy": 0.95,
+    "maxErrorRate": 0.05,
+    "maxResponseTime": 5000
+  },
+  "currentSession": {
+    "startTime": "2026-01-07T02:58:25.280Z",
+    "operations": 3,
+    "totalResponseTime": 1451.7546605389234,
+    "errors": 0,
+    "accuracyScore": 0.45383149397495465
+  },
+  "alerts": []
+}

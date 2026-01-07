@@ -18,171 +18,171 @@ const { extractZipFile } = require('./amazon-integration/amazon-zip-extractor');
 const { processExtractedFiles } = require('./amazon-integration/amazon-zip-processor');
 
 class AmazonZipParser {
-    constructor() {
-        this.supportedFiles = {
-            orderHistory: [
-                'Retail.OrderHistory.1.csv',
-                'Retail.OrderHistory.2.csv',
-                'Digital.OrderHistory.1.csv'
-            ],
-            subscriptions: [
-                'SubscribeAndSave.Subscriptions.1.json'
-            ],
-            cartHistory: [
-                'Retail.CartItems.1.csv'
-            ],
-            returns: [
-                'CustomerReturns.1.csv'
-            ]
-        };
+  constructor() {
+    this.supportedFiles = {
+      orderHistory: [
+        'Retail.OrderHistory.1.csv',
+        'Retail.OrderHistory.2.csv',
+        'Digital.OrderHistory.1.csv'
+      ],
+      subscriptions: [
+        'SubscribeAndSave.Subscriptions.1.json'
+      ],
+      cartHistory: [
+        'Retail.CartItems.1.csv'
+      ],
+      returns: [
+        'CustomerReturns.1.csv'
+      ]
+    };
 
-        this.processingStats = {
-            totalFiles: 0,
-            processedFiles: 0,
-            orders: 0,
-            subscriptions: 0,
-            cartItems: 0,
-            returns: 0,
-            errors: []
-        };
-    }
+    this.processingStats = {
+      totalFiles: 0,
+      processedFiles: 0,
+      orders: 0,
+      subscriptions: 0,
+      cartItems: 0,
+      returns: 0,
+      errors: []
+    };
+  }
 
-    /**
+  /**
      * Main entry point - processes Amazon zip files
      * @param {string} zipFilePath - Path to the Amazon zip file
      * @param {Object} options - Processing options
      * @returns {Object} - Parsed data and statistics
      */
-    async processZipFile(zipFilePath, options = {}) {
-        console.log(`🔍 Processing Amazon zip file: ${path.basename(zipFilePath)}`);
+  async processZipFile(zipFilePath, options = {}) {
+    console.log(`🔍 Processing Amazon zip file: ${path.basename(zipFilePath)}`);
 
-        const extractDir = options.extractDir ||
+    const extractDir = options.extractDir ||
             path.join(path.dirname(zipFilePath), 'temp-amazon-extract');
 
-        try {
-            // Extract zip file using modular extractor
-            await extractZipFile(zipFilePath, extractDir);
+    try {
+      // Extract zip file using modular extractor
+      await extractZipFile(zipFilePath, extractDir);
 
-            // Process extracted files using modular processor
-            const result = await processExtractedFiles(extractDir, options, this.supportedFiles);
+      // Process extracted files using modular processor
+      const result = await processExtractedFiles(extractDir, options, this.supportedFiles);
 
-            // Update stats
-            this.processingStats = {
-                ...this.processingStats,
-                ...result.stats
-            };
+      // Update stats
+      this.processingStats = {
+        ...this.processingStats,
+        ...result.stats
+      };
 
-            // Cleanup temporary files unless specified otherwise
-            if (!options.keepExtracted) {
-                await this.cleanupTempFiles(extractDir);
-            }
+      // Cleanup temporary files unless specified otherwise
+      if (!options.keepExtracted) {
+        await this.cleanupTempFiles(extractDir);
+      }
 
-            return {
-                success: true,
-                data: result.processedData,
-                stats: this.processingStats,
-                source: path.basename(zipFilePath)
-            };
+      return {
+        success: true,
+        data: result.processedData,
+        stats: this.processingStats,
+        source: path.basename(zipFilePath)
+      };
 
-        } catch (error) {
-            console.error('❌ Error processing zip file:', error.message);
-            this.processingStats.errors.push(error.message);
+    } catch (error) {
+      console.error('❌ Error processing zip file:', error.message);
+      this.processingStats.errors.push(error.message);
 
-            return {
-                success: false,
-                error: error.message,
-                stats: this.processingStats
-            };
-        }
+      return {
+        success: false,
+        error: error.message,
+        stats: this.processingStats
+      };
     }
+  }
 
-    /**
+  /**
      * Cleanup temporary extraction directory
      * @param {string} extractDir - Directory to remove
      */
-    async cleanupTempFiles(extractDir) {
-        try {
-            if (fs.existsSync(extractDir)) {
-                // Use system rm command for recursive deletion
-                execSync(`rm -rf "${extractDir}"`);
-                console.log(`🧹 Cleaned up temporary directory: ${extractDir}`);
-            }
-        } catch (error) {
-            console.warn(`⚠️  Failed to cleanup ${extractDir}:`, error.message);
-        }
+  async cleanupTempFiles(extractDir) {
+    try {
+      if (fs.existsSync(extractDir)) {
+        // Use system rm command for recursive deletion
+        execSync(`rm -rf "${extractDir}"`);
+        console.log(`🧹 Cleaned up temporary directory: ${extractDir}`);
+      }
+    } catch (error) {
+      console.warn(`⚠️  Failed to cleanup ${extractDir}:`, error.message);
     }
+  }
 
-    /**
+  /**
      * Get supported file patterns
      * @returns {Object} - Supported file patterns
      */
-    getSupportedFiles() {
-        return this.supportedFiles;
-    }
+  getSupportedFiles() {
+    return this.supportedFiles;
+  }
 
-    /**
+  /**
      * Reset processing statistics
      */
-    resetStats() {
-        this.processingStats = {
-            totalFiles: 0,
-            processedFiles: 0,
-            orders: 0,
-            subscriptions: 0,
-            cartItems: 0,
-            returns: 0,
-            errors: []
-    }
-        };
-    /**
+  resetStats() {
+    this.processingStats = {
+      totalFiles: 0,
+      processedFiles: 0,
+      orders: 0,
+      subscriptions: 0,
+      cartItems: 0,
+      returns: 0,
+      errors: []
+    };
+  };
+  /**
      * Validate ZIP file (basic validation)
      * @param {string} zipFilePath - Path to ZIP file
      * @returns {Object} - Validation result
      */
-    validateZipFile(zipFilePath) {
-        try {
-            // Check file exists
-            if (!fs.existsSync(zipFilePath)) {
-                return {
-                    isValid: false,
-                    error: "File not found",
-                    message: "The selected file does not exist"
-                };
-            }
+  validateZipFile(zipFilePath) {
+    try {
+      // Check file exists
+      if (!fs.existsSync(zipFilePath)) {
+        return {
+          isValid: false,
+          error: 'File not found',
+          message: 'The selected file does not exist'
+        };
+      }
 
-            // Check file extension
-            const ext = path.extname(zipFilePath).toLowerCase();
-            if (ext !== ".zip") {
-                return {
-                    isValid: false,
-                    error: "Invalid file type",
-                    message: "Please select a ZIP file (.zip extension required)"
-                };
-            }
+      // Check file extension
+      const ext = path.extname(zipFilePath).toLowerCase();
+      if (ext !== '.zip') {
+        return {
+          isValid: false,
+          error: 'Invalid file type',
+          message: 'Please select a ZIP file (.zip extension required)'
+        };
+      }
 
-            // Check file size (basic sanity check)
-            const stats = fs.statSync(zipFilePath);
-            if (stats.size === 0) {
-                return {
-                    isValid: false,
-                    error: "Empty file",
-                    message: "The selected file is empty"
-                };
-            }
+      // Check file size (basic sanity check)
+      const stats = fs.statSync(zipFilePath);
+      if (stats.size === 0) {
+        return {
+          isValid: false,
+          error: 'Empty file',
+          message: 'The selected file is empty'
+        };
+      }
 
-            return {
-                isValid: true,
-                message: "File appears to be a valid ZIP file"
-            };
+      return {
+        isValid: true,
+        message: 'File appears to be a valid ZIP file'
+      };
 
-        } catch (error) {
-            return {
-                isValid: false,
-                error: "Validation error",
-                message: `Error validating file: ${error.message}`
-            };
-        }
+    } catch (error) {
+      return {
+        isValid: false,
+        error: 'Validation error',
+        message: `Error validating file: ${error.message}`
+      };
     }
+  }
 }
 
 module.exports = AmazonZipParser;

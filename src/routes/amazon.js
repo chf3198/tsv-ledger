@@ -73,9 +73,9 @@ router.get('/amazon-items', (req, res) => {
         items: amazonItems,
         total: amazonItems.length,
         summary: {
-          totalSpent: totalSpent,
+          totalSpent,
           averageOrderValue: avgOrderValue,
-          categoryBreakdown: categoryBreakdown
+          categoryBreakdown
         },
         filters: { startDate, endDate, category, limit, search }
       });

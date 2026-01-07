@@ -49,7 +49,7 @@ const subscriptionRoutes = require("./src/routes/subscription");
 const geographicRoutes = require("./src/routes/geographic");
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 
 // Small helper to escape text for safe HTML embedding
 function escapeHtml(str) {
@@ -193,7 +193,7 @@ app.get("/health", (req, res) => {
 });
 
 // Start the server
-app.listen(port, () => {
+app.listen(port, '0.0.0.0', () => {
   console.log(`🚀 TSV Ledger server running on http://localhost:${port}`);
   console.log(`📊 Version 2.2.3 - Professional Business Intelligence Platform`);
   console.log(`🔧 Development mode: ${process.env.NODE_ENV || "production"}`);

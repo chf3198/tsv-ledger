@@ -9,7 +9,7 @@
 
 const express = require('express');
 const { getAllExpenditures } = require('../database');
-const subscriptionAnalysisEngine = require('../subscription-analysis-engine');
+const SubscriptionAnalysisEngine = require('../subscription-analysis-engine');
 
 const router = express.Router();
 
@@ -50,13 +50,13 @@ router.get('/subscription-dashboard', (req, res) => {
 
       res.json({
         summary: {
-          totalSubscriptions: totalSubscriptions,
-          totalSpent: totalSpent,
+          totalSubscriptions,
+          totalSpent,
           averageCost: avgSubscriptionCost,
           uniqueServices: recurringSubscriptions.length
         },
         monthlyBreakdown: monthlySubscriptions,
-        recurringSubscriptions: recurringSubscriptions,
+        recurringSubscriptions,
         recentSubscriptions: subscriptionItems
           .sort((a, b) => new Date(b.date) - new Date(a.date))
           .slice(0, 10)
@@ -84,7 +84,8 @@ router.get('/subscription-analysis', async (req, res) => {
       }
 
       // Use subscription analysis engine
-      const analysis = await subscriptionAnalysisEngine.analyzeSubscriptions(expenditures);
+      const engine = new SubscriptionAnalysisEngine();
+      const analysis = await engine.analyzeSubscriptions(expenditures);
 
       res.json(analysis);
     });
@@ -129,7 +130,9 @@ router.get('/subscription-for-order/:orderId', (req, res) => {
 
       // Find related subscription orders (same description pattern)
       const relatedOrders = expenditures.filter(exp => {
-        if (exp.orderId === orderId) return false; // Exclude the current order
+        if (exp.orderId === orderId) {
+          return false;
+        } // Exclude the current order
 
         // Check for similar descriptions (basic pattern matching)
         const currentDesc = order.description.toLowerCase();
@@ -143,8 +146,8 @@ router.get('/subscription-for-order/:orderId', (req, res) => {
       });
 
       res.json({
-        order: order,
-        isSubscription: isSubscription,
+        order,
+        isSubscription,
         relatedOrders: relatedOrders.slice(0, 5), // Limit to 5 related orders
         subscriptionInfo: isSubscription ? {
           estimatedFrequency: estimateSubscriptionFrequency([order, ...relatedOrders]),
@@ -228,7 +231,9 @@ function extractServiceName(description) {
  * Estimate subscription frequency from order dates
  */
 function estimateSubscriptionFrequency(orders) {
-  if (orders.length < 2) return 'unknown';
+  if (orders.length < 2) {
+    return 'unknown';
+  }
 
   // Sort orders by date
   const sortedOrders = orders.sort((a, b) => new Date(a.date) - new Date(b.date));
@@ -243,10 +248,18 @@ function estimateSubscriptionFrequency(orders) {
   const avgInterval = intervals.reduce((sum, interval) => sum + interval, 0) / intervals.length;
 
   // Determine frequency
-  if (avgInterval <= 7) return 'weekly';
-  if (avgInterval <= 31) return 'monthly';
-  if (avgInterval <= 95) return 'quarterly';
-  if (avgInterval <= 370) return 'yearly';
+  if (avgInterval <= 7) {
+    return 'weekly';
+  }
+  if (avgInterval <= 31) {
+    return 'monthly';
+  }
+  if (avgInterval <= 95) {
+    return 'quarterly';
+  }
+  if (avgInterval <= 370) {
+    return 'yearly';
+  }
 
   return 'irregular';
 }
@@ -255,7 +268,9 @@ function estimateSubscriptionFrequency(orders) {
  * Estimate next subscription date
  */
 function estimateNextSubscriptionDate(orders) {
-  if (orders.length < 2) return null;
+  if (orders.length < 2) {
+    return null;
+  }
 
   const sortedOrders = orders.sort((a, b) => new Date(a.date) - new Date(b.date));
   const lastOrder = sortedOrders[sortedOrders.length - 1];
@@ -265,20 +280,20 @@ function estimateNextSubscriptionDate(orders) {
   let nextDate;
 
   switch (frequency) {
-    case 'weekly':
-      nextDate = new Date(lastDate.getTime() + (7 * 24 * 60 * 60 * 1000));
-      break;
-    case 'monthly':
-      nextDate = new Date(lastDate.getFullYear(), lastDate.getMonth() + 1, lastDate.getDate());
-      break;
-    case 'quarterly':
-      nextDate = new Date(lastDate.getFullYear(), lastDate.getMonth() + 3, lastDate.getDate());
-      break;
-    case 'yearly':
-      nextDate = new Date(lastDate.getFullYear() + 1, lastDate.getMonth(), lastDate.getDate());
-      break;
-    default:
-      return null;
+  case 'weekly':
+    nextDate = new Date(lastDate.getTime() + (7 * 24 * 60 * 60 * 1000));
+    break;
+  case 'monthly':
+    nextDate = new Date(lastDate.getFullYear(), lastDate.getMonth() + 1, lastDate.getDate());
+    break;
+  case 'quarterly':
+    nextDate = new Date(lastDate.getFullYear(), lastDate.getMonth() + 3, lastDate.getDate());
+    break;
+  case 'yearly':
+    nextDate = new Date(lastDate.getFullYear() + 1, lastDate.getMonth(), lastDate.getDate());
+    break;
+  default:
+    return null;
   }
 
   return nextDate.toISOString().split('T')[0];

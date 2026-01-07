@@ -14,12 +14,16 @@ test.describe('Benefits search (converted)', () => {
       try {
         const mgr = (typeof employeeBenefitsManager !== 'undefined') ? employeeBenefitsManager : (window.employeeBenefitsManager || null);
         return !!(mgr && typeof mgr.showSelectionModal === 'function');
-      } catch (e) { return false; }
+      } catch (e) {
+        return false;
+      }
     }, { timeout: 20000 });
 
     await page.evaluate(() => {
       const mgr = (typeof employeeBenefitsManager !== 'undefined') ? employeeBenefitsManager : (window.employeeBenefitsManager || null);
-      if (mgr && typeof mgr.showSelectionModal === 'function') mgr.showSelectionModal();
+      if (mgr && typeof mgr.showSelectionModal === 'function') {
+        mgr.showSelectionModal();
+      }
     });
 
     await page.waitForSelector('#businessSuppliesList .col-md-6', { timeout: 10000 });

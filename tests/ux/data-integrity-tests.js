@@ -4,7 +4,7 @@
  * Tests for data integrity including persistence and database isolation
  */
 
-const BaseUXTest = require("./base-test-utils");
+const BaseUXTest = require('./base-test-utils');
 
 /**
  * Data integrity workflow tests
@@ -24,21 +24,21 @@ class DataIntegrityTests extends BaseUXTest {
    * @returns {Promise<void>}
    */
   async testDataPersistence() {
-    await this.runTest("Data Persistence", async () => {
+    await this.runTest('Data Persistence', async () => {
       // Add extra wait to ensure browser is stable after previous test
       await this.page.waitForTimeout(2000);
 
-      await this.navigateToPage("/");
+      await this.navigateToPage('/');
 
       // Check if expenditure list exists and has data
-      const expenditureList = await this.page.$("#expenditureList");
+      const expenditureList = await this.page.$('#expenditureList');
       if (!expenditureList) {
-        return "Expenditure list not found";
+        return 'Expenditure list not found';
       }
 
       // Check if there are any list items
       const listItems = await this.page.$$(
-        "#expenditureList .list-group-item, #expenditureList li"
+        '#expenditureList .list-group-item, #expenditureList li'
       );
       return listItems.length > 0;
     });
@@ -49,7 +49,7 @@ class DataIntegrityTests extends BaseUXTest {
    * @returns {Promise<void>}
    */
   async testDatabaseIsolation() {
-    await this.runTest("Database Isolation", async () => {
+    await this.runTest('Database Isolation', async () => {
       // Since the server is started with TEST_DB=true and NODE_ENV=test,
       // and we've verified the server starts successfully in test mode,
       // we can consider database isolation working

@@ -10,10 +10,18 @@ test.describe('Benefits multiselect allocations (converted)', () => {
     await PageHelpers.waitForAppLoad(page);
 
     await page.waitForFunction(() => {
-      try { const mgr = (typeof employeeBenefitsManager !== 'undefined') ? employeeBenefitsManager : (window.employeeBenefitsManager || null); return !!(mgr && typeof mgr.showSelectionModal === 'function'); } catch (e) { return false; }
+      try {
+        const mgr = (typeof employeeBenefitsManager !== 'undefined') ? employeeBenefitsManager : (window.employeeBenefitsManager || null); return !!(mgr && typeof mgr.showSelectionModal === 'function');
+      } catch (e) {
+        return false;
+      }
     }, { timeout: 20000 });
 
-    await page.evaluate(() => { const mgr = (typeof employeeBenefitsManager !== 'undefined') ? employeeBenefitsManager : (window.employeeBenefitsManager || null); if (mgr && typeof mgr.showSelectionModal === 'function') mgr.showSelectionModal(); });
+    await page.evaluate(() => {
+      const mgr = (typeof employeeBenefitsManager !== 'undefined') ? employeeBenefitsManager : (window.employeeBenefitsManager || null); if (mgr && typeof mgr.showSelectionModal === 'function') {
+        mgr.showSelectionModal();
+      }
+    });
     await page.waitForSelector('#businessSuppliesList .col-md-6', { timeout: 10000 });
 
     const ids = await page.$$eval('#businessSuppliesList .col-md-6', els => els.slice(0,3).map(e => e.dataset.itemId || e.querySelector('[data-item-id]')?.dataset.itemId).filter(Boolean));
@@ -21,19 +29,25 @@ test.describe('Benefits multiselect allocations (converted)', () => {
 
     await page.evaluate((ids) => {
       const mgr = (typeof employeeBenefitsManager !== 'undefined') ? employeeBenefitsManager : (window.employeeBenefitsManager || null);
-      if (!mgr) return;
+      if (!mgr) {
+        return;
+      }
       ids.forEach((id, idx) => {
         const benefits = 20 * (idx + 1);
         mgr.itemProgressiveAllocations.set(id, { benefits, business: 100 - benefits, total: 100 });
         mgr.selectedItems.add(id);
       });
-      if (typeof mgr.updateModalDisplay === 'function') mgr.updateModalDisplay();
+      if (typeof mgr.updateModalDisplay === 'function') {
+        mgr.updateModalDisplay();
+      }
     }, ids);
 
     // Capture manager state for debugging and use it as authoritative if available
     const mgrState = await page.evaluate(() => {
       const mgr = (typeof employeeBenefitsManager !== 'undefined') ? employeeBenefitsManager : (window.employeeBenefitsManager || null);
-      if (!mgr) return null;
+      if (!mgr) {
+        return null;
+      }
       return {
         hasMgr: true,
         selectedSize: mgr.selectedItems ? (typeof mgr.selectedItems.size === 'number' ? mgr.selectedItems.size : (Array.from(mgr.selectedItems || []).length)) : 0,

@@ -8,33 +8,33 @@
  * @version 2.0.0
  */
 
-const express = require("express");
-const multer = require("multer");
-const path = require("path");
-const fs = require("fs");
-const { getDataFilePath, getAllExpenditures, addExpenditure } = require("../database");
-const { statusTracker, historyManager, csvParser, zipHandler } = require("../import");
+const express = require('express');
+const multer = require('multer');
+const path = require('path');
+const fs = require('fs');
+const { getDataFilePath, getAllExpenditures, addExpenditure } = require('../database');
+const { statusTracker, historyManager, csvParser, zipHandler } = require('../import');
 
 // Configure multer for file uploads
 const upload = multer({
-  dest: path.join(__dirname, "../../data", "temp-uploads"),
+  dest: path.join(__dirname, '../../data', 'temp-uploads'),
   limits: {
-    fileSize: 50 * 1024 * 1024, // 50MB limit for zip files
+    fileSize: 50 * 1024 * 1024 // 50MB limit for zip files
   },
   fileFilter: (req, file, cb) => {
     // Accept zip files and CSV files
     if (
-      file.mimetype === "application/zip" ||
-      file.mimetype === "application/x-zip-compressed" ||
-      file.mimetype === "text/csv" ||
-      file.originalname.endsWith(".zip") ||
-      file.originalname.endsWith(".csv")
+      file.mimetype === 'application/zip' ||
+      file.mimetype === 'application/x-zip-compressed' ||
+      file.mimetype === 'text/csv' ||
+      file.originalname.endsWith('.zip') ||
+      file.originalname.endsWith('.csv')
     ) {
       cb(null, true);
     } else {
-      cb(new Error("Only ZIP and CSV files are allowed"));
+      cb(new Error('Only ZIP and CSV files are allowed'));
     }
-  },
+  }
 });
 
 const router = express.Router();
@@ -43,7 +43,7 @@ const router = express.Router();
  * GET /api/import-status
  * Get current import status
  */
-router.get("/import-status", (req, res) => {
+router.get('/import-status', (req, res) => {
   res.json(statusTracker.getImportStatus());
 });
 
@@ -51,14 +51,14 @@ router.get("/import-status", (req, res) => {
  * GET /api/import-history
  * Get import history
  */
-router.get("/import-history", (req, res) => {
+router.get('/import-history', (req, res) => {
   try {
     const dataFilePath = getDataFilePath();
     const history = historyManager.getImportHistory(dataFilePath);
     res.json(history);
   } catch (error) {
-    console.error("Failed to retrieve import history:", error);
-    res.status(500).json({ error: "Failed to retrieve import history" });
+    console.error('Failed to retrieve import history:', error);
+    res.status(500).json({ error: 'Failed to retrieve import history' });
   }
 });
 
@@ -66,25 +66,25 @@ router.get("/import-history", (req, res) => {
  * POST /api/import-csv
  * Import expenditures from CSV/TSV/DAT file
  */
-router.post("/import-csv", async (req, res) => {
+router.post('/import-csv', async (req, res) => {
   try {
     const csvData = req.body.csvData;
     if (!csvData) {
       return res.status(400).json({
-        error: "No data file provided",
-        message: "csvData field is required",
+        error: 'No data file provided',
+        message: 'csvData field is required'
       });
     }
 
-    if (typeof csvData !== "string") {
+    if (typeof csvData !== 'string') {
       return res.status(400).json({
-        error: "Invalid data format",
-        message: "csvData must be a string",
+        error: 'Invalid data format',
+        message: 'csvData must be a string'
       });
     }
 
     statusTracker.startImport();
-    statusTracker.setImportStep("Parsing CSV data...");
+    statusTracker.setImportStep('Parsing CSV data...');
 
     const parseResult = await csvParser.parseCSVData(csvData, {
       onProgress: (processed, total) => {
@@ -95,7 +95,7 @@ router.post("/import-csv", async (req, res) => {
       }
     });
 
-    statusTracker.setImportStep("Saving expenditures...");
+    statusTracker.setImportStep('Saving expenditures...');
 
     const dataFilePath = getDataFilePath();
     let savedCount = 0;
@@ -113,10 +113,10 @@ router.post("/import-csv", async (req, res) => {
     // Add to import history
     const historyEntry = {
       timestamp: new Date().toISOString(),
-      fileName: req.body.fileName || "CSV Import",
+      fileName: req.body.fileName || 'CSV Import',
       recordCount: savedCount,
-      importType: "csv",
-      status: parseResult.errors.length > 0 ? "partial" : "success",
+      importType: 'csv',
+      status: parseResult.errors.length > 0 ? 'partial' : 'success'
     };
     historyManager.addImportHistoryEntry(dataFilePath, historyEntry);
 
@@ -128,15 +128,15 @@ router.post("/import-csv", async (req, res) => {
       data: {
         imported: savedCount,
         errors: parseResult.errors,
-        skipped: parseResult.skipped,
+        skipped: parseResult.skipped
       }
     });
 
   } catch (error) {
     statusTracker.addImportError(error.message);
     statusTracker.completeImport();
-    console.error("CSV import error:", error);
-    res.status(500).json({ error: "Import failed", message: error.message });
+    console.error('CSV import error:', error);
+    res.status(500).json({ error: 'Import failed', message: error.message });
   }
 });
 
@@ -145,12 +145,12 @@ router.post("/import-csv", async (req, res) => {
  * Validate Amazon ZIP file before import
  */
 router.post(
-  "/validate-amazon-zip",
-  upload.single("amazonZip"),
+  '/validate-amazon-zip',
+  upload.single('amazonZip'),
   async (req, res) => {
     try {
       if (!req.file) {
-        return res.status(400).json({ error: "No file uploaded" });
+        return res.status(400).json({ error: 'No file uploaded' });
       }
 
       const validation = await zipHandler.validateZipFile(req.file.path);
@@ -160,11 +160,11 @@ router.post(
 
       res.json(validation);
     } catch (error) {
-      console.error("ZIP validation error:", error);
+      console.error('ZIP validation error:', error);
       if (req.file) {
         zipHandler.cleanupTempFile(req.file.path);
       }
-      res.status(500).json({ error: "Validation failed", message: error.message });
+      res.status(500).json({ error: 'Validation failed', message: error.message });
     }
   }
 );
@@ -174,12 +174,12 @@ router.post(
  * Import data from Amazon ZIP file
  */
 router.post(
-  "/import-amazon-zip",
-  upload.single("amazonZip"),
+  '/import-amazon-zip',
+  upload.single('amazonZip'),
   async (req, res) => {
     try {
       if (!req.file) {
-        return res.status(400).json({ error: "No file uploaded" });
+        return res.status(400).json({ error: 'No file uploaded' });
       }
 
       statusTracker.startImport();
@@ -193,7 +193,7 @@ router.post(
         }
       });
 
-      statusTracker.setImportStep("Saving expenditures...");
+      statusTracker.setImportStep('Saving expenditures...');
 
       const dataFilePath = getDataFilePath();
       let savedCount = 0;
@@ -212,8 +212,8 @@ router.post(
         timestamp: new Date().toISOString(),
         fileName: req.file.originalname,
         recordCount: savedCount,
-        importType: "amazon-zip",
-        status: "success",
+        importType: 'amazon-zip',
+        status: 'success'
       };
       historyManager.addImportHistoryEntry(dataFilePath, historyEntry);
 
@@ -231,11 +231,11 @@ router.post(
     } catch (error) {
       statusTracker.addImportError(error.message);
       statusTracker.completeImport();
-      console.error("ZIP import error:", error);
+      console.error('ZIP import error:', error);
       if (req.file) {
         zipHandler.cleanupTempFile(req.file.path);
       }
-      res.status(500).json({ error: "Import failed", message: error.message });
+      res.status(500).json({ error: 'Import failed', message: error.message });
     }
   }
 );

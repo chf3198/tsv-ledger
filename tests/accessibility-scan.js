@@ -6,7 +6,9 @@ const path = require('path');
 (async () => {
   const baseUrl = 'http://localhost:3000';
   const outDir = path.join(process.cwd(), 'test-results');
-  if (!fs.existsSync(outDir)) fs.mkdirSync(outDir, { recursive: true });
+  if (!fs.existsSync(outDir)) {
+    fs.mkdirSync(outDir, { recursive: true });
+  }
 
   const browser = await puppeteer.launch({ headless: false, args: ['--no-sandbox','--start-maximized'], defaultViewport: null });
   const page = await browser.newPage();
@@ -25,7 +27,9 @@ const path = require('path');
         break;
       } catch (e) {
         console.warn('aXe run attempt', attempt, 'failed:', e && e.message);
-        if (attempt === 2) throw e;
+        if (attempt === 2) {
+          throw e;
+        }
         await page.waitForTimeout(500);
       }
     }

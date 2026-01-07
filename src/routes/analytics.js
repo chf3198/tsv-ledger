@@ -9,7 +9,7 @@
 
 const express = require('express');
 const { getAllExpenditures } = require('../database');
-const AIAnalysisEngine = require('../ai-analysis-engine');
+const { AIAnalysisEngine } = require('../ai-analysis-engine');
 
 const router = express.Router();
 
@@ -80,12 +80,12 @@ router.get('/premium-analytics', async (req, res) => {
       res.json({
         summary: {
           totalExpenditures: expenditures.length,
-          totalSpent: totalSpent,
+          totalSpent,
           averageTransaction: avgTransaction
         },
-        categoryBreakdown: categoryBreakdown,
-        monthlySpending: monthlySpending,
-        topCategories: topCategories,
+        categoryBreakdown,
+        monthlySpending,
+        topCategories,
         insights: [
           `Highest spending category: ${topCategories[0]?.[0] || 'N/A'} ($${topCategories[0]?.[1]?.toFixed(2) || '0.00'})`,
           `Average transaction: $${avgTransaction.toFixed(2)}`,
@@ -133,10 +133,10 @@ router.get('/analysis', (req, res) => {
 
       res.json({
         totalExpenditures: expenditures.length,
-        totalSpent: totalSpent,
+        totalSpent,
         averageAmount: avgAmount,
-        categories: categories,
-        dateRange: dateRange,
+        categories,
+        dateRange,
         topCategory: Object.entries(categories).sort(([,a], [,b]) => b - a)[0]
       });
     });

@@ -56,7 +56,9 @@ test.describe('Accessibility Testing Suite', () => {
               'region': { enabled: true }
             }
           }, (err, results) => {
-            if (err) throw err;
+            if (err) {
+              throw err;
+            }
             resolve(results);
           });
         });
@@ -104,7 +106,9 @@ test.describe('Accessibility Testing Suite', () => {
         const results = await page.evaluate(() => {
           return new Promise((resolve) => {
             axe.run(document, (err, results) => {
-              if (err) throw err;
+              if (err) {
+                throw err;
+              }
               resolve(results);
             });
           });
@@ -130,7 +134,7 @@ test.describe('Accessibility Testing Suite', () => {
 
       // Test tab navigation through main navigation
       await page.keyboard.press('Tab');
-      let focusedElement = await page.evaluate(() => document.activeElement.tagName);
+      const focusedElement = await page.evaluate(() => document.activeElement.tagName);
       expect(focusedElement).toMatch(/BUTTON|A|INPUT|SELECT|TEXTAREA/i);
 
       // Continue tabbing through interactive elements
@@ -298,7 +302,9 @@ test.describe('Accessibility Testing Suite', () => {
               'color-contrast': { enabled: true }
             }
           }, (err, results) => {
-            if (err) throw err;
+            if (err) {
+              throw err;
+            }
             resolve(results);
           });
         });

@@ -27,7 +27,9 @@ const puppeteer = require('puppeteer');
 
     await page.evaluate(() => {
       const mgr = (typeof employeeBenefitsManager !== 'undefined') ? employeeBenefitsManager : (window.employeeBenefitsManager || null);
-      if (mgr && typeof mgr.showSelectionModal === 'function') mgr.showSelectionModal();
+      if (mgr && typeof mgr.showSelectionModal === 'function') {
+        mgr.showSelectionModal();
+      }
     });
 
     // Ensure at least one business card exists
@@ -35,15 +37,21 @@ const puppeteer = require('puppeteer');
 
     // Allocate 25% to first business item and add it to selected
     const firstItemId = await page.$eval('#businessSuppliesList .col-md-6', el => el.dataset.itemId || el.querySelector('[data-item-id]')?.dataset.itemId || '');
-    if (!firstItemId) throw new Error('Could not determine first business item id');
+    if (!firstItemId) {
+      throw new Error('Could not determine first business item id');
+    }
 
     // Set canonical allocations directly to avoid timing issues and refresh UI
     await page.evaluate((id) => {
       const mgr = (typeof employeeBenefitsManager !== 'undefined') ? employeeBenefitsManager : (window.employeeBenefitsManager || null);
-      if (!mgr) return;
+      if (!mgr) {
+        return;
+      }
       mgr.itemProgressiveAllocations.set(id, { benefits: 50, business: 50, total: 100 });
       mgr.selectedItems.add(id);
-      if (typeof mgr.updateModalDisplay === 'function') mgr.updateModalDisplay();
+      if (typeof mgr.updateModalDisplay === 'function') {
+        mgr.updateModalDisplay();
+      }
     }, firstItemId);
 
     // Wait for selected item to appear in benefits list
@@ -55,7 +63,9 @@ const puppeteer = require('puppeteer');
     // then render the returned report with displayBenefitsReport(report)
     await page.evaluate(async (id) => {
       const mgr = (typeof employeeBenefitsManager !== 'undefined') ? employeeBenefitsManager : (window.employeeBenefitsManager || null);
-      if (!mgr) throw new Error('Manager not available');
+      if (!mgr) {
+        throw new Error('Manager not available');
+      }
 
       const itemIds = [id];
       const progressive = mgr.itemProgressiveAllocations.get(id) || { allocated: 0 };
@@ -68,7 +78,9 @@ const puppeteer = require('puppeteer');
         body: JSON.stringify({ itemIds, itemAllocations })
       });
 
-      if (!resp.ok) throw new Error('Server failed to generate report');
+      if (!resp.ok) {
+        throw new Error('Server failed to generate report');
+      }
       const report = await resp.json();
       // Render the report in-page
       if (typeof mgr.displayBenefitsReport === 'function') {
@@ -76,7 +88,9 @@ const puppeteer = require('puppeteer');
       } else {
         // Fallback: create a simple container
         let c = document.getElementById('summaryContainer');
-        if (!c) { c = document.createElement('div'); c.id = 'summaryContainer'; document.body.appendChild(c); }
+        if (!c) {
+          c = document.createElement('div'); c.id = 'summaryContainer'; document.body.appendChild(c);
+        }
         c.innerHTML = JSON.stringify(report).slice(0,200);
       }
     }, firstItemId);
@@ -86,7 +100,9 @@ const puppeteer = require('puppeteer');
 
     const reportSummary = await page.$eval('#summaryContainer .card-body, #summaryContainer', el => el.innerText || el.textContent || '');
     console.log('Report summary text length:', reportSummary.length);
-    if (reportSummary.length < 20) throw new Error('Report summary seems empty');
+    if (reportSummary.length < 20) {
+      throw new Error('Report summary seems empty');
+    }
 
     console.log('\u2705 Report generation test passed');
     await browser.close();

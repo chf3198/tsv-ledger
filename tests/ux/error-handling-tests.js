@@ -4,7 +4,7 @@
  * Tests for error handling workflows including validation and 404 errors
  */
 
-const BaseUXTest = require("./base-test-utils");
+const BaseUXTest = require('./base-test-utils');
 
 /**
  * Error handling workflow tests
@@ -24,9 +24,9 @@ class ErrorHandlingTests extends BaseUXTest {
    * @returns {Promise<void>}
    */
   async testInvalidDataHandling() {
-    await this.runTest("Invalid Data Error Handling", async () => {
-      await this.navigateToPage("/");
-      await this.navigateToSection("manual-entry");
+    await this.runTest('Invalid Data Error Handling', async () => {
+      await this.navigateToPage('/');
+      await this.navigateToSection('manual-entry');
 
       // Try to submit empty form
       const submitBtn = await this.page.$(
@@ -38,10 +38,10 @@ class ErrorHandlingTests extends BaseUXTest {
 
         // Check for validation errors (HTML5 validation or custom error messages)
         const errorElements = await this.page.$$(
-          ".alert-danger, .error, .invalid-feedback, .is-invalid, input:invalid"
+          '.alert-danger, .error, .invalid-feedback, .is-invalid, input:invalid'
         );
         const hasValidation = await this.page.evaluate(() => {
-          const form = document.getElementById("expenditureForm");
+          const form = document.getElementById('expenditureForm');
           return form ? !form.checkValidity() : false;
         });
 
@@ -57,10 +57,10 @@ class ErrorHandlingTests extends BaseUXTest {
    * @returns {Promise<void>}
    */
   async test404ErrorHandling() {
-    await this.runTest("404 Error Handling", async () => {
+    await this.runTest('404 Error Handling', async () => {
       try {
         await this.page.goto(`${this.baseUrl}/non-existent-page`, {
-          waitUntil: "networkidle2",
+          waitUntil: 'networkidle2'
         });
         await this.page.waitForTimeout(1000); // Wait for potential error page to load
 
@@ -71,12 +71,12 @@ class ErrorHandlingTests extends BaseUXTest {
 
         // Check for various error indicators
         const isErrorPage =
-          title.includes("404") ||
-          title.includes("Not Found") ||
-          title.includes("Error") ||
-          bodyText.includes("404") ||
-          bodyText.includes("not found") ||
-          bodyText.includes("error");
+          title.includes('404') ||
+          title.includes('Not Found') ||
+          title.includes('Error') ||
+          bodyText.includes('404') ||
+          bodyText.includes('not found') ||
+          bodyText.includes('error');
 
         return isErrorPage;
       } catch (error) {

@@ -10,8 +10,8 @@ const { processCartHistoryCSV } = require('./parsers/cart-parser');
 const { processReturnsCSV } = require('./parsers/returns-parser');
 
 module.exports = {
-    processOrderHistoryCSV,
-    processSubscriptionsJSON,
-    processCartHistoryCSV,
-    processReturnsCSV
+  processOrderHistoryCSV,
+  processSubscriptionsJSON,
+  processCartHistoryCSV,
+  processReturnsCSV
 };

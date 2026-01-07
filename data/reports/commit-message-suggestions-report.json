@@ -1,0 +1,276 @@
+{
+  "timestamp": "2026-01-06T21:31:35.038Z",
+  "analysis": {
+    "totalFiles": 168,
+    "added": 0,
+    "modified": 68,
+    "deleted": 4,
+    "renamed": 0,
+    "fileTypes": {},
+    "directories": {},
+    "patterns": {},
+    "scopes": {},
+    "risk": "high",
+    "untracked": null
+  },
+  "suggestions": [
+    {
+      "message": "refactor: refactor code",
+      "type": "refactor",
+      "scope": null,
+      "description": "refactor code",
+      "risk": "high",
+      "riskEmoji": "⚠️",
+      "confidence": 40,
+      "details": {
+        "filesChanged": 168,
+        "directories": [
+          "github",
+          "docs/api",
+          "playwright-report/data",
+          "playwright-report",
+          "public",
+          "public/js",
+          "src/routes",
+          "src",
+          "test-results",
+          "tests",
+          "tests/integration",
+          "tests/iterative",
+          "tests/reports",
+          "tests/screenshots/current",
+          "tests/shared",
+          "KnowledgeTransferTest/AIIntegration",
+          "utils"
+        ],
+        "patterns": [
+          "class",
+          "testing",
+          "async",
+          "configuration",
+          "dependency",
+          "error-handling",
+          "functionality"
+        ]
+      },
+      "validation": {
+        "valid": true,
+        "errors": [],
+        "warnings": [],
+        "suggestions": [
+          "Consider adding a scope: refactor(scope): refactor code",
+          "Consider referencing issues with Closes #123, Fixes #123, or Refs #123"
+        ],
+        "score": 100
+      }
+    },
+    {
+      "message": "test: add tests",
+      "type": "test",
+      "description": "add tests",
+      "risk": "high",
+      "riskEmoji": "⚠️",
+      "confidence": 40,
+      "details": {
+        "filesChanged": 168,
+        "directories": [
+          "github",
+          "docs/api",
+          "playwright-report/data",
+          "playwright-report",
+          "public",
+          "public/js",
+          "src/routes",
+          "src",
+          "test-results",
+          "tests",
+          "tests/integration",
+          "tests/iterative",
+          "tests/reports",
+          "tests/screenshots/current",
+          "tests/shared",
+          "KnowledgeTransferTest/AIIntegration",
+          "utils"
+        ],
+        "patterns": [
+          "class",
+          "testing",
+          "async",
+          "configuration",
+          "dependency",
+          "error-handling",
+          "functionality"
+        ]
+      },
+      "validation": {
+        "valid": true,
+        "errors": [],
+        "warnings": [
+          {
+            "rule": "length",
+            "message": "Subject must be at least 10 characters long",
+            "severity": "warning"
+          }
+        ],
+        "suggestions": [
+          "Consider adding a scope: test(scope): add tests",
+          "Consider referencing issues with Closes #123, Fixes #123, or Refs #123"
+        ],
+        "score": 95
+      }
+    },
+    {
+      "message": "chore: update configuration",
+      "type": "chore",
+      "description": "update configuration",
+      "risk": "high",
+      "riskEmoji": "⚠️",
+      "confidence": 40,
+      "details": {
+        "filesChanged": 168,
+        "directories": [
+          "github",
+          "docs/api",
+          "playwright-report/data",
+          "playwright-report",
+          "public",
+          "public/js",
+          "src/routes",
+          "src",
+          "test-results",
+          "tests",
+          "tests/integration",
+          "tests/iterative",
+          "tests/reports",
+          "tests/screenshots/current",
+          "tests/shared",
+          "KnowledgeTransferTest/AIIntegration",
+          "utils"
+        ],
+        "patterns": [
+          "class",
+          "testing",
+          "async",
+          "configuration",
+          "dependency",
+          "error-handling",
+          "functionality"
+        ]
+      },
+      "validation": {
+        "valid": true,
+        "errors": [],
+        "warnings": [],
+        "suggestions": [
+          "Consider adding a scope: chore(scope): update configuration",
+          "Consider referencing issues with Closes #123, Fixes #123, or Refs #123"
+        ],
+        "score": 100
+      }
+    },
+    {
+      "message": "refactor(github): refactor code",
+      "type": "refactor",
+      "scope": "github",
+      "description": "refactor code",
+      "risk": "high",
+      "riskEmoji": "⚠️",
+      "confidence": 40,
+      "details": {
+        "filesChanged": 168,
+        "directories": [
+          "github",
+          "docs/api",
+          "playwright-report/data",
+          "playwright-report",
+          "public",
+          "public/js",
+          "src/routes",
+          "src",
+          "test-results",
+          "tests",
+          "tests/integration",
+          "tests/iterative",
+          "tests/reports",
+          "tests/screenshots/current",
+          "tests/shared",
+          "KnowledgeTransferTest/AIIntegration",
+          "utils"
+        ],
+        "patterns": [
+          "class",
+          "testing",
+          "async",
+          "configuration",
+          "dependency",
+          "error-handling",
+          "functionality"
+        ]
+      },
+      "validation": {
+        "valid": true,
+        "errors": [],
+        "warnings": [],
+        "suggestions": [
+          "Consider referencing issues with Closes #123, Fixes #123, or Refs #123"
+        ],
+        "score": 100
+      }
+    }
+  ],
+  "recommended": {
+    "message": "refactor: refactor code",
+    "type": "refactor",
+    "scope": null,
+    "description": "refactor code",
+    "risk": "high",
+    "riskEmoji": "⚠️",
+    "confidence": 40,
+    "details": {
+      "filesChanged": 168,
+      "directories": [
+        "github",
+        "docs/api",
+        "playwright-report/data",
+        "playwright-report",
+        "public",
+        "public/js",
+        "src/routes",
+        "src",
+        "test-results",
+        "tests",
+        "tests/integration",
+        "tests/iterative",
+        "tests/reports",
+        "tests/screenshots/current",
+        "tests/shared",
+        "KnowledgeTransferTest/AIIntegration",
+        "utils"
+      ],
+      "patterns": [
+        "class",
+        "testing",
+        "async",
+        "configuration",
+        "dependency",
+        "error-handling",
+        "functionality"
+      ]
+    },
+    "validation": {
+      "valid": true,
+      "errors": [],
+      "warnings": [],
+      "suggestions": [
+        "Consider adding a scope: refactor(scope): refactor code",
+        "Consider referencing issues with Closes #123, Fixes #123, or Refs #123"
+      ],
+      "score": 100
+    }
+  },
+  "summary": {
+    "totalSuggestions": 4,
+    "riskLevel": "high",
+    "confidenceRange": "40-40"
+  }
+}

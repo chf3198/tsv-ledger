@@ -1,0 +1,49 @@
+{
+  "incidents": [
+    {
+      "timestamp": "2026-01-07T03:13:40.577Z",
+      "errorId": "2026-01-07T03:13:40.549Z",
+      "method": "self_correction",
+      "description": "Fixed syntax error automatically",
+      "successful": true,
+      "context": {}
+    },
+    {
+      "timestamp": "2026-01-07T03:13:40.591Z",
+      "errorId": "2026-01-07T03:13:40.558Z",
+      "method": "user_feedback",
+      "description": "Corrected algorithm based on user input",
+      "successful": true,
+      "context": {}
+    }
+  ],
+  "methods": {
+    "self_correction": 1,
+    "user_feedback": 1,
+    "system_update": 0,
+    "documentation_update": 0,
+    "training_data": 0
+  },
+  "effectiveness": {
+    "self_correction": {
+      "applied": 1,
+      "successful": 1
+    },
+    "user_feedback": {
+      "applied": 1,
+      "successful": 1
+    },
+    "system_update": {
+      "applied": 0,
+      "successful": 0
+    },
+    "documentation_update": {
+      "applied": 0,
+      "successful": 0
+    },
+    "training_data": {
+      "applied": 0,
+      "successful": 0
+    }
+  }
+}

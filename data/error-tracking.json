@@ -1,0 +1,123 @@
+{
+  "incidents": [
+    {
+      "timestamp": "2026-01-07T03:13:40.549Z",
+      "category": "syntax_errors",
+      "description": "Missing semicolon in generated code",
+      "severity": "low",
+      "context": {},
+      "corrected": true,
+      "correctionMethod": "self_correction",
+      "correctionTimestamp": "2026-01-07T03:13:40.577Z"
+    },
+    {
+      "timestamp": "2026-01-07T03:13:40.558Z",
+      "category": "logic_errors",
+      "description": "Incorrect algorithm implementation",
+      "severity": "high",
+      "context": {},
+      "corrected": true,
+      "correctionMethod": "user_feedback",
+      "correctionTimestamp": "2026-01-07T03:13:40.591Z"
+    },
+    {
+      "timestamp": "2026-01-07T03:13:40.564Z",
+      "category": "syntax_errors",
+      "description": "Undefined variable reference",
+      "severity": "medium",
+      "context": {},
+      "corrected": false,
+      "correctionMethod": null,
+      "correctionTimestamp": null
+    },
+    {
+      "timestamp": "2026-01-07T03:16:15.481Z",
+      "category": "syntax_errors",
+      "description": "Missing semicolon in generated code",
+      "severity": "low",
+      "context": {},
+      "corrected": false,
+      "correctionMethod": null,
+      "correctionTimestamp": null
+    },
+    {
+      "timestamp": "2026-01-07T03:16:15.488Z",
+      "category": "logic_errors",
+      "description": "Incorrect algorithm implementation",
+      "severity": "high",
+      "context": {},
+      "corrected": false,
+      "correctionMethod": null,
+      "correctionTimestamp": null
+    },
+    {
+      "timestamp": "2026-01-07T03:16:15.491Z",
+      "category": "syntax_errors",
+      "description": "Undefined variable reference",
+      "severity": "medium",
+      "context": {},
+      "corrected": false,
+      "correctionMethod": null,
+      "correctionTimestamp": null
+    }
+  ],
+  "categories": {
+    "syntax_errors": {
+      "total": 4,
+      "corrected": 1,
+      "preventionImplemented": true
+    },
+    "logic_errors": {
+      "total": 2,
+      "corrected": 1,
+      "preventionImplemented": false
+    },
+    "data_errors": {
+      "total": 0,
+      "corrected": 0,
+      "preventionImplemented": false
+    },
+    "integration_errors": {
+      "total": 0,
+      "corrected": 0,
+      "preventionImplemented": false
+    },
+    "performance_errors": {
+      "total": 0,
+      "corrected": 0,
+      "preventionImplemented": false
+    },
+    "security_errors": {
+      "total": 0,
+      "corrected": 0,
+      "preventionImplemented": false
+    }
+  },
+  "trends": {
+    "daily": [
+      {
+        "day": "2026-01-07",
+        "errors": 6,
+        "corrections": 0,
+        "preventions": 2
+      }
+    ],
+    "weekly": [
+      {
+        "week": "2026-W01",
+        "errors": 6,
+        "corrections": 0,
+        "preventions": 2
+      }
+    ],
+    "monthly": [
+      {
+        "month": "2026-01",
+        "errors": 6,
+        "corrections": 0,
+        "preventions": 2
+      }
+    ]
+  },
+  "lastUpdated": "2026-01-07T03:16:15.491Z"
+}

@@ -1,0 +1,717 @@
+{
+  "timestamp": "2026-01-06T20:48:40.143Z",
+  "experiments": [
+    {
+      "parameters": {
+        "embeddingNoise": {
+          "mean": 0,
+          "std": 0.005,
+          "probability": 0.05
+        }
+      },
+      "testCases": 100,
+      "robustnessScore": 1,
+      "edgeCasePerformance": 1,
+      "results": [
+        {
+          "scenario": {
+            "name": "file_size_violation",
+            "context": {
+              "violations": [
+                {
+                  "type": "file_size",
+                  "file": "large.js",
+                  "lines": 500
+                }
+              ]
+            },
+            "instruction": {
+              "steps": [
+                "check file size",
+                "componentize if needed",
+                "validate result"
+              ]
+            }
+          },
+          "baselineResult": {
+            "contextProcessed": true,
+            "instructionProcessed": true,
+            "recommendationsGenerated": true,
+            "errors": []
+          },
+          "noisyResult": {
+            "contextProcessed": true,
+            "instructionProcessed": true,
+            "recommendationsGenerated": true,
+            "errors": []
+          },
+          "robustness": 1
+        },
+        {
+          "scenario": {
+            "name": "test_failure",
+            "context": {
+              "violations": [
+                {
+                  "type": "test_failure",
+                  "error": "server crash"
+                }
+              ]
+            },
+            "instruction": {
+              "steps": [
+                "run tests",
+                "fix errors",
+                "validate fixes"
+              ]
+            }
+          },
+          "baselineResult": {
+            "contextProcessed": true,
+            "instructionProcessed": true,
+            "recommendationsGenerated": true,
+            "errors": []
+          },
+          "noisyResult": {
+            "contextProcessed": true,
+            "instructionProcessed": true,
+            "recommendationsGenerated": true,
+            "errors": []
+          },
+          "robustness": 1
+        },
+        {
+          "scenario": {
+            "name": "mixed_violations",
+            "context": {
+              "violations": [
+                {
+                  "type": "file_size",
+                  "file": "big.html",
+                  "lines": 400
+                },
+                {
+                  "type": "lint_errors",
+                  "count": 3
+                },
+                {
+                  "type": "commit_convention",
+                  "commit": "bad commit"
+                }
+              ]
+            },
+            "instruction": {
+              "steps": [
+                "analyze violations",
+                "prioritize fixes",
+                "implement solutions"
+              ]
+            }
+          },
+          "baselineResult": {
+            "contextProcessed": true,
+            "instructionProcessed": true,
+            "recommendationsGenerated": true,
+            "errors": []
+          },
+          "noisyResult": {
+            "contextProcessed": true,
+            "instructionProcessed": true,
+            "recommendationsGenerated": true,
+            "errors": []
+          },
+          "robustness": 1
+        },
+        {
+          "scenario": {
+            "name": "edge_case_empty",
+            "context": {
+              "violations": []
+            },
+            "instruction": {
+              "steps": [
+                "check compliance",
+                "report status"
+              ]
+            }
+          },
+          "baselineResult": {
+            "contextProcessed": true,
+            "instructionProcessed": true,
+            "recommendationsGenerated": true,
+            "errors": []
+          },
+          "noisyResult": {
+            "contextProcessed": true,
+            "instructionProcessed": true,
+            "recommendationsGenerated": true,
+            "errors": []
+          },
+          "robustness": 1
+        },
+        {
+          "scenario": {
+            "name": "edge_case_corrupted",
+            "context": {
+              "violations": null,
+              "invalidField": "corrupted"
+            },
+            "instruction": {
+              "steps": [
+                "handle errors",
+                "recover gracefully"
+              ]
+            }
+          },
+          "baselineResult": {
+            "contextProcessed": true,
+            "instructionProcessed": true,
+            "recommendationsGenerated": true,
+            "errors": []
+          },
+          "noisyResult": {
+            "contextProcessed": true,
+            "instructionProcessed": true,
+            "recommendationsGenerated": true,
+            "errors": []
+          },
+          "robustness": 1
+        }
+      ]
+    },
+    {
+      "parameters": {
+        "embeddingNoise": {
+          "mean": 0,
+          "std": 0.01,
+          "probability": 0.1
+        }
+      },
+      "testCases": 100,
+      "robustnessScore": 1,
+      "edgeCasePerformance": 1,
+      "results": [
+        {
+          "scenario": {
+            "name": "file_size_violation",
+            "context": {
+              "violations": [
+                {
+                  "type": "file_size",
+                  "file": "large.js",
+                  "lines": 500
+                }
+              ]
+            },
+            "instruction": {
+              "steps": [
+                "check file size",
+                "componentize if needed",
+                "validate result"
+              ]
+            }
+          },
+          "baselineResult": {
+            "contextProcessed": true,
+            "instructionProcessed": true,
+            "recommendationsGenerated": true,
+            "errors": []
+          },
+          "noisyResult": {
+            "contextProcessed": true,
+            "instructionProcessed": true,
+            "recommendationsGenerated": true,
+            "errors": []
+          },
+          "robustness": 1
+        },
+        {
+          "scenario": {
+            "name": "test_failure",
+            "context": {
+              "violations": [
+                {
+                  "type": "test_failure",
+                  "error": "server crash"
+                }
+              ]
+            },
+            "instruction": {
+              "steps": [
+                "run tests",
+                "fix errors",
+                "validate fixes"
+              ]
+            }
+          },
+          "baselineResult": {
+            "contextProcessed": true,
+            "instructionProcessed": true,
+            "recommendationsGenerated": true,
+            "errors": []
+          },
+          "noisyResult": {
+            "contextProcessed": true,
+            "instructionProcessed": true,
+            "recommendationsGenerated": true,
+            "errors": []
+          },
+          "robustness": 1
+        },
+        {
+          "scenario": {
+            "name": "mixed_violations",
+            "context": {
+              "violations": [
+                {
+                  "type": "file_size",
+                  "file": "big.html",
+                  "lines": 400
+                },
+                {
+                  "type": "lint_errors",
+                  "count": 3
+                },
+                {
+                  "type": "commit_convention",
+                  "commit": "bad commit"
+                }
+              ]
+            },
+            "instruction": {
+              "steps": [
+                "analyze violations",
+                "prioritize fixes",
+                "implement solutions"
+              ]
+            }
+          },
+          "baselineResult": {
+            "contextProcessed": true,
+            "instructionProcessed": true,
+            "recommendationsGenerated": true,
+            "errors": []
+          },
+          "noisyResult": {
+            "contextProcessed": true,
+            "instructionProcessed": true,
+            "recommendationsGenerated": true,
+            "errors": []
+          },
+          "robustness": 1
+        },
+        {
+          "scenario": {
+            "name": "edge_case_empty",
+            "context": {
+              "violations": []
+            },
+            "instruction": {
+              "steps": [
+                "check compliance",
+                "report status"
+              ]
+            }
+          },
+          "baselineResult": {
+            "contextProcessed": true,
+            "instructionProcessed": true,
+            "recommendationsGenerated": true,
+            "errors": []
+          },
+          "noisyResult": {
+            "contextProcessed": true,
+            "instructionProcessed": true,
+            "recommendationsGenerated": true,
+            "errors": []
+          },
+          "robustness": 1
+        },
+        {
+          "scenario": {
+            "name": "edge_case_corrupted",
+            "context": {
+              "violations": null,
+              "invalidField": "corrupted"
+            },
+            "instruction": {
+              "steps": [
+                "handle errors",
+                "recover gracefully"
+              ]
+            }
+          },
+          "baselineResult": {
+            "contextProcessed": true,
+            "instructionProcessed": true,
+            "recommendationsGenerated": true,
+            "errors": []
+          },
+          "noisyResult": {
+            "contextProcessed": true,
+            "instructionProcessed": true,
+            "recommendationsGenerated": true,
+            "errors": []
+          },
+          "robustness": 1
+        }
+      ]
+    },
+    {
+      "parameters": {
+        "embeddingNoise": {
+          "mean": 0,
+          "std": 0.02,
+          "probability": 0.15
+        }
+      },
+      "testCases": 100,
+      "robustnessScore": 0.8666666666666666,
+      "edgeCasePerformance": 1,
+      "results": [
+        {
+          "scenario": {
+            "name": "file_size_violation",
+            "context": {
+              "violations": [
+                {
+                  "type": "file_size",
+                  "file": "large.js",
+                  "lines": 500
+                }
+              ]
+            },
+            "instruction": {
+              "steps": [
+                "check file size",
+                "componentize if needed",
+                "validate result"
+              ]
+            }
+          },
+          "baselineResult": {
+            "contextProcessed": true,
+            "instructionProcessed": true,
+            "recommendationsGenerated": true,
+            "errors": []
+          },
+          "noisyResult": {
+            "contextProcessed": true,
+            "instructionProcessed": true,
+            "recommendationsGenerated": true,
+            "errors": []
+          },
+          "robustness": 1
+        },
+        {
+          "scenario": {
+            "name": "test_failure",
+            "context": {
+              "violations": [
+                {
+                  "type": "test_failure",
+                  "error": "server crash"
+                }
+              ]
+            },
+            "instruction": {
+              "steps": [
+                "run tests",
+                "fix errors",
+                "validate fixes"
+              ]
+            }
+          },
+          "baselineResult": {
+            "contextProcessed": true,
+            "instructionProcessed": true,
+            "recommendationsGenerated": true,
+            "errors": []
+          },
+          "noisyResult": {
+            "contextProcessed": false,
+            "instructionProcessed": true,
+            "recommendationsGenerated": false,
+            "errors": []
+          },
+          "robustness": 0.3333333333333333
+        },
+        {
+          "scenario": {
+            "name": "mixed_violations",
+            "context": {
+              "violations": [
+                {
+                  "type": "file_size",
+                  "file": "big.html",
+                  "lines": 400
+                },
+                {
+                  "type": "lint_errors",
+                  "count": 3
+                },
+                {
+                  "type": "commit_convention",
+                  "commit": "bad commit"
+                }
+              ]
+            },
+            "instruction": {
+              "steps": [
+                "analyze violations",
+                "prioritize fixes",
+                "implement solutions"
+              ]
+            }
+          },
+          "baselineResult": {
+            "contextProcessed": true,
+            "instructionProcessed": true,
+            "recommendationsGenerated": true,
+            "errors": []
+          },
+          "noisyResult": {
+            "contextProcessed": true,
+            "instructionProcessed": true,
+            "recommendationsGenerated": true,
+            "errors": []
+          },
+          "robustness": 1
+        },
+        {
+          "scenario": {
+            "name": "edge_case_empty",
+            "context": {
+              "violations": []
+            },
+            "instruction": {
+              "steps": [
+                "check compliance",
+                "report status"
+              ]
+            }
+          },
+          "baselineResult": {
+            "contextProcessed": true,
+            "instructionProcessed": true,
+            "recommendationsGenerated": true,
+            "errors": []
+          },
+          "noisyResult": {
+            "contextProcessed": true,
+            "instructionProcessed": true,
+            "recommendationsGenerated": true,
+            "errors": []
+          },
+          "robustness": 1
+        },
+        {
+          "scenario": {
+            "name": "edge_case_corrupted",
+            "context": {
+              "violations": null,
+              "invalidField": "corrupted"
+            },
+            "instruction": {
+              "steps": [
+                "handle errors",
+                "recover gracefully"
+              ]
+            }
+          },
+          "baselineResult": {
+            "contextProcessed": true,
+            "instructionProcessed": true,
+            "recommendationsGenerated": true,
+            "errors": []
+          },
+          "noisyResult": {
+            "contextProcessed": true,
+            "instructionProcessed": true,
+            "recommendationsGenerated": true,
+            "errors": []
+          },
+          "robustness": 1
+        }
+      ]
+    },
+    {
+      "parameters": {
+        "embeddingNoise": {
+          "mean": 0,
+          "std": 0.01,
+          "probability": 0.2
+        }
+      },
+      "testCases": 100,
+      "robustnessScore": 1,
+      "edgeCasePerformance": 1,
+      "results": [
+        {
+          "scenario": {
+            "name": "file_size_violation",
+            "context": {
+              "violations": [
+                {
+                  "type": "file_size",
+                  "file": "large.js",
+                  "lines": 500
+                }
+              ]
+            },
+            "instruction": {
+              "steps": [
+                "check file size",
+                "componentize if needed",
+                "validate result"
+              ]
+            }
+          },
+          "baselineResult": {
+            "contextProcessed": true,
+            "instructionProcessed": true,
+            "recommendationsGenerated": true,
+            "errors": []
+          },
+          "noisyResult": {
+            "contextProcessed": true,
+            "instructionProcessed": true,
+            "recommendationsGenerated": true,
+            "errors": []
+          },
+          "robustness": 1
+        },
+        {
+          "scenario": {
+            "name": "test_failure",
+            "context": {
+              "violations": [
+                {
+                  "type": "test_failure",
+                  "error": "server crash"
+                }
+              ]
+            },
+            "instruction": {
+              "steps": [
+                "run tests",
+                "fix errors",
+                "validate fixes"
+              ]
+            }
+          },
+          "baselineResult": {
+            "contextProcessed": true,
+            "instructionProcessed": true,
+            "recommendationsGenerated": true,
+            "errors": []
+          },
+          "noisyResult": {
+            "contextProcessed": true,
+            "instructionProcessed": true,
+            "recommendationsGenerated": true,
+            "errors": []
+          },
+          "robustness": 1
+        },
+        {
+          "scenario": {
+            "name": "mixed_violations",
+            "context": {
+              "violations": [
+                {
+                  "type": "file_size",
+                  "file": "big.html",
+                  "lines": 400
+                },
+                {
+                  "type": "lint_errors",
+                  "count": 3
+                },
+                {
+                  "type": "commit_convention",
+                  "commit": "bad commit"
+                }
+              ]
+            },
+            "instruction": {
+              "steps": [
+                "analyze violations",
+                "prioritize fixes",
+                "implement solutions"
+              ]
+            }
+          },
+          "baselineResult": {
+            "contextProcessed": true,
+            "instructionProcessed": true,
+            "recommendationsGenerated": true,
+            "errors": []
+          },
+          "noisyResult": {
+            "contextProcessed": true,
+            "instructionProcessed": true,
+            "recommendationsGenerated": true,
+            "errors": []
+          },
+          "robustness": 1
+        },
+        {
+          "scenario": {
+            "name": "edge_case_empty",
+            "context": {
+              "violations": []
+            },
+            "instruction": {
+              "steps": [
+                "check compliance",
+                "report status"
+              ]
+            }
+          },
+          "baselineResult": {
+            "contextProcessed": true,
+            "instructionProcessed": true,
+            "recommendationsGenerated": true,
+            "errors": []
+          },
+          "noisyResult": {
+            "contextProcessed": true,
+            "instructionProcessed": true,
+            "recommendationsGenerated": true,
+            "errors": []
+          },
+          "robustness": 1
+        },
+        {
+          "scenario": {
+            "name": "edge_case_corrupted",
+            "context": {
+              "violations": null,
+              "invalidField": "corrupted"
+            },
+            "instruction": {
+              "steps": [
+                "handle errors",
+                "recover gracefully"
+              ]
+            }
+          },
+          "baselineResult": {
+            "contextProcessed": true,
+            "instructionProcessed": true,
+            "recommendationsGenerated": true,
+            "errors": []
+          },
+          "noisyResult": {
+            "contextProcessed": true,
+            "instructionProcessed": true,
+            "recommendationsGenerated": true,
+            "errors": []
+          },
+          "robustness": 1
+        }
+      ]
+    }
+  ]
+}

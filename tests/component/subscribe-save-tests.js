@@ -4,7 +4,7 @@
  * Tests for the Subscribe & Save detection component
  */
 
-const BaseComponentTester = require("./base-component-tester");
+const BaseComponentTester = require('./base-component-tester');
 
 /**
  * Subscribe & Save detection component tests
@@ -15,7 +15,7 @@ class SubscribeAndSaveTests extends BaseComponentTester {
    * @returns {Object} Test results
    */
   testSubscribeAndSaveDetection() {
-    console.log("\n🔄 Testing Subscribe & Save Detection Component...");
+    console.log('\n🔄 Testing Subscribe & Save Detection Component...');
 
     const results = {
       tested: 0,
@@ -24,18 +24,18 @@ class SubscribeAndSaveTests extends BaseComponentTester {
       lowConfidence: 0,
       falsePositives: [],
       missed: [],
-      details: [],
+      details: []
     };
 
     // Known Subscribe & Save indicators for validation
     const knownSSIndicators = [
-      "subscribe & save",
-      "subscription",
-      "recurring",
-      "auto-delivery",
-      "monthly delivery",
-      "subscribe",
-      "recurring delivery",
+      'subscribe & save',
+      'subscription',
+      'recurring',
+      'auto-delivery',
+      'monthly delivery',
+      'subscribe',
+      'recurring delivery'
     ];
 
     this.sampleData.forEach((order) => {
@@ -64,7 +64,7 @@ class SubscribeAndSaveTests extends BaseComponentTester {
             orderId: order.orderId,
             items: order.items,
             confidence: ssResult.confidence,
-            indicators: ssResult.indicators || [],
+            indicators: ssResult.indicators || []
           });
         }
       } else if (hasObviousIndicators) {
@@ -74,16 +74,16 @@ class SubscribeAndSaveTests extends BaseComponentTester {
           items: order.items,
           expectedIndicators: knownSSIndicators.filter((ind) =>
             order.items.toLowerCase().includes(ind.toLowerCase())
-          ),
+          )
         });
       }
 
       results.details.push({
         orderId: order.orderId,
-        items: order.items.substring(0, 50) + "...",
+        items: order.items.substring(0, 50) + '...',
         isDetected: ssResult.isSubscribeAndSave,
         confidence: ssResult.confidence,
-        hasObviousIndicators,
+        hasObviousIndicators
       });
     });
 
@@ -96,7 +96,7 @@ class SubscribeAndSaveTests extends BaseComponentTester {
       100
     ).toFixed(1);
 
-    console.log(`\n📊 Subscribe & Save Detection Results:`);
+    console.log('\n📊 Subscribe & Save Detection Results:');
     console.log(`   Tested Orders: ${results.tested}`);
     console.log(
       `   Detected S&S: ${results.detected} (${results.detectionRate}%)`
@@ -110,7 +110,7 @@ class SubscribeAndSaveTests extends BaseComponentTester {
     console.log(`   Estimated Accuracy: ${results.accuracyRate}%`);
 
     if (results.falsePositives.length > 0) {
-      console.log(`\n⚠️  Potential False Positives:`);
+      console.log('\n⚠️  Potential False Positives:');
       results.falsePositives.slice(0, 3).forEach((fp) => {
         console.log(
           `   • ${fp.items.substring(0, 40)}... (confidence: ${(
@@ -121,18 +121,18 @@ class SubscribeAndSaveTests extends BaseComponentTester {
     }
 
     if (results.missed.length > 0) {
-      console.log(`\n❌ Potentially Missed Detections:`);
+      console.log('\n❌ Potentially Missed Detections:');
       results.missed.slice(0, 3).forEach((missed) => {
         console.log(
           `   • ${missed.items.substring(
             0,
             40
-          )}... (indicators: ${missed.expectedIndicators.join(", ")})`
+          )}... (indicators: ${missed.expectedIndicators.join(', ')})`
         );
       });
     }
 
-    this.testResults.set("subscribeAndSave", results);
+    this.testResults.set('subscribeAndSave', results);
     return results;
   }
 

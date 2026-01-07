@@ -11,9 +11,9 @@
  * @since 2025-09-07
  */
 
-const fs = require("fs");
-const path = require("path");
-const csv = require("csv-parser");
+const fs = require('fs');
+const path = require('path');
+const csv = require('csv-parser');
 
 // Import modular test components
 const SubscribeSaveTests = require('./component/subscribe-save-tests');
@@ -34,15 +34,15 @@ class ComponentTester {
     this.amountTests = new AmountCalculationsTests();
     this.dataQualityTests = new DataQualityTests();
 
-    console.log("🔬 TSV Ledger - Component-Level Unit Testing");
-    console.log("=".repeat(60));
+    console.log('🔬 TSV Ledger - Component-Level Unit Testing');
+    console.log('='.repeat(60));
   }
 
   /**
    * Load sample data for testing all components
    */
   async loadSampleData(limit = 50) {
-    const dataFile = path.join(__dirname, "../../data/amazon-test-sample.csv");
+    const dataFile = path.join(__dirname, '../../data/amazon-test-sample.csv');
 
     return new Promise((resolve, reject) => {
       const samples = [];
@@ -52,18 +52,18 @@ class ComponentTester {
       if (fs.existsSync(dataFile)) {
         fs.createReadStream(dataFile)
           .pipe(csv())
-          .on("data", (row) => {
+          .on('data', (row) => {
             if (count < limit) {
               const order = {
-                date: row["Order Date"] || row.date,
+                date: row['Order Date'] || row.date,
                 amount: parseFloat(
-                  row["Item Total"] || row.total || row.amount || 0
+                  row['Item Total'] || row.total || row.amount || 0
                 ),
-                items: row["Title"] || row.items || "",
-                payments: row["Payment Method"] || row.payments || "",
-                shipping: row["Item Subtotal Tax"] || row.shipping || "0",
-                orderId: row["Order ID"] || row.orderId || `test-${count}`,
-                quantity: parseInt(row["Quantity"] || 1),
+                items: row['Title'] || row.items || '',
+                payments: row['Payment Method'] || row.payments || '',
+                shipping: row['Item Subtotal Tax'] || row.shipping || '0',
+                orderId: row['Order ID'] || row.orderId || `test-${count}`,
+                quantity: parseInt(row['Quantity'] || 1)
               };
 
               if (order.date && order.amount && order.items) {
@@ -72,7 +72,7 @@ class ComponentTester {
               }
             }
           })
-          .on("end", () => {
+          .on('end', () => {
             this.sampleData = samples;
             // Load data into all test components
             this.subscribeSaveTests.sampleData = samples;
@@ -85,7 +85,7 @@ class ComponentTester {
             );
             resolve(samples);
           })
-          .on("error", reject);
+          .on('error', reject);
       } else {
         // Generate mock data if file doesn't exist
         this.sampleData = this.generateMockData(limit);
@@ -112,13 +112,13 @@ class ComponentTester {
       data.push({
         date: new Date(Date.now() - Math.random() * 365 * 24 * 60 * 60 * 1000)
           .toISOString()
-          .split("T")[0],
+          .split('T')[0],
         amount: -(Math.random() * 100 + 5).toFixed(2),
         items: `Test item ${i + 1} and accessories`,
-        orderId: `MOCK-${String(i + 1).padStart(3, "0")}`,
-        payments: "Credit Card",
-        shipping: "0.00",
-        quantity: 1,
+        orderId: `MOCK-${String(i + 1).padStart(3, '0')}`,
+        payments: 'Credit Card',
+        shipping: '0.00',
+        quantity: 1
       });
     }
 
@@ -130,7 +130,7 @@ class ComponentTester {
    */
   testSubscribeAndSaveDetection() {
     const results = this.subscribeSaveTests.testSubscribeAndSaveDetection();
-    this.testResults.set("subscribeAndSave", results);
+    this.testResults.set('subscribeAndSave', results);
     return results;
   }
 
@@ -139,7 +139,7 @@ class ComponentTester {
    */
   testCategoryClassification() {
     const results = this.categoryTests.testCategoryClassification();
-    this.testResults.set("categoryClassification", results);
+    this.testResults.set('categoryClassification', results);
     return results;
   }
 
@@ -165,15 +165,15 @@ class ComponentTester {
    * Generate comprehensive component test report
    */
   generateComponentReport() {
-    console.log("\n📋 COMPREHENSIVE COMPONENT TEST REPORT");
-    console.log("=".repeat(70));
+    console.log('\n📋 COMPREHENSIVE COMPONENT TEST REPORT');
+    console.log('='.repeat(70));
 
     let overallScore = 0;
     let componentCount = 0;
 
     // Subscribe & Save Component
-    if (this.testResults.has("subscribeAndSave")) {
-      const ss = this.testResults.get("subscribeAndSave");
+    if (this.testResults.has('subscribeAndSave')) {
+      const ss = this.testResults.get('subscribeAndSave');
       const ssScore =
         ((ss.detected - ss.falsePositives.length) / ss.tested) * 100;
       console.log(
@@ -184,8 +184,8 @@ class ComponentTester {
     }
 
     // Category Classification Component
-    if (this.testResults.has("categoryClassification")) {
-      const cat = this.testResults.get("categoryClassification");
+    if (this.testResults.has('categoryClassification')) {
+      const cat = this.testResults.get('categoryClassification');
       const catScore =
         ((cat.tested - cat.uncategorized.length) / cat.tested) * 100;
       console.log(
@@ -196,8 +196,8 @@ class ComponentTester {
     }
 
     // Amount Calculations Component
-    if (this.testResults.has("amountCalculations")) {
-      const amt = this.testResults.get("amountCalculations");
+    if (this.testResults.has('amountCalculations')) {
+      const amt = this.testResults.get('amountCalculations');
       const amtScore =
         ((amt.tested - amt.discrepancies.length) / amt.tested) * 100;
       console.log(`💰 Amount Calculations: ${amtScore.toFixed(1)}% accurate`);
@@ -206,8 +206,8 @@ class ComponentTester {
     }
 
     // Data Quality Component
-    if (this.testResults.has("dataQuality")) {
-      const dq = this.testResults.get("dataQuality");
+    if (this.testResults.has('dataQuality')) {
+      const dq = this.testResults.get('dataQuality');
       console.log(`🔍 Data Quality: ${dq.qualityScore.toFixed(1)}% valid`);
       overallScore += dq.qualityScore;
       componentCount++;
@@ -217,21 +217,21 @@ class ComponentTester {
     console.log(`\n🎯 OVERALL COMPONENT SCORE: ${avgScore.toFixed(1)}%`);
 
     // Recommendations
-    console.log(`\n💡 RECOMMENDATIONS:`);
+    console.log('\n💡 RECOMMENDATIONS:');
     if (avgScore >= 90) {
-      console.log(`   ✅ Excellent! All components performing well.`);
+      console.log('   ✅ Excellent! All components performing well.');
     } else if (avgScore >= 80) {
-      console.log(`   ⚠️  Good performance with room for minor improvements.`);
+      console.log('   ⚠️  Good performance with room for minor improvements.');
     } else if (avgScore >= 70) {
-      console.log(`   🔧 Moderate performance - several areas need attention.`);
+      console.log('   🔧 Moderate performance - several areas need attention.');
     } else {
-      console.log(`   ❌ Poor performance - significant improvements needed.`);
+      console.log('   ❌ Poor performance - significant improvements needed.');
     }
 
     return {
       overallScore: avgScore,
       componentScores: Object.fromEntries(this.testResults),
-      recommendations: this.generateRecommendations(avgScore),
+      recommendations: this.generateRecommendations(avgScore)
     };
   }
 
@@ -241,33 +241,33 @@ class ComponentTester {
   generateRecommendations(overallScore) {
     const recommendations = [];
 
-    if (this.testResults.has("subscribeAndSave")) {
-      const ss = this.testResults.get("subscribeAndSave");
+    if (this.testResults.has('subscribeAndSave')) {
+      const ss = this.testResults.get('subscribeAndSave');
       if (ss.falsePositives.length > 2) {
         recommendations.push(
-          "Refine Subscribe & Save detection patterns to reduce false positives"
+          'Refine Subscribe & Save detection patterns to reduce false positives'
         );
       }
       if (ss.missed.length > 2) {
         recommendations.push(
-          "Add more Subscribe & Save indicators to improve detection"
+          'Add more Subscribe & Save indicators to improve detection'
         );
       }
     }
 
-    if (this.testResults.has("categoryClassification")) {
-      const cat = this.testResults.get("categoryClassification");
+    if (this.testResults.has('categoryClassification')) {
+      const cat = this.testResults.get('categoryClassification');
       if (cat.uncategorized.length > cat.tested * 0.2) {
         recommendations.push(
-          "Expand category classification rules - too many uncategorized items"
+          'Expand category classification rules - too many uncategorized items'
         );
       }
     }
 
-    if (this.testResults.has("dataQuality")) {
-      const dq = this.testResults.get("dataQuality");
+    if (this.testResults.has('dataQuality')) {
+      const dq = this.testResults.get('dataQuality');
       if (dq.qualityScore < 80) {
-        recommendations.push("Improve data preprocessing and validation steps");
+        recommendations.push('Improve data preprocessing and validation steps');
       }
     }
 
@@ -279,7 +279,7 @@ class ComponentTester {
    */
   async runAllComponentTests() {
     try {
-      console.log("\n🚀 Starting comprehensive component testing...");
+      console.log('\n🚀 Starting comprehensive component testing...');
 
       // Load sample data
       await this.loadSampleData(100); // Test with 100 orders
@@ -293,10 +293,10 @@ class ComponentTester {
       // Generate comprehensive report
       const report = this.generateComponentReport();
 
-      console.log("\n✅ Component testing complete!");
+      console.log('\n✅ Component testing complete!');
       return report;
     } catch (error) {
-      console.error("\n❌ Component testing failed:", error.message);
+      console.error('\n❌ Component testing failed:', error.message);
       throw error;
     }
   }
@@ -307,7 +307,7 @@ if (require.main === module) {
   const args = process.argv.slice(2);
   const tester = new ComponentTester();
 
-  if (args.includes("--help")) {
+  if (args.includes('--help')) {
     console.log(`
 Usage: node component-tester.js [options]
 
@@ -325,13 +325,13 @@ Examples:
     process.exit(0);
   }
 
-  if (args.includes("--ss-only")) {
+  if (args.includes('--ss-only')) {
     tester.loadSampleData().then(() => tester.testSubscribeAndSaveDetection());
-  } else if (args.includes("--category-only")) {
+  } else if (args.includes('--category-only')) {
     tester.loadSampleData().then(() => tester.testCategoryClassification());
-  } else if (args.includes("--amount-only")) {
+  } else if (args.includes('--amount-only')) {
     tester.loadSampleData().then(() => tester.testAmountCalculations());
-  } else if (args.includes("--quality-only")) {
+  } else if (args.includes('--quality-only')) {
     tester.loadSampleData().then(() => tester.testDataQuality());
   } else {
     tester.runAllComponentTests().catch(console.error);

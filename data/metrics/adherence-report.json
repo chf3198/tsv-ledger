@@ -1,0 +1,594 @@
+{
+  "timestamp": "2026-01-06T20:41:25.650Z",
+  "overallCompliance": false,
+  "metrics": {
+    "fileSizes": {
+      "src/ai-analysis-engine.js": 281,
+      "src/amazon-integration/amazon-zip-extractor.js": 130,
+      "src/amazon-integration/amazon-zip-parsers-fixed.js": 18,
+      "src/amazon-integration/amazon-zip-parsers.js": 17,
+      "src/amazon-integration/amazon-zip-processor.js": 118,
+      "src/amazon-integration/parsers/cart-parser.js": 202,
+      "src/amazon-integration/parsers/order-parser.js": 274,
+      "src/amazon-integration/parsers/returns-parser.js": 212,
+      "src/amazon-integration/parsers/subscription-parser.js": 140,
+      "src/amazon-zip-detector.js": 380,
+      "src/amazon-zip-parser-new.js": 139,
+      "src/amazon-zip-parser-original.js": 626,
+      "src/amazon-zip-parser.js": 188,
+      "src/bank-reconciliation-engine.js": 621,
+      "src/database.js": 392,
+      "src/geographic-analysis-engine.js": 614,
+      "src/import/csv-parser.js": 228,
+      "src/import/history-manager.js": 131,
+      "src/import/index.js": 22,
+      "src/import/status-tracker.js": 115,
+      "src/import/zip-handler.js": 156,
+      "src/menu.js": 71,
+      "src/routes/amazon.js": 184,
+      "src/routes/analytics.js": 187,
+      "src/routes/data.js": 157,
+      "src/routes/employee-benefits.js": 290,
+      "src/routes/geographic.js": 189,
+      "src/routes/import.js": 244,
+      "src/routes/subscription.js": 288,
+      "src/subscription-analysis-engine.js": 495,
+      "src/tsv-categorizer.js": 456,
+      "public/components/dashboard/dashboard.js": 75,
+      "public/components/dashboard/sections/analysis-section.js": 199,
+      "public/components/dashboard/sections/overview-section.js": 152,
+      "public/components/shared/api-client.js": 110,
+      "public/components/shared/dom-utils.js": 118,
+      "public/js/ai-dashboard.js": 501,
+      "public/js/app.js": 276,
+      "public/js/bootstrap-navigation.js": 441,
+      "public/js/employee-benefits.js": 2549,
+      "public/js/init-shell.js": 74,
+      "public/js/modules/analysis/analysis.js": 95,
+      "public/js/modules/expenditures/expenditures.js": 84,
+      "public/js/modules/import-history/import-history.js": 63,
+      "public/js/modules/premium-analytics/premium-analytics.js": 226,
+      "public/js/shoelace-navigation-new.js": 203,
+      "public/js/shoelace-navigation.js": 344,
+      "public/about.html": 121,
+      "public/amazon-zip-import.html": 552,
+      "public/api-debug.html": 143,
+      "public/benefits-refactor-complete.html": 115,
+      "public/bootstrap-navigation-template.html": 64,
+      "public/components/ai-insights/ai-insights.html": 35,
+      "public/components/amazon-zip-import/amazon-zip-import.html": 217,
+      "public/components/analysis/analysis.html": 27,
+      "public/components/bank-reconciliation/bank-reconciliation.html": 198,
+      "public/components/dashboard/dashboard.html": 118,
+      "public/components/dashboard/test.html": 81,
+      "public/components/data-import/data-import.html": 220,
+      "public/components/employee-benefits/employee-benefits.html": 161,
+      "public/components/geographic-analysis/geographic-analysis.html": 158,
+      "public/components/manual-entry/manual-entry.html": 53,
+      "public/components/navigation/head.html": 398,
+      "public/components/navigation/navbar.html": 35,
+      "public/components/navigation-e2e-test/navigation-e2e-test.html": 197,
+      "public/components/premium-features/premium-features.html": 66,
+      "public/components/reconciliation/reconciliation.html": 196,
+      "public/components/settings/settings.html": 67,
+      "public/components/subscription-analysis/subscription-analysis.html": 205,
+      "public/debug-benefits.html": 111,
+      "public/employee-benefits-test.html": 127,
+      "public/employee-benefits.html": 769,
+      "public/geographic-analysis.html": 1011,
+      "public/index.html": 3208,
+      "public/navigation-e2e-test.html": 805,
+      "public/reconciliation.html": 722,
+      "public/recovery-summary.html": 158,
+      "public/subscription-analysis.html": 570,
+      "public/test-business-card.html": 137,
+      "public/test-employee-benefits.html": 42,
+      "public/test-navigation.html": 130,
+      "public/view-separation-test.html": 125,
+      "tests/accessibility/accessibility.test.js": 455,
+      "tests/accessibility-scan.js": 41,
+      "tests/cli/benefits-zero-allocation-cli-test.js": 103,
+      "tests/cli/cli-test-helpers.js": 242,
+      "tests/cli/cli-tests.test.js": 449,
+      "tests/cli/test-benefits-zero-allocation.js": 20,
+      "tests/component/amount-calculations-tests.js": 222,
+      "tests/component/base-component-tester.js": 101,
+      "tests/component/category-classification-tests.js": 233,
+      "tests/component/data-quality-tests.js": 257,
+      "tests/component/subscribe-save-tests.js": 151,
+      "tests/component-tester.js": 342,
+      "tests/e2e/complete-workflow.test.js": 355,
+      "tests/e2e/comprehensive-workflow-e2e.test.js": 248,
+      "tests/e2e/data-import-e2e.test.js": 390,
+      "tests/e2e/debug-benefits.test.js": 104,
+      "tests/e2e/import-history-e2e.test.js": 181,
+      "tests/e2e/merged-menu.spec.js": 96,
+      "tests/e2e/navigation-console.spec.js": 250,
+      "tests/e2e/navigation-ux-example.spec.js": 159,
+      "tests/e2e/playwright.config.js": 61,
+      "tests/e2e/sidebar-menu.spec.js": 36,
+      "tests/e2e/sidebar-nonjs.spec.js": 32,
+      "tests/e2e/sidebar.spec.js": 25,
+      "tests/global-setup.js": 45,
+      "tests/global-teardown.js": 25,
+      "tests/import-history-api.test.js": 334,
+      "tests/import-history-puppeteer.test.js": 313,
+      "tests/integration/api.test.js": 491,
+      "tests/iterative/analysis-runner.js": 242,
+      "tests/iterative/data-loader.js": 136,
+      "tests/iterative/results-processor.js": 188,
+      "tests/iterative/validation-rules.js": 223,
+      "tests/iterative-analysis-tester.js": 252,
+      "tests/performance/performance.test.js": 436,
+      "tests/pw/benefits-allocations.test.js": 95,
+      "tests/pw/benefits-multiselect.test.js": 59,
+      "tests/pw/benefits-persistence.test.js": 73,
+      "tests/pw/benefits-report.test.js": 102,
+      "tests/pw/benefits-search.test.js": 68,
+      "tests/pw/benefits-smoke.spec.js": 126,
+      "tests/pw/benefits-smoke.test.js": 190,
+      "tests/pw/benefits-zero-allocation.spec.js": 245,
+      "tests/pw/import-history-ux.test.js": 386,
+      "tests/quick-test.js": 217,
+      "tests/reports/test-reporting.test.js": 543,
+      "tests/shared/e2e-setup.js": 120,
+      "tests/shared/e2e-teardown.js": 39,
+      "tests/shared/global-setup.js": 76,
+      "tests/shared/global-teardown.js": 25,
+      "tests/shared/jest.setup.js": 95,
+      "tests/shared/test-helpers.js": 423,
+      "tests/test-ai-analysis.js": 1,
+      "tests/test-ai-button-iterative.js": 1,
+      "tests/test-ai-button-simple.js": 1,
+      "tests/test-amazon-edit-feature.js": 1,
+      "tests/test-amazon-import.js": 1,
+      "tests/test-analysis-unit.js": 1,
+      "tests/test-analysis.js": 1,
+      "tests/test-complete.js": 1,
+      "tests/test-corrected-analysis.js": 1,
+      "tests/test-database.js": 1,
+      "tests/test-frontend-fix.js": 1,
+      "tests/test-master.js": 1,
+      "tests/test-parser.js": 156,
+      "tests/test-server.js": 13,
+      "tests/test-ux-amazon-edit.js": 1,
+      "tests/unit/database.test.js": 292,
+      "tests/unit/tsv-categorizer.test.js": 404,
+      "tests/ux/analysis-tests.js": 100,
+      "tests/ux/base-test-utils.js": 170,
+      "tests/ux/browser-manager.js": 221,
+      "tests/ux/data-import-tests.js": 137,
+      "tests/ux/data-integrity-tests.js": 63,
+      "tests/ux/employee-benefits-tests.js": 163,
+      "tests/ux/error-handling-tests.js": 91,
+      "tests/ux/navigation-tests.js": 97,
+      "tests/ux/server-manager.js": 109,
+      "tests/ux/test-runner.js": 133,
+      "tests/ux/visual-consistency-tests.js": 274,
+      "tests/ux-testing-suite.js": 134,
+      "tests/visual/benefits-spa-status.spec.js": 48,
+      "tests/visual/converted/benefits-allocations-clean.spec.js": 68,
+      "tests/visual/converted/benefits-allocations.spec.js": 33,
+      "tests/visual/converted/benefits-multiselect.spec.js": 66,
+      "tests/visual/converted/benefits-persistence.spec.js": 54,
+      "tests/visual/converted/benefits-report.spec.js": 84,
+      "tests/visual/converted/benefits-search.spec.js": 47,
+      "tests/visual/converted/benefits-smoke.spec.js": 60,
+      "tests/visual/visual-regression.test.js": 447,
+      "docs/AMAZON_RESEARCH.md": 186,
+      "docs/AMAZON_ZIP_IMPORT_SYSTEM.md": 190,
+      "docs/API_DOCUMENTATION.md": 485,
+      "docs/CHANGELOG.md": 82,
+      "docs/CODEBASE_ARCHITECTURE.md": 140,
+      "docs/KNOWLEDGE_TRANSFER_TEST_PLAN.md": 133,
+      "docs/MENU.md": 31,
+      "docs/ORGANIZATION_COMPLETE.md": 78,
+      "docs/README.md": 23
+    },
+    "testCoverage": 0,
+    "lintErrors": 0,
+    "commitConvention": true,
+    "lastCheck": "2026-01-06T20:40:52.738Z"
+  },
+  "violations": [
+    {
+      "type": "file_size",
+      "file": "src/amazon-zip-detector.js",
+      "lines": 380,
+      "limit": 300,
+      "severity": "high",
+      "message": "File exceeds 300-line limit: 380 lines"
+    },
+    {
+      "type": "file_size",
+      "file": "src/amazon-zip-parser-original.js",
+      "lines": 626,
+      "limit": 300,
+      "severity": "high",
+      "message": "File exceeds 300-line limit: 626 lines"
+    },
+    {
+      "type": "file_size",
+      "file": "src/bank-reconciliation-engine.js",
+      "lines": 621,
+      "limit": 300,
+      "severity": "high",
+      "message": "File exceeds 300-line limit: 621 lines"
+    },
+    {
+      "type": "file_size",
+      "file": "src/database.js",
+      "lines": 392,
+      "limit": 300,
+      "severity": "high",
+      "message": "File exceeds 300-line limit: 392 lines"
+    },
+    {
+      "type": "file_size",
+      "file": "src/geographic-analysis-engine.js",
+      "lines": 614,
+      "limit": 300,
+      "severity": "high",
+      "message": "File exceeds 300-line limit: 614 lines"
+    },
+    {
+      "type": "file_size",
+      "file": "src/subscription-analysis-engine.js",
+      "lines": 495,
+      "limit": 300,
+      "severity": "high",
+      "message": "File exceeds 300-line limit: 495 lines"
+    },
+    {
+      "type": "file_size",
+      "file": "src/tsv-categorizer.js",
+      "lines": 456,
+      "limit": 300,
+      "severity": "high",
+      "message": "File exceeds 300-line limit: 456 lines"
+    },
+    {
+      "type": "file_size",
+      "file": "public/js/ai-dashboard.js",
+      "lines": 501,
+      "limit": 300,
+      "severity": "high",
+      "message": "File exceeds 300-line limit: 501 lines"
+    },
+    {
+      "type": "file_size",
+      "file": "public/js/bootstrap-navigation.js",
+      "lines": 441,
+      "limit": 300,
+      "severity": "high",
+      "message": "File exceeds 300-line limit: 441 lines"
+    },
+    {
+      "type": "file_size",
+      "file": "public/js/employee-benefits.js",
+      "lines": 2549,
+      "limit": 300,
+      "severity": "high",
+      "message": "File exceeds 300-line limit: 2549 lines"
+    },
+    {
+      "type": "file_size",
+      "file": "public/js/shoelace-navigation.js",
+      "lines": 344,
+      "limit": 300,
+      "severity": "high",
+      "message": "File exceeds 300-line limit: 344 lines"
+    },
+    {
+      "type": "file_size",
+      "file": "public/amazon-zip-import.html",
+      "lines": 552,
+      "limit": 300,
+      "severity": "high",
+      "message": "File exceeds 300-line limit: 552 lines"
+    },
+    {
+      "type": "file_size",
+      "file": "public/components/navigation/head.html",
+      "lines": 398,
+      "limit": 300,
+      "severity": "high",
+      "message": "File exceeds 300-line limit: 398 lines"
+    },
+    {
+      "type": "file_size",
+      "file": "public/employee-benefits.html",
+      "lines": 769,
+      "limit": 300,
+      "severity": "high",
+      "message": "File exceeds 300-line limit: 769 lines"
+    },
+    {
+      "type": "file_size",
+      "file": "public/geographic-analysis.html",
+      "lines": 1011,
+      "limit": 300,
+      "severity": "high",
+      "message": "File exceeds 300-line limit: 1011 lines"
+    },
+    {
+      "type": "file_size",
+      "file": "public/index.html",
+      "lines": 3208,
+      "limit": 300,
+      "severity": "high",
+      "message": "File exceeds 300-line limit: 3208 lines"
+    },
+    {
+      "type": "file_size",
+      "file": "public/navigation-e2e-test.html",
+      "lines": 805,
+      "limit": 300,
+      "severity": "high",
+      "message": "File exceeds 300-line limit: 805 lines"
+    },
+    {
+      "type": "file_size",
+      "file": "public/reconciliation.html",
+      "lines": 722,
+      "limit": 300,
+      "severity": "high",
+      "message": "File exceeds 300-line limit: 722 lines"
+    },
+    {
+      "type": "file_size",
+      "file": "public/subscription-analysis.html",
+      "lines": 570,
+      "limit": 300,
+      "severity": "high",
+      "message": "File exceeds 300-line limit: 570 lines"
+    },
+    {
+      "type": "file_size",
+      "file": "tests/accessibility/accessibility.test.js",
+      "lines": 455,
+      "limit": 300,
+      "severity": "high",
+      "message": "File exceeds 300-line limit: 455 lines"
+    },
+    {
+      "type": "file_size",
+      "file": "tests/cli/cli-tests.test.js",
+      "lines": 449,
+      "limit": 300,
+      "severity": "high",
+      "message": "File exceeds 300-line limit: 449 lines"
+    },
+    {
+      "type": "file_size",
+      "file": "tests/component-tester.js",
+      "lines": 342,
+      "limit": 300,
+      "severity": "high",
+      "message": "File exceeds 300-line limit: 342 lines"
+    },
+    {
+      "type": "file_size",
+      "file": "tests/e2e/complete-workflow.test.js",
+      "lines": 355,
+      "limit": 300,
+      "severity": "high",
+      "message": "File exceeds 300-line limit: 355 lines"
+    },
+    {
+      "type": "file_size",
+      "file": "tests/e2e/data-import-e2e.test.js",
+      "lines": 390,
+      "limit": 300,
+      "severity": "high",
+      "message": "File exceeds 300-line limit: 390 lines"
+    },
+    {
+      "type": "file_size",
+      "file": "tests/import-history-api.test.js",
+      "lines": 334,
+      "limit": 300,
+      "severity": "high",
+      "message": "File exceeds 300-line limit: 334 lines"
+    },
+    {
+      "type": "file_size",
+      "file": "tests/import-history-puppeteer.test.js",
+      "lines": 313,
+      "limit": 300,
+      "severity": "high",
+      "message": "File exceeds 300-line limit: 313 lines"
+    },
+    {
+      "type": "file_size",
+      "file": "tests/integration/api.test.js",
+      "lines": 491,
+      "limit": 300,
+      "severity": "high",
+      "message": "File exceeds 300-line limit: 491 lines"
+    },
+    {
+      "type": "file_size",
+      "file": "tests/performance/performance.test.js",
+      "lines": 436,
+      "limit": 300,
+      "severity": "high",
+      "message": "File exceeds 300-line limit: 436 lines"
+    },
+    {
+      "type": "file_size",
+      "file": "tests/pw/import-history-ux.test.js",
+      "lines": 386,
+      "limit": 300,
+      "severity": "high",
+      "message": "File exceeds 300-line limit: 386 lines"
+    },
+    {
+      "type": "file_size",
+      "file": "tests/reports/test-reporting.test.js",
+      "lines": 543,
+      "limit": 300,
+      "severity": "high",
+      "message": "File exceeds 300-line limit: 543 lines"
+    },
+    {
+      "type": "file_size",
+      "file": "tests/shared/test-helpers.js",
+      "lines": 423,
+      "limit": 300,
+      "severity": "high",
+      "message": "File exceeds 300-line limit: 423 lines"
+    },
+    {
+      "type": "file_size",
+      "file": "tests/unit/tsv-categorizer.test.js",
+      "lines": 404,
+      "limit": 300,
+      "severity": "high",
+      "message": "File exceeds 300-line limit: 404 lines"
+    },
+    {
+      "type": "file_size",
+      "file": "tests/visual/visual-regression.test.js",
+      "lines": 447,
+      "limit": 300,
+      "severity": "high",
+      "message": "File exceeds 300-line limit: 447 lines"
+    },
+    {
+      "type": "file_size",
+      "file": "docs/API_DOCUMENTATION.md",
+      "lines": 485,
+      "limit": 300,
+      "severity": "high",
+      "message": "File exceeds 300-line limit: 485 lines"
+    },
+    {
+      "type": "test_failure",
+      "severity": "critical",
+      "message": "Test suite execution failed",
+      "error": "Command failed: npm run test:coverage\n❌ Server error: /mnt/chromeos/removable/Drive/repos/tsv-ledger/src/routes/geographic.js:60\n      const analysis = await geographicAnalysisEngine.analyzeGeographicData(expenditures);\n                                                      ^\n\nTypeError: geographicAnalysisEngine.analyzeGeographicData is not a function\n    at /mnt/chromeos/removable/Drive/repos/tsv-ledger/src/routes/geographic.js:60:55\n    at getAllExpenditures (/mnt/chromeos/removable/Drive/repos/tsv-ledger/src/database.js:119:3)\n    at /mnt/chromeos/removable/Drive/repos/tsv-ledger/src/routes/geographic.js:53:5\n    at Layer.handle [as handle_request] (/mnt/chromeos/removable/Drive/repos/tsv-ledger/node_modules/express/lib/router/layer.js:95:5)\n    at next (/mnt/chromeos/removable/Drive/repos/tsv-ledger/node_modules/express/lib/router/route.js:149:13)\n    at Route.dispatch (/mnt/chromeos/removable/Drive/repos/tsv-ledger/node_modules/express/lib/router/route.js:119:3)\n    at Layer.handle [as handle_request] (/mnt/chromeos/removable/Drive/repos/tsv-ledger/node_modules/express/lib/router/layer.js:95:5)\n    at /mnt/chromeos/removable/Drive/repos/tsv-ledger/node_modules/express/lib/router/index.js:284:15\n    at router.process_params (/mnt/chromeos/removable/Drive/repos/tsv-ledger/node_modules/express/lib/router/index.js:346:12)\n    at next (/mnt/chromeos/removable/Drive/repos/tsv-ledger/node_modules/express/lib/router/index.js:280:10)\n\nNode.js v24.12.0\n❌ Server exited with code 1\n📄 Server stdout: 🚀 TSV Ledger server running on http://localhost:3000\n📊 Version 2.2.3 - Professional Business Intelligence Platform\n🔧 Development mode: test\n🔍 Analyzing expenditures for subscription patterns...\n\n📄 Server stderr: /mnt/chromeos/removable/Drive/repos/tsv-ledger/src/routes/geographic.js:60\n      const analysis = await geographicAnalysisEngine.analyzeGeographicData(expenditures);\n                                                      ^\n\nTypeError: geographicAnalysisEngine.analyzeGeographicData is not a function\n    at /mnt/chromeos/removable/Drive/repos/tsv-ledger/src/routes/geographic.js:60:55\n    at getAllExpenditures (/mnt/chromeos/removable/Drive/repos/tsv-ledger/src/database.js:119:3)\n    at /mnt/chromeos/removable/Drive/repos/tsv-ledger/src/routes/geographic.js:53:5\n    at Layer.handle [as handle_request] (/mnt/chromeos/removable/Drive/repos/tsv-ledger/node_modules/express/lib/router/layer.js:95:5)\n    at next (/mnt/chromeos/removable/Drive/repos/tsv-ledger/node_modules/express/lib/router/route.js:149:13)\n    at Route.dispatch (/mnt/chromeos/removable/Drive/repos/tsv-ledger/node_modules/express/lib/router/route.js:119:3)\n    at Layer.handle [as handle_request] (/mnt/chromeos/removable/Drive/repos/tsv-ledger/node_modules/express/lib/router/layer.js:95:5)\n    at /mnt/chromeos/removable/Drive/repos/tsv-ledger/node_modules/express/lib/router/index.js:284:15\n    at router.process_params (/mnt/chromeos/removable/Drive/repos/tsv-ledger/node_modules/express/lib/router/index.js:346:12)\n    at next (/mnt/chromeos/removable/Drive/repos/tsv-ledger/node_modules/express/lib/router/index.js:280:10)\n\nNode.js v24.12.0\n\nFAIL tests/integration/api.test.js\n  API Integration Tests\n    GET /api/expenditures\n      ✓ should return empty array when no expenditures exist (57 ms)\n      ✓ should return all expenditures (34 ms)\n      ✓ should handle large datasets (30 ms)\n    POST /api/expenditures\n      ✓ should create new expenditure (168 ms)\n      ✓ should handle invalid JSON (19 ms)\n      ✓ should handle missing required fields (22 ms)\n    GET /api/analysis\n      ✕ should return analysis for existing expenditures (26 ms)\n      ✓ should handle empty dataset (14 ms)\n    GET /api/ai-analysis\n      ✓ should return AI analysis results (17 ms)\n      ✕ should handle empty dataset (19 ms)\n    GET /api/amazon-items\n      ✕ should return Amazon items (22 ms)\n      ✕ should handle filtering parameters (20 ms)\n    PUT /api/amazon-items/:id\n      ✓ should update Amazon item (18 ms)\n      ✓ should handle non-existent item (22 ms)\n    GET /api/premium-status\n      ✕ should return premium status (12 ms)\n    GET /api/premium-analytics\n      ✕ should return premium analytics (17 ms)\n    Employee Benefits API\n      POST /api/employee-benefits-filter\n        ✕ should filter employee benefits (30 ms)\n    Subscription Analysis API\n      GET /api/subscription-dashboard\n        ✕ should return subscription dashboard data (23 ms)\n      GET /api/subscription-analysis\n        ✕ should return subscription analysis (22 ms)\n    Geographic Analysis API\n      GET /api/geographic-dashboard\n        ✕ should return geographic dashboard data (29 ms)\n      GET /api/geographic-analysis\n        ✕ should return geographic analysis (28 ms)\n    File Upload APIs\n      POST /api/validate-amazon-zip\n        ✕ should validate ZIP file upload (15 ms)\n      POST /api/import-amazon-zip\n        ✕ should handle ZIP import request (13 ms)\n    Error Handling\n      ✕ should handle invalid endpoints (12 ms)\n      ✕ should handle malformed JSON in POST requests (13 ms)\n      ✕ should handle unsupported HTTP methods (14 ms)\n    Performance\n      ✕ should respond within acceptable time limits (39 ms)\n      ✕ should handle concurrent requests (54 ms)\n    Security\n      ✕ should not allow directory traversal (27 ms)\n      ✕ should handle large request bodies (16 ms)\n\n  ● API Integration Tests › GET /api/analysis › should return analysis for existing expenditures\n\n    expect(received).toHaveProperty(path)\n\n    Expected path: \"monthlyTrends\"\n    Received path: []\n\n    Received value: {\"averageAmount\": 75, \"categories\": {\"Food & Dining\": 50, \"Office Supplies\": 100}, \"dateRange\": {\"end\": \"2024-01-15\", \"start\": \"2024-01-15\"}, \"topCategory\": [\"Office Supplies\", 100], \"totalExpenditures\": 2, \"totalSpent\": 150}\n\n      203 |       expect(data).toHaveProperty('totalSpent');\n      204 |       expect(data).toHaveProperty('categories');\n    > 205 |       expect(data).toHaveProperty('monthlyTrends');\n          |                    ^\n      206 |       expect(data.totalSpent).toBe(150);\n      207 |       expect(data.categories['Office Supplies']).toBeDefined();\n      208 |       expect(data.categories['Food & Dining']).toBeDefined();\n\n      at Object.<anonymous> (tests/integration/api.test.js:205:20)\n\n  ● API Integration Tests › GET /api/ai-analysis › should handle empty dataset\n\n    expect(received).toEqual(expected) // deep equality\n\n    - Expected  - 1\n    + Received  + 3\n\n    - Array []\n    + Array [\n    +   \"No expenditure data available for analysis\",\n    + ]\n\n      241 |\n      242 |       AssertionHelpers.assertApiResponse(response, 200);\n    > 243 |       expect(data.insights).toEqual([]);\n          |                             ^\n      244 |       expect(data.recommendations).toEqual([]);\n      245 |       expect(data.anomalies).toEqual([]);\n      246 |     });\n\n      at Object.<anonymous> (tests/integration/api.test.js:243:29)\n\n  ● API Integration Tests › GET /api/amazon-items › should return Amazon items\n\n    expect(received).toBe(expected) // Object.is equality\n\n    Expected: true\n    Received: false\n\n      253 |\n      254 |       AssertionHelpers.assertApiResponse(response, 200);\n    > 255 |       expect(Array.isArray(data)).toBe(true);\n          |                                   ^\n      256 |     });\n      257 |\n      258 |     test('should handle filtering parameters', async () => {\n\n      at Object.<anonymous> (tests/integration/api.test.js:255:35)\n\n  ● API Integration Tests › GET /api/amazon-items › should handle filtering parameters\n\n    expect(received).toBe(expected) // Object.is equality\n\n    Expected: true\n    Received: false\n\n      261 |\n      262 |       AssertionHelpers.assertApiResponse(response, 200);\n    > 263 |       expect(Array.isArray(data)).toBe(true);\n          |                                   ^\n      264 |     });\n      265 |   });\n      266 |\n\n      at Object.<anonymous> (tests/integration/api.test.js:263:35)\n\n  ● API Integration Tests › GET /api/premium-status › should return premium status\n\n    expect(received).toHaveProperty(path)\n\n    Expected path: \"isPremium\"\n    Received path: []\n\n    Received value: {\"features\": {\"advancedReporting\": true, \"aiAnalysis\": true, \"amazonIntegration\": true, \"businessIntelligence\": true, \"geographicAnalysis\": true, \"subscriptionTracking\": true}, \"premium\": true, \"version\": \"2.2.3\"}\n\n      304 |\n      305 |       AssertionHelpers.assertApiResponse(response, 200);\n    > 306 |       expect(data).toHaveProperty('isPremium');\n          |                    ^\n      307 |       expect(data).toHaveProperty('features');\n      308 |     });\n      309 |   });\n\n      at Object.<anonymous> (tests/integration/api.test.js:306:20)\n\n  ● API Integration Tests › GET /api/premium-analytics › should return premium analytics\n\n    expect(received).toHaveProperty(path)\n\n    Expected path: \"advancedMetrics\"\n    Received path: []\n\n    Received value: {\"categoryBreakdown\": {}, \"insights\": [\"Highest spending category: N/A ($0.00)\", \"Average transaction: $NaN\", \"Total transactions: 0\"], \"monthlySpending\": {}, \"summary\": {\"averageTransaction\": null, \"totalExpenditures\": 0, \"totalSpent\": 0}, \"topCategories\": []}\n\n      315 |\n      316 |       AssertionHelpers.assertApiResponse(response, 200);\n    > 317 |       expect(data).toHaveProperty('advancedMetrics');\n          |                    ^\n      318 |       expect(data).toHaveProperty('insights');\n      319 |     });\n      320 |   });\n\n      at Object.<anonymous> (tests/integration/api.test.js:317:20)\n\n  ● API Integration Tests › Employee Benefits API › POST /api/employee-benefits-filter › should filter employee benefits\n\n    expect(received).toHaveProperty(path)\n\n    Expected path: \"filteredItems\"\n    Received path: []\n\n    Received value: {\"data\": {\"analysis\": {\"averageTransaction\": 0, \"categoryBreakdown\": {}, \"sourceBreakdown\": {}, \"totalSpent\": 0, \"transactionCount\": 0, \"type\": \"summary\"}, \"dateRange\": null, \"totalRecords\": 0}, \"expenditures\": [], \"success\": true}\n\n      336 |\n      337 |         AssertionHelpers.assertApiResponse(response, 200);\n    > 338 |         expect(data).toHaveProperty('filteredItems');\n          |                      ^\n      339 |         expect(data).toHaveProperty('summary');\n      340 |       });\n      341 |     });\n\n      at Object.<anonymous> (tests/integration/api.test.js:338:22)\n\n  ● API Integration Tests › Subscription Analysis API › GET /api/subscription-dashboard › should return subscription dashboard data\n\n    expect(received).toHaveProperty(path)\n\n    Expected path: \"subscriptions\"\n    Received path: []\n\n    Received value: {\"monthlyBreakdown\": {}, \"recentSubscriptions\": [], \"recurringSubscriptions\": [], \"summary\": {\"averageCost\": 0, \"totalSpent\": 0, \"totalSubscriptions\": 0, \"uniqueServices\": 0}}\n\n      349 |\n      350 |         AssertionHelpers.assertApiResponse(response, 200);\n    > 351 |         expect(data).toHaveProperty('subscriptions');\n          |                      ^\n      352 |         expect(data).toHaveProperty('metrics');\n      353 |       });\n      354 |     });\n\n      at Object.<anonymous> (tests/integration/api.test.js:351:22)\n\n  ● API Integration Tests › Subscription Analysis API › GET /api/subscription-analysis › should return subscription analysis\n\n    expect(received).toHaveProperty(path)\n\n    Expected path: \"patterns\"\n    Received path: []\n\n    Received value: {\"categoryBreakdown\": {}, \"insights\": [\"No subscription transactions found in the dataset\"], \"monthlyBreakdown\": {}, \"recommendations\": [], \"summary\": {\"averageCost\": 0, \"totalSpent\": 0, \"totalSubscriptions\": 0, \"uniqueServices\": []}}\n\n      360 |\n      361 |         AssertionHelpers.assertApiResponse(response, 200);\n    > 362 |         expect(data).toHaveProperty('patterns');\n          |                      ^\n      363 |         expect(data).toHaveProperty('recommendations');\n      364 |       });\n      365 |     });\n\n      at Object.<anonymous> (tests/integration/api.test.js:362:22)\n\n  ● API Integration Tests › Geographic Analysis API › GET /api/geographic-dashboard › should return geographic dashboard data\n\n    expect(received).toHaveProperty(path)\n\n    Expected path: \"locations\"\n    Received path: []\n\n    Received value: {\"spendingByRegion\": {}, \"summary\": {\"averageSpendingPerLocation\": null, \"totalLocations\": 0, \"totalSpent\": 0}, \"topLocations\": [], \"trends\": {\"highestSpendingLocation\": null, \"locationDiversity\": \"low\", \"mostActiveRegion\": null}}\n\n      373 |\n      374 |         AssertionHelpers.assertApiResponse(response, 200);\n    > 375 |         expect(data).toHaveProperty('locations');\n          |                      ^\n      376 |         expect(data).toHaveProperty('spending');\n      377 |       });\n      378 |     });\n\n      at Object.<anonymous> (tests/integration/api.test.js:375:22)\n\n  ● API Integration Tests › Geographic Analysis API › GET /api/geographic-analysis › should return geographic analysis\n\n    TypeError: fetch failed\n\n      380 |     describe('GET /api/geographic-analysis', () => {\n      381 |       test('should return geographic analysis', async () => {\n    > 382 |         const response = await fetch(`${baseUrl}/api/geographic-analysis`);\n          |                          ^\n      383 |         const data = await response.json();\n      384 |\n      385 |         AssertionHelpers.assertApiResponse(response, 200);\n\n      at Object.<anonymous> (tests/integration/api.test.js:382:26)\n\n    Cause:\n    SocketError: other side closed\n\n\n  ● API Integration Tests › File Upload APIs › POST /api/validate-amazon-zip › should validate ZIP file upload\n\n    TypeError: fetch failed\n\n      399 |         formData.append('amazonZip', blob, 'test.zip');\n      400 |\n    > 401 |         const response = await fetch(`${baseUrl}/api/validate-amazon-zip`, {\n          |                          ^\n      402 |           method: 'POST',\n      403 |           body: formData\n      404 |         });\n\n      at Object.<anonymous> (tests/integration/api.test.js:401:26)\n\n    Cause:\n    AggregateError:\n\n\n  ● API Integration Tests › File Upload APIs › POST /api/import-amazon-zip › should handle ZIP import request\n\n    TypeError: fetch failed\n\n      415 |         formData.append('amazonZip', blob, 'test.zip');\n      416 |\n    > 417 |         const response = await fetch(`${baseUrl}/api/import-amazon-zip`, {\n          |                          ^\n      418 |           method: 'POST',\n      419 |           body: formData\n      420 |         });\n\n      at Object.<anonymous> (tests/integration/api.test.js:417:26)\n\n    Cause:\n    AggregateError:\n\n\n  ● API Integration Tests › Error Handling › should handle invalid endpoints\n\n    TypeError: fetch failed\n\n      428 |   describe('Error Handling', () => {\n      429 |     test('should handle invalid endpoints', async () => {\n    > 430 |       const response = await fetch(`${baseUrl}/api/nonexistent`);\n          |                        ^\n      431 |       expect(response.status).toBe(404);\n      432 |     });\n      433 |\n\n      at Object.<anonymous> (tests/integration/api.test.js:430:24)\n\n    Cause:\n    AggregateError:\n\n\n  ● API Integration Tests › Error Handling › should handle malformed JSON in POST requests\n\n    TypeError: fetch failed\n\n      433 |\n      434 |     test('should handle malformed JSON in POST requests', async () => {\n    > 435 |       const response = await fetch(`${baseUrl}/api/expenditures`, {\n          |                        ^\n      436 |         method: 'POST',\n      437 |         headers: { 'Content-Type': 'application/json' },\n      438 |         body: '{invalid json}'\n\n      at Object.<anonymous> (tests/integration/api.test.js:435:24)\n\n    Cause:\n    AggregateError:\n\n\n  ● API Integration Tests › Error Handling › should handle unsupported HTTP methods\n\n    TypeError: fetch failed\n\n      442 |\n      443 |     test('should handle unsupported HTTP methods', async () => {\n    > 444 |       const response = await fetch(`${baseUrl}/api/expenditures`, {\n          |                        ^\n      445 |         method: 'PATCH'\n      446 |       });\n      447 |       expect([404, 405]).toContain(response.status);\n\n      at Object.<anonymous> (tests/integration/api.test.js:444:24)\n\n    Cause:\n    AggregateError:\n\n\n  ● API Integration Tests › Performance › should respond within acceptable time limits\n\n    TypeError: fetch failed\n\n      453 |       const startTime = Date.now();\n      454 |\n    > 455 |       await fetch(`${baseUrl}/api/expenditures`);\n          |       ^\n      456 |\n      457 |       const responseTime = Date.now() - startTime;\n      458 |       expect(responseTime).toBeLessThan(1000); // Should respond within 1 second\n\n      at Object.<anonymous> (tests/integration/api.test.js:455:7)\n\n    Cause:\n    AggregateError:\n\n\n  ● API Integration Tests › Performance › should handle concurrent requests\n\n    TypeError: fetch failed\n\n      464 |       );\n      465 |\n    > 466 |       const responses = await Promise.all(requests);\n          |                         ^\n      467 |       responses.forEach(response => {\n      468 |         expect(response.status).toBe(200);\n      469 |       });\n\n          at async Promise.all (index 0)\n      at Object.<anonymous> (tests/integration/api.test.js:466:25)\n\n    Cause:\n    AggregateError:\n\n\n  ● API Integration Tests › Security › should not allow directory traversal\n\n    TypeError: fetch failed\n\n      473 |   describe('Security', () => {\n      474 |     test('should not allow directory traversal', async () => {\n    > 475 |       const response = await fetch(`${baseUrl}/api/../../../etc/passwd`);\n          |                        ^\n      476 |       expect(response.status).toBe(404);\n      477 |     });\n      478 |\n\n      at Object.<anonymous> (tests/integration/api.test.js:475:24)\n\n    Cause:\n    AggregateError:\n\n\n  ● API Integration Tests › Security › should handle large request bodies\n\n    TypeError: fetch failed\n\n      480 |       const largeData = 'x'.repeat(1024 * 1024); // 1MB of data\n      481 |\n    > 482 |       const response = await fetch(`${baseUrl}/api/expenditures`, {\n          |                        ^\n      483 |         method: 'POST',\n      484 |         headers: { 'Content-Type': 'application/json' },\n      485 |         body: JSON.stringify({ description: largeData })\n\n      at Object.<anonymous> (tests/integration/api.test.js:482:24)\n\n    Cause:\n    AggregateError:\n\n\nPASS tests/unit/database.test.js (10.754 s)\n  Database Module\n    getAllExpenditures\n      ✓ should return empty array when no data exists (16 ms)\n      ✓ should return all expenditures when data exists (15 ms)\n      ✓ should handle malformed JSON gracefully (15 ms)\n      ✓ should handle file read errors gracefully (16 ms)\n    addExpenditure\n      ✓ should add new expenditure with generated ID (17 ms)\n      ✓ should increment ID for multiple additions (17 ms)\n      ✓ should preserve existing properties when adding (16 ms)\n      ✓ should handle file write errors gracefully (15 ms)\n      ✓ should validate required fields are present (15 ms)\n    Data Persistence\n      ✓ should persist data between operations (14 ms)\n      ✓ should maintain data integrity across multiple operations (18 ms)\n    Error Handling\n      ✓ should handle concurrent access gracefully (15 ms)\n      ✓ should handle large datasets efficiently (10489 ms)\n\nPASS tests/unit/tsv-categorizer.test.js\n  TSVCategorizer\n    Categorization\n      ✓ should categorize food-related expenses correctly (9 ms)\n      ✓ should categorize transportation expenses correctly (3 ms)\n      ✓ should categorize shopping expenses correctly (3 ms)\n      ✓ should categorize utilities correctly (2 ms)\n      ✓ should return Other for uncategorized expenses (4 ms)\n      ✓ should handle case-insensitive matching (3 ms)\n      ✓ should handle null/undefined inputs gracefully (2 ms)\n    Analysis\n      ✓ should analyze empty expense array (2 ms)\n      ✓ should analyze null/undefined expenses (3 ms)\n      ✓ should analyze single expense correctly (5 ms)\n      ✓ should analyze multiple expenses with different categories (4 ms)\n      ✓ should handle expenses with invalid amounts (3 ms)\n      ✓ should handle large datasets efficiently (19 ms)\n    Bank of America Transaction Categorization\n      ✓ should categorize BoA transactions with subcategories (5 ms)\n    Amazon Order Analysis\n      ✓ should analyze Amazon orders correctly (5 ms)\n      ✓ should detect Subscribe & Save orders (4 ms)\n      ✓ should calculate data completeness accurately (3 ms)\n    Subcategory Logic\n      ✓ should assign correct subcategories for Food & Dining (4 ms)\n      ✓ should assign correct subcategories for Transportation (3 ms)\n      ✓ should handle null inputs for subcategories (3 ms)\n    Edge Cases\n      ✓ should handle very long descriptions (3 ms)\n      ✓ should handle special characters in descriptions (4 ms)\n      ✓ should handle numeric descriptions (4 ms)\n      ✓ should handle emoji in descriptions (4 ms)\n    Performance\n      ✓ should categorize quickly (5 ms)\n      ✓ should handle memory efficiently (44 ms)\n\nJest: \"global\" coverage threshold for statements (85%) not met: 4.78%\nJest: \"global\" coverage threshold for branches (80%) not met: 5.76%\nJest: \"global\" coverage threshold for lines (85%) not met: 4.74%\nJest: \"global\" coverage threshold for functions (85%) not met: 4.78%\nTest Suites: 1 failed, 2 passed, 3 total\nTests:       20 failed, 49 passed, 69 total\nSnapshots:   0 total\nTime:        17.146 s\nRan all test suites.\n"
+    },
+    {
+      "type": "lint_errors",
+      "count": 0,
+      "severity": "medium",
+      "message": "0 linting errors found",
+      "details": "\n> tsv-ledger@2.2.3 lint\n> npx eslint src/ tests/ --fix\n\n"
+    }
+  ],
+  "recommendations": [
+    {
+      "context": "large_javascript_file",
+      "triggers": [
+        "file_size_violation",
+        "javascript",
+        "lines > 300"
+      ],
+      "practices": [
+        "Break into smaller modules under 300 lines each",
+        "Extract pure functions into separate files",
+        "Use ES6 imports/exports for modular structure",
+        "Create index.js files for clean module exports"
+      ],
+      "examples": [
+        "src/database.js → src/database/index.js + modules"
+      ],
+      "successRate": 0.95,
+      "relevance": 1.7000000000000002,
+      "category": "fileSize",
+      "violation": {
+        "type": "file_size",
+        "file": "src/amazon-zip-detector.js",
+        "lines": 380,
+        "limit": 300,
+        "severity": "high",
+        "message": "File exceeds 300-line limit: 380 lines"
+      }
+    },
+    {
+      "context": "failing_tests",
+      "triggers": [
+        "test_failure",
+        "api_error",
+        "server_crash"
+      ],
+      "practices": [
+        "Run tests before any code changes (baseline)",
+        "Fix server crashes before proceeding with tests",
+        "Implement missing API methods in analysis engines",
+        "Ensure proper error handling in routes"
+      ],
+      "examples": [
+        "Add analyzeSubscriptions method to engine",
+        "Fix route instantiation"
+      ],
+      "successRate": 0.88,
+      "relevance": 0.9,
+      "category": "testing",
+      "violation": {
+        "type": "test_failure",
+        "severity": "critical",
+        "message": "Test suite execution failed",
+        "error": "Command failed: npm run test:coverage\n❌ Server error: /mnt/chromeos/removable/Drive/repos/tsv-ledger/src/routes/geographic.js:60\n      const analysis = await geographicAnalysisEngine.analyzeGeographicData(expenditures);\n                                                      ^\n\nTypeError: geographicAnalysisEngine.analyzeGeographicData is not a function\n    at /mnt/chromeos/removable/Drive/repos/tsv-ledger/src/routes/geographic.js:60:55\n    at getAllExpenditures (/mnt/chromeos/removable/Drive/repos/tsv-ledger/src/database.js:119:3)\n    at /mnt/chromeos/removable/Drive/repos/tsv-ledger/src/routes/geographic.js:53:5\n    at Layer.handle [as handle_request] (/mnt/chromeos/removable/Drive/repos/tsv-ledger/node_modules/express/lib/router/layer.js:95:5)\n    at next (/mnt/chromeos/removable/Drive/repos/tsv-ledger/node_modules/express/lib/router/route.js:149:13)\n    at Route.dispatch (/mnt/chromeos/removable/Drive/repos/tsv-ledger/node_modules/express/lib/router/route.js:119:3)\n    at Layer.handle [as handle_request] (/mnt/chromeos/removable/Drive/repos/tsv-ledger/node_modules/express/lib/router/layer.js:95:5)\n    at /mnt/chromeos/removable/Drive/repos/tsv-ledger/node_modules/express/lib/router/index.js:284:15\n    at router.process_params (/mnt/chromeos/removable/Drive/repos/tsv-ledger/node_modules/express/lib/router/index.js:346:12)\n    at next (/mnt/chromeos/removable/Drive/repos/tsv-ledger/node_modules/express/lib/router/index.js:280:10)\n\nNode.js v24.12.0\n❌ Server exited with code 1\n📄 Server stdout: 🚀 TSV Ledger server running on http://localhost:3000\n📊 Version 2.2.3 - Professional Business Intelligence Platform\n🔧 Development mode: test\n🔍 Analyzing expenditures for subscription patterns...\n\n📄 Server stderr: /mnt/chromeos/removable/Drive/repos/tsv-ledger/src/routes/geographic.js:60\n      const analysis = await geographicAnalysisEngine.analyzeGeographicData(expenditures);\n                                                      ^\n\nTypeError: geographicAnalysisEngine.analyzeGeographicData is not a function\n    at /mnt/chromeos/removable/Drive/repos/tsv-ledger/src/routes/geographic.js:60:55\n    at getAllExpenditures (/mnt/chromeos/removable/Drive/repos/tsv-ledger/src/database.js:119:3)\n    at /mnt/chromeos/removable/Drive/repos/tsv-ledger/src/routes/geographic.js:53:5\n    at Layer.handle [as handle_request] (/mnt/chromeos/removable/Drive/repos/tsv-ledger/node_modules/express/lib/router/layer.js:95:5)\n    at next (/mnt/chromeos/removable/Drive/repos/tsv-ledger/node_modules/express/lib/router/route.js:149:13)\n    at Route.dispatch (/mnt/chromeos/removable/Drive/repos/tsv-ledger/node_modules/express/lib/router/route.js:119:3)\n    at Layer.handle [as handle_request] (/mnt/chromeos/removable/Drive/repos/tsv-ledger/node_modules/express/lib/router/layer.js:95:5)\n    at /mnt/chromeos/removable/Drive/repos/tsv-ledger/node_modules/express/lib/router/index.js:284:15\n    at router.process_params (/mnt/chromeos/removable/Drive/repos/tsv-ledger/node_modules/express/lib/router/index.js:346:12)\n    at next (/mnt/chromeos/removable/Drive/repos/tsv-ledger/node_modules/express/lib/router/index.js:280:10)\n\nNode.js v24.12.0\n\nFAIL tests/integration/api.test.js\n  API Integration Tests\n    GET /api/expenditures\n      ✓ should return empty array when no expenditures exist (57 ms)\n      ✓ should return all expenditures (34 ms)\n      ✓ should handle large datasets (30 ms)\n    POST /api/expenditures\n      ✓ should create new expenditure (168 ms)\n      ✓ should handle invalid JSON (19 ms)\n      ✓ should handle missing required fields (22 ms)\n    GET /api/analysis\n      ✕ should return analysis for existing expenditures (26 ms)\n      ✓ should handle empty dataset (14 ms)\n    GET /api/ai-analysis\n      ✓ should return AI analysis results (17 ms)\n      ✕ should handle empty dataset (19 ms)\n    GET /api/amazon-items\n      ✕ should return Amazon items (22 ms)\n      ✕ should handle filtering parameters (20 ms)\n    PUT /api/amazon-items/:id\n      ✓ should update Amazon item (18 ms)\n      ✓ should handle non-existent item (22 ms)\n    GET /api/premium-status\n      ✕ should return premium status (12 ms)\n    GET /api/premium-analytics\n      ✕ should return premium analytics (17 ms)\n    Employee Benefits API\n      POST /api/employee-benefits-filter\n        ✕ should filter employee benefits (30 ms)\n    Subscription Analysis API\n      GET /api/subscription-dashboard\n        ✕ should return subscription dashboard data (23 ms)\n      GET /api/subscription-analysis\n        ✕ should return subscription analysis (22 ms)\n    Geographic Analysis API\n      GET /api/geographic-dashboard\n        ✕ should return geographic dashboard data (29 ms)\n      GET /api/geographic-analysis\n        ✕ should return geographic analysis (28 ms)\n    File Upload APIs\n      POST /api/validate-amazon-zip\n        ✕ should validate ZIP file upload (15 ms)\n      POST /api/import-amazon-zip\n        ✕ should handle ZIP import request (13 ms)\n    Error Handling\n      ✕ should handle invalid endpoints (12 ms)\n      ✕ should handle malformed JSON in POST requests (13 ms)\n      ✕ should handle unsupported HTTP methods (14 ms)\n    Performance\n      ✕ should respond within acceptable time limits (39 ms)\n      ✕ should handle concurrent requests (54 ms)\n    Security\n      ✕ should not allow directory traversal (27 ms)\n      ✕ should handle large request bodies (16 ms)\n\n  ● API Integration Tests › GET /api/analysis › should return analysis for existing expenditures\n\n    expect(received).toHaveProperty(path)\n\n    Expected path: \"monthlyTrends\"\n    Received path: []\n\n    Received value: {\"averageAmount\": 75, \"categories\": {\"Food & Dining\": 50, \"Office Supplies\": 100}, \"dateRange\": {\"end\": \"2024-01-15\", \"start\": \"2024-01-15\"}, \"topCategory\": [\"Office Supplies\", 100], \"totalExpenditures\": 2, \"totalSpent\": 150}\n\n      203 |       expect(data).toHaveProperty('totalSpent');\n      204 |       expect(data).toHaveProperty('categories');\n    > 205 |       expect(data).toHaveProperty('monthlyTrends');\n          |                    ^\n      206 |       expect(data.totalSpent).toBe(150);\n      207 |       expect(data.categories['Office Supplies']).toBeDefined();\n      208 |       expect(data.categories['Food & Dining']).toBeDefined();\n\n      at Object.<anonymous> (tests/integration/api.test.js:205:20)\n\n  ● API Integration Tests › GET /api/ai-analysis › should handle empty dataset\n\n    expect(received).toEqual(expected) // deep equality\n\n    - Expected  - 1\n    + Received  + 3\n\n    - Array []\n    + Array [\n    +   \"No expenditure data available for analysis\",\n    + ]\n\n      241 |\n      242 |       AssertionHelpers.assertApiResponse(response, 200);\n    > 243 |       expect(data.insights).toEqual([]);\n          |                             ^\n      244 |       expect(data.recommendations).toEqual([]);\n      245 |       expect(data.anomalies).toEqual([]);\n      246 |     });\n\n      at Object.<anonymous> (tests/integration/api.test.js:243:29)\n\n  ● API Integration Tests › GET /api/amazon-items › should return Amazon items\n\n    expect(received).toBe(expected) // Object.is equality\n\n    Expected: true\n    Received: false\n\n      253 |\n      254 |       AssertionHelpers.assertApiResponse(response, 200);\n    > 255 |       expect(Array.isArray(data)).toBe(true);\n          |                                   ^\n      256 |     });\n      257 |\n      258 |     test('should handle filtering parameters', async () => {\n\n      at Object.<anonymous> (tests/integration/api.test.js:255:35)\n\n  ● API Integration Tests › GET /api/amazon-items › should handle filtering parameters\n\n    expect(received).toBe(expected) // Object.is equality\n\n    Expected: true\n    Received: false\n\n      261 |\n      262 |       AssertionHelpers.assertApiResponse(response, 200);\n    > 263 |       expect(Array.isArray(data)).toBe(true);\n          |                                   ^\n      264 |     });\n      265 |   });\n      266 |\n\n      at Object.<anonymous> (tests/integration/api.test.js:263:35)\n\n  ● API Integration Tests › GET /api/premium-status › should return premium status\n\n    expect(received).toHaveProperty(path)\n\n    Expected path: \"isPremium\"\n    Received path: []\n\n    Received value: {\"features\": {\"advancedReporting\": true, \"aiAnalysis\": true, \"amazonIntegration\": true, \"businessIntelligence\": true, \"geographicAnalysis\": true, \"subscriptionTracking\": true}, \"premium\": true, \"version\": \"2.2.3\"}\n\n      304 |\n      305 |       AssertionHelpers.assertApiResponse(response, 200);\n    > 306 |       expect(data).toHaveProperty('isPremium');\n          |                    ^\n      307 |       expect(data).toHaveProperty('features');\n      308 |     });\n      309 |   });\n\n      at Object.<anonymous> (tests/integration/api.test.js:306:20)\n\n  ● API Integration Tests › GET /api/premium-analytics › should return premium analytics\n\n    expect(received).toHaveProperty(path)\n\n    Expected path: \"advancedMetrics\"\n    Received path: []\n\n    Received value: {\"categoryBreakdown\": {}, \"insights\": [\"Highest spending category: N/A ($0.00)\", \"Average transaction: $NaN\", \"Total transactions: 0\"], \"monthlySpending\": {}, \"summary\": {\"averageTransaction\": null, \"totalExpenditures\": 0, \"totalSpent\": 0}, \"topCategories\": []}\n\n      315 |\n      316 |       AssertionHelpers.assertApiResponse(response, 200);\n    > 317 |       expect(data).toHaveProperty('advancedMetrics');\n          |                    ^\n      318 |       expect(data).toHaveProperty('insights');\n      319 |     });\n      320 |   });\n\n      at Object.<anonymous> (tests/integration/api.test.js:317:20)\n\n  ● API Integration Tests › Employee Benefits API › POST /api/employee-benefits-filter › should filter employee benefits\n\n    expect(received).toHaveProperty(path)\n\n    Expected path: \"filteredItems\"\n    Received path: []\n\n    Received value: {\"data\": {\"analysis\": {\"averageTransaction\": 0, \"categoryBreakdown\": {}, \"sourceBreakdown\": {}, \"totalSpent\": 0, \"transactionCount\": 0, \"type\": \"summary\"}, \"dateRange\": null, \"totalRecords\": 0}, \"expenditures\": [], \"success\": true}\n\n      336 |\n      337 |         AssertionHelpers.assertApiResponse(response, 200);\n    > 338 |         expect(data).toHaveProperty('filteredItems');\n          |                      ^\n      339 |         expect(data).toHaveProperty('summary');\n      340 |       });\n      341 |     });\n\n      at Object.<anonymous> (tests/integration/api.test.js:338:22)\n\n  ● API Integration Tests › Subscription Analysis API › GET /api/subscription-dashboard › should return subscription dashboard data\n\n    expect(received).toHaveProperty(path)\n\n    Expected path: \"subscriptions\"\n    Received path: []\n\n    Received value: {\"monthlyBreakdown\": {}, \"recentSubscriptions\": [], \"recurringSubscriptions\": [], \"summary\": {\"averageCost\": 0, \"totalSpent\": 0, \"totalSubscriptions\": 0, \"uniqueServices\": 0}}\n\n      349 |\n      350 |         AssertionHelpers.assertApiResponse(response, 200);\n    > 351 |         expect(data).toHaveProperty('subscriptions');\n          |                      ^\n      352 |         expect(data).toHaveProperty('metrics');\n      353 |       });\n      354 |     });\n\n      at Object.<anonymous> (tests/integration/api.test.js:351:22)\n\n  ● API Integration Tests › Subscription Analysis API › GET /api/subscription-analysis › should return subscription analysis\n\n    expect(received).toHaveProperty(path)\n\n    Expected path: \"patterns\"\n    Received path: []\n\n    Received value: {\"categoryBreakdown\": {}, \"insights\": [\"No subscription transactions found in the dataset\"], \"monthlyBreakdown\": {}, \"recommendations\": [], \"summary\": {\"averageCost\": 0, \"totalSpent\": 0, \"totalSubscriptions\": 0, \"uniqueServices\": []}}\n\n      360 |\n      361 |         AssertionHelpers.assertApiResponse(response, 200);\n    > 362 |         expect(data).toHaveProperty('patterns');\n          |                      ^\n      363 |         expect(data).toHaveProperty('recommendations');\n      364 |       });\n      365 |     });\n\n      at Object.<anonymous> (tests/integration/api.test.js:362:22)\n\n  ● API Integration Tests › Geographic Analysis API › GET /api/geographic-dashboard › should return geographic dashboard data\n\n    expect(received).toHaveProperty(path)\n\n    Expected path: \"locations\"\n    Received path: []\n\n    Received value: {\"spendingByRegion\": {}, \"summary\": {\"averageSpendingPerLocation\": null, \"totalLocations\": 0, \"totalSpent\": 0}, \"topLocations\": [], \"trends\": {\"highestSpendingLocation\": null, \"locationDiversity\": \"low\", \"mostActiveRegion\": null}}\n\n      373 |\n      374 |         AssertionHelpers.assertApiResponse(response, 200);\n    > 375 |         expect(data).toHaveProperty('locations');\n          |                      ^\n      376 |         expect(data).toHaveProperty('spending');\n      377 |       });\n      378 |     });\n\n      at Object.<anonymous> (tests/integration/api.test.js:375:22)\n\n  ● API Integration Tests › Geographic Analysis API › GET /api/geographic-analysis › should return geographic analysis\n\n    TypeError: fetch failed\n\n      380 |     describe('GET /api/geographic-analysis', () => {\n      381 |       test('should return geographic analysis', async () => {\n    > 382 |         const response = await fetch(`${baseUrl}/api/geographic-analysis`);\n          |                          ^\n      383 |         const data = await response.json();\n      384 |\n      385 |         AssertionHelpers.assertApiResponse(response, 200);\n\n      at Object.<anonymous> (tests/integration/api.test.js:382:26)\n\n    Cause:\n    SocketError: other side closed\n\n\n  ● API Integration Tests › File Upload APIs › POST /api/validate-amazon-zip › should validate ZIP file upload\n\n    TypeError: fetch failed\n\n      399 |         formData.append('amazonZip', blob, 'test.zip');\n      400 |\n    > 401 |         const response = await fetch(`${baseUrl}/api/validate-amazon-zip`, {\n          |                          ^\n      402 |           method: 'POST',\n      403 |           body: formData\n      404 |         });\n\n      at Object.<anonymous> (tests/integration/api.test.js:401:26)\n\n    Cause:\n    AggregateError:\n\n\n  ● API Integration Tests › File Upload APIs › POST /api/import-amazon-zip › should handle ZIP import request\n\n    TypeError: fetch failed\n\n      415 |         formData.append('amazonZip', blob, 'test.zip');\n      416 |\n    > 417 |         const response = await fetch(`${baseUrl}/api/import-amazon-zip`, {\n          |                          ^\n      418 |           method: 'POST',\n      419 |           body: formData\n      420 |         });\n\n      at Object.<anonymous> (tests/integration/api.test.js:417:26)\n\n    Cause:\n    AggregateError:\n\n\n  ● API Integration Tests › Error Handling › should handle invalid endpoints\n\n    TypeError: fetch failed\n\n      428 |   describe('Error Handling', () => {\n      429 |     test('should handle invalid endpoints', async () => {\n    > 430 |       const response = await fetch(`${baseUrl}/api/nonexistent`);\n          |                        ^\n      431 |       expect(response.status).toBe(404);\n      432 |     });\n      433 |\n\n      at Object.<anonymous> (tests/integration/api.test.js:430:24)\n\n    Cause:\n    AggregateError:\n\n\n  ● API Integration Tests › Error Handling › should handle malformed JSON in POST requests\n\n    TypeError: fetch failed\n\n      433 |\n      434 |     test('should handle malformed JSON in POST requests', async () => {\n    > 435 |       const response = await fetch(`${baseUrl}/api/expenditures`, {\n          |                        ^\n      436 |         method: 'POST',\n      437 |         headers: { 'Content-Type': 'application/json' },\n      438 |         body: '{invalid json}'\n\n      at Object.<anonymous> (tests/integration/api.test.js:435:24)\n\n    Cause:\n    AggregateError:\n\n\n  ● API Integration Tests › Error Handling › should handle unsupported HTTP methods\n\n    TypeError: fetch failed\n\n      442 |\n      443 |     test('should handle unsupported HTTP methods', async () => {\n    > 444 |       const response = await fetch(`${baseUrl}/api/expenditures`, {\n          |                        ^\n      445 |         method: 'PATCH'\n      446 |       });\n      447 |       expect([404, 405]).toContain(response.status);\n\n      at Object.<anonymous> (tests/integration/api.test.js:444:24)\n\n    Cause:\n    AggregateError:\n\n\n  ● API Integration Tests › Performance › should respond within acceptable time limits\n\n    TypeError: fetch failed\n\n      453 |       const startTime = Date.now();\n      454 |\n    > 455 |       await fetch(`${baseUrl}/api/expenditures`);\n          |       ^\n      456 |\n      457 |       const responseTime = Date.now() - startTime;\n      458 |       expect(responseTime).toBeLessThan(1000); // Should respond within 1 second\n\n      at Object.<anonymous> (tests/integration/api.test.js:455:7)\n\n    Cause:\n    AggregateError:\n\n\n  ● API Integration Tests › Performance › should handle concurrent requests\n\n    TypeError: fetch failed\n\n      464 |       );\n      465 |\n    > 466 |       const responses = await Promise.all(requests);\n          |                         ^\n      467 |       responses.forEach(response => {\n      468 |         expect(response.status).toBe(200);\n      469 |       });\n\n          at async Promise.all (index 0)\n      at Object.<anonymous> (tests/integration/api.test.js:466:25)\n\n    Cause:\n    AggregateError:\n\n\n  ● API Integration Tests › Security › should not allow directory traversal\n\n    TypeError: fetch failed\n\n      473 |   describe('Security', () => {\n      474 |     test('should not allow directory traversal', async () => {\n    > 475 |       const response = await fetch(`${baseUrl}/api/../../../etc/passwd`);\n          |                        ^\n      476 |       expect(response.status).toBe(404);\n      477 |     });\n      478 |\n\n      at Object.<anonymous> (tests/integration/api.test.js:475:24)\n\n    Cause:\n    AggregateError:\n\n\n  ● API Integration Tests › Security › should handle large request bodies\n\n    TypeError: fetch failed\n\n      480 |       const largeData = 'x'.repeat(1024 * 1024); // 1MB of data\n      481 |\n    > 482 |       const response = await fetch(`${baseUrl}/api/expenditures`, {\n          |                        ^\n      483 |         method: 'POST',\n      484 |         headers: { 'Content-Type': 'application/json' },\n      485 |         body: JSON.stringify({ description: largeData })\n\n      at Object.<anonymous> (tests/integration/api.test.js:482:24)\n\n    Cause:\n    AggregateError:\n\n\nPASS tests/unit/database.test.js (10.754 s)\n  Database Module\n    getAllExpenditures\n      ✓ should return empty array when no data exists (16 ms)\n      ✓ should return all expenditures when data exists (15 ms)\n      ✓ should handle malformed JSON gracefully (15 ms)\n      ✓ should handle file read errors gracefully (16 ms)\n    addExpenditure\n      ✓ should add new expenditure with generated ID (17 ms)\n      ✓ should increment ID for multiple additions (17 ms)\n      ✓ should preserve existing properties when adding (16 ms)\n      ✓ should handle file write errors gracefully (15 ms)\n      ✓ should validate required fields are present (15 ms)\n    Data Persistence\n      ✓ should persist data between operations (14 ms)\n      ✓ should maintain data integrity across multiple operations (18 ms)\n    Error Handling\n      ✓ should handle concurrent access gracefully (15 ms)\n      ✓ should handle large datasets efficiently (10489 ms)\n\nPASS tests/unit/tsv-categorizer.test.js\n  TSVCategorizer\n    Categorization\n      ✓ should categorize food-related expenses correctly (9 ms)\n      ✓ should categorize transportation expenses correctly (3 ms)\n      ✓ should categorize shopping expenses correctly (3 ms)\n      ✓ should categorize utilities correctly (2 ms)\n      ✓ should return Other for uncategorized expenses (4 ms)\n      ✓ should handle case-insensitive matching (3 ms)\n      ✓ should handle null/undefined inputs gracefully (2 ms)\n    Analysis\n      ✓ should analyze empty expense array (2 ms)\n      ✓ should analyze null/undefined expenses (3 ms)\n      ✓ should analyze single expense correctly (5 ms)\n      ✓ should analyze multiple expenses with different categories (4 ms)\n      ✓ should handle expenses with invalid amounts (3 ms)\n      ✓ should handle large datasets efficiently (19 ms)\n    Bank of America Transaction Categorization\n      ✓ should categorize BoA transactions with subcategories (5 ms)\n    Amazon Order Analysis\n      ✓ should analyze Amazon orders correctly (5 ms)\n      ✓ should detect Subscribe & Save orders (4 ms)\n      ✓ should calculate data completeness accurately (3 ms)\n    Subcategory Logic\n      ✓ should assign correct subcategories for Food & Dining (4 ms)\n      ✓ should assign correct subcategories for Transportation (3 ms)\n      ✓ should handle null inputs for subcategories (3 ms)\n    Edge Cases\n      ✓ should handle very long descriptions (3 ms)\n      ✓ should handle special characters in descriptions (4 ms)\n      ✓ should handle numeric descriptions (4 ms)\n      ✓ should handle emoji in descriptions (4 ms)\n    Performance\n      ✓ should categorize quickly (5 ms)\n      ✓ should handle memory efficiently (44 ms)\n\nJest: \"global\" coverage threshold for statements (85%) not met: 4.78%\nJest: \"global\" coverage threshold for branches (80%) not met: 5.76%\nJest: \"global\" coverage threshold for lines (85%) not met: 4.74%\nJest: \"global\" coverage threshold for functions (85%) not met: 4.78%\nTest Suites: 1 failed, 2 passed, 3 total\nTests:       20 failed, 49 passed, 69 total\nSnapshots:   0 total\nTime:        17.146 s\nRan all test suites.\n"
+      }
+    },
+    {
+      "context": "large_html_file",
+      "triggers": [
+        "file_size_violation",
+        "html",
+        "component"
+      ],
+      "practices": [
+        "Componentize into public/components/[feature]/[component].html",
+        "Ensure each component under 300 lines",
+        "Use server-side includes or JavaScript imports",
+        "Maintain single responsibility per component"
+      ],
+      "examples": [
+        "index.html → components/dashboard/, components/navigation/"
+      ],
+      "successRate": 0.92,
+      "relevance": 0.8,
+      "category": "fileSize",
+      "violation": {
+        "type": "file_size",
+        "file": "src/amazon-zip-detector.js",
+        "lines": 380,
+        "limit": 300,
+        "severity": "high",
+        "message": "File exceeds 300-line limit: 380 lines"
+      }
+    },
+    {
+      "context": "lint_errors",
+      "triggers": [
+        "eslint_errors",
+        "code_quality"
+      ],
+      "practices": [
+        "Run npm run lint to identify issues",
+        "Fix syntax errors and style violations",
+        "Use Prettier for consistent formatting",
+        "Address all linting errors before commit"
+      ],
+      "examples": [
+        "Fix missing semicolons",
+        "Correct variable naming"
+      ],
+      "successRate": 0.96,
+      "relevance": 0.7,
+      "category": "codeQuality",
+      "violation": {
+        "type": "lint_errors",
+        "count": 0,
+        "severity": "medium",
+        "message": "0 linting errors found",
+        "details": "\n> tsv-ledger@2.2.3 lint\n> npx eslint src/ tests/ --fix\n\n"
+      }
+    }
+  ],
+  "totalRecommendations": 4,
+  "recommendationsAnalyzed": true
+}

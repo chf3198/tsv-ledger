@@ -10,7 +10,7 @@ test.describe('Benefits Allocation - Zero Percent Items', () => {
       style.textContent = '* { transition-duration: 1s !important; animation-duration: 1s !important; }';
       document.head.appendChild(style);
     });
-    
+
     const base = process.env.BASE_URL || 'http://localhost:3000';
     const url = `${base}/employee-benefits.html`;
 
@@ -24,14 +24,18 @@ test.describe('Benefits Allocation - Zero Percent Items', () => {
       try {
         const mgr = (typeof employeeBenefitsManager !== 'undefined') ? employeeBenefitsManager : (window.employeeBenefitsManager || null);
         return !!(mgr && typeof mgr.showSelectionModal === 'function');
-      } catch (e) { return false; }
+      } catch (e) {
+        return false;
+      }
     }, { timeout: 20000 });
 
     console.log('🖱️ Opening benefits modal...');
     // Open the modal
     await page.evaluate(() => {
       const mgr = (typeof employeeBenefitsManager !== 'undefined') ? employeeBenefitsManager : (window.employeeBenefitsManager || null);
-      if (mgr && typeof mgr.showSelectionModal === 'function') mgr.showSelectionModal();
+      if (mgr && typeof mgr.showSelectionModal === 'function') {
+        mgr.showSelectionModal();
+      }
     });
     await page.waitForTimeout(2000);
 
@@ -61,21 +65,21 @@ test.describe('Benefits Allocation - Zero Percent Items', () => {
     const firstItem = await page.$('#businessSuppliesList [data-item-id]');
     const itemId = await firstItem.getAttribute('data-item-id');
     console.log(`📝 Testing item: ${itemId}`);
-    
+
     // Check if our injected script is present
     const scriptPresent = await page.evaluate(() => {
-      return !!document.querySelector('script') && 
+      return !!document.querySelector('script') &&
              document.documentElement.innerHTML.includes('moveFullyAllocatedItems');
     });
     console.log(`🔧 Injected script present: ${scriptPresent ? '✅' : '❌'}`);
-    
+
     // Listen for console messages from our script
     page.on('console', msg => {
       if (msg.text().includes('Benefits fix') || msg.text().includes('🔧')) {
         console.log(`📋 BROWSER CONSOLE: ${msg.text()}`);
       }
     });
-    
+
     // Check initial allocation before changing it
     const initialAlloc = await page.evaluate((id) => {
       const mgr = (typeof employeeBenefitsManager !== 'undefined') ? employeeBenefitsManager : (window.employeeBenefitsManager || null);
@@ -85,10 +89,10 @@ test.describe('Benefits Allocation - Zero Percent Items', () => {
       }
       return null;
     }, itemId);
-    
+
     console.log(`📊 Initial allocation: ${initialAlloc ? `${initialAlloc.business}% Business, ${initialAlloc.benefits}% Benefits` : 'Unknown'}`);
     await page.waitForTimeout(2000); // Let user see initial state
-    
+
     // Click on the item to open allocation controls
     console.log('🖱️ Clicking item to open allocation controls...');
     await firstItem.click();

@@ -4,7 +4,7 @@
  * Tests for visual consistency including navigation, colors, and cross-page elements
  */
 
-const BaseUXTest = require("./base-test-utils");
+const BaseUXTest = require('./base-test-utils');
 
 /**
  * Visual consistency workflow tests
@@ -26,19 +26,21 @@ class VisualConsistencyTests extends BaseUXTest {
    * @returns {Promise<void>}
    */
   async testNavigationMenuVisibility() {
-    await this.runTest("Navigation Menu Visibility", async () => {
-      await this.navigateToPage("/");
+    await this.runTest('Navigation Menu Visibility', async () => {
+      await this.navigateToPage('/');
 
       // Check if navbar exists and is visible
-      const navbar = await this.page.$(".navbar");
+      const navbar = await this.page.$('.navbar');
       if (!navbar) {
-        return "Navbar not found";
+        return 'Navbar not found';
       }
 
       // Check navbar visibility and positioning
       const navbarVisible = await this.page.evaluate(() => {
-        const nav = document.querySelector(".navbar");
-        if (!nav) return false;
+        const nav = document.querySelector('.navbar');
+        if (!nav) {
+          return false;
+        }
 
         const rect = nav.getBoundingClientRect();
         const computedStyle = window.getComputedStyle(nav);
@@ -46,26 +48,28 @@ class VisualConsistencyTests extends BaseUXTest {
         return (
           rect.width > 0 &&
           rect.height > 0 &&
-          computedStyle.display !== "none" &&
-          computedStyle.visibility !== "hidden" &&
-          computedStyle.position === "fixed" &&
+          computedStyle.display !== 'none' &&
+          computedStyle.visibility !== 'hidden' &&
+          computedStyle.position === 'fixed' &&
           rect.top === 0
         ); // Should be at top of viewport
       });
 
       if (!navbarVisible) {
-        return "Navbar is not properly visible or positioned";
+        return 'Navbar is not properly visible or positioned';
       }
 
       // Check if menu toggle button exists and is visible
-      const menuButton = await this.page.$(".navbar-toggler");
+      const menuButton = await this.page.$('.navbar-toggler');
       if (!menuButton) {
-        return "Menu toggle button not found";
+        return 'Menu toggle button not found';
       }
 
       const buttonVisible = await this.page.evaluate(() => {
-        const btn = document.querySelector(".navbar-toggler");
-        if (!btn) return false;
+        const btn = document.querySelector('.navbar-toggler');
+        if (!btn) {
+          return false;
+        }
 
         const rect = btn.getBoundingClientRect();
         const computedStyle = window.getComputedStyle(btn);
@@ -73,19 +77,21 @@ class VisualConsistencyTests extends BaseUXTest {
         return (
           rect.width > 0 &&
           rect.height > 0 &&
-          computedStyle.display !== "none" &&
-          computedStyle.visibility !== "hidden"
+          computedStyle.display !== 'none' &&
+          computedStyle.visibility !== 'hidden'
         );
       });
 
       if (!buttonVisible) {
-        return "Menu toggle button is not visible";
+        return 'Menu toggle button is not visible';
       }
 
       // Check if menu button is within viewport (not scrolled off screen)
       const buttonInViewport = await this.page.evaluate(() => {
-        const btn = document.querySelector(".navbar-toggler");
-        if (!btn) return false;
+        const btn = document.querySelector('.navbar-toggler');
+        if (!btn) {
+          return false;
+        }
 
         const rect = btn.getBoundingClientRect();
         return (
@@ -97,7 +103,7 @@ class VisualConsistencyTests extends BaseUXTest {
       });
 
       if (!buttonInViewport) {
-        return "Menu toggle button is outside viewport (possibly scrolled off screen)";
+        return 'Menu toggle button is outside viewport (possibly scrolled off screen)';
       }
 
       return true;
@@ -109,47 +115,51 @@ class VisualConsistencyTests extends BaseUXTest {
    * @returns {Promise<void>}
    */
   async testNavigationMenuTextColor() {
-    await this.runTest("Navigation Menu Text Color", async () => {
-      await this.navigateToPage("/");
+    await this.runTest('Navigation Menu Text Color', async () => {
+      await this.navigateToPage('/');
 
       // Check navbar brand text color
       const brandColor = await this.page.evaluate(() => {
-        const brand = document.querySelector(".navbar-brand");
-        if (!brand) return null;
+        const brand = document.querySelector('.navbar-brand');
+        if (!brand) {
+          return null;
+        }
 
         const computedStyle = window.getComputedStyle(brand);
         return computedStyle.color;
       });
 
       if (!brandColor) {
-        return "Navbar brand text color not found";
+        return 'Navbar brand text color not found';
       }
 
       // For dark navbar, text should be white or light colored
       const isDarkNavbar = await this.page.evaluate(() => {
-        const navbar = document.querySelector(".navbar");
-        if (!navbar) return false;
+        const navbar = document.querySelector('.navbar');
+        if (!navbar) {
+          return false;
+        }
 
         const computedStyle = window.getComputedStyle(navbar);
         const bgColor = computedStyle.backgroundColor;
 
         // Check if background is dark (common dark navbar colors)
         return (
-          bgColor.includes("rgb(0, 0, 0)") ||
-          bgColor.includes("rgb(13, 110, 253)") || // Bootstrap primary blue
-          bgColor.includes("#0d6efd") ||
-          computedStyle.backgroundColor === "black" ||
-          computedStyle.backgroundColor.includes("dark")
+          bgColor.includes('rgb(0, 0, 0)') ||
+          bgColor.includes('rgb(13, 110, 253)') || // Bootstrap primary blue
+          bgColor.includes('#0d6efd') ||
+          computedStyle.backgroundColor === 'black' ||
+          computedStyle.backgroundColor.includes('dark')
         );
       });
 
       if (isDarkNavbar) {
         // For dark navbar, text should be white/light
         const isLightText =
-          brandColor.includes("rgb(255, 255, 255)") ||
-          brandColor.includes("white") ||
-          brandColor.includes("#fff") ||
-          brandColor.includes("#ffffff");
+          brandColor.includes('rgb(255, 255, 255)') ||
+          brandColor.includes('white') ||
+          brandColor.includes('#fff') ||
+          brandColor.includes('#ffffff');
 
         if (!isLightText) {
           return `Navbar brand text color ${brandColor} is not suitable for dark navbar`;
@@ -165,19 +175,21 @@ class VisualConsistencyTests extends BaseUXTest {
    * @returns {Promise<void>}
    */
   async testEmployeeBenefitsNavigation() {
-    await this.runTest("Employee Benefits Navigation", async () => {
-      await this.navigateToPage("/employee-benefits.html");
+    await this.runTest('Employee Benefits Navigation', async () => {
+      await this.navigateToPage('/employee-benefits.html');
 
       // Check if navbar exists on employee benefits page
-      const navbar = await this.page.$(".navbar");
+      const navbar = await this.page.$('.navbar');
       if (!navbar) {
-        return "Navbar not found on employee benefits page";
+        return 'Navbar not found on employee benefits page';
       }
 
       // Check navbar visibility and positioning
       const navbarVisible = await this.page.evaluate(() => {
-        const nav = document.querySelector(".navbar");
-        if (!nav) return false;
+        const nav = document.querySelector('.navbar');
+        if (!nav) {
+          return false;
+        }
 
         const rect = nav.getBoundingClientRect();
         const computedStyle = window.getComputedStyle(nav);
@@ -185,24 +197,26 @@ class VisualConsistencyTests extends BaseUXTest {
         return (
           rect.width > 0 &&
           rect.height > 0 &&
-          computedStyle.display !== "none" &&
-          computedStyle.visibility !== "hidden"
+          computedStyle.display !== 'none' &&
+          computedStyle.visibility !== 'hidden'
         );
       });
 
       if (!navbarVisible) {
-        return "Navbar is not visible on employee benefits page";
+        return 'Navbar is not visible on employee benefits page';
       }
 
       // Check if menu toggle button exists and is visible
-      const menuButton = await this.page.$(".navbar-toggler");
+      const menuButton = await this.page.$('.navbar-toggler');
       if (!menuButton) {
-        return "Menu toggle button not found on employee benefits page";
+        return 'Menu toggle button not found on employee benefits page';
       }
 
       const buttonVisible = await this.page.evaluate(() => {
-        const btn = document.querySelector(".navbar-toggler");
-        if (!btn) return false;
+        const btn = document.querySelector('.navbar-toggler');
+        if (!btn) {
+          return false;
+        }
 
         const rect = btn.getBoundingClientRect();
         const computedStyle = window.getComputedStyle(btn);
@@ -210,13 +224,13 @@ class VisualConsistencyTests extends BaseUXTest {
         return (
           rect.width > 0 &&
           rect.height > 0 &&
-          computedStyle.display !== "none" &&
-          computedStyle.visibility !== "hidden"
+          computedStyle.display !== 'none' &&
+          computedStyle.visibility !== 'hidden'
         );
       });
 
       if (!buttonVisible) {
-        return "Menu toggle button is not visible on employee benefits page";
+        return 'Menu toggle button is not visible on employee benefits page';
       }
 
       return true;
@@ -228,30 +242,30 @@ class VisualConsistencyTests extends BaseUXTest {
    * @returns {Promise<void>}
    */
   async testCrossPageNavigationConsistency() {
-    await this.runTest("Cross-Page Navigation Consistency", async () => {
+    await this.runTest('Cross-Page Navigation Consistency', async () => {
       // Test navigation consistency between main page and employee benefits page
 
       // First check main page navbar
-      await this.navigateToPage("/");
+      await this.navigateToPage('/');
       const mainNavbarColor = await this.page.evaluate(() => {
-        const navbar = document.querySelector(".navbar");
+        const navbar = document.querySelector('.navbar');
         return navbar ? window.getComputedStyle(navbar).backgroundColor : null;
       });
 
       const mainBrandColor = await this.page.evaluate(() => {
-        const brand = document.querySelector(".navbar-brand");
+        const brand = document.querySelector('.navbar-brand');
         return brand ? window.getComputedStyle(brand).color : null;
       });
 
       // Then check employee benefits page navbar
-      await this.navigateToPage("/employee-benefits.html");
+      await this.navigateToPage('/employee-benefits.html');
       const benefitsNavbarColor = await this.page.evaluate(() => {
-        const navbar = document.querySelector(".navbar");
+        const navbar = document.querySelector('.navbar');
         return navbar ? window.getComputedStyle(navbar).backgroundColor : null;
       });
 
       const benefitsBrandColor = await this.page.evaluate(() => {
-        const brand = document.querySelector(".navbar-brand");
+        const brand = document.querySelector('.navbar-brand');
         return brand ? window.getComputedStyle(brand).color : null;
       });
 

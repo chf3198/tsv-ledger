@@ -1,0 +1,43 @@
+{
+  "sandboxStatus": {
+    "totalSandboxes": 2,
+    "activeSandboxes": 1,
+    "resourcesUsed": 0,
+    "lastCleanup": null
+  },
+  "activeSandboxesData": [
+    [
+      "sandbox_instruction_testing_1767754889167",
+      {
+        "id": "sandbox_instruction_testing_1767754889167",
+        "environmentType": "instruction_testing",
+        "path": "/mnt/chromeos/removable/Drive/repos/tsv-ledger/sandbox/instances/sandbox_instruction_testing_1767754889167",
+        "config": {
+          "sandboxId": "sandbox_instruction_testing_1767754889167",
+          "environmentType": "instruction_testing",
+          "isolationLevel": "high",
+          "resourceLimits": {
+            "maxMemory": "512m",
+            "maxCpu": "50%",
+            "maxFiles": 100,
+            "timeout": 300000
+          },
+          "testDataPath": "/mnt/chromeos/removable/Drive/repos/tsv-ledger/sandbox/instances/sandbox_instruction_testing_1767754889167/test-data",
+          "logPath": "/mnt/chromeos/removable/Drive/repos/tsv-ledger/sandbox/instances/sandbox_instruction_testing_1767754889167/logs",
+          "tempPath": "/mnt/chromeos/removable/Drive/repos/tsv-ledger/sandbox/instances/sandbox_instruction_testing_1767754889167/temp",
+          "created": "2026-01-07T03:01:29.173Z",
+          "options": {}
+        },
+        "created": "2026-01-07T03:01:29.208Z",
+        "status": "created",
+        "resources": {
+          "memory": 0,
+          "cpu": 0,
+          "files": 0
+        },
+        "options": {}
+      }
+    ]
+  ],
+  "lastUpdated": "2026-01-07T03:02:37.195Z"
+}

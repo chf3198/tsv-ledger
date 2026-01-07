@@ -11,615 +11,625 @@ const path = require('path');
 const { execSync } = require('child_process');
 
 class AmazonZipParser {
-    constructor() {
-        this.supportedFiles = {
-            orderHistory: [
-                'Retail.OrderHistory.1.csv',
-                'Retail.OrderHistory.2.csv',
-                'Digital.OrderHistory.1.csv'
-            ],
-            subscriptions: [
-                'SubscribeAndSave.Subscriptions.1.json'
-            ],
-            cartHistory: [
-                'Retail.CartItems.1.csv'
-            ],
-            returns: [
-                'CustomerReturns.1.csv'
-            ]
-        };
-        
-        this.processingStats = {
-            totalFiles: 0,
-            processedFiles: 0,
-            orders: 0,
-            subscriptions: 0,
-            errors: []
-        };
-    }
+  constructor() {
+    this.supportedFiles = {
+      orderHistory: [
+        'Retail.OrderHistory.1.csv',
+        'Retail.OrderHistory.2.csv',
+        'Digital.OrderHistory.1.csv'
+      ],
+      subscriptions: [
+        'SubscribeAndSave.Subscriptions.1.json'
+      ],
+      cartHistory: [
+        'Retail.CartItems.1.csv'
+      ],
+      returns: [
+        'CustomerReturns.1.csv'
+      ]
+    };
 
-    /**
+    this.processingStats = {
+      totalFiles: 0,
+      processedFiles: 0,
+      orders: 0,
+      subscriptions: 0,
+      errors: []
+    };
+  }
+
+  /**
      * Main entry point - processes Amazon zip files
      * @param {string} zipFilePath - Path to the Amazon zip file
      * @param {Object} options - Processing options
      * @returns {Object} - Parsed data and statistics
      */
-    async processZipFile(zipFilePath, options = {}) {
-        console.log(`🔍 Processing Amazon zip file: ${path.basename(zipFilePath)}`);
-        
-        const extractDir = options.extractDir || 
-            path.join(path.dirname(zipFilePath), 'temp-amazon-extract');
-        
-        try {
-            // Extract zip file
-            await this.extractZipFile(zipFilePath, extractDir);
-            
-            // Process extracted files
-            const processedData = await this.processExtractedFiles(extractDir, options);
-            
-            // Cleanup temporary files unless specified otherwise
-            if (!options.keepExtracted) {
-                await this.cleanupTempFiles(extractDir);
-            }
-            
-            return {
-                success: true,
-                data: processedData,
-                stats: this.processingStats,
-                source: path.basename(zipFilePath)
-            };
-            
-        } catch (error) {
-            console.error('❌ Error processing zip file:', error.message);
-            this.processingStats.errors.push(error.message);
-            
-            return {
-                success: false,
-                error: error.message,
-                stats: this.processingStats
-            };
-        }
-    }
+  async processZipFile(zipFilePath, options = {}) {
+    console.log(`🔍 Processing Amazon zip file: ${path.basename(zipFilePath)}`);
 
-    /**
+    const extractDir = options.extractDir ||
+            path.join(path.dirname(zipFilePath), 'temp-amazon-extract');
+
+    try {
+      // Extract zip file
+      await this.extractZipFile(zipFilePath, extractDir);
+
+      // Process extracted files
+      const processedData = await this.processExtractedFiles(extractDir, options);
+
+      // Cleanup temporary files unless specified otherwise
+      if (!options.keepExtracted) {
+        await this.cleanupTempFiles(extractDir);
+      }
+
+      return {
+        success: true,
+        data: processedData,
+        stats: this.processingStats,
+        source: path.basename(zipFilePath)
+      };
+
+    } catch (error) {
+      console.error('❌ Error processing zip file:', error.message);
+      this.processingStats.errors.push(error.message);
+
+      return {
+        success: false,
+        error: error.message,
+        stats: this.processingStats
+      };
+    }
+  }
+
+  /**
      * Extract zip file to temporary directory using system unzip command
      */
-    async extractZipFile(zipFilePath, extractDir) {
-        if (!fs.existsSync(zipFilePath)) {
-            throw new Error(`Zip file not found: ${zipFilePath}`);
-        }
-
-        // Create extraction directory
-        if (!fs.existsSync(extractDir)) {
-            fs.mkdirSync(extractDir, { recursive: true });
-        }
-
-        try {
-            // First, list the contents of the ZIP to see what files are actually present
-            const listCmd = `unzip -l "${zipFilePath}"`;
-            const listOutput = execSync(listCmd, { encoding: 'utf8' });
-            
-            // Parse the file list to find supported files
-            const filesInZip = this.parseZipContents(listOutput);
-            const filesToExtract = this.matchSupportedFiles(filesInZip);
-            
-            if (filesToExtract.length === 0) {
-                throw new Error('No supported data files found in ZIP archive');
-            }
-
-            console.log(`📋 Found ${filesToExtract.length} supported files to extract:`, filesToExtract.map(f => path.basename(f)));
-
-            // Extract only the supported files
-            for (const filePath of filesToExtract) {
-                const extractCmd = `unzip -o "${zipFilePath}" "${filePath}" -d "${extractDir}"`;
-                execSync(extractCmd, { stdio: 'pipe', encoding: 'utf8' });
-            }
-            
-            console.log(`✅ Extracted ${filesToExtract.length} files to: ${extractDir}`);
-        } catch (error) {
-            throw new Error(`Failed to extract zip file: ${error.message}`);
-        }
+  async extractZipFile(zipFilePath, extractDir) {
+    if (!fs.existsSync(zipFilePath)) {
+      throw new Error(`Zip file not found: ${zipFilePath}`);
     }
 
-    /**
+    // Create extraction directory
+    if (!fs.existsSync(extractDir)) {
+      fs.mkdirSync(extractDir, { recursive: true });
+    }
+
+    try {
+      // First, list the contents of the ZIP to see what files are actually present
+      const listCmd = `unzip -l "${zipFilePath}"`;
+      const listOutput = execSync(listCmd, { encoding: 'utf8' });
+
+      // Parse the file list to find supported files
+      const filesInZip = this.parseZipContents(listOutput);
+      const filesToExtract = this.matchSupportedFiles(filesInZip);
+
+      if (filesToExtract.length === 0) {
+        throw new Error('No supported data files found in ZIP archive');
+      }
+
+      console.log(`📋 Found ${filesToExtract.length} supported files to extract:`, filesToExtract.map(f => path.basename(f)));
+
+      // Extract only the supported files
+      for (const filePath of filesToExtract) {
+        const extractCmd = `unzip -o "${zipFilePath}" "${filePath}" -d "${extractDir}"`;
+        execSync(extractCmd, { stdio: 'pipe', encoding: 'utf8' });
+      }
+
+      console.log(`✅ Extracted ${filesToExtract.length} files to: ${extractDir}`);
+    } catch (error) {
+      throw new Error(`Failed to extract zip file: ${error.message}`);
+    }
+  }
+
+  /**
      * Parse unzip -l output to get list of files in ZIP
      */
-    parseZipContents(listOutput) {
-        const lines = listOutput.split('\n');
-        const files = [];
-        
-        // Skip header lines and find file entries
-        for (const line of lines) {
-            // Look for lines that contain file paths (they have date/time format)
-            if (line.match(/\d{4}-\d{2}-\d{2} \d{2}:\d{2}/)) {
-                // Extract the file path from the line
-                const parts = line.trim().split(/\s+/);
-                if (parts.length >= 4) {
-                    const filePath = parts.slice(3).join(' ');
-                    if (filePath && !filePath.endsWith('/')) { // Skip directories
-                        files.push(filePath);
-                    }
-                }
-            }
+  parseZipContents(listOutput) {
+    const lines = listOutput.split('\n');
+    const files = [];
+
+    // Skip header lines and find file entries
+    for (const line of lines) {
+      // Look for lines that contain file paths (they have date/time format)
+      if (line.match(/\d{4}-\d{2}-\d{2} \d{2}:\d{2}/)) {
+        // Extract the file path from the line
+        const parts = line.trim().split(/\s+/);
+        if (parts.length >= 4) {
+          const filePath = parts.slice(3).join(' ');
+          if (filePath && !filePath.endsWith('/')) { // Skip directories
+            files.push(filePath);
+          }
         }
-        
-        return files;
+      }
     }
 
-    /**
+    return files;
+  }
+
+  /**
      * Match files in ZIP to our supported file patterns
      */
-    matchSupportedFiles(filesInZip) {
-        const matchedFiles = [];
-        const allSupportedPatterns = [
-            ...this.supportedFiles.orderHistory,
-            ...this.supportedFiles.subscriptions,
-            ...this.supportedFiles.cartHistory,
-            ...this.supportedFiles.returns
-        ];
+  matchSupportedFiles(filesInZip) {
+    const matchedFiles = [];
+    const allSupportedPatterns = [
+      ...this.supportedFiles.orderHistory,
+      ...this.supportedFiles.subscriptions,
+      ...this.supportedFiles.cartHistory,
+      ...this.supportedFiles.returns
+    ];
 
-        for (const filePath of filesInZip) {
-            const fileName = path.basename(filePath);
-            
-            // Check if this file matches any of our supported patterns
-            for (const pattern of allSupportedPatterns) {
-                if (fileName === pattern) {
-                    matchedFiles.push(filePath);
-                    break;
-                }
-            }
+    for (const filePath of filesInZip) {
+      const fileName = path.basename(filePath);
+
+      // Check if this file matches any of our supported patterns
+      for (const pattern of allSupportedPatterns) {
+        if (fileName === pattern) {
+          matchedFiles.push(filePath);
+          break;
         }
-
-        return matchedFiles;
+      }
     }
 
-    /**
+    return matchedFiles;
+  }
+
+  /**
      * Process all extracted files and return structured data
      */
-    async processExtractedFiles(extractDir, options) {
-        const processedData = {
-            orders: [],
-            subscriptions: [],
-            cartItems: [],
-            returns: [],
-            metadata: {
-                processingDate: new Date().toISOString(),
-                fileCount: 0
-            }
-        };
+  async processExtractedFiles(extractDir, options) {
+    const processedData = {
+      orders: [],
+      subscriptions: [],
+      cartItems: [],
+      returns: [],
+      metadata: {
+        processingDate: new Date().toISOString(),
+        fileCount: 0
+      }
+    };
 
-        const files = this.getAllFiles(extractDir);
-        this.processingStats.totalFiles = files.length;
+    const files = this.getAllFiles(extractDir);
+    this.processingStats.totalFiles = files.length;
 
-        for (let idx = 0; idx < files.length; idx++) {
-            const filePath = files[idx];
-            const fileName = path.basename(filePath);
-            // Real-time status callback
-            if (options.onFileProcess) {
-                options.onFileProcess(fileName, idx + 1, files.length);
-            } else if (this.onFileProcess) {
-                this.onFileProcess(fileName, idx + 1, files.length);
-            }
-            console.log(`📄 Processing: ${fileName}`);
+    for (let idx = 0; idx < files.length; idx++) {
+      const filePath = files[idx];
+      const fileName = path.basename(filePath);
+      // Real-time status callback
+      if (options.onFileProcess) {
+        options.onFileProcess(fileName, idx + 1, files.length);
+      } else if (this.onFileProcess) {
+        this.onFileProcess(fileName, idx + 1, files.length);
+      }
+      console.log(`📄 Processing: ${fileName}`);
 
-            try {
-                if (this.supportedFiles.orderHistory.includes(fileName)) {
-                    const orders = await this.processOrderHistoryCSV(filePath);
-                    processedData.orders.push(...orders);
-                    this.processingStats.orders += orders.length;
-                    
-                } else if (this.supportedFiles.subscriptions.includes(fileName)) {
-                    const subscriptions = await this.processSubscriptionsJSON(filePath);
-                    processedData.subscriptions.push(...subscriptions);
-                    this.processingStats.subscriptions += subscriptions.length;
-                    
-                } else if (this.supportedFiles.cartHistory.includes(fileName)) {
-                    const cartItems = await this.processCartHistoryCSV(filePath);
-                    processedData.cartItems.push(...cartItems);
-                    
-                } else if (this.supportedFiles.returns.includes(fileName)) {
-                    const returns = await this.processReturnsCSV(filePath);
-                    processedData.returns.push(...returns);
-                    
-                } else if (options.processAllFiles) {
-                    // Log unrecognized files for future enhancement
-                    console.log(`ℹ️  Unrecognized file: ${fileName}`);
-                }
+      try {
+        if (this.supportedFiles.orderHistory.includes(fileName)) {
+          const orders = await this.processOrderHistoryCSV(filePath);
+          processedData.orders.push(...orders);
+          this.processingStats.orders += orders.length;
 
-                this.processingStats.processedFiles++;
-                
-            } catch (error) {
-                console.error(`❌ Error processing ${fileName}:`, error.message);
-                this.processingStats.errors.push(`${fileName}: ${error.message}`);
-            }
+        } else if (this.supportedFiles.subscriptions.includes(fileName)) {
+          const subscriptions = await this.processSubscriptionsJSON(filePath);
+          processedData.subscriptions.push(...subscriptions);
+          this.processingStats.subscriptions += subscriptions.length;
+
+        } else if (this.supportedFiles.cartHistory.includes(fileName)) {
+          const cartItems = await this.processCartHistoryCSV(filePath);
+          processedData.cartItems.push(...cartItems);
+
+        } else if (this.supportedFiles.returns.includes(fileName)) {
+          const returns = await this.processReturnsCSV(filePath);
+          processedData.returns.push(...returns);
+
+        } else if (options.processAllFiles) {
+          // Log unrecognized files for future enhancement
+          console.log(`ℹ️  Unrecognized file: ${fileName}`);
         }
 
-        processedData.metadata.fileCount = this.processingStats.processedFiles;
-        return processedData;
+        this.processingStats.processedFiles++;
+
+      } catch (error) {
+        console.error(`❌ Error processing ${fileName}:`, error.message);
+        this.processingStats.errors.push(`${fileName}: ${error.message}`);
+      }
     }
 
-    /**
+    processedData.metadata.fileCount = this.processingStats.processedFiles;
+    return processedData;
+  }
+
+  /**
      * Process Amazon Order History CSV files using built-in parsing
      */
-    async processOrderHistoryCSV(filePath) {
-        const orders = [];
-        const csvContent = fs.readFileSync(filePath, 'utf8');
-        const lines = csvContent.split('\n');
-        
-        if (lines.length < 2) {
-            console.log(`⚠️  Empty or invalid CSV file: ${path.basename(filePath)}`);
-            return orders;
-        }
+  async processOrderHistoryCSV(filePath) {
+    const orders = [];
+    const csvContent = fs.readFileSync(filePath, 'utf8');
+    const lines = csvContent.split('\n');
 
-        // Parse header row
-        const headers = lines[0].split(',').map(header => header.replace(/"/g, '').trim());
-        
-        // Process data rows
-        for (let i = 1; i < lines.length; i++) {
-            const line = lines[i].trim();
-            if (!line) continue;
-            
-            try {
-                const values = this.parseCSVLine(line);
-                if (values.length !== headers.length) continue;
-                
-                const record = {};
-                headers.forEach((header, index) => {
-                    record[header] = values[index];
-                });
-                
-                const order = this.transformOrderRecord(record);
-                if (order) {
-                    orders.push(order);
-                }
-            } catch (error) {
-                console.warn(`⚠️  Skipping malformed line ${i} in ${path.basename(filePath)}`);
-            }
-        }
-
-        console.log(`✅ Processed ${orders.length} orders from ${path.basename(filePath)}`);
-        return orders;
+    if (lines.length < 2) {
+      console.log(`⚠️  Empty or invalid CSV file: ${path.basename(filePath)}`);
+      return orders;
     }
 
-    /**
+    // Parse header row
+    const headers = lines[0].split(',').map(header => header.replace(/"/g, '').trim());
+
+    // Process data rows
+    for (let i = 1; i < lines.length; i++) {
+      const line = lines[i].trim();
+      if (!line) {
+        continue;
+      }
+
+      try {
+        const values = this.parseCSVLine(line);
+        if (values.length !== headers.length) {
+          continue;
+        }
+
+        const record = {};
+        headers.forEach((header, index) => {
+          record[header] = values[index];
+        });
+
+        const order = this.transformOrderRecord(record);
+        if (order) {
+          orders.push(order);
+        }
+      } catch (error) {
+        console.warn(`⚠️  Skipping malformed line ${i} in ${path.basename(filePath)}`);
+      }
+    }
+
+    console.log(`✅ Processed ${orders.length} orders from ${path.basename(filePath)}`);
+    return orders;
+  }
+
+  /**
      * Simple CSV line parser that handles quoted fields
      */
-    parseCSVLine(line) {
-        const values = [];
-        let current = '';
-        let inQuotes = false;
-        
-        for (let i = 0; i < line.length; i++) {
-            const char = line[i];
-            const nextChar = line[i + 1];
-            
-            if (char === '"' && nextChar === '"') {
-                // Handle escaped quotes
-                current += '"';
-                i++; // Skip next quote
-            } else if (char === '"') {
-                // Toggle quote state
-                inQuotes = !inQuotes;
-            } else if (char === ',' && !inQuotes) {
-                // End of field
-                values.push(current.trim());
-                current = '';
-            } else {
-                current += char;
-            }
-        }
-        
-        // Add the last field
+  parseCSVLine(line) {
+    const values = [];
+    let current = '';
+    let inQuotes = false;
+
+    for (let i = 0; i < line.length; i++) {
+      const char = line[i];
+      const nextChar = line[i + 1];
+
+      if (char === '"' && nextChar === '"') {
+        // Handle escaped quotes
+        current += '"';
+        i++; // Skip next quote
+      } else if (char === '"') {
+        // Toggle quote state
+        inQuotes = !inQuotes;
+      } else if (char === ',' && !inQuotes) {
+        // End of field
         values.push(current.trim());
-        
-        return values;
+        current = '';
+      } else {
+        current += char;
+      }
     }
 
-    /**
+    // Add the last field
+    values.push(current.trim());
+
+    return values;
+  }
+
+  /**
      * Process Subscribe & Save JSON file
      */
-    async processSubscriptionsJSON(filePath) {
-        try {
-            const jsonContent = fs.readFileSync(filePath, 'utf8');
-            const subscriptions = JSON.parse(jsonContent);
-            
-            const processedSubscriptions = subscriptions.map(sub => this.transformSubscriptionRecord(sub));
-            
-            console.log(`✅ Processed ${processedSubscriptions.length} subscriptions from ${path.basename(filePath)}`);
-            return processedSubscriptions;
-            
-        } catch (error) {
-            throw new Error(`Failed to process subscriptions JSON: ${error.message}`);
-        }
-    }
+  async processSubscriptionsJSON(filePath) {
+    try {
+      const jsonContent = fs.readFileSync(filePath, 'utf8');
+      const subscriptions = JSON.parse(jsonContent);
 
-    /**
+      const processedSubscriptions = subscriptions.map(sub => this.transformSubscriptionRecord(sub));
+
+      console.log(`✅ Processed ${processedSubscriptions.length} subscriptions from ${path.basename(filePath)}`);
+      return processedSubscriptions;
+
+    } catch (error) {
+      throw new Error(`Failed to process subscriptions JSON: ${error.message}`);
+    }
+  }
+
+  /**
      * Transform raw order record to standardized format
      */
-    transformOrderRecord(record) {
-        try {
-            // Fallbacks for description, amount, and date
-            const title = record['Title'] || record.title || record['Item Name'] || record['Product Name'] || 'Unknown Item';
-            const purchasePrice = this.parsePrice(record['Purchase Price USD'] || record.purchasePrice || record['Item Total'] || record['Total Charged'] || 0);
-            const orderDate = this.parseDate(record['Order Date'] || record.orderDate || record['Date']);
+  transformOrderRecord(record) {
+    try {
+      // Fallbacks for description, amount, and date
+      const title = record['Title'] || record.title || record['Item Name'] || record['Product Name'] || 'Unknown Item';
+      const purchasePrice = this.parsePrice(record['Purchase Price USD'] || record.purchasePrice || record['Item Total'] || record['Total Charged'] || 0);
+      const orderDate = this.parseDate(record['Order Date'] || record.orderDate || record['Date']);
 
-            return {
-                orderId: record['Order ID'] || record.orderId,
-                orderDate: orderDate,
-                title: title,
-                category: record['Category'] || record.category,
-                asin: record['ASIN'] || record.asin,
-                unspscCode: record['UNSPSC Code'] || record.unspscCode,
-                website: record['Website'] || record.website || 'Amazon.com',
-                releaseDate: this.parseDate(record['Release Date'] || record.releaseDate),
-                condition: record['Condition'] || record.condition,
-                seller: record['Seller'] || record.seller,
-                sellerCredentials: record['Seller Credentials'] || record.sellerCredentials,
-                listPrice: this.parsePrice(record['List Price USD'] || record.listPrice),
-                purchasePrice: purchasePrice,
-                quantity: parseInt(record['Quantity'] || record.quantity) || 1,
-                paymentInstrument: record['Payment Instrument Type'] || record.paymentInstrument,
-                orderStatus: record['Order Status'] || record.orderStatus,
-                shipmentStatus: record['Shipment Status'] || record.shipmentStatus,
-                shipDate: this.parseDate(record['Ship Date'] || record.shipDate),
-                shippingAddress: {
-                    name: record['Shipping Address Name'] || record.shippingAddressName,
-                    street1: record['Shipping Address Street 1'] || record.shippingAddressStreet1,
-                    street2: record['Shipping Address Street 2'] || record.shippingAddressStreet2,
-                    city: record['Shipping Address City'] || record.shippingAddressCity,
-                    state: record['Shipping Address State'] || record.shippingAddressState,
-                    zipCode: record['Shipping Address Zip'] || record.shippingAddressZip
-                },
-                billingAddress: {
-                    name: record['Billing Address Name'] || record.billingAddressName,
-                    street1: record['Billing Address Street 1'] || record.billingAddressStreet1,
-                    street2: record['Billing Address Street 2'] || record.billingAddressStreet2,
-                    city: record['Billing Address City'] || record.billingAddressCity,
-                    state: record['Billing Address State'] || record.billingAddressState,
-                    zipCode: record['Billing Address Zip'] || record.billingAddressZip
-                },
-                carrier: record['Carrier Name & Tracking Number'] || record.carrier,
-                productCondition: record['Product Condition'] || record.productCondition,
-                currency: record['Currency'] || 'USD',
-                poBoxApo: record['PO Box or APO'] || record.poBoxApo,
-                orderingCustomer: record['Ordering Customer'] || record.orderingCustomer,
-                // Enhanced fields for TSV Ledger integration
-                tsvCategory: this.determineTSVCategory(record),
-                isSubscription: false,
-                dataSource: 'amazon-zip-orders',
-                processedDate: new Date().toISOString(),
-                // For frontend sample display
-                description: `Amazon Order ${record['Order ID'] || record.orderId || ''}: ${title}`,
-                amount: purchasePrice,
-                date: orderDate,
-            };
-        } catch (error) {
-            console.error('Error transforming order record:', error);
-            return null;
-        }
+      return {
+        orderId: record['Order ID'] || record.orderId,
+        orderDate,
+        title,
+        category: record['Category'] || record.category,
+        asin: record['ASIN'] || record.asin,
+        unspscCode: record['UNSPSC Code'] || record.unspscCode,
+        website: record['Website'] || record.website || 'Amazon.com',
+        releaseDate: this.parseDate(record['Release Date'] || record.releaseDate),
+        condition: record['Condition'] || record.condition,
+        seller: record['Seller'] || record.seller,
+        sellerCredentials: record['Seller Credentials'] || record.sellerCredentials,
+        listPrice: this.parsePrice(record['List Price USD'] || record.listPrice),
+        purchasePrice,
+        quantity: parseInt(record['Quantity'] || record.quantity) || 1,
+        paymentInstrument: record['Payment Instrument Type'] || record.paymentInstrument,
+        orderStatus: record['Order Status'] || record.orderStatus,
+        shipmentStatus: record['Shipment Status'] || record.shipmentStatus,
+        shipDate: this.parseDate(record['Ship Date'] || record.shipDate),
+        shippingAddress: {
+          name: record['Shipping Address Name'] || record.shippingAddressName,
+          street1: record['Shipping Address Street 1'] || record.shippingAddressStreet1,
+          street2: record['Shipping Address Street 2'] || record.shippingAddressStreet2,
+          city: record['Shipping Address City'] || record.shippingAddressCity,
+          state: record['Shipping Address State'] || record.shippingAddressState,
+          zipCode: record['Shipping Address Zip'] || record.shippingAddressZip
+        },
+        billingAddress: {
+          name: record['Billing Address Name'] || record.billingAddressName,
+          street1: record['Billing Address Street 1'] || record.billingAddressStreet1,
+          street2: record['Billing Address Street 2'] || record.billingAddressStreet2,
+          city: record['Billing Address City'] || record.billingAddressCity,
+          state: record['Billing Address State'] || record.billingAddressState,
+          zipCode: record['Billing Address Zip'] || record.billingAddressZip
+        },
+        carrier: record['Carrier Name & Tracking Number'] || record.carrier,
+        productCondition: record['Product Condition'] || record.productCondition,
+        currency: record['Currency'] || 'USD',
+        poBoxApo: record['PO Box or APO'] || record.poBoxApo,
+        orderingCustomer: record['Ordering Customer'] || record.orderingCustomer,
+        // Enhanced fields for TSV Ledger integration
+        tsvCategory: this.determineTSVCategory(record),
+        isSubscription: false,
+        dataSource: 'amazon-zip-orders',
+        processedDate: new Date().toISOString(),
+        // For frontend sample display
+        description: `Amazon Order ${record['Order ID'] || record.orderId || ''}: ${title}`,
+        amount: purchasePrice,
+        date: orderDate
+      };
+    } catch (error) {
+      console.error('Error transforming order record:', error);
+      return null;
     }
+  }
 
-    /**
+  /**
      * Transform raw subscription record to standardized format
      */
-    transformSubscriptionRecord(subscription) {
-        return {
-            subscriptionId: `sns_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
-            productTitle: subscription.productTitle,
-            statusChangeDate: this.parseDate(subscription.statusChangeDate),
-            website: subscription.website || 'Amazon.com',
-            quantity: parseInt(subscription.quantity) || 1,
-            marketplace: subscription.marketplace || 'US',
-            subscriptionState: subscription.subscriptionState,
-            merchant: subscription.merchant,
-            eventDate: this.parseDate(subscription.eventDate),
-            frequency: subscription.frequency,
-            backupProductTitle: subscription.backupProductTitle,
-            backupMerchant: subscription.backupMerchant,
-            // Enhanced fields for TSV Ledger integration
-            tsvCategory: this.determineTSVCategoryFromTitle(subscription.productTitle),
-            isSubscription: true,
-            subscriptionActive: subscription.subscriptionState === 'ACTIVE',
-            dataSource: 'amazon-zip-subscriptions',
-            processedDate: new Date().toISOString()
-        };
-    }
+  transformSubscriptionRecord(subscription) {
+    return {
+      subscriptionId: `sns_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+      productTitle: subscription.productTitle,
+      statusChangeDate: this.parseDate(subscription.statusChangeDate),
+      website: subscription.website || 'Amazon.com',
+      quantity: parseInt(subscription.quantity) || 1,
+      marketplace: subscription.marketplace || 'US',
+      subscriptionState: subscription.subscriptionState,
+      merchant: subscription.merchant,
+      eventDate: this.parseDate(subscription.eventDate),
+      frequency: subscription.frequency,
+      backupProductTitle: subscription.backupProductTitle,
+      backupMerchant: subscription.backupMerchant,
+      // Enhanced fields for TSV Ledger integration
+      tsvCategory: this.determineTSVCategoryFromTitle(subscription.productTitle),
+      isSubscription: true,
+      subscriptionActive: subscription.subscriptionState === 'ACTIVE',
+      dataSource: 'amazon-zip-subscriptions',
+      processedDate: new Date().toISOString()
+    };
+  }
 
-    /**
+  /**
      * Determine TSV category based on product data
      */
-    determineTSVCategory(record) {
-        const title = (record['Title'] || record.title || '').toLowerCase();
-        const category = (record['Category'] || record.category || '').toLowerCase();
-        
-        return this.determineTSVCategoryFromTitle(title) || 
-               this.categorizeFromAmazonCategory(category) || 
-               'Miscellaneous';
-    }
+  determineTSVCategory(record) {
+    const title = (record['Title'] || record.title || '').toLowerCase();
+    const category = (record['Category'] || record.category || '').toLowerCase();
 
-    /**
+    return this.determineTSVCategoryFromTitle(title) ||
+               this.categorizeFromAmazonCategory(category) ||
+               'Miscellaneous';
+  }
+
+  /**
      * Categorize products for TSV Ledger based on title
      */
-    determineTSVCategoryFromTitle(title) {
-        if (!title) return 'Miscellaneous';
-        
-        const titleLower = title.toLowerCase();
-        
-        // Property maintenance categories
-        if (titleLower.includes('clean') || titleLower.includes('soap') || 
-            titleLower.includes('detergent') || titleLower.includes('sanitizer')) {
-            return 'Property Cleaning & Maintenance';
-        }
-        
-        if (titleLower.includes('trash') || titleLower.includes('garbage') ||
-            titleLower.includes('bag') || titleLower.includes('disposal')) {
-            return 'Property Supplies';
-        }
-        
-        if (titleLower.includes('toilet') || titleLower.includes('paper towel') ||
-            titleLower.includes('tissue') || titleLower.includes('napkin')) {
-            return 'Guest Amenities';
-        }
-        
-        // Guest amenities
-        if (titleLower.includes('coffee') || titleLower.includes('tea') ||
-            titleLower.includes('sweetener') || titleLower.includes('cream')) {
-            return 'Guest Beverages';
-        }
-        
-        if (titleLower.includes('shampoo') || titleLower.includes('conditioner') ||
-            titleLower.includes('body wash') || titleLower.includes('lotion')) {
-            return 'Guest Toiletries';
-        }
-        
-        // Utilities and maintenance
-        if (titleLower.includes('filter') || titleLower.includes('hvac') ||
-            titleLower.includes('air') || titleLower.includes('water')) {
-            return 'Utilities & Systems';
-        }
-        
-        // Office and admin
-        if (titleLower.includes('ibuprofen') || titleLower.includes('medication') ||
-            titleLower.includes('first aid') || titleLower.includes('bandage')) {
-            return 'Guest Safety & Health';
-        }
-        
-        return 'Miscellaneous';
+  determineTSVCategoryFromTitle(title) {
+    if (!title) {
+      return 'Miscellaneous';
     }
 
-    /**
+    const titleLower = title.toLowerCase();
+
+    // Property maintenance categories
+    if (titleLower.includes('clean') || titleLower.includes('soap') ||
+            titleLower.includes('detergent') || titleLower.includes('sanitizer')) {
+      return 'Property Cleaning & Maintenance';
+    }
+
+    if (titleLower.includes('trash') || titleLower.includes('garbage') ||
+            titleLower.includes('bag') || titleLower.includes('disposal')) {
+      return 'Property Supplies';
+    }
+
+    if (titleLower.includes('toilet') || titleLower.includes('paper towel') ||
+            titleLower.includes('tissue') || titleLower.includes('napkin')) {
+      return 'Guest Amenities';
+    }
+
+    // Guest amenities
+    if (titleLower.includes('coffee') || titleLower.includes('tea') ||
+            titleLower.includes('sweetener') || titleLower.includes('cream')) {
+      return 'Guest Beverages';
+    }
+
+    if (titleLower.includes('shampoo') || titleLower.includes('conditioner') ||
+            titleLower.includes('body wash') || titleLower.includes('lotion')) {
+      return 'Guest Toiletries';
+    }
+
+    // Utilities and maintenance
+    if (titleLower.includes('filter') || titleLower.includes('hvac') ||
+            titleLower.includes('air') || titleLower.includes('water')) {
+      return 'Utilities & Systems';
+    }
+
+    // Office and admin
+    if (titleLower.includes('ibuprofen') || titleLower.includes('medication') ||
+            titleLower.includes('first aid') || titleLower.includes('bandage')) {
+      return 'Guest Safety & Health';
+    }
+
+    return 'Miscellaneous';
+  }
+
+  /**
      * Map Amazon categories to TSV categories
      */
-    categorizeFromAmazonCategory(amazonCategory) {
-        const categoryMappings = {
-            'health_personal_care': 'Guest Toiletries',
-            'grocery_gourmet_food': 'Guest Beverages',
-            'home_kitchen': 'Property Supplies',
-            'tools_home_improvement': 'Property Cleaning & Maintenance',
-            'office_products': 'Office & Administrative',
-            'pet_supplies': 'Property Exterior & Grounds'
-        };
-        
-        return categoryMappings[amazonCategory] || 'Miscellaneous';
-    }
+  categorizeFromAmazonCategory(amazonCategory) {
+    const categoryMappings = {
+      'health_personal_care': 'Guest Toiletries',
+      'grocery_gourmet_food': 'Guest Beverages',
+      'home_kitchen': 'Property Supplies',
+      'tools_home_improvement': 'Property Cleaning & Maintenance',
+      'office_products': 'Office & Administrative',
+      'pet_supplies': 'Property Exterior & Grounds'
+    };
 
-    /**
+    return categoryMappings[amazonCategory] || 'Miscellaneous';
+  }
+
+  /**
      * Process cart history CSV files
      */
-    async processCartHistoryCSV(filePath) {
-        // Similar to order processing but for cart items
-        // Implementation would be added based on cart CSV structure
-        console.log(`ℹ️  Cart history processing not yet implemented for ${path.basename(filePath)}`);
-        return [];
-    }
+  async processCartHistoryCSV(filePath) {
+    // Similar to order processing but for cart items
+    // Implementation would be added based on cart CSV structure
+    console.log(`ℹ️  Cart history processing not yet implemented for ${path.basename(filePath)}`);
+    return [];
+  }
 
-    /**
+  /**
      * Process customer returns CSV files
      */
-    async processReturnsCSV(filePath) {
-        // Implementation for processing returns data
-        console.log(`ℹ️  Returns processing not yet implemented for ${path.basename(filePath)}`);
-        return [];
-    }
+  async processReturnsCSV(filePath) {
+    // Implementation for processing returns data
+    console.log(`ℹ️  Returns processing not yet implemented for ${path.basename(filePath)}`);
+    return [];
+  }
 
-    /**
+  /**
      * Utility functions
      */
-    parseDate(dateString) {
-        if (!dateString) return null;
-        const date = new Date(dateString);
-        return isNaN(date.getTime()) ? null : date.toISOString();
+  parseDate(dateString) {
+    if (!dateString) {
+      return null;
+    }
+    const date = new Date(dateString);
+    return isNaN(date.getTime()) ? null : date.toISOString();
+  }
+
+  parsePrice(priceString) {
+    if (!priceString) {
+      return 0;
+    }
+    const price = parseFloat(priceString.toString().replace(/[$,]/g, ''));
+    return isNaN(price) ? 0 : price;
+  }
+
+  getAllFiles(dir) {
+    const files = [];
+    const items = fs.readdirSync(dir);
+
+    for (const item of items) {
+      const fullPath = path.join(dir, item);
+      const stat = fs.statSync(fullPath);
+
+      if (stat.isDirectory()) {
+        files.push(...this.getAllFiles(fullPath));
+      } else {
+        files.push(fullPath);
+      }
     }
 
-    parsePrice(priceString) {
-        if (!priceString) return 0;
-        const price = parseFloat(priceString.toString().replace(/[$,]/g, ''));
-        return isNaN(price) ? 0 : price;
-    }
+    return files;
+  }
 
-    getAllFiles(dir) {
-        const files = [];
-        const items = fs.readdirSync(dir);
-        
-        for (const item of items) {
-            const fullPath = path.join(dir, item);
-            const stat = fs.statSync(fullPath);
-            
-            if (stat.isDirectory()) {
-                files.push(...this.getAllFiles(fullPath));
-            } else {
-                files.push(fullPath);
-            }
-        }
-        
-        return files;
-    }
-
-    async cleanupTempFiles(extractDir) {
-        const maxRetries = 3;
-        let attempt = 0;
-        let lastError = null;
-        while (attempt < maxRetries) {
-            try {
-                fs.rmSync(extractDir, { recursive: true, force: true });
-                console.log(`🧹 Cleaned up temporary files: ${extractDir}`);
-                return;
-            } catch (error) {
-                lastError = error;
-                if (error.code === 'ENOTEMPTY' || error.code === 'EBUSY' || error.code === 'EPERM') {
-                    // Wait a bit and retry
-                    await new Promise(res => setTimeout(res, 400 * (attempt + 1)));
-                    attempt++;
-                } else {
-                    break;
-                }
-            }
-        }
-        // If still not deleted, log remaining files for diagnostics
-        if (fs.existsSync(extractDir)) {
-            try {
-                const remaining = this.getAllFiles(extractDir);
-                console.warn(`⚠️  Could not cleanup temp files after ${maxRetries} attempts: ${lastError && lastError.message}`);
-                console.warn(`⚠️  Remaining files in ${extractDir}:\n  ` + remaining.join('\n  '));
-            } catch (e) {
-                console.warn(`⚠️  Could not list remaining files in ${extractDir}: ${e.message}`);
-            }
+  async cleanupTempFiles(extractDir) {
+    const maxRetries = 3;
+    let attempt = 0;
+    let lastError = null;
+    while (attempt < maxRetries) {
+      try {
+        fs.rmSync(extractDir, { recursive: true, force: true });
+        console.log(`🧹 Cleaned up temporary files: ${extractDir}`);
+        return;
+      } catch (error) {
+        lastError = error;
+        if (error.code === 'ENOTEMPTY' || error.code === 'EBUSY' || error.code === 'EPERM') {
+          // Wait a bit and retry
+          await new Promise(res => setTimeout(res, 400 * (attempt + 1)));
+          attempt++;
         } else {
-            console.warn(`⚠️  Could not cleanup temp files: ${lastError && lastError.message}`);
+          break;
         }
+      }
     }
+    // If still not deleted, log remaining files for diagnostics
+    if (fs.existsSync(extractDir)) {
+      try {
+        const remaining = this.getAllFiles(extractDir);
+        console.warn(`⚠️  Could not cleanup temp files after ${maxRetries} attempts: ${lastError && lastError.message}`);
+        console.warn(`⚠️  Remaining files in ${extractDir}:\n  ` + remaining.join('\n  '));
+      } catch (e) {
+        console.warn(`⚠️  Could not list remaining files in ${extractDir}: ${e.message}`);
+      }
+    } else {
+      console.warn(`⚠️  Could not cleanup temp files: ${lastError && lastError.message}`);
+    }
+  }
 
-    /**
+  /**
      * Generate processing report
      */
-    generateReport() {
-        const report = {
-            summary: {
-                totalFiles: this.processingStats.totalFiles,
-                processedFiles: this.processingStats.processedFiles,
-                orders: this.processingStats.orders,
-                subscriptions: this.processingStats.subscriptions,
-                errors: this.processingStats.errors.length
-            },
-            details: {
-                processingDate: new Date().toISOString(),
-                errors: this.processingStats.errors
-            }
-        };
-        
-        console.log('\n📊 Processing Report:');
-        console.log(`Files processed: ${report.summary.processedFiles}/${report.summary.totalFiles}`);
-        console.log(`Orders extracted: ${report.summary.orders}`);
-        console.log(`Subscriptions extracted: ${report.summary.subscriptions}`);
-        console.log(`Errors: ${report.summary.errors}`);
-        
-        if (report.summary.errors > 0) {
-            console.log('\n❌ Errors encountered:');
-            report.details.errors.forEach(error => console.log(`  - ${error}`));
-        }
-        
-        return report;
+  generateReport() {
+    const report = {
+      summary: {
+        totalFiles: this.processingStats.totalFiles,
+        processedFiles: this.processingStats.processedFiles,
+        orders: this.processingStats.orders,
+        subscriptions: this.processingStats.subscriptions,
+        errors: this.processingStats.errors.length
+      },
+      details: {
+        processingDate: new Date().toISOString(),
+        errors: this.processingStats.errors
+      }
+    };
+
+    console.log('\n📊 Processing Report:');
+    console.log(`Files processed: ${report.summary.processedFiles}/${report.summary.totalFiles}`);
+    console.log(`Orders extracted: ${report.summary.orders}`);
+    console.log(`Subscriptions extracted: ${report.summary.subscriptions}`);
+    console.log(`Errors: ${report.summary.errors}`);
+
+    if (report.summary.errors > 0) {
+      console.log('\n❌ Errors encountered:');
+      report.details.errors.forEach(error => console.log(`  - ${error}`));
     }
+
+    return report;
+  }
 }
 
 module.exports = AmazonZipParser;

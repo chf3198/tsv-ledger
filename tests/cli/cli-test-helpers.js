@@ -90,41 +90,43 @@ class CLITestHelpers {
    */
   static parseCLIOutput(output, format = 'text') {
     switch (format) {
-      case 'json':
-        try {
-          return JSON.parse(output);
-        } catch (error) {
-          throw new Error(`Invalid JSON output: ${output}`);
+    case 'json':
+      try {
+        return JSON.parse(output);
+      } catch (error) {
+        throw new Error(`Invalid JSON output: ${output}`);
+      }
+
+    case 'table':
+      // Parse table-like output
+      const lines = output.split('\n').filter(line => line.trim());
+      if (lines.length < 2) {
+        return [];
+      }
+
+      const headers = lines[0].split(/\s+/);
+      return lines.slice(1).map(line => {
+        const values = line.split(/\s+/);
+        const obj = {};
+        headers.forEach((header, index) => {
+          obj[header.toLowerCase()] = values[index] || '';
+        });
+        return obj;
+      });
+
+    case 'list':
+      // Parse list output (key: value format)
+      const result = {};
+      output.split('\n').forEach(line => {
+        const match = line.match(/^([^:]+):\s*(.+)$/);
+        if (match) {
+          result[match[1].trim()] = match[2].trim();
         }
+      });
+      return result;
 
-      case 'table':
-        // Parse table-like output
-        const lines = output.split('\n').filter(line => line.trim());
-        if (lines.length < 2) return [];
-
-        const headers = lines[0].split(/\s+/);
-        return lines.slice(1).map(line => {
-          const values = line.split(/\s+/);
-          const obj = {};
-          headers.forEach((header, index) => {
-            obj[header.toLowerCase()] = values[index] || '';
-          });
-          return obj;
-        });
-
-      case 'list':
-        // Parse list output (key: value format)
-        const result = {};
-        output.split('\n').forEach(line => {
-          const match = line.match(/^([^:]+):\s*(.+)$/);
-          if (match) {
-            result[match[1].trim()] = match[2].trim();
-          }
-        });
-        return result;
-
-      default:
-        return output;
+    default:
+      return output;
     }
   }
 

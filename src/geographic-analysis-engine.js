@@ -59,7 +59,9 @@ class GeographicAnalysisEngine {
           .pipe(csv())
           .on('data', (data) => {
             const order = this.parseGeographicOrder(data);
-            if (order) orders.push(order);
+            if (order) {
+              orders.push(order);
+            }
           })
           .on('end', resolve)
           .on('error', reject);
@@ -102,14 +104,14 @@ class GeographicAnalysisEngine {
         date: orderDate,
         amount: totalOwed,
         shipping: shippingCharge,
-        tax: tax,
+        tax,
         productName: data['Product Name'],
         asin: data['ASIN'],
         orderStatus: data['Order Status'],
         paymentMethod: data['Payment Instrument Type'],
 
         // Geographic data
-        shippingAddress: shippingAddress,
+        shippingAddress,
         ...geographicInfo,
 
         // Additional analysis fields
@@ -219,7 +221,9 @@ class GeographicAnalysisEngine {
     };
 
     this.orders.forEach(order => {
-      if (!order.isValid) return;
+      if (!order.isValid) {
+        return;
+      }
 
       // Process state data
       this.updateGeographicStats(this.geographicData.states, order.state, order);
@@ -243,7 +247,9 @@ class GeographicAnalysisEngine {
    * @param {Object} order - Order data
    */
   updateGeographicStats(statsMap, key, order) {
-    if (!key || key.trim() === '') return;
+    if (!key || key.trim() === '') {
+      return;
+    }
 
     const existing = statsMap.get(key) || {
       location: key,
@@ -370,7 +376,9 @@ class GeographicAnalysisEngine {
    * @returns {Object} Concentration analysis
    */
   analyzeRevenueConcentration(stateRevenue) {
-    if (stateRevenue.length === 0) return { concentrationRatio: 0, topStatePercentage: 0 };
+    if (stateRevenue.length === 0) {
+      return { concentrationRatio: 0, topStatePercentage: 0 };
+    }
 
     const topStateRevenue = stateRevenue[0]?.revenue || 0;
     const totalRevenue = stateRevenue.reduce((sum, s) => sum + s.revenue, 0);
@@ -431,7 +439,9 @@ class GeographicAnalysisEngine {
     const weekdayStats = new Map();
 
     this.orders.forEach(order => {
-      if (!order.isValid) return;
+      if (!order.isValid) {
+        return;
+      }
 
       // Monthly analysis
       const monthKey = `${order.year}-${order.month.toString().padStart(2, '0')}`;
@@ -468,7 +478,9 @@ class GeographicAnalysisEngine {
    */
   analyzeSeasonalPatterns(monthlyStats) {
     const monthlyData = Array.from(monthlyStats.values());
-    if (monthlyData.length < 3) return { hasSeasonalPattern: false };
+    if (monthlyData.length < 3) {
+      return { hasSeasonalPattern: false };
+    }
 
     // Calculate month-over-month growth
     const growthRates = [];
@@ -549,7 +561,9 @@ class GeographicAnalysisEngine {
    * @returns {number} Variance
    */
   calculateVariance(numbers) {
-    if (numbers.length === 0) return 0;
+    if (numbers.length === 0) {
+      return 0;
+    }
 
     const mean = numbers.reduce((sum, n) => sum + n, 0) / numbers.length;
     const squaredDiffs = numbers.map(n => Math.pow(n - mean, 2));

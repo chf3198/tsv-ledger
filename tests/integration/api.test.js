@@ -12,38 +12,61 @@ const { HttpHelpers, TestFixtures, DatabaseHelpers, AssertionHelpers } = require
 
 describe('API Integration Tests', () => {
   let serverProcess;
-  const baseUrl = 'http://localhost:3001'; // Use test port
+  let baseUrl;
 
-  beforeAll(async () => {
-    // Setup test database
-    await DatabaseHelpers.setupTestDatabase();
+  beforeAll((done) => {
+    // Setup test database synchronously
+    DatabaseHelpers.setupTestDatabase().then(() => {
+      // When run from auto-test.js, server should already be running on port 3000
+      if (process.env.DISABLE_JEST_GLOBAL_SETUP) {
+        // Server managed by auto-test.js
+        console.log('✅ Using server managed by auto-test.js on port 3000');
+        baseUrl = 'http://localhost:3000';
+        serverProcess = null;
+        done();
+      } else {
+        // Standalone test execution
+        console.log('🚀 Starting standalone test server on port 3000');
+        baseUrl = 'http://localhost:3000';
+        const serverPath = path.join(__dirname, '..', '..', 'server.js');
+        serverProcess = spawn('node', [serverPath], {
+          env: { ...process.env, PORT: '3000', NODE_ENV: 'test' },
+          stdio: 'pipe'
+        });
 
-    // Start server on test port
-    const serverPath = path.join(__dirname, '..', '..', 'server.js');
-    serverProcess = spawn('node', [serverPath], {
-      env: { ...process.env, PORT: '3001', NODE_ENV: 'test' },
-      stdio: 'pipe'
+        // Wait for server to start
+        const checkReady = () => {
+          require('http').get(`${baseUrl}/health`, (res) => {
+            if (res.statusCode === 200) {
+              done();
+            } else {
+              setTimeout(checkReady, 100);
+            }
+          }).on('error', () => {
+            setTimeout(checkReady, 100);
+          });
+        };
+        setTimeout(checkReady, 100);
+      }
     });
-
-    // Wait for server to start
-    await HttpHelpers.waitForEndpoint(`${baseUrl}/api/expenditures`, 10000);
-
-    // Give server a moment to fully initialize
-    await new Promise(resolve => setTimeout(resolve, 1000));
   }, 15000);
 
-  afterAll(async () => {
+  afterAll((done) => {
     // Stop server
     if (serverProcess) {
       serverProcess.kill('SIGTERM');
-      await new Promise(resolve => {
-        const timeout = setTimeout(() => serverProcess.kill('SIGKILL'), 5000);
-        serverProcess.on('close', () => clearTimeout(timeout));
-      });
+      // Give server time to shut down gracefully
+      setTimeout(() => {
+        if (!serverProcess.killed) {
+          serverProcess.kill('SIGKILL');
+        }
+        // Restore database synchronously
+        DatabaseHelpers.restoreDatabase().then(() => done());
+      }, 2000);
+    } else {
+      // Restore database synchronously
+      DatabaseHelpers.restoreDatabase().then(() => done());
     }
-
-    // Restore database
-    await DatabaseHelpers.restoreDatabase();
   });
 
   beforeEach(async () => {
@@ -57,8 +80,12 @@ describe('API Integration Tests', () => {
       const data = await response.json();
 
       AssertionHelpers.assertApiResponse(response, 200);
-      expect(Array.isArray(data)).toBe(true);
-      expect(data).toHaveLength(0);
+      expect(data).toHaveProperty('expenditures');
+      expect(data).toHaveProperty('filters');
+      expect(data).toHaveProperty('total');
+      expect(Array.isArray(data.expenditures)).toBe(true);
+      expect(data.expenditures).toHaveLength(0);
+      expect(data.total).toBe(0);
     });
 
     test('should return all expenditures', async () => {
@@ -69,8 +96,13 @@ describe('API Integration Tests', () => {
       const data = await response.json();
 
       AssertionHelpers.assertApiResponse(response, 200);
-      expect(data).toHaveLength(1);
-      expect(data[0]).toEqual(testData[0]);
+      expect(data).toHaveProperty('expenditures');
+      expect(data).toHaveProperty('filters');
+      expect(data).toHaveProperty('total');
+      expect(Array.isArray(data.expenditures)).toBe(true);
+      expect(data.expenditures).toHaveLength(1);
+      expect(data.total).toBe(1);
+      expect(data.expenditures[0]).toEqual(testData[0]);
     });
 
     test('should handle large datasets', async () => {
@@ -85,7 +117,12 @@ describe('API Integration Tests', () => {
       const data = await response.json();
 
       AssertionHelpers.assertApiResponse(response, 200);
-      expect(data).toHaveLength(100);
+      expect(data).toHaveProperty('expenditures');
+      expect(data).toHaveProperty('filters');
+      expect(data).toHaveProperty('total');
+      expect(Array.isArray(data.expenditures)).toBe(true);
+      expect(data.expenditures).toHaveLength(100);
+      expect(data.total).toBe(100);
     });
   });
 
@@ -105,13 +142,23 @@ describe('API Integration Tests', () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(newExpenditure)
       });
-      const data = await response.json();
 
-      AssertionHelpers.assertApiResponse(response, 200);
-      expect(data.id).toBeDefined();
-      expect(data.date).toBe(newExpenditure.date);
-      expect(data.amount).toBe(newExpenditure.amount);
-      expect(data.description).toBe(newExpenditure.description);
+      expect(response.status).toBe(200);
+
+      let data;
+      try {
+        const text = await response.text();
+        data = JSON.parse(text);
+      } catch (e) {
+        throw new Error(`Failed to parse response: ${e.message}`);
+      }
+
+      expect(data).toHaveProperty('success', true);
+      expect(data).toHaveProperty('expenditure');
+      expect(data.expenditure.id).toBeDefined();
+      expect(data.expenditure.date).toBe(newExpenditure.date);
+      expect(data.expenditure.amount).toBe(newExpenditure.amount);
+      expect(data.expenditure.description).toBe(newExpenditure.description);
     });
 
     test('should handle invalid JSON', async () => {
@@ -134,9 +181,10 @@ describe('API Integration Tests', () => {
       });
       const data = await response.json();
 
-      // Should still create with defaults
-      AssertionHelpers.assertApiResponse(response, 200);
-      expect(data.id).toBeDefined();
+      // Should return 400 error for missing required fields
+      expect(response.status).toBe(400);
+      expect(data).toHaveProperty('error', 'Missing required fields');
+      expect(data).toHaveProperty('message');
     });
   });
 

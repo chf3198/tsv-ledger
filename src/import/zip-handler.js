@@ -8,8 +8,8 @@
  * @version 1.0.0
  */
 
-const fs = require("fs");
-const path = require("path");
+const fs = require('fs');
+const path = require('path');
 
 /**
  * Validates a ZIP file for Amazon data import
@@ -18,7 +18,7 @@ const path = require("path");
  */
 async function validateZipFile(zipFilePath) {
   try {
-    const AmazonZipParser = require("../amazon-zip-parser");
+    const AmazonZipParser = require('../amazon-zip-parser');
     const parser = new AmazonZipParser();
     const validation = await parser.validateZipFile(zipFilePath);
     return validation;
@@ -39,25 +39,37 @@ async function importFromZip(zipFilePath, options = {}) {
   const { onProgress, onStatus } = options;
 
   try {
-    if (onStatus) onStatus("Starting ZIP import...");
+    if (onStatus) {
+      onStatus('Starting ZIP import...');
+    }
 
-    const AmazonZipParser = require("../amazon-zip-parser");
+    const AmazonZipParser = require('../amazon-zip-parser');
     const parser = new AmazonZipParser();
 
-    if (onStatus) onStatus("Extracting ZIP file...");
+    if (onStatus) {
+      onStatus('Extracting ZIP file...');
+    }
     const extractResult = await parser.extractAndParse(zipFilePath, {
       onProgress: (step, progress) => {
-        if (onProgress) onProgress(progress);
-        if (onStatus) onStatus(step);
-      },
+        if (onProgress) {
+          onProgress(progress);
+        }
+        if (onStatus) {
+          onStatus(step);
+        }
+      }
     });
 
-    if (onStatus) onStatus("Processing extracted data...");
+    if (onStatus) {
+      onStatus('Processing extracted data...');
+    }
 
     // Convert parsed data to expenditures
     const expenditures = convertParsedDataToExpenditures(extractResult);
 
-    if (onStatus) onStatus("Import completed successfully");
+    if (onStatus) {
+      onStatus('Import completed successfully');
+    }
 
     return {
       expenditures,
@@ -65,8 +77,8 @@ async function importFromZip(zipFilePath, options = {}) {
         totalFiles: extractResult.totalFiles || 0,
         processedFiles: extractResult.processedFiles || 0,
         totalRecords: expenditures.length,
-        source: "amazon-zip",
-      },
+        source: 'amazon-zip'
+      }
     };
   } catch (error) {
     throw new Error(`ZIP import failed: ${error.message}`);
@@ -90,14 +102,14 @@ function convertParsedDataToExpenditures(parsedData) {
             id: generateId(),
             date: order.orderDate || order.date,
             amount: item.price || item.amount || 0,
-            description: item.title || item.description || "Amazon Item",
-            category: "Amazon",
-            source: "amazon-zip",
+            description: item.title || item.description || 'Amazon Item',
+            category: 'Amazon',
+            source: 'amazon-zip',
             metadata: {
               orderId: order.orderId,
               asin: item.asin,
-              quantity: item.quantity || 1,
-            },
+              quantity: item.quantity || 1
+            }
           });
         });
       }
@@ -109,14 +121,14 @@ function convertParsedDataToExpenditures(parsedData) {
     parsedData.cart.forEach((item) => {
       expenditures.push({
         id: generateId(),
-        date: new Date().toISOString().split("T")[0], // Current date for cart items
+        date: new Date().toISOString().split('T')[0], // Current date for cart items
         amount: item.price || 0,
-        description: item.title || "Cart Item",
-        category: "Amazon Cart",
-        source: "amazon-zip-cart",
+        description: item.title || 'Cart Item',
+        category: 'Amazon Cart',
+        source: 'amazon-zip-cart',
         metadata: {
-          asin: item.asin,
-        },
+          asin: item.asin
+        }
       });
     });
   }
@@ -151,5 +163,5 @@ module.exports = {
   validateZipFile,
   importFromZip,
   convertParsedDataToExpenditures,
-  cleanupTempFile,
+  cleanupTempFile
 };

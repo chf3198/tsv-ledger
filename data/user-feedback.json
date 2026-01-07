@@ -1,0 +1,72 @@
+{
+  "positive": [
+    {
+      "timestamp": "2026-01-07T03:13:01.500Z",
+      "type": "positive",
+      "content": "The AI was very helpful with the code review",
+      "sentiment": "positive",
+      "context": {}
+    },
+    {
+      "timestamp": "2026-01-07T03:16:15.414Z",
+      "type": "positive",
+      "content": "The AI was very helpful with the code review",
+      "sentiment": "positive",
+      "context": {}
+    }
+  ],
+  "negative": [
+    {
+      "timestamp": "2026-01-07T03:13:01.508Z",
+      "type": "negative",
+      "content": "Response was too slow for urgent debugging",
+      "sentiment": "negative",
+      "context": {}
+    },
+    {
+      "timestamp": "2026-01-07T03:16:15.418Z",
+      "type": "negative",
+      "content": "Response was too slow for urgent debugging",
+      "sentiment": "negative",
+      "context": {}
+    }
+  ],
+  "suggestions": [
+    {
+      "timestamp": "2026-01-07T03:13:01.514Z",
+      "type": "suggestion",
+      "content": "Add more detailed explanations for complex topics",
+      "sentiment": "neutral",
+      "context": {}
+    },
+    {
+      "timestamp": "2026-01-07T03:16:15.420Z",
+      "type": "suggestion",
+      "content": "Add more detailed explanations for complex topics",
+      "sentiment": "neutral",
+      "context": {}
+    }
+  ],
+  "themes": {
+    "helpfulness": {
+      "positive": 2,
+      "negative": 0,
+      "suggestions": 0
+    },
+    "speed": {
+      "positive": 0,
+      "negative": 2,
+      "suggestions": 0
+    },
+    "usability": {
+      "positive": 0,
+      "negative": 0,
+      "suggestions": 2
+    }
+  },
+  "sentiment": {
+    "positive": 2,
+    "neutral": 2,
+    "negative": 2
+  }
+}

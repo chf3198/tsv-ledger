@@ -18,8 +18,9 @@ class ValidationRules {
       {
         name: 'Subscribe & Save Detection Accuracy',
         test: (analysis) => {
-          const ssRate = analysis.subscribeAndSave.count / analysis.overview.amazonOrders;
-          return ssRate >= 0.15 && ssRate <= 0.60; // 15-60% is realistic range
+          const ssRate =
+            analysis.subscribeAndSave.count / analysis.overview.amazonOrders;
+          return ssRate >= 0.15 && ssRate <= 0.6; // 15-60% is realistic range
         },
         severity: 'error',
         description: 'Subscribe & Save detection rate should be between 15-60%'
@@ -33,14 +34,17 @@ class ValidationRules {
           return categories.length >= 3 && (hasFood || hasHousehold);
         },
         severity: 'warning',
-        description: 'Should have at least 3 categories including Food/Household items'
+        description:
+          'Should have at least 3 categories including Food/Household items'
       },
       {
         name: 'Amount Validation',
         test: (analysis) => {
           const total = analysis.overview.totalAmount;
-          const categorySum = Object.values(analysis.categories)
-            .reduce((sum, cat) => sum + cat.total, 0);
+          const categorySum = Object.values(analysis.categories).reduce(
+            (sum, cat) => sum + cat.total,
+            0
+          );
           const diff = Math.abs(total - categorySum) / total;
           return diff < 0.05; // Less than 5% difference
         },
@@ -59,11 +63,12 @@ class ValidationRules {
         name: 'Location Distribution',
         test: (analysis) => {
           const locations = Object.values(analysis.locations);
-          const nonZeroLocations = locations.filter(val => val > 0).length;
+          const nonZeroLocations = locations.filter((val) => val > 0).length;
           return nonZeroLocations >= 1 && nonZeroLocations <= 2;
         },
         severity: 'info',
-        description: 'Location distribution should be reasonable (1-2 locations)'
+        description:
+          'Location distribution should be reasonable (1-2 locations)'
       },
       {
         name: 'Monthly Trends Consistency',
@@ -87,7 +92,7 @@ class ValidationRules {
         name: 'Seasonal Distribution Logic',
         test: (analysis) => {
           const seasons = Object.values(analysis.seasonalTrends);
-          const nonZeroSeasons = seasons.filter(val => val > 0).length;
+          const nonZeroSeasons = seasons.filter((val) => val > 0).length;
           return nonZeroSeasons >= 2; // At least 2 seasons should have data
         },
         severity: 'info',
@@ -112,7 +117,7 @@ class ValidationRules {
       info: 0
     };
 
-    this.validationRules.forEach(rule => {
+    this.validationRules.forEach((rule) => {
       try {
         const passed = rule.test(analysis);
         const status = passed ? '✅' : '❌';
@@ -134,7 +139,6 @@ class ValidationRules {
         } else {
           results[rule.severity]++;
         }
-
       } catch (error) {
         console.log(`⚠️  ${rule.name}: ERROR - ${error.message}`);
         issues.push({
@@ -158,39 +162,51 @@ class ValidationRules {
    */
   getValidationDetails(ruleName, analysis) {
     switch (ruleName) {
-      case 'Subscribe & Save Detection Accuracy':
-        const ssRate = analysis.subscribeAndSave.count / analysis.overview.amazonOrders;
-        return {
-          currentRate: `${(ssRate * 100).toFixed(2)}%`,
-          expectedRange: '15-60%',
-          detected: analysis.subscribeAndSave.count,
-          total: analysis.overview.amazonOrders,
-          averageConfidence: `${(analysis.subscribeAndSave.averageConfidence * 100).toFixed(1)}%`
-        };
+    case 'Subscribe & Save Detection Accuracy':
+      const ssRate =
+          analysis.subscribeAndSave.count / analysis.overview.amazonOrders;
+      return {
+        currentRate: `${(ssRate * 100).toFixed(2)}%`,
+        expectedRange: '15-60%',
+        detected: analysis.subscribeAndSave.count,
+        total: analysis.overview.amazonOrders,
+        averageConfidence: `${(
+          analysis.subscribeAndSave.averageConfidence * 100
+        ).toFixed(1)}%`
+      };
 
-      case 'Amount Validation':
-        const total = analysis.overview.totalAmount;
-        const categorySum = Object.values(analysis.categories)
-          .reduce((sum, cat) => sum + cat.total, 0);
-        return {
-          totalAmount: total.toFixed(2),
-          categorySum: categorySum.toFixed(2),
-          difference: (total - categorySum).toFixed(2),
-          percentageDiff: `${((Math.abs(total - categorySum) / total) * 100).toFixed(2)}%`
-        };
+    case 'Amount Validation':
+      const total = analysis.overview.totalAmount;
+      const categorySum = Object.values(analysis.categories).reduce(
+        (sum, cat) => sum + cat.total,
+        0
+      );
+      return {
+        totalAmount: total.toFixed(2),
+        categorySum: categorySum.toFixed(2),
+        difference: (total - categorySum).toFixed(2),
+        percentageDiff: `${(
+          (Math.abs(total - categorySum) / total) *
+            100
+        ).toFixed(2)}%`
+      };
 
-      case 'Category Distribution Logic':
-        return {
-          categoriesFound: Object.keys(analysis.categories),
-          categoryCount: Object.keys(analysis.categories).length,
-          topCategories: Object.entries(analysis.categories)
-            .sort((a, b) => b[1].total - a[1].total)
-            .slice(0, 5)
-            .map(([name, data]) => ({ name, total: data.total.toFixed(2), count: data.count }))
-        };
+    case 'Category Distribution Logic':
+      return {
+        categoriesFound: Object.keys(analysis.categories),
+        categoryCount: Object.keys(analysis.categories).length,
+        topCategories: Object.entries(analysis.categories)
+          .sort((a, b) => b[1].total - a[1].total)
+          .slice(0, 5)
+          .map(([name, data]) => ({
+            name,
+            total: data.total.toFixed(2),
+            count: data.count
+          }))
+      };
 
-      default:
-        return null;
+    default:
+      return null;
     }
   }
 

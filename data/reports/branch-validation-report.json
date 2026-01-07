@@ -1,0 +1,82 @@
+{
+  "timestamp": "2026-01-06T21:32:39.347Z",
+  "strategy": "github-flow",
+  "results": {
+    "total": 5,
+    "valid": 5,
+    "invalid": 0,
+    "results": [
+      {
+        "branch": "copilot/vscode1757993515120",
+        "validation": {
+          "valid": true,
+          "branchType": "feature",
+          "violations": [],
+          "suggestions": [],
+          "strategy": "GitHub Flow",
+          "score": 100
+        }
+      },
+      {
+        "branch": "feat/subscription-analysis",
+        "validation": {
+          "valid": true,
+          "branchType": "feature",
+          "violations": [],
+          "suggestions": [],
+          "strategy": "GitHub Flow",
+          "score": 100
+        }
+      },
+      {
+        "branch": "feat/universal-menu",
+        "validation": {
+          "valid": true,
+          "branchType": "feature",
+          "violations": [],
+          "suggestions": [],
+          "strategy": "GitHub Flow",
+          "score": 100
+        }
+      },
+      {
+        "branch": "master",
+        "validation": {
+          "valid": true,
+          "branchType": "main",
+          "violations": [],
+          "suggestions": [],
+          "strategy": "GitHub Flow",
+          "score": 100
+        }
+      },
+      {
+        "branch": "protocol-evolution-setup",
+        "validation": {
+          "valid": true,
+          "branchType": "feature",
+          "violations": [],
+          "suggestions": [],
+          "strategy": "GitHub Flow",
+          "score": 100
+        }
+      }
+    ],
+    "summary": {
+      "byType": {
+        "feature": 4,
+        "main": 1
+      },
+      "violations": {},
+      "suggestions": []
+    }
+  },
+  "summary": {
+    "byType": {
+      "feature": 4,
+      "main": 1
+    },
+    "violations": {},
+    "suggestions": []
+  }
+}

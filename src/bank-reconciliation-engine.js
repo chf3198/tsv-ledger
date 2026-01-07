@@ -66,7 +66,9 @@ class BankReconciliationEngine {
       const transactions = [];
 
       for (const line of lines) {
-        if (line.trim() === '') continue;
+        if (line.trim() === '') {
+          continue;
+        }
 
         // Start parsing when we see the transaction header
         if (line.includes('Date') && line.includes('Description') && line.includes('Amount')) {
@@ -105,7 +107,9 @@ class BankReconciliationEngine {
       line = line.trim().replace(/\r/g, '');
 
       // Skip empty lines
-      if (!line) return null;
+      if (!line) {
+        return null;
+      }
 
       // Skip summary lines
       if (line.includes('Beginning balance') ||
@@ -162,7 +166,9 @@ class BankReconciliationEngine {
   createTransactionObject(date, description, amount, runningBalance) {
     // Parse date (MM/DD/YYYY)
     const parsedDate = this.parseBankDate(date);
-    if (!parsedDate) return null;
+    if (!parsedDate) {
+      return null;
+    }
 
     // Parse amount (remove quotes and handle negative)
     const cleanAmount = amount.replace(/"/g, '').trim();
@@ -173,7 +179,9 @@ class BankReconciliationEngine {
     const numericBalance = parseFloat(cleanBalance) || 0;
 
     // Skip if amount is 0 or invalid
-    if (numericAmount === 0) return null;
+    if (numericAmount === 0) {
+      return null;
+    }
 
     return {
       date: parsedDate,
@@ -236,11 +244,15 @@ class BankReconciliationEngine {
   extractLocation(description) {
     // Look for state codes (2 letters) or city patterns
     const stateMatch = description.match(/([A-Z]{2})\s+(DEBIT|CARD|PURCHASE)/);
-    if (stateMatch) return stateMatch[1];
+    if (stateMatch) {
+      return stateMatch[1];
+    }
 
     // Look for city patterns
     const cityMatch = description.match(/([A-Z][a-z]+)\s+[A-Z]{2}\s+(DEBIT|CARD|PURCHASE)/);
-    if (cityMatch) return cityMatch[1];
+    if (cityMatch) {
+      return cityMatch[1];
+    }
 
     return '';
   }
@@ -270,7 +282,9 @@ class BankReconciliationEngine {
           .pipe(csv())
           .on('data', (data) => {
             const order = this.parseAmazonOrder(data);
-            if (order) orders.push(order);
+            if (order) {
+              orders.push(order);
+            }
           })
           .on('end', resolve)
           .on('error', reject);
@@ -363,10 +377,14 @@ class BankReconciliationEngine {
 
         // Remove from unmatched lists
         const bankIndex = this.unmatchedBankTransactions.findIndex(t => t === match.bankTransaction);
-        if (bankIndex > -1) this.unmatchedBankTransactions.splice(bankIndex, 1);
+        if (bankIndex > -1) {
+          this.unmatchedBankTransactions.splice(bankIndex, 1);
+        }
 
         const amazonIndex = this.unmatchedAmazonOrders.findIndex(o => o === amazonOrder);
-        if (amazonIndex > -1) this.unmatchedAmazonOrders.splice(amazonIndex, 1);
+        if (amazonIndex > -1) {
+          this.unmatchedAmazonOrders.splice(amazonIndex, 1);
+        }
 
         totalConfidence += confidence;
       }

@@ -4,7 +4,7 @@
  * @module tests/component/category-classification-tests
  */
 
-const path = require("path");
+const path = require('path');
 
 /**
  * Category Classification Test Suite
@@ -26,29 +26,29 @@ class CategoryClassificationTests {
       // Load from test data if not provided
       const testDataPath = path.join(
         __dirname,
-        "../../test-data/amazon-test-sample.csv"
+        '../../test-data/amazon-test-sample.csv'
       );
-      const fs = require("fs");
+      const fs = require('fs');
 
       if (fs.existsSync(testDataPath)) {
-        const csv = require("csv-parser");
+        const csv = require('csv-parser');
         const data = [];
 
         await new Promise((resolve, reject) => {
           fs.createReadStream(testDataPath)
             .pipe(csv())
-            .on("data", (row) => {
+            .on('data', (row) => {
               if (data.length < count) {
                 data.push({
                   date: row.date,
                   amount: parseFloat(row.amount) || 0,
-                  items: row.items || "",
-                  orderId: row.orderId || `test-${data.length}`,
+                  items: row.items || '',
+                  orderId: row.orderId || `test-${data.length}`
                 });
               }
             })
-            .on("end", () => resolve())
-            .on("error", reject);
+            .on('end', () => resolve())
+            .on('error', reject);
         });
 
         this.sampleData = data;
@@ -66,17 +66,17 @@ class CategoryClassificationTests {
    */
   generateMockData(count) {
     const categories = {
-      Grocery: ["milk", "bread", "eggs", "apples", "chicken", "rice", "pasta"],
+      Grocery: ['milk', 'bread', 'eggs', 'apples', 'chicken', 'rice', 'pasta'],
       Household: [
-        "paper towels",
-        "laundry detergent",
-        "dish soap",
-        "trash bags",
+        'paper towels',
+        'laundry detergent',
+        'dish soap',
+        'trash bags'
       ],
-      Electronics: ["charger", "headphones", "mouse", "keyboard", "monitor"],
-      Books: ["novel", "textbook", "cookbook", "biography"],
-      Clothing: ["shirt", "pants", "shoes", "jacket", "socks"],
-      Other: ["miscellaneous item", "unknown product"],
+      Electronics: ['charger', 'headphones', 'mouse', 'keyboard', 'monitor'],
+      Books: ['novel', 'textbook', 'cookbook', 'biography'],
+      Clothing: ['shirt', 'pants', 'shoes', 'jacket', 'socks'],
+      Other: ['miscellaneous item', 'unknown product']
     };
 
     const data = [];
@@ -91,10 +91,10 @@ class CategoryClassificationTests {
       data.push({
         date: new Date(Date.now() - Math.random() * 365 * 24 * 60 * 60 * 1000)
           .toISOString()
-          .split("T")[0],
+          .split('T')[0],
         amount: -(Math.random() * 100 + 5).toFixed(2),
         items: `${item} and other items`,
-        orderId: `MOCK-${String(i + 1).padStart(3, "0")}`,
+        orderId: `MOCK-${String(i + 1).padStart(3, '0')}`
       });
     }
 
@@ -106,14 +106,14 @@ class CategoryClassificationTests {
    * @returns {Object} Test results
    */
   testCategoryClassification() {
-    console.log("\n📂 Testing Category Classification Component...");
+    console.log('\n📂 Testing Category Classification Component...');
 
     const results = {
       tested: 0,
       categories: new Map(),
       uncategorized: [],
       confidenceDistribution: { high: 0, medium: 0, low: 0 },
-      details: [],
+      details: []
     };
 
     this.sampleData.forEach((order) => {
@@ -127,7 +127,7 @@ class CategoryClassificationTests {
         results.categories.set(category, {
           count: 0,
           totalAmount: 0,
-          samples: [],
+          samples: []
         });
       }
 
@@ -136,15 +136,15 @@ class CategoryClassificationTests {
       categoryData.totalAmount += Math.abs(order.amount);
 
       if (categoryData.samples.length < 3) {
-        categoryData.samples.push(order.items.substring(0, 40) + "...");
+        categoryData.samples.push(order.items.substring(0, 40) + '...');
       }
 
       // Check if uncategorized
-      if (category === "Other" || category === "Uncategorized") {
+      if (category === 'Other' || category === 'Uncategorized') {
         results.uncategorized.push({
           orderId: order.orderId,
           items: order.items,
-          amount: order.amount,
+          amount: order.amount
         });
       }
 
@@ -154,23 +154,31 @@ class CategoryClassificationTests {
         /food|grocery|household|electronics|book|clothing/i.test(order.items);
       let confidence = 0.5;
 
-      if (hasKeywords) confidence += 0.3;
-      if (itemLength > 20) confidence += 0.2;
+      if (hasKeywords) {
+        confidence += 0.3;
+      }
+      if (itemLength > 20) {
+        confidence += 0.2;
+      }
 
-      if (confidence > 0.8) results.confidenceDistribution.high++;
-      else if (confidence > 0.6) results.confidenceDistribution.medium++;
-      else results.confidenceDistribution.low++;
+      if (confidence > 0.8) {
+        results.confidenceDistribution.high++;
+      } else if (confidence > 0.6) {
+        results.confidenceDistribution.medium++;
+      } else {
+        results.confidenceDistribution.low++;
+      }
 
       results.details.push({
         orderId: order.orderId,
-        category: category,
-        items: order.items.substring(0, 40) + "...",
+        category,
+        items: order.items.substring(0, 40) + '...',
         amount: order.amount,
-        estimatedConfidence: confidence,
+        estimatedConfidence: confidence
       });
     });
 
-    console.log(`\n📊 Category Classification Results:`);
+    console.log('\n📊 Category Classification Results:');
     console.log(`   Tested Orders: ${results.tested}`);
     console.log(`   Unique Categories: ${results.categories.size}`);
     console.log(
@@ -180,12 +188,12 @@ class CategoryClassificationTests {
       ).toFixed(1)}%)`
     );
 
-    console.log(`\n📈 Confidence Distribution:`);
+    console.log('\n📈 Confidence Distribution:');
     console.log(`   High (>80%): ${results.confidenceDistribution.high}`);
     console.log(`   Medium (60-80%): ${results.confidenceDistribution.medium}`);
     console.log(`   Low (<60%): ${results.confidenceDistribution.low}`);
 
-    console.log(`\n🏷️  Top Categories:`);
+    console.log('\n🏷️  Top Categories:');
     const sortedCategories = Array.from(results.categories.entries())
       .sort((a, b) => b[1].count - a[1].count)
       .slice(0, 5);
@@ -194,17 +202,17 @@ class CategoryClassificationTests {
       console.log(
         `   ${category}: ${data.count} orders, $${data.totalAmount.toFixed(2)}`
       );
-      console.log(`     Samples: ${data.samples.join(", ")}`);
+      console.log(`     Samples: ${data.samples.join(', ')}`);
     });
 
     if (results.uncategorized.length > 0) {
-      console.log(`\n❓ Sample Uncategorized Items:`);
+      console.log('\n❓ Sample Uncategorized Items:');
       results.uncategorized.slice(0, 3).forEach((item) => {
         console.log(`   • ${item.items.substring(0, 50)}... ($${item.amount})`);
       });
     }
 
-    this.testResults.set("categoryClassification", results);
+    this.testResults.set('categoryClassification', results);
     return results;
   }
 
@@ -221,8 +229,10 @@ class CategoryClassificationTests {
    * @returns {number} Score as percentage
    */
   getScore() {
-    const results = this.testResults.get("categoryClassification");
-    if (!results) return 0;
+    const results = this.testResults.get('categoryClassification');
+    if (!results) {
+      return 0;
+    }
 
     const categorized = results.tested - results.uncategorized.length;
     return (categorized / results.tested) * 100;

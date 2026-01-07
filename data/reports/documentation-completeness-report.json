@@ -1,0 +1,238 @@
+{
+  "timestamp": "2026-01-06T21:42:03.558Z",
+  "analysis": {
+    "project": "/mnt/chromeos/removable/Drive/repos/tsv-ledger",
+    "timestamp": "2026-01-06T21:42:03.547Z",
+    "documentation": {
+      "api": {
+        "type": "api",
+        "files": [],
+        "exists": false,
+        "completeness": 0,
+        "issues": [],
+        "lastModified": null,
+        "coverage": {}
+      },
+      "readme": {
+        "type": "readme",
+        "files": [
+          "/mnt/chromeos/removable/Drive/repos/tsv-ledger/README.md"
+        ],
+        "exists": true,
+        "completeness": 25,
+        "issues": [
+          {
+            "type": "missing-section",
+            "severity": "warning",
+            "message": "Missing required section: description",
+            "file": "/mnt/chromeos/removable/Drive/repos/tsv-ledger/README.md"
+          },
+          {
+            "type": "missing-section",
+            "severity": "warning",
+            "message": "Missing required section: installation",
+            "file": "/mnt/chromeos/removable/Drive/repos/tsv-ledger/README.md"
+          },
+          {
+            "type": "missing-section",
+            "severity": "warning",
+            "message": "Missing required section: usage",
+            "file": "/mnt/chromeos/removable/Drive/repos/tsv-ledger/README.md"
+          },
+          {
+            "type": "documentation-todo",
+            "severity": "info",
+            "message": "Documentation contains TODO/FIXME items",
+            "file": "/mnt/chromeos/removable/Drive/repos/tsv-ledger/README.md"
+          },
+          {
+            "type": "code-block",
+            "severity": "warning",
+            "message": "Code block without language specification",
+            "file": "/mnt/chromeos/removable/Drive/repos/tsv-ledger/README.md"
+          },
+          {
+            "type": "code-block",
+            "severity": "warning",
+            "message": "Code block without language specification",
+            "file": "/mnt/chromeos/removable/Drive/repos/tsv-ledger/README.md"
+          },
+          {
+            "type": "code-block",
+            "severity": "warning",
+            "message": "Code block without language specification",
+            "file": "/mnt/chromeos/removable/Drive/repos/tsv-ledger/README.md"
+          },
+          {
+            "type": "code-block",
+            "severity": "warning",
+            "message": "Code block without language specification",
+            "file": "/mnt/chromeos/removable/Drive/repos/tsv-ledger/README.md"
+          },
+          {
+            "type": "version-reference",
+            "severity": "info",
+            "message": "Documentation contains version references: 2.2.3, v2.2.3",
+            "file": "/mnt/chromeos/removable/Drive/repos/tsv-ledger/README.md"
+          }
+        ],
+        "lastModified": "2025-11-17T17:29:09.087Z",
+        "coverage": {
+          "description": false,
+          "installation": false,
+          "usage": false,
+          "contributing": true
+        }
+      },
+      "architecture": {
+        "type": "architecture",
+        "files": [],
+        "exists": false,
+        "completeness": 0,
+        "issues": [],
+        "lastModified": null,
+        "coverage": {}
+      },
+      "testing": {
+        "type": "testing",
+        "files": [],
+        "exists": false,
+        "completeness": 0,
+        "issues": [],
+        "lastModified": null,
+        "coverage": {}
+      },
+      "deployment": {
+        "type": "deployment",
+        "files": [],
+        "exists": false,
+        "completeness": 0,
+        "issues": [],
+        "lastModified": null,
+        "coverage": {}
+      }
+    },
+    "issues": [
+      {
+        "type": "missing-section",
+        "severity": "warning",
+        "message": "Missing required section: description",
+        "file": "/mnt/chromeos/removable/Drive/repos/tsv-ledger/README.md"
+      },
+      {
+        "type": "missing-section",
+        "severity": "warning",
+        "message": "Missing required section: installation",
+        "file": "/mnt/chromeos/removable/Drive/repos/tsv-ledger/README.md"
+      },
+      {
+        "type": "missing-section",
+        "severity": "warning",
+        "message": "Missing required section: usage",
+        "file": "/mnt/chromeos/removable/Drive/repos/tsv-ledger/README.md"
+      },
+      {
+        "type": "documentation-todo",
+        "severity": "info",
+        "message": "Documentation contains TODO/FIXME items",
+        "file": "/mnt/chromeos/removable/Drive/repos/tsv-ledger/README.md"
+      },
+      {
+        "type": "code-block",
+        "severity": "warning",
+        "message": "Code block without language specification",
+        "file": "/mnt/chromeos/removable/Drive/repos/tsv-ledger/README.md"
+      },
+      {
+        "type": "code-block",
+        "severity": "warning",
+        "message": "Code block without language specification",
+        "file": "/mnt/chromeos/removable/Drive/repos/tsv-ledger/README.md"
+      },
+      {
+        "type": "code-block",
+        "severity": "warning",
+        "message": "Code block without language specification",
+        "file": "/mnt/chromeos/removable/Drive/repos/tsv-ledger/README.md"
+      },
+      {
+        "type": "code-block",
+        "severity": "warning",
+        "message": "Code block without language specification",
+        "file": "/mnt/chromeos/removable/Drive/repos/tsv-ledger/README.md"
+      },
+      {
+        "type": "version-reference",
+        "severity": "info",
+        "message": "Documentation contains version references: 2.2.3, v2.2.3",
+        "file": "/mnt/chromeos/removable/Drive/repos/tsv-ledger/README.md"
+      },
+      {
+        "type": "missing-file",
+        "file": "CONTRIBUTING.md",
+        "severity": "warning",
+        "message": "Missing documentation file: CONTRIBUTING.md"
+      },
+      {
+        "type": "missing-file",
+        "file": "CHANGELOG.md",
+        "severity": "warning",
+        "message": "Missing documentation file: CHANGELOG.md"
+      },
+      {
+        "type": "missing-file",
+        "file": "LICENSE",
+        "severity": "warning",
+        "message": "Missing documentation file: LICENSE"
+      },
+      {
+        "type": "missing-file",
+        "file": "API_DOCUMENTATION.md",
+        "severity": "warning",
+        "message": "Missing documentation file: API_DOCUMENTATION.md"
+      }
+    ],
+    "suggestions": [
+      "Create CONTRIBUTING.md with standard project documentation",
+      "Create CHANGELOG.md with standard project documentation",
+      "Create LICENSE with standard project documentation",
+      "Create API_DOCUMENTATION.md with standard project documentation",
+      "Improve readme documentation completeness (currently 25.0%)",
+      "Create a comprehensive documentation strategy for the project",
+      "Review and complete missing sections in existing documentation"
+    ],
+    "coverage": {
+      "files": 1,
+      "types": 20,
+      "completeness": 25,
+      "recency": 20
+    },
+    "score": 30,
+    "missing": [
+      {
+        "type": "missing-file",
+        "file": "CONTRIBUTING.md",
+        "severity": "warning",
+        "message": "Missing documentation file: CONTRIBUTING.md"
+      },
+      {
+        "type": "missing-file",
+        "file": "CHANGELOG.md",
+        "severity": "warning",
+        "message": "Missing documentation file: CHANGELOG.md"
+      },
+      {
+        "type": "missing-file",
+        "file": "LICENSE",
+        "severity": "warning",
+        "message": "Missing documentation file: LICENSE"
+      },
+      {
+        "type": "missing-file",
+        "file": "API_DOCUMENTATION.md",
+        "severity": "warning",
+        "message": "Missing documentation file: API_DOCUMENTATION.md"
+      }
+    ]
+  }
+}

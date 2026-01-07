@@ -4,9 +4,9 @@
  * Tests for data import workflows including CSV, ZIP, and manual entry
  */
 
-const path = require("path");
-const fs = require("fs");
-const BaseUXTest = require("./base-test-utils");
+const path = require('path');
+const fs = require('fs');
+const BaseUXTest = require('./base-test-utils');
 
 /**
  * Data import workflow tests
@@ -27,24 +27,24 @@ class DataImportTests extends BaseUXTest {
    * @returns {Promise<void>}
    */
   async testCsvDataImport() {
-    await this.runTest("CSV Data Import", async () => {
-      await this.navigateToPage("/");
-      await this.navigateToSection("data-import");
+    await this.runTest('CSV Data Import', async () => {
+      await this.navigateToPage('/');
+      await this.navigateToSection('data-import');
 
       // Look for CSV file input
-      const fileInput = await this.page.$("#csvFile");
+      const fileInput = await this.page.$('#csvFile');
       if (!fileInput) {
-        return "CSV file input not found";
+        return 'CSV file input not found';
       }
 
-      const csvPath = path.join(__dirname, "../data/test-expenditures.csv");
+      const csvPath = path.join(__dirname, '../data/test-expenditures.csv');
       if (!fs.existsSync(csvPath)) {
-        return "Test CSV file not found";
+        return 'Test CSV file not found';
       }
 
       // Upload the file
       await fileInput.uploadFile(csvPath);
-      this.log("📁 Uploaded CSV file for import");
+      this.log('📁 Uploaded CSV file for import');
 
       // Look for import button and click it
       const importBtn = await this.page.$(
@@ -56,10 +56,10 @@ class DataImportTests extends BaseUXTest {
       }
 
       // Check if import was successful (look for success message or updated data)
-      const successIndicators = await this.page.$$(".alert-success, .success");
+      const successIndicators = await this.page.$$('.alert-success, .success');
       const importStatusSuccess = await this.page.evaluate(() => {
-        const status = document.getElementById("importStatus");
-        return status && status.textContent.toLowerCase().includes("success");
+        const status = document.getElementById('importStatus');
+        return status && status.textContent.toLowerCase().includes('success');
       });
       return successIndicators.length > 0 || importStatusSuccess;
     });
@@ -70,18 +70,18 @@ class DataImportTests extends BaseUXTest {
    * @returns {Promise<void>}
    */
   async testAmazonZipImport() {
-    await this.runTest("Amazon ZIP Import", async () => {
-      await this.navigateToPage("/");
-      await this.navigateToSection("data-import");
+    await this.runTest('Amazon ZIP Import', async () => {
+      await this.navigateToPage('/');
+      await this.navigateToSection('data-import');
 
       // Look for Amazon ZIP import form
-      const zipForm = await this.page.$("#amazonZipImportForm");
+      const zipForm = await this.page.$('#amazonZipImportForm');
       if (!zipForm) {
-        return "Amazon ZIP import form not found";
+        return 'Amazon ZIP import form not found';
       }
 
       // For now, just verify the form exists and is accessible
-      const zipInput = await this.page.$("#amazonZipFile");
+      const zipInput = await this.page.$('#amazonZipFile');
       return !!zipInput;
     });
   }
@@ -91,31 +91,31 @@ class DataImportTests extends BaseUXTest {
    * @returns {Promise<void>}
    */
   async testManualExpenseEntry() {
-    await this.runTest("Manual Expense Entry", async () => {
-      await this.navigateToPage("/");
-      await this.navigateToSection("manual-entry");
+    await this.runTest('Manual Expense Entry', async () => {
+      await this.navigateToPage('/');
+      await this.navigateToSection('manual-entry');
 
       // Look for expense entry form
-      const expenseForm = await this.page.$("#expenditureForm");
+      const expenseForm = await this.page.$('#expenditureForm');
       if (!expenseForm) {
-        return "Expense entry form not found";
+        return 'Expense entry form not found';
       }
 
       // Try to fill out a test expense
-      const dateField = await this.page.$("#date");
-      const amountField = await this.page.$("#amount");
-      const descField = await this.page.$("#description");
-      const categoryField = await this.page.$("#category");
+      const dateField = await this.page.$('#date');
+      const amountField = await this.page.$('#amount');
+      const descField = await this.page.$('#description');
+      const categoryField = await this.page.$('#category');
 
       if (dateField && amountField && descField && categoryField) {
-        await this.fillFormField("#date", "2025-01-20", "date field");
-        await this.fillFormField("#amount", "45.67", "amount field");
+        await this.fillFormField('#date', '2025-01-20', 'date field');
+        await this.fillFormField('#amount', '45.67', 'amount field');
         await this.fillFormField(
-          "#description",
-          "UX Test Expense",
-          "description field"
+          '#description',
+          'UX Test Expense',
+          'description field'
         );
-        await this.page.select("#category", "tool subscriptions");
+        await this.page.select('#category', 'tool subscriptions');
 
         // Look for submit button
         const submitBtn = await this.page.$(

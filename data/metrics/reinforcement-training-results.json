@@ -1,0 +1,1803 @@
+{
+  "timestamp": "2026-01-06T20:49:08.852Z",
+  "metrics": {
+    "totalEpisodes": 100,
+    "averageReward": 1.8491786372238859,
+    "policyUpdates": 100,
+    "convergenceRate": 0.9661359200752719
+  },
+  "finalPolicy": {
+    "outcomeActions": {
+      "file_size_compliance": {
+        "weight": 2,
+        "successRate": 1
+      },
+      "test_pass_rate": {
+        "weight": 1.668761697470617,
+        "successRate": 1
+      },
+      "code_quality": {
+        "weight": 1.3257643804781682,
+        "successRate": 0.999999999992724
+      },
+      "commit_conventions": {
+        "weight": 0.6316679531835648,
+        "successRate": 0.984375
+      }
+    },
+    "processActions": {
+      "validate_before_action": {
+        "weight": 1.649350000000003,
+        "successRate": 1
+      },
+      "checklist_completion": {
+        "weight": 1.547450000000003,
+        "successRate": 1
+      },
+      "error_handling": {
+        "weight": 1.0180500000000001,
+        "successRate": 0.96875
+      },
+      "iterative_improvement": {
+        "weight": 0.9161500000000001,
+        "successRate": 0.96875
+      }
+    },
+    "consistencyPatterns": {
+      "similar_context_same_action": {
+        "weight": 1,
+        "violations": 0
+      },
+      "process_step_completion": {
+        "weight": 1,
+        "violations": 0
+      },
+      "validation_consistency": {
+        "weight": 0.8,
+        "violations": 0
+      }
+    }
+  },
+  "trainingHistory": [
+    {
+      "episodeId": 51,
+      "context": {
+        "violations": [
+          {
+            "type": "file_size",
+            "lines": 350
+          }
+        ]
+      },
+      "actions": {
+        "outcomeActions": [
+          "file_size_compliance",
+          "test_pass_rate"
+        ],
+        "processActions": [
+          "validate_before_action",
+          "checklist_completion"
+        ]
+      },
+      "outcomes": {
+        "success": false,
+        "quality": 0.273818051831391,
+        "efficiency": 0.3247274625032498,
+        "adherence": 0.7
+      },
+      "timestamp": "2026-01-06T20:49:08.840Z",
+      "rewards": {
+        "outcomeReward": 0.5143272646666704,
+        "processReward": 0.5,
+        "consistencyReward": 0.4,
+        "noveltyPenalty": 0.5
+      },
+      "totalReward": 0.9143272646666705
+    },
+    {
+      "episodeId": 52,
+      "context": {
+        "violations": [
+          {
+            "type": "test_failure",
+            "error": "api_error"
+          }
+        ]
+      },
+      "actions": {
+        "outcomeActions": [
+          "file_size_compliance",
+          "commit_conventions"
+        ],
+        "processActions": [
+          "checklist_completion",
+          "validate_before_action"
+        ]
+      },
+      "outcomes": {
+        "success": false,
+        "quality": 0.32117760888619534,
+        "efficiency": 0.30892631581476854,
+        "adherence": 0.4
+      },
+      "timestamp": "2026-01-06T20:49:08.841Z",
+      "rewards": {
+        "outcomeReward": 0.41326669918752823,
+        "processReward": 0.5,
+        "consistencyReward": 0.24,
+        "noveltyPenalty": 0.5
+      },
+      "totalReward": 0.6532666991875282
+    },
+    {
+      "episodeId": 53,
+      "context": {
+        "violations": [
+          {
+            "type": "lint_errors",
+            "count": 5
+          }
+        ]
+      },
+      "actions": {
+        "outcomeActions": [
+          "file_size_compliance",
+          "test_pass_rate"
+        ],
+        "processActions": [
+          "validate_before_action",
+          "checklist_completion"
+        ]
+      },
+      "outcomes": {
+        "success": false,
+        "quality": 0.021103369545679318,
+        "efficiency": 0.28785320780512763,
+        "adherence": 0.4
+      },
+      "timestamp": "2026-01-06T20:49:08.842Z",
+      "rewards": {
+        "outcomeReward": 0.25690764711437797,
+        "processReward": 0.5,
+        "consistencyReward": 0.24,
+        "noveltyPenalty": 0.5
+      },
+      "totalReward": 0.49690764711437796
+    },
+    {
+      "episodeId": 54,
+      "context": {
+        "violations": [
+          {
+            "type": "file_size",
+            "lines": 320
+          },
+          {
+            "type": "lint_errors",
+            "count": 2
+          }
+        ]
+      },
+      "actions": {
+        "outcomeActions": [
+          "file_size_compliance",
+          "code_quality"
+        ],
+        "processActions": [
+          "validate_before_action",
+          "checklist_completion"
+        ]
+      },
+      "outcomes": {
+        "success": true,
+        "quality": 0.727693317243211,
+        "efficiency": 0.7677264530518014,
+        "adherence": 1
+      },
+      "timestamp": "2026-01-06T20:49:08.842Z",
+      "rewards": {
+        "outcomeReward": 1.9941645945371458,
+        "processReward": 0.5,
+        "consistencyReward": 0.4,
+        "noveltyPenalty": 0.5
+      },
+      "totalReward": 2.3941645945371457
+    },
+    {
+      "episodeId": 55,
+      "context": {
+        "violations": []
+      },
+      "actions": {
+        "outcomeActions": [
+          "file_size_compliance",
+          "test_pass_rate"
+        ],
+        "processActions": [
+          "validate_before_action",
+          "checklist_completion"
+        ]
+      },
+      "outcomes": {
+        "success": true,
+        "quality": 0.5794312467354166,
+        "efficiency": 0.7559596863722793,
+        "adherence": 0.4
+      },
+      "timestamp": "2026-01-06T20:49:08.842Z",
+      "rewards": {
+        "outcomeReward": 1.6765035292793922,
+        "processReward": 0.5,
+        "consistencyReward": 0.4,
+        "noveltyPenalty": 0.5
+      },
+      "totalReward": 2.076503529279392
+    },
+    {
+      "episodeId": 56,
+      "context": {
+        "violations": [
+          {
+            "type": "file_size",
+            "lines": 350
+          }
+        ]
+      },
+      "actions": {
+        "outcomeActions": [
+          "file_size_compliance",
+          "test_pass_rate"
+        ],
+        "processActions": [
+          "validate_before_action",
+          "checklist_completion"
+        ]
+      },
+      "outcomes": {
+        "success": true,
+        "quality": 0.7064910569176357,
+        "efficiency": 0.5921539153012891,
+        "adherence": 0.7
+      },
+      "timestamp": "2026-01-06T20:49:08.842Z",
+      "rewards": {
+        "outcomeReward": 1.8108917030492047,
+        "processReward": 0.5,
+        "consistencyReward": 0.4,
+        "noveltyPenalty": 0.5
+      },
+      "totalReward": 2.2108917030492043
+    },
+    {
+      "episodeId": 57,
+      "context": {
+        "violations": [
+          {
+            "type": "test_failure",
+            "error": "api_error"
+          }
+        ]
+      },
+      "actions": {
+        "outcomeActions": [
+          "test_pass_rate",
+          "file_size_compliance"
+        ],
+        "processActions": [
+          "validate_before_action",
+          "checklist_completion"
+        ]
+      },
+      "outcomes": {
+        "success": false,
+        "quality": 0.46096963380028094,
+        "efficiency": 0.3310397021057454,
+        "adherence": 0.7
+      },
+      "timestamp": "2026-01-06T20:49:08.842Z",
+      "rewards": {
+        "outcomeReward": 0.6097967275318641,
+        "processReward": 0.5,
+        "consistencyReward": 0.24,
+        "noveltyPenalty": 0.5
+      },
+      "totalReward": 0.8497967275318641
+    },
+    {
+      "episodeId": 58,
+      "context": {
+        "violations": [
+          {
+            "type": "lint_errors",
+            "count": 5
+          }
+        ]
+      },
+      "actions": {
+        "outcomeActions": [
+          "file_size_compliance",
+          "code_quality"
+        ],
+        "processActions": [
+          "validate_before_action",
+          "checklist_completion"
+        ]
+      },
+      "outcomes": {
+        "success": true,
+        "quality": 0.6490432037538381,
+        "efficiency": 0.8617280671456045,
+        "adherence": 0.7
+      },
+      "timestamp": "2026-01-06T20:49:08.843Z",
+      "rewards": {
+        "outcomeReward": 1.8630400220206005,
+        "processReward": 0.5,
+        "consistencyReward": 0.24,
+        "noveltyPenalty": 0.5
+      },
+      "totalReward": 2.1030400220206005
+    },
+    {
+      "episodeId": 59,
+      "context": {
+        "violations": [
+          {
+            "type": "file_size",
+            "lines": 320
+          },
+          {
+            "type": "lint_errors",
+            "count": 2
+          }
+        ]
+      },
+      "actions": {
+        "outcomeActions": [
+          "file_size_compliance",
+          "code_quality"
+        ],
+        "processActions": [
+          "validate_before_action",
+          "checklist_completion"
+        ]
+      },
+      "outcomes": {
+        "success": false,
+        "quality": 0.08275911524118496,
+        "efficiency": 0.40489342799049316,
+        "adherence": 1
+      },
+      "timestamp": "2026-01-06T20:49:08.843Z",
+      "rewards": {
+        "outcomeReward": 0.5628475860177404,
+        "processReward": 0.5,
+        "consistencyReward": 0.4,
+        "noveltyPenalty": 0.5
+      },
+      "totalReward": 0.9628475860177406
+    },
+    {
+      "episodeId": 60,
+      "context": {
+        "violations": []
+      },
+      "actions": {
+        "outcomeActions": [
+          "file_size_compliance",
+          "test_pass_rate"
+        ],
+        "processActions": [
+          "validate_before_action",
+          "checklist_completion"
+        ]
+      },
+      "outcomes": {
+        "success": true,
+        "quality": 0.6955584061570206,
+        "efficiency": 0.6967635273046402,
+        "adherence": 0.4
+      },
+      "timestamp": "2026-01-06T20:49:08.843Z",
+      "rewards": {
+        "outcomeReward": 1.7168082612699025,
+        "processReward": 0.5,
+        "consistencyReward": 0.4,
+        "noveltyPenalty": 0.5
+      },
+      "totalReward": 2.1168082612699024
+    },
+    {
+      "episodeId": 61,
+      "context": {
+        "violations": [
+          {
+            "type": "file_size",
+            "lines": 350
+          }
+        ]
+      },
+      "actions": {
+        "outcomeActions": [
+          "file_size_compliance",
+          "test_pass_rate"
+        ],
+        "processActions": [
+          "validate_before_action",
+          "checklist_completion"
+        ]
+      },
+      "outcomes": {
+        "success": true,
+        "quality": 0.7486916436304079,
+        "efficiency": 0.8706205446475377,
+        "adherence": 0.7
+      },
+      "timestamp": "2026-01-06T20:49:08.844Z",
+      "rewards": {
+        "outcomeReward": 1.9155319852094652,
+        "processReward": 0.5,
+        "consistencyReward": 0.4,
+        "noveltyPenalty": 0.5
+      },
+      "totalReward": 2.315531985209465
+    },
+    {
+      "episodeId": 62,
+      "context": {
+        "violations": [
+          {
+            "type": "test_failure",
+            "error": "api_error"
+          }
+        ]
+      },
+      "actions": {
+        "outcomeActions": [
+          "test_pass_rate",
+          "file_size_compliance"
+        ],
+        "processActions": [
+          "validate_before_action",
+          "checklist_completion"
+        ]
+      },
+      "outcomes": {
+        "success": true,
+        "quality": 0.5486732702918986,
+        "efficiency": 0.8277500779277243,
+        "adherence": 0.7
+      },
+      "timestamp": "2026-01-06T20:49:08.844Z",
+      "rewards": {
+        "outcomeReward": 1.8026616585242665,
+        "processReward": 0.5,
+        "consistencyReward": 0.4,
+        "noveltyPenalty": 0.5
+      },
+      "totalReward": 2.2026616585242667
+    },
+    {
+      "episodeId": 63,
+      "context": {
+        "violations": [
+          {
+            "type": "lint_errors",
+            "count": 5
+          }
+        ]
+      },
+      "actions": {
+        "outcomeActions": [
+          "file_size_compliance",
+          "code_quality"
+        ],
+        "processActions": [
+          "validate_before_action",
+          "checklist_completion"
+        ]
+      },
+      "outcomes": {
+        "success": true,
+        "quality": 0.5122418178363304,
+        "efficiency": 0.5007218908366121,
+        "adherence": 0.7
+      },
+      "timestamp": "2026-01-06T20:49:08.844Z",
+      "rewards": {
+        "outcomeReward": 1.686337476169149,
+        "processReward": 0.5,
+        "consistencyReward": 0.4,
+        "noveltyPenalty": 0.5
+      },
+      "totalReward": 2.086337476169149
+    },
+    {
+      "episodeId": 64,
+      "context": {
+        "violations": [
+          {
+            "type": "file_size",
+            "lines": 320
+          },
+          {
+            "type": "lint_errors",
+            "count": 2
+          }
+        ]
+      },
+      "actions": {
+        "outcomeActions": [
+          "file_size_compliance",
+          "code_quality"
+        ],
+        "processActions": [
+          "validate_before_action",
+          "checklist_completion"
+        ]
+      },
+      "outcomes": {
+        "success": true,
+        "quality": 0.5941606190990597,
+        "efficiency": 0.7774555195655366,
+        "adherence": 1
+      },
+      "timestamp": "2026-01-06T20:49:08.844Z",
+      "rewards": {
+        "outcomeReward": 1.9303169654191907,
+        "processReward": 0.5,
+        "consistencyReward": 0.4,
+        "noveltyPenalty": 0.5
+      },
+      "totalReward": 2.3303169654191906
+    },
+    {
+      "episodeId": 65,
+      "context": {
+        "violations": []
+      },
+      "actions": {
+        "outcomeActions": [
+          "file_size_compliance",
+          "test_pass_rate"
+        ],
+        "processActions": [
+          "validate_before_action",
+          "checklist_completion"
+        ]
+      },
+      "outcomes": {
+        "success": false,
+        "quality": 0.0848138332411239,
+        "efficiency": 0.020846169662366687,
+        "adherence": 0.4
+      },
+      "timestamp": "2026-01-06T20:49:08.844Z",
+      "rewards": {
+        "outcomeReward": 0.20866076751927198,
+        "processReward": 0.5,
+        "consistencyReward": 0.4,
+        "noveltyPenalty": 0.5
+      },
+      "totalReward": 0.6086607675192721
+    },
+    {
+      "episodeId": 66,
+      "context": {
+        "violations": [
+          {
+            "type": "file_size",
+            "lines": 350
+          }
+        ]
+      },
+      "actions": {
+        "outcomeActions": [
+          "file_size_compliance",
+          "test_pass_rate"
+        ],
+        "processActions": [
+          "validate_before_action",
+          "checklist_completion"
+        ]
+      },
+      "outcomes": {
+        "success": false,
+        "quality": 0.09836108331092974,
+        "efficiency": 0.0761137002031177,
+        "adherence": 0.7
+      },
+      "timestamp": "2026-01-06T20:49:08.844Z",
+      "rewards": {
+        "outcomeReward": 0.3520146517164001,
+        "processReward": 0.5,
+        "consistencyReward": 0.4,
+        "noveltyPenalty": 0.5
+      },
+      "totalReward": 0.7520146517164001
+    },
+    {
+      "episodeId": 67,
+      "context": {
+        "violations": [
+          {
+            "type": "test_failure",
+            "error": "api_error"
+          }
+        ]
+      },
+      "actions": {
+        "outcomeActions": [
+          "test_pass_rate",
+          "file_size_compliance"
+        ],
+        "processActions": [
+          "validate_before_action",
+          "checklist_completion"
+        ]
+      },
+      "outcomes": {
+        "success": false,
+        "quality": 0.19351940354976221,
+        "efficiency": 0.09190997490942765,
+        "adherence": 0.7
+      },
+      "timestamp": "2026-01-06T20:49:08.844Z",
+      "rewards": {
+        "outcomeReward": 0.40433269424770935,
+        "processReward": 0.5,
+        "consistencyReward": 0.4,
+        "noveltyPenalty": 0.5
+      },
+      "totalReward": 0.8043326942477094
+    },
+    {
+      "episodeId": 68,
+      "context": {
+        "violations": [
+          {
+            "type": "lint_errors",
+            "count": 5
+          }
+        ]
+      },
+      "actions": {
+        "outcomeActions": [
+          "code_quality",
+          "commit_conventions"
+        ],
+        "processActions": [
+          "validate_before_action",
+          "checklist_completion"
+        ]
+      },
+      "outcomes": {
+        "success": false,
+        "quality": 0.2711591403772042,
+        "efficiency": 0.13779425949997315,
+        "adherence": 0.7
+      },
+      "timestamp": "2026-01-06T20:49:08.844Z",
+      "rewards": {
+        "outcomeReward": 0.45691784803859403,
+        "processReward": 0.5,
+        "consistencyReward": 0.24,
+        "noveltyPenalty": 0.5
+      },
+      "totalReward": 0.696917848038594
+    },
+    {
+      "episodeId": 69,
+      "context": {
+        "violations": [
+          {
+            "type": "file_size",
+            "lines": 320
+          },
+          {
+            "type": "lint_errors",
+            "count": 2
+          }
+        ]
+      },
+      "actions": {
+        "outcomeActions": [
+          "file_size_compliance",
+          "code_quality"
+        ],
+        "processActions": [
+          "validate_before_action",
+          "checklist_completion"
+        ]
+      },
+      "outcomes": {
+        "success": true,
+        "quality": 0.6852833549240096,
+        "efficiency": 0.5856931223028821,
+        "adherence": 1
+      },
+      "timestamp": "2026-01-06T20:49:08.844Z",
+      "rewards": {
+        "outcomeReward": 1.9183496141528695,
+        "processReward": 0.5,
+        "consistencyReward": 0.4,
+        "noveltyPenalty": 0.5
+      },
+      "totalReward": 2.3183496141528694
+    },
+    {
+      "episodeId": 70,
+      "context": {
+        "violations": []
+      },
+      "actions": {
+        "outcomeActions": [
+          "file_size_compliance",
+          "test_pass_rate"
+        ],
+        "processActions": [
+          "validate_before_action",
+          "checklist_completion"
+        ]
+      },
+      "outcomes": {
+        "success": true,
+        "quality": 0.7349778711184293,
+        "efficiency": 0.8084510268235867,
+        "adherence": 0.4
+      },
+      "timestamp": "2026-01-06T20:49:08.844Z",
+      "rewards": {
+        "outcomeReward": 1.7700242436062905,
+        "processReward": 0.5,
+        "consistencyReward": 0.4,
+        "noveltyPenalty": 0.5
+      },
+      "totalReward": 2.1700242436062904
+    },
+    {
+      "episodeId": 71,
+      "context": {
+        "violations": [
+          {
+            "type": "file_size",
+            "lines": 350
+          }
+        ]
+      },
+      "actions": {
+        "outcomeActions": [
+          "file_size_compliance",
+          "test_pass_rate"
+        ],
+        "processActions": [
+          "validate_before_action",
+          "checklist_completion"
+        ]
+      },
+      "outcomes": {
+        "success": false,
+        "quality": 0.11532368890595562,
+        "efficiency": 0.49731042600378217,
+        "adherence": 0.7
+      },
+      "timestamp": "2026-01-06T20:49:08.845Z",
+      "rewards": {
+        "outcomeReward": 0.48685497225411245,
+        "processReward": 0.5,
+        "consistencyReward": 0.4,
+        "noveltyPenalty": 0.5
+      },
+      "totalReward": 0.8868549722541124
+    },
+    {
+      "episodeId": 72,
+      "context": {
+        "violations": [
+          {
+            "type": "test_failure",
+            "error": "api_error"
+          }
+        ]
+      },
+      "actions": {
+        "outcomeActions": [
+          "test_pass_rate",
+          "file_size_compliance"
+        ],
+        "processActions": [
+          "validate_before_action",
+          "checklist_completion"
+        ]
+      },
+      "outcomes": {
+        "success": false,
+        "quality": 0.09146436067622882,
+        "efficiency": 0.2384753005468792,
+        "adherence": 0.7
+      },
+      "timestamp": "2026-01-06T20:49:08.847Z",
+      "rewards": {
+        "outcomeReward": 0.39727477050217813,
+        "processReward": 0.5,
+        "consistencyReward": 0.4,
+        "noveltyPenalty": 0.5
+      },
+      "totalReward": 0.7972747705021783
+    },
+    {
+      "episodeId": 73,
+      "context": {
+        "violations": [
+          {
+            "type": "lint_errors",
+            "count": 5
+          }
+        ]
+      },
+      "actions": {
+        "outcomeActions": [
+          "file_size_compliance",
+          "code_quality"
+        ],
+        "processActions": [
+          "validate_before_action",
+          "checklist_completion"
+        ]
+      },
+      "outcomes": {
+        "success": false,
+        "quality": 0.04762685846283038,
+        "efficiency": 0.3862147618848836,
+        "adherence": 0.7
+      },
+      "timestamp": "2026-01-06T20:49:08.847Z",
+      "rewards": {
+        "outcomeReward": 0.4196778577968802,
+        "processReward": 0.5,
+        "consistencyReward": 0.24,
+        "noveltyPenalty": 0.5
+      },
+      "totalReward": 0.6596778577968803
+    },
+    {
+      "episodeId": 74,
+      "context": {
+        "violations": [
+          {
+            "type": "file_size",
+            "lines": 320
+          },
+          {
+            "type": "lint_errors",
+            "count": 2
+          }
+        ]
+      },
+      "actions": {
+        "outcomeActions": [
+          "file_size_compliance",
+          "code_quality"
+        ],
+        "processActions": [
+          "validate_before_action",
+          "checklist_completion"
+        ]
+      },
+      "outcomes": {
+        "success": true,
+        "quality": 0.9617069723548408,
+        "efficiency": 0.8039748062583458,
+        "adherence": 1
+      },
+      "timestamp": "2026-01-06T20:49:08.847Z",
+      "rewards": {
+        "outcomeReward": 2,
+        "processReward": 0.5,
+        "consistencyReward": 0.4,
+        "noveltyPenalty": 0.5
+      },
+      "totalReward": 2.4
+    },
+    {
+      "episodeId": 75,
+      "context": {
+        "violations": []
+      },
+      "actions": {
+        "outcomeActions": [
+          "file_size_compliance",
+          "test_pass_rate"
+        ],
+        "processActions": [
+          "validate_before_action",
+          "checklist_completion"
+        ]
+      },
+      "outcomes": {
+        "success": true,
+        "quality": 0.5535555556531361,
+        "efficiency": 0.8959754447117589,
+        "adherence": 0.4
+      },
+      "timestamp": "2026-01-06T20:49:08.847Z",
+      "rewards": {
+        "outcomeReward": 1.705570411240096,
+        "processReward": 0.5,
+        "consistencyReward": 0.4,
+        "noveltyPenalty": 0.5
+      },
+      "totalReward": 2.105570411240096
+    },
+    {
+      "episodeId": 76,
+      "context": {
+        "violations": [
+          {
+            "type": "file_size",
+            "lines": 350
+          }
+        ]
+      },
+      "actions": {
+        "outcomeActions": [
+          "file_size_compliance",
+          "test_pass_rate"
+        ],
+        "processActions": [
+          "validate_before_action",
+          "checklist_completion"
+        ]
+      },
+      "outcomes": {
+        "success": true,
+        "quality": 0.5006425556240806,
+        "efficiency": 0.7408132740308866,
+        "adherence": 0.7
+      },
+      "timestamp": "2026-01-06T20:49:08.847Z",
+      "rewards": {
+        "outcomeReward": 1.7525652600213062,
+        "processReward": 0.5,
+        "consistencyReward": 0.4,
+        "noveltyPenalty": 0.5
+      },
+      "totalReward": 2.1525652600213063
+    },
+    {
+      "episodeId": 77,
+      "context": {
+        "violations": [
+          {
+            "type": "test_failure",
+            "error": "api_error"
+          }
+        ]
+      },
+      "actions": {
+        "outcomeActions": [
+          "test_pass_rate",
+          "file_size_compliance"
+        ],
+        "processActions": [
+          "validate_before_action",
+          "checklist_completion"
+        ]
+      },
+      "outcomes": {
+        "success": true,
+        "quality": 0.7293156603544015,
+        "efficiency": 0.7796662131891765,
+        "adherence": 0.7
+      },
+      "timestamp": "2026-01-06T20:49:08.847Z",
+      "rewards": {
+        "outcomeReward": 1.8785576941339537,
+        "processReward": 0.5,
+        "consistencyReward": 0.4,
+        "noveltyPenalty": 0.5
+      },
+      "totalReward": 2.2785576941339536
+    },
+    {
+      "episodeId": 78,
+      "context": {
+        "violations": [
+          {
+            "type": "lint_errors",
+            "count": 5
+          }
+        ]
+      },
+      "actions": {
+        "outcomeActions": [
+          "test_pass_rate",
+          "commit_conventions"
+        ],
+        "processActions": [
+          "checklist_completion",
+          "validate_before_action"
+        ]
+      },
+      "outcomes": {
+        "success": false,
+        "quality": 0.05723359209084533,
+        "efficiency": 0.0074193162708612315,
+        "adherence": 0.4
+      },
+      "timestamp": "2026-01-06T20:49:08.847Z",
+      "rewards": {
+        "outcomeReward": 0.19084259092668107,
+        "processReward": 0.5,
+        "consistencyReward": 0.13333333333333333,
+        "noveltyPenalty": 0.5
+      },
+      "totalReward": 0.3241759242600144
+    },
+    {
+      "episodeId": 79,
+      "context": {
+        "violations": [
+          {
+            "type": "file_size",
+            "lines": 320
+          },
+          {
+            "type": "lint_errors",
+            "count": 2
+          }
+        ]
+      },
+      "actions": {
+        "outcomeActions": [
+          "file_size_compliance",
+          "code_quality"
+        ],
+        "processActions": [
+          "validate_before_action",
+          "checklist_completion"
+        ]
+      },
+      "outcomes": {
+        "success": true,
+        "quality": 0.5746411223601342,
+        "efficiency": 0.698997510955337,
+        "adherence": 1
+      },
+      "timestamp": "2026-01-06T20:49:08.847Z",
+      "rewards": {
+        "outcomeReward": 1.8970198144666681,
+        "processReward": 0.5,
+        "consistencyReward": 0.4,
+        "noveltyPenalty": 0.5
+      },
+      "totalReward": 2.297019814466668
+    },
+    {
+      "episodeId": 80,
+      "context": {
+        "violations": []
+      },
+      "actions": {
+        "outcomeActions": [
+          "file_size_compliance",
+          "test_pass_rate"
+        ],
+        "processActions": [
+          "validate_before_action",
+          "checklist_completion"
+        ]
+      },
+      "outcomes": {
+        "success": false,
+        "quality": 0.08549914167016837,
+        "efficiency": 0.044156010761934816,
+        "adherence": 0.4
+      },
+      "timestamp": "2026-01-06T20:49:08.847Z",
+      "rewards": {
+        "outcomeReward": 0.21599637406366468,
+        "processReward": 0.5,
+        "consistencyReward": 0.4,
+        "noveltyPenalty": 0.5
+      },
+      "totalReward": 0.6159963740636647
+    },
+    {
+      "episodeId": 81,
+      "context": {
+        "violations": [
+          {
+            "type": "file_size",
+            "lines": 350
+          }
+        ]
+      },
+      "actions": {
+        "outcomeActions": [
+          "file_size_compliance",
+          "test_pass_rate"
+        ],
+        "processActions": [
+          "validate_before_action",
+          "checklist_completion"
+        ]
+      },
+      "outcomes": {
+        "success": true,
+        "quality": 0.600056029261095,
+        "efficiency": 0.6419883351001947,
+        "adherence": 0.7
+      },
+      "timestamp": "2026-01-06T20:49:08.848Z",
+      "rewards": {
+        "outcomeReward": 1.7726245151606062,
+        "processReward": 0.5,
+        "consistencyReward": 0.4,
+        "noveltyPenalty": 0.5
+      },
+      "totalReward": 2.172624515160606
+    },
+    {
+      "episodeId": 82,
+      "context": {
+        "violations": [
+          {
+            "type": "test_failure",
+            "error": "api_error"
+          }
+        ]
+      },
+      "actions": {
+        "outcomeActions": [
+          "test_pass_rate",
+          "file_size_compliance"
+        ],
+        "processActions": [
+          "validate_before_action",
+          "checklist_completion"
+        ]
+      },
+      "outcomes": {
+        "success": false,
+        "quality": 0.43267585893068883,
+        "efficiency": 0.4170477237214225,
+        "adherence": 0.7
+      },
+      "timestamp": "2026-01-06T20:49:08.848Z",
+      "rewards": {
+        "outcomeReward": 0.6214522465817711,
+        "processReward": 0.5,
+        "consistencyReward": 0.4,
+        "noveltyPenalty": 0.5
+      },
+      "totalReward": 1.021452246581771
+    },
+    {
+      "episodeId": 83,
+      "context": {
+        "violations": [
+          {
+            "type": "lint_errors",
+            "count": 5
+          }
+        ]
+      },
+      "actions": {
+        "outcomeActions": [
+          "file_size_compliance",
+          "code_quality"
+        ],
+        "processActions": [
+          "validate_before_action",
+          "checklist_completion"
+        ]
+      },
+      "outcomes": {
+        "success": true,
+        "quality": 0.6867981854765605,
+        "efficiency": 0.8157066692342297,
+        "adherence": 0.7
+      },
+      "timestamp": "2026-01-06T20:49:08.848Z",
+      "rewards": {
+        "outcomeReward": 1.8681110935085492,
+        "processReward": 0.5,
+        "consistencyReward": 0.13333333333333333,
+        "noveltyPenalty": 0.5
+      },
+      "totalReward": 2.0014444268418825
+    },
+    {
+      "episodeId": 84,
+      "context": {
+        "violations": [
+          {
+            "type": "file_size",
+            "lines": 320
+          },
+          {
+            "type": "lint_errors",
+            "count": 2
+          }
+        ]
+      },
+      "actions": {
+        "outcomeActions": [
+          "file_size_compliance",
+          "code_quality"
+        ],
+        "processActions": [
+          "validate_before_action",
+          "checklist_completion"
+        ]
+      },
+      "outcomes": {
+        "success": false,
+        "quality": 0.12829200752352798,
+        "efficiency": 0.13477239743223546,
+        "adherence": 1
+      },
+      "timestamp": "2026-01-06T20:49:08.848Z",
+      "rewards": {
+        "outcomeReward": 0.5045777229914347,
+        "processReward": 0.5,
+        "consistencyReward": 0.4,
+        "noveltyPenalty": 0.5
+      },
+      "totalReward": 0.9045777229914345
+    },
+    {
+      "episodeId": 85,
+      "context": {
+        "violations": []
+      },
+      "actions": {
+        "outcomeActions": [
+          "file_size_compliance",
+          "test_pass_rate"
+        ],
+        "processActions": [
+          "validate_before_action",
+          "checklist_completion"
+        ]
+      },
+      "outcomes": {
+        "success": false,
+        "quality": 0.2051716714004005,
+        "efficiency": 0.42586371151975105,
+        "adherence": 0.4
+      },
+      "timestamp": "2026-01-06T20:49:08.848Z",
+      "rewards": {
+        "outcomeReward": 0.3903449491561256,
+        "processReward": 0.5,
+        "consistencyReward": 0.4,
+        "noveltyPenalty": 0.5
+      },
+      "totalReward": 0.7903449491561256
+    },
+    {
+      "episodeId": 86,
+      "context": {
+        "violations": [
+          {
+            "type": "file_size",
+            "lines": 350
+          }
+        ]
+      },
+      "actions": {
+        "outcomeActions": [
+          "file_size_compliance",
+          "test_pass_rate"
+        ],
+        "processActions": [
+          "validate_before_action",
+          "checklist_completion"
+        ]
+      },
+      "outcomes": {
+        "success": false,
+        "quality": 0.000759183853527301,
+        "efficiency": 0.0696267837872459,
+        "adherence": 0.7
+      },
+      "timestamp": "2026-01-06T20:49:08.848Z",
+      "rewards": {
+        "outcomeReward": 0.3012676270629374,
+        "processReward": 0.5,
+        "consistencyReward": 0.4,
+        "noveltyPenalty": 0.5
+      },
+      "totalReward": 0.7012676270629374
+    },
+    {
+      "episodeId": 87,
+      "context": {
+        "violations": [
+          {
+            "type": "test_failure",
+            "error": "api_error"
+          }
+        ]
+      },
+      "actions": {
+        "outcomeActions": [
+          "test_pass_rate",
+          "file_size_compliance"
+        ],
+        "processActions": [
+          "validate_before_action",
+          "checklist_completion"
+        ]
+      },
+      "outcomes": {
+        "success": true,
+        "quality": 0.6780924595352948,
+        "efficiency": 0.9037693540037459,
+        "adherence": 0.7
+      },
+      "timestamp": "2026-01-06T20:49:08.848Z",
+      "rewards": {
+        "outcomeReward": 1.890177035968771,
+        "processReward": 0.5,
+        "consistencyReward": 0.4,
+        "noveltyPenalty": 0.5
+      },
+      "totalReward": 2.290177035968771
+    },
+    {
+      "episodeId": 88,
+      "context": {
+        "violations": [
+          {
+            "type": "lint_errors",
+            "count": 5
+          }
+        ]
+      },
+      "actions": {
+        "outcomeActions": [
+          "commit_conventions",
+          "test_pass_rate"
+        ],
+        "processActions": [
+          "iterative_improvement",
+          "error_handling"
+        ]
+      },
+      "outcomes": {
+        "success": false,
+        "quality": 0.17340400435288605,
+        "efficiency": 0.06143176351717072,
+        "adherence": 0.4
+      },
+      "timestamp": "2026-01-06T20:49:08.848Z",
+      "rewards": {
+        "outcomeReward": 0.2651315312315943,
+        "processReward": 0.30000000000000004,
+        "consistencyReward": 0,
+        "noveltyPenalty": 0.44000000000000006
+      },
+      "totalReward": 0.12513153123159426
+    },
+    {
+      "episodeId": 89,
+      "context": {
+        "violations": [
+          {
+            "type": "file_size",
+            "lines": 320
+          },
+          {
+            "type": "lint_errors",
+            "count": 2
+          }
+        ]
+      },
+      "actions": {
+        "outcomeActions": [
+          "file_size_compliance",
+          "code_quality"
+        ],
+        "processActions": [
+          "validate_before_action",
+          "checklist_completion"
+        ]
+      },
+      "outcomes": {
+        "success": false,
+        "quality": 0.4020078950603152,
+        "efficiency": 0.45900635950020385,
+        "adherence": 1
+      },
+      "timestamp": "2026-01-06T20:49:08.848Z",
+      "rewards": {
+        "outcomeReward": 0.7387058553802188,
+        "processReward": 0.5,
+        "consistencyReward": 0.4,
+        "noveltyPenalty": 0.5
+      },
+      "totalReward": 1.138705855380219
+    },
+    {
+      "episodeId": 90,
+      "context": {
+        "violations": []
+      },
+      "actions": {
+        "outcomeActions": [
+          "test_pass_rate",
+          "code_quality"
+        ],
+        "processActions": [
+          "iterative_improvement",
+          "validate_before_action"
+        ]
+      },
+      "outcomes": {
+        "success": true,
+        "quality": 0.7783521693218659,
+        "efficiency": 0.5079493396057266,
+        "adherence": 0.4
+      },
+      "timestamp": "2026-01-06T20:49:08.848Z",
+      "rewards": {
+        "outcomeReward": 1.701560886542651,
+        "processReward": 0.4,
+        "consistencyReward": 0.13333333333333333,
+        "noveltyPenalty": 0.5
+      },
+      "totalReward": 1.7348942198759842
+    },
+    {
+      "episodeId": 91,
+      "context": {
+        "violations": [
+          {
+            "type": "file_size",
+            "lines": 350
+          }
+        ]
+      },
+      "actions": {
+        "outcomeActions": [
+          "file_size_compliance",
+          "test_pass_rate"
+        ],
+        "processActions": [
+          "validate_before_action",
+          "checklist_completion"
+        ]
+      },
+      "outcomes": {
+        "success": true,
+        "quality": 0.7372801072518635,
+        "efficiency": 0.7041411039347344,
+        "adherence": 0.7
+      },
+      "timestamp": "2026-01-06T20:49:08.849Z",
+      "rewards": {
+        "outcomeReward": 1.8598823848063522,
+        "processReward": 0.5,
+        "consistencyReward": 0.4,
+        "noveltyPenalty": 0.5
+      },
+      "totalReward": 2.259882384806352
+    },
+    {
+      "episodeId": 92,
+      "context": {
+        "violations": [
+          {
+            "type": "test_failure",
+            "error": "api_error"
+          }
+        ]
+      },
+      "actions": {
+        "outcomeActions": [
+          "test_pass_rate",
+          "file_size_compliance"
+        ],
+        "processActions": [
+          "validate_before_action",
+          "checklist_completion"
+        ]
+      },
+      "outcomes": {
+        "success": true,
+        "quality": 0.9539700864251979,
+        "efficiency": 0.5671176156426919,
+        "adherence": 0.7
+      },
+      "timestamp": "2026-01-06T20:49:08.850Z",
+      "rewards": {
+        "outcomeReward": 1.9271203279054063,
+        "processReward": 0.5,
+        "consistencyReward": 0.4,
+        "noveltyPenalty": 0.5
+      },
+      "totalReward": 2.3271203279054062
+    },
+    {
+      "episodeId": 93,
+      "context": {
+        "violations": [
+          {
+            "type": "lint_errors",
+            "count": 5
+          }
+        ]
+      },
+      "actions": {
+        "outcomeActions": [
+          "file_size_compliance",
+          "code_quality"
+        ],
+        "processActions": [
+          "validate_before_action",
+          "checklist_completion"
+        ]
+      },
+      "outcomes": {
+        "success": true,
+        "quality": 0.5827768776447568,
+        "efficiency": 0.8441554049211153,
+        "adherence": 0.7
+      },
+      "timestamp": "2026-01-06T20:49:08.850Z",
+      "rewards": {
+        "outcomeReward": 1.8246350602987131,
+        "processReward": 0.5,
+        "consistencyReward": 0,
+        "noveltyPenalty": 0.5
+      },
+      "totalReward": 1.8246350602987134
+    },
+    {
+      "episodeId": 94,
+      "context": {
+        "violations": [
+          {
+            "type": "file_size",
+            "lines": 320
+          },
+          {
+            "type": "lint_errors",
+            "count": 2
+          }
+        ]
+      },
+      "actions": {
+        "outcomeActions": [
+          "file_size_compliance",
+          "code_quality"
+        ],
+        "processActions": [
+          "validate_before_action",
+          "checklist_completion"
+        ]
+      },
+      "outcomes": {
+        "success": true,
+        "quality": 0.8572363908997238,
+        "efficiency": 0.8236986506329762,
+        "adherence": 1
+      },
+      "timestamp": "2026-01-06T20:49:08.850Z",
+      "rewards": {
+        "outcomeReward": 2,
+        "processReward": 0.5,
+        "consistencyReward": 0.4,
+        "noveltyPenalty": 0.5
+      },
+      "totalReward": 2.4
+    },
+    {
+      "episodeId": 95,
+      "context": {
+        "violations": []
+      },
+      "actions": {
+        "outcomeActions": [
+          "file_size_compliance",
+          "test_pass_rate"
+        ],
+        "processActions": [
+          "validate_before_action",
+          "checklist_completion"
+        ]
+      },
+      "outcomes": {
+        "success": false,
+        "quality": 0.19702863871973397,
+        "efficiency": 0.056041580296266325,
+        "adherence": 0.4
+      },
+      "timestamp": "2026-01-06T20:49:08.850Z",
+      "rewards": {
+        "outcomeReward": 0.2753267934487469,
+        "processReward": 0.5,
+        "consistencyReward": 0.13333333333333333,
+        "noveltyPenalty": 0.5
+      },
+      "totalReward": 0.4086601267820802
+    },
+    {
+      "episodeId": 96,
+      "context": {
+        "violations": [
+          {
+            "type": "file_size",
+            "lines": 350
+          }
+        ]
+      },
+      "actions": {
+        "outcomeActions": [
+          "file_size_compliance",
+          "test_pass_rate"
+        ],
+        "processActions": [
+          "validate_before_action",
+          "checklist_completion"
+        ]
+      },
+      "outcomes": {
+        "success": true,
+        "quality": 0.8680127458728416,
+        "efficiency": 0.9555814356024356,
+        "adherence": 0.7
+      },
+      "timestamp": "2026-01-06T20:49:08.850Z",
+      "rewards": {
+        "outcomeReward": 2,
+        "processReward": 0.5,
+        "consistencyReward": 0.4,
+        "noveltyPenalty": 0.5
+      },
+      "totalReward": 2.4
+    },
+    {
+      "episodeId": 97,
+      "context": {
+        "violations": [
+          {
+            "type": "test_failure",
+            "error": "api_error"
+          }
+        ]
+      },
+      "actions": {
+        "outcomeActions": [
+          "test_pass_rate",
+          "file_size_compliance"
+        ],
+        "processActions": [
+          "validate_before_action",
+          "checklist_completion"
+        ]
+      },
+      "outcomes": {
+        "success": true,
+        "quality": 0.5119018184619406,
+        "efficiency": 0.9893492117214111,
+        "adherence": 0.7
+      },
+      "timestamp": "2026-01-06T20:49:08.850Z",
+      "rewards": {
+        "outcomeReward": 1.8327556727473937,
+        "processReward": 0.5,
+        "consistencyReward": 0.4,
+        "noveltyPenalty": 0.5
+      },
+      "totalReward": 2.2327556727473934
+    },
+    {
+      "episodeId": 98,
+      "context": {
+        "violations": [
+          {
+            "type": "lint_errors",
+            "count": 5
+          }
+        ]
+      },
+      "actions": {
+        "outcomeActions": [
+          "file_size_compliance",
+          "code_quality"
+        ],
+        "processActions": [
+          "validate_before_action",
+          "checklist_completion"
+        ]
+      },
+      "outcomes": {
+        "success": true,
+        "quality": 0.878610837766868,
+        "efficiency": 0.7038960296440828,
+        "adherence": 0.7
+      },
+      "timestamp": "2026-01-06T20:49:08.850Z",
+      "rewards": {
+        "outcomeReward": 1.930474227776659,
+        "processReward": 0.5,
+        "consistencyReward": 0.4,
+        "noveltyPenalty": 0.5
+      },
+      "totalReward": 2.330474227776659
+    },
+    {
+      "episodeId": 99,
+      "context": {
+        "violations": [
+          {
+            "type": "file_size",
+            "lines": 320
+          },
+          {
+            "type": "lint_errors",
+            "count": 2
+          }
+        ]
+      },
+      "actions": {
+        "outcomeActions": [
+          "file_size_compliance",
+          "code_quality"
+        ],
+        "processActions": [
+          "validate_before_action",
+          "checklist_completion"
+        ]
+      },
+      "outcomes": {
+        "success": true,
+        "quality": 0.6709914780982822,
+        "efficiency": 0.9423676521187379,
+        "adherence": 1
+      },
+      "timestamp": "2026-01-06T20:49:08.850Z",
+      "rewards": {
+        "outcomeReward": 2,
+        "processReward": 0.5,
+        "consistencyReward": 0.4,
+        "noveltyPenalty": 0.5
+      },
+      "totalReward": 2.4
+    },
+    {
+      "episodeId": 100,
+      "context": {
+        "violations": []
+      },
+      "actions": {
+        "outcomeActions": [
+          "file_size_compliance",
+          "test_pass_rate"
+        ],
+        "processActions": [
+          "validate_before_action",
+          "checklist_completion"
+        ]
+      },
+      "outcomes": {
+        "success": true,
+        "quality": 0.9047305977940874,
+        "efficiency": 0.9051278931182422,
+        "adherence": 0.4
+      },
+      "timestamp": "2026-01-06T20:49:08.850Z",
+      "rewards": {
+        "outcomeReward": 1.8839036668325164,
+        "processReward": 0.5,
+        "consistencyReward": 0.4,
+        "noveltyPenalty": 0.5
+      },
+      "totalReward": 2.2839036668325163
+    }
+  ]
+}

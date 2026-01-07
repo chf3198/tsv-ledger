@@ -5,18 +5,18 @@
  * and error handling scenarios
  */
 
-const fs = require("fs");
-const path = require("path");
-const { DatabaseHelpers, TestFixtures } = require("../shared/test-helpers");
-const database = require("../../src/database");
+const fs = require('fs');
+const path = require('path');
+const { DatabaseHelpers, TestFixtures } = require('../shared/test-helpers');
+const database = require('../../src/database');
 
-describe("Database Module", () => {
+describe('Database Module', () => {
   const getTestDataFile = () => {
     // Use test database when NODE_ENV is 'test' or PROCESS.TEST_DB is set
-    if (process.env.NODE_ENV === "test" || process.env.TEST_DB) {
-      return path.join(__dirname, "..", "data", "test-expenditures.json");
+    if (process.env.NODE_ENV === 'test' || process.env.TEST_DB) {
+      return path.join(__dirname, '..', 'data', 'test-expenditures.json');
     }
-    return path.join(__dirname, "..", "..", "data", "expenditures.json");
+    return path.join(__dirname, '..', '..', 'data', 'expenditures.json');
   };
 
   beforeEach(async () => {
@@ -28,7 +28,7 @@ describe("Database Module", () => {
     // Clean up after each test
     const testDataFile = getTestDataFile();
     if (fs.existsSync(testDataFile)) {
-      fs.writeFileSync(testDataFile, "[]");
+      fs.writeFileSync(testDataFile, '[]');
     }
   });
 
@@ -37,8 +37,8 @@ describe("Database Module", () => {
     await DatabaseHelpers.restoreDatabase();
   });
 
-  describe("getAllExpenditures", () => {
-    test("should return empty array when no data exists", (done) => {
+  describe('getAllExpenditures', () => {
+    test('should return empty array when no data exists', (done) => {
       database.getAllExpenditures((err, expenditures) => {
         expect(err).toBeNull();
         expect(expenditures).toEqual([]);
@@ -47,7 +47,7 @@ describe("Database Module", () => {
       });
     });
 
-    test("should return all expenditures when data exists", (done) => {
+    test('should return all expenditures when data exists', (done) => {
       const testData = [TestFixtures.sampleExpenditure];
       const testDataFile = getTestDataFile();
       fs.writeFileSync(testDataFile, JSON.stringify(testData));
@@ -61,9 +61,9 @@ describe("Database Module", () => {
       });
     });
 
-    test("should handle malformed JSON gracefully", (done) => {
+    test('should handle malformed JSON gracefully', (done) => {
       const testDataFile = getTestDataFile();
-      fs.writeFileSync(testDataFile, "invalid json");
+      fs.writeFileSync(testDataFile, 'invalid json');
 
       database.getAllExpenditures((err, expenditures) => {
         expect(err).toBeNull();
@@ -72,7 +72,7 @@ describe("Database Module", () => {
       });
     });
 
-    test("should handle file read errors gracefully", (done) => {
+    test('should handle file read errors gracefully', (done) => {
       const testDataFile = getTestDataFile();
       // Remove read permissions temporarily
       const originalMode = fs.statSync(testDataFile).mode;
@@ -90,15 +90,15 @@ describe("Database Module", () => {
     });
   });
 
-  describe("addExpenditure", () => {
-    test("should add new expenditure with generated ID", (done) => {
+  describe('addExpenditure', () => {
+    test('should add new expenditure with generated ID', (done) => {
       const newExpenditure = {
-        date: "2024-01-15",
+        date: '2024-01-15',
         amount: 29.99,
-        description: "Test purchase",
-        category: "Office Supplies",
-        vendor: "Amazon",
-        account: "Business Card",
+        description: 'Test purchase',
+        category: 'Office Supplies',
+        vendor: 'Amazon',
+        account: 'Business Card'
       };
 
       database.addExpenditure(newExpenditure, (err, addedExpenditure) => {
@@ -115,12 +115,12 @@ describe("Database Module", () => {
       });
     });
 
-    test("should increment ID for multiple additions", (done) => {
+    test('should increment ID for multiple additions', (done) => {
       const expenditure1 = { ...TestFixtures.sampleExpenditure, id: undefined };
       const expenditure2 = {
         ...TestFixtures.sampleExpenditure,
         id: undefined,
-        description: "Second item",
+        description: 'Second item'
       };
 
       database.addExpenditure(expenditure1, (err1, added1) => {
@@ -135,25 +135,25 @@ describe("Database Module", () => {
       });
     });
 
-    test("should preserve existing properties when adding", (done) => {
+    test('should preserve existing properties when adding', (done) => {
       const expenditureWithExtras = {
         ...TestFixtures.sampleExpenditure,
-        customField: "custom value",
-        taxCategory: "Business",
-        notes: "Additional notes",
+        customField: 'custom value',
+        taxCategory: 'Business',
+        notes: 'Additional notes'
       };
 
       database.addExpenditure(expenditureWithExtras, (err, added) => {
         expect(err).toBeNull();
-        expect(added.customField).toBe("custom value");
-        expect(added.taxCategory).toBe("Business");
-        expect(added.notes).toBe("Additional notes");
+        expect(added.customField).toBe('custom value');
+        expect(added.taxCategory).toBe('Business');
+        expect(added.notes).toBe('Additional notes');
         expect(added.id).toBe(1);
         done();
       });
     });
 
-    test("should handle file write errors gracefully", (done) => {
+    test('should handle file write errors gracefully', (done) => {
       // Make directory read-only to simulate write error
       const testDataFile = getTestDataFile();
       const dataDir = path.dirname(testDataFile);
@@ -173,7 +173,7 @@ describe("Database Module", () => {
       });
     });
 
-    test("should validate required fields are present", (done) => {
+    test('should validate required fields are present', (done) => {
       const invalidExpenditure = {}; // Empty object
 
       database.addExpenditure(invalidExpenditure, (err, added) => {
@@ -186,8 +186,8 @@ describe("Database Module", () => {
     });
   });
 
-  describe("Data Persistence", () => {
-    test("should persist data between operations", (done) => {
+  describe('Data Persistence', () => {
+    test('should persist data between operations', (done) => {
       const expenditure = TestFixtures.sampleExpenditure;
 
       database.addExpenditure(expenditure, (err1, added) => {
@@ -202,11 +202,11 @@ describe("Database Module", () => {
       });
     });
 
-    test("should maintain data integrity across multiple operations", (done) => {
+    test('should maintain data integrity across multiple operations', (done) => {
       const expenditures = [
-        { ...TestFixtures.sampleExpenditure, description: "Item 1" },
-        { ...TestFixtures.sampleExpenditure, description: "Item 2" },
-        { ...TestFixtures.sampleExpenditure, description: "Item 3" },
+        { ...TestFixtures.sampleExpenditure, description: 'Item 1' },
+        { ...TestFixtures.sampleExpenditure, description: 'Item 2' },
+        { ...TestFixtures.sampleExpenditure, description: 'Item 3' }
       ];
 
       // Add all expenditures
@@ -223,9 +223,9 @@ describe("Database Module", () => {
               expect(err2).toBeNull();
               expect(allExpenditures).toHaveLength(3);
               expect(allExpenditures.map((e) => e.description)).toEqual([
-                "Item 1",
-                "Item 2",
-                "Item 3",
+                'Item 1',
+                'Item 2',
+                'Item 3'
               ]);
               done();
             });
@@ -235,15 +235,15 @@ describe("Database Module", () => {
     });
   });
 
-  describe("Error Handling", () => {
-    test("should handle concurrent access gracefully", (done) => {
+  describe('Error Handling', () => {
+    test('should handle concurrent access gracefully', (done) => {
       const expenditure1 = {
         ...TestFixtures.sampleExpenditure,
-        description: "Concurrent 1",
+        description: 'Concurrent 1'
       };
       const expenditure2 = {
         ...TestFixtures.sampleExpenditure,
-        description: "Concurrent 2",
+        description: 'Concurrent 2'
       };
 
       // Simulate concurrent operations
@@ -253,7 +253,7 @@ describe("Database Module", () => {
         ),
         new Promise((resolve) =>
           database.addExpenditure(expenditure2, resolve)
-        ),
+        )
       ]).then(() => {
         database.getAllExpenditures((err, expenditures) => {
           expect(err).toBeNull();
@@ -266,11 +266,11 @@ describe("Database Module", () => {
       });
     });
 
-    test("should handle large datasets efficiently", (done) => {
+    test('should handle large datasets efficiently', (done) => {
       const largeDataset = Array.from({ length: 1000 }, (_, i) => ({
         ...TestFixtures.sampleExpenditure,
         description: `Item ${i + 1}`,
-        amount: Math.random() * 100,
+        amount: Math.random() * 100
       }));
 
       let added = 0;

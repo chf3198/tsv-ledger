@@ -4,7 +4,7 @@
  * Tests for analysis workflows including expense analysis, AI insights, and category breakdowns
  */
 
-const BaseUXTest = require("./base-test-utils");
+const BaseUXTest = require('./base-test-utils');
 
 /**
  * Analysis workflow tests
@@ -25,11 +25,11 @@ class AnalysisTests extends BaseUXTest {
    * @returns {Promise<void>}
    */
   async testExpenseAnalysis() {
-    await this.runTest("Expense Analysis", async () => {
-      await this.navigateToPage("/");
+    await this.runTest('Expense Analysis', async () => {
+      await this.navigateToPage('/');
 
       // Look for analysis button on dashboard
-      const analysisBtn = await this.page.$("#loadAnalysis");
+      const analysisBtn = await this.page.$('#loadAnalysis');
       if (analysisBtn) {
         await analysisBtn.click();
         await this.page.waitForTimeout(1000);
@@ -48,25 +48,25 @@ class AnalysisTests extends BaseUXTest {
    * @returns {Promise<void>}
    */
   async testAIAnalysis() {
-    await this.runTest("AI Analysis", async () => {
-      await this.navigateToPage("/");
-      await this.navigateToSection("ai-insights");
+    await this.runTest('AI Analysis', async () => {
+      await this.navigateToPage('/');
+      await this.navigateToSection('ai-insights');
 
       // Look for AI analysis button
-      const aiBtn = await this.page.$("#loadAIAnalysis");
+      const aiBtn = await this.page.$('#loadAIAnalysis');
       if (!aiBtn) {
-        return "AI analysis button not found";
+        return 'AI analysis button not found';
       }
 
       // Click AI analysis button
       await aiBtn.click();
-      this.log("🤖 Triggered AI analysis");
+      this.log('🤖 Triggered AI analysis');
 
       // Wait for analysis to complete with timeout
       const analysisLoaded = await this.waitForAnalysisLoad(15000); // 15 second timeout
 
       if (!analysisLoaded) {
-        this.log("⚠️ AI analysis timed out, but button was clickable");
+        this.log('⚠️ AI analysis timed out, but button was clickable');
         return true; // Still pass if button works, even if analysis is slow
       }
 
@@ -83,9 +83,9 @@ class AnalysisTests extends BaseUXTest {
    * @returns {Promise<void>}
    */
   async testCategoryAnalysis() {
-    await this.runTest("Category Analysis", async () => {
-      await this.navigateToPage("/");
-      await this.navigateToSection("analysis");
+    await this.runTest('Category Analysis', async () => {
+      await this.navigateToPage('/');
+      await this.navigateToSection('analysis');
 
       // Look for category breakdown or charts
       const categoryElements = await this.page.$$(

@@ -4,10 +4,10 @@
  * Common utilities for component-level testing
  */
 
-const fs = require("fs");
-const path = require("path");
-const csv = require("csv-parser");
-const TSVCategorizer = require("../../src/tsv-categorizer");
+const fs = require('fs');
+const path = require('path');
+const csv = require('csv-parser');
+const TSVCategorizer = require('../../src/tsv-categorizer');
 
 /**
  * Base class for component testing with common utilities
@@ -18,8 +18,8 @@ class BaseComponentTester {
     this.testResults = new Map();
     this.sampleData = [];
 
-    console.log("🔬 TSV Ledger - Component-Level Unit Testing");
-    console.log("=".repeat(60));
+    console.log('🔬 TSV Ledger - Component-Level Unit Testing');
+    console.log('='.repeat(60));
   }
 
   /**
@@ -28,7 +28,7 @@ class BaseComponentTester {
    * @returns {Promise<Array>} Array of sample data
    */
   async loadSampleData(limit = 50) {
-    const dataFile = path.join(__dirname, "../../data/amazon-test-sample.csv");
+    const dataFile = path.join(__dirname, '../../data/amazon-test-sample.csv');
 
     return new Promise((resolve, reject) => {
       const samples = [];
@@ -36,27 +36,27 @@ class BaseComponentTester {
 
       fs.createReadStream(dataFile)
         .pipe(csv())
-        .on("data", (row) => {
+        .on('data', (row) => {
           if (count < limit) {
             const order = {
-              date: row["Order Date"] || row.date,
-              amount: parseFloat(row["Item Total"] || row.total || 0),
-              items: row["Title"] || row.items || "",
-              payments: row["Payment Method"] || row.payments || "",
-              shipping: row["Item Subtotal Tax"] || row.shipping || "0",
-              orderId: row["Order ID"] || `test-${count}`,
-              quantity: parseInt(row["Quantity"] || 1),
+              date: row['Order Date'] || row.date,
+              amount: parseFloat(row['Item Total'] || row.total || 0),
+              items: row['Title'] || row.items || '',
+              payments: row['Payment Method'] || row.payments || '',
+              shipping: row['Item Subtotal Tax'] || row.shipping || '0',
+              orderId: row['Order ID'] || `test-${count}`,
+              quantity: parseInt(row['Quantity'] || 1)
             };
             samples.push(order);
             count++;
           }
         })
-        .on("end", () => {
+        .on('end', () => {
           this.sampleData = samples;
           console.log(`📊 Loaded ${samples.length} sample orders for testing`);
           resolve(samples);
         })
-        .on("error", reject);
+        .on('error', reject);
     });
   }
 
@@ -65,8 +65,8 @@ class BaseComponentTester {
    * @returns {void}
    */
   generateSummary() {
-    console.log("\n📊 Component Testing Summary", "info");
-    console.log("==========================", "info");
+    console.log('\n📊 Component Testing Summary', 'info');
+    console.log('==========================', 'info');
 
     let totalTests = 0;
     let totalPassed = 0;
@@ -86,7 +86,9 @@ class BaseComponentTester {
         console.log(`   Issues: ${results.issues.length}`);
       }
       totalTests++;
-      if (results.passed) totalPassed++;
+      if (results.passed) {
+        totalPassed++;
+      }
     }
 
     const successRate =

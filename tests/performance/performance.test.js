@@ -239,7 +239,9 @@ test.describe('Performance Testing Suite', () => {
           activeTimers: (function() {
             let count = 0;
             for (let i = 1; i < 10000; i++) {
-              if (window.hasOwnProperty(`timer${i}`)) count++;
+              if (window.hasOwnProperty(`timer${i}`)) {
+                count++;
+              }
             }
             return count;
           })()
@@ -405,7 +407,7 @@ test.describe('Performance Testing Suite', () => {
         // Slow 3G simulation
         ...{
           viewport: { width: 1280, height: 720 },
-          reducedMotion: 'reduce',
+          reducedMotion: 'reduce'
           // Note: Playwright doesn't have direct network throttling in all versions
         }
       });

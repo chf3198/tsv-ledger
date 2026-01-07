@@ -13,12 +13,16 @@ test.describe('Benefits report (converted)', () => {
       try {
         const mgr = (typeof employeeBenefitsManager !== 'undefined') ? employeeBenefitsManager : (window.employeeBenefitsManager || null);
         return !!(mgr && typeof mgr.showSelectionModal === 'function');
-      } catch (e) { return false; }
+      } catch (e) {
+        return false;
+      }
     }, { timeout: 20000 });
 
     await page.evaluate(() => {
       const mgr = (typeof employeeBenefitsManager !== 'undefined') ? employeeBenefitsManager : (window.employeeBenefitsManager || null);
-      if (mgr && typeof mgr.showSelectionModal === 'function') mgr.showSelectionModal();
+      if (mgr && typeof mgr.showSelectionModal === 'function') {
+        mgr.showSelectionModal();
+      }
     });
 
     await page.waitForSelector('#businessSuppliesList .col-md-6', { timeout: 10000 });
@@ -28,20 +32,26 @@ test.describe('Benefits report (converted)', () => {
 
     await page.evaluate((id) => {
       const mgr = (typeof employeeBenefitsManager !== 'undefined') ? employeeBenefitsManager : (window.employeeBenefitsManager || null);
-      if (!mgr) return;
+      if (!mgr) {
+        return;
+      }
       mgr.itemProgressiveAllocations.set(id, { benefits: 50, business: 50, total: 100 });
       mgr.selectedItems.add(id);
-      if (typeof mgr.updateModalDisplay === 'function') mgr.updateModalDisplay();
+      if (typeof mgr.updateModalDisplay === 'function') {
+        mgr.updateModalDisplay();
+      }
     }, firstItemId);
 
     // Give the UI a moment to reflect selection; if DOM doesn't update, fall back to manager state
     await page.waitForTimeout(250);
-    let appeared = await page.$(`#benefitsList [data-item-id="${firstItemId}"]`);
+    const appeared = await page.$(`#benefitsList [data-item-id="${firstItemId}"]`);
     if (!appeared) {
       // Attempt manager fallback: use the first selected item in manager.selectedItems
       const mgrSelected = await page.evaluate(() => {
         const mgr = (typeof employeeBenefitsManager !== 'undefined') ? employeeBenefitsManager : (window.employeeBenefitsManager || null);
-        if (!mgr || !mgr.selectedItems) return null;
+        if (!mgr || !mgr.selectedItems) {
+          return null;
+        }
         return Array.from(mgr.selectedItems)[0] || null;
       });
       if (mgrSelected) {
@@ -51,7 +61,9 @@ test.describe('Benefits report (converted)', () => {
 
     await page.evaluate(async (id) => {
       const mgr = (typeof employeeBenefitsManager !== 'undefined') ? employeeBenefitsManager : (window.employeeBenefitsManager || null);
-      if (!mgr) throw new Error('Manager not available');
+      if (!mgr) {
+        throw new Error('Manager not available');
+      }
 
       const itemIds = [id];
       const progressive = mgr.itemProgressiveAllocations.get(id) || { allocated: 0 };
@@ -64,13 +76,17 @@ test.describe('Benefits report (converted)', () => {
         body: JSON.stringify({ itemIds, itemAllocations })
       });
 
-      if (!resp.ok) throw new Error('Server failed to generate report');
+      if (!resp.ok) {
+        throw new Error('Server failed to generate report');
+      }
       const report = await resp.json();
       if (typeof mgr.displayBenefitsReport === 'function') {
         mgr.displayBenefitsReport(report);
       } else {
         let c = document.getElementById('summaryContainer');
-        if (!c) { c = document.createElement('div'); c.id = 'summaryContainer'; document.body.appendChild(c); }
+        if (!c) {
+          c = document.createElement('div'); c.id = 'summaryContainer'; document.body.appendChild(c);
+        }
         c.innerHTML = JSON.stringify(report).slice(0, 200);
       }
     }, firstItemId);

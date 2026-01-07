@@ -30,7 +30,10 @@ class AnalysisRunner {
       overview: {
         totalExpenditures: this.testData.length,
         amazonOrders: this.testData.length,
-        totalAmount: this.testData.reduce((sum, order) => sum + Math.abs(order.amount), 0),
+        totalAmount: this.testData.reduce(
+          (sum, order) => sum + Math.abs(order.amount),
+          0
+        ),
         dateRange: this.getDateRange(),
         averageOrderValue: 0
       },
@@ -65,7 +68,7 @@ class AnalysisRunner {
     let totalConfidence = 0;
     let ssCount = 0;
 
-    this.testData.forEach(order => {
+    this.testData.forEach((order) => {
       const orderAnalysis = this.categorizer.analyzeAmazonOrder(order);
       const amount = Math.abs(order.amount);
 
@@ -73,7 +76,7 @@ class AnalysisRunner {
         orderId: order.orderId,
         originalOrder: order,
         analysis: orderAnalysis,
-        amount: amount
+        amount
       });
 
       // Categories
@@ -102,15 +105,18 @@ class AnalysisRunner {
         this.analysis.subscribeAndSave.detailedResults.push({
           orderId: order.orderId,
           confidence: orderAnalysis.subscribeAndSave.confidence,
-          amount: amount,
+          amount,
           items: order.items,
           indicators: orderAnalysis.subscribeAndSave.indicators || []
         });
       }
 
       // Monthly trends
-      const month = new Date(order.date).toLocaleString('default', { month: 'long' });
-      this.analysis.monthlyTrends[month] = (this.analysis.monthlyTrends[month] || 0) + amount;
+      const month = new Date(order.date).toLocaleString('default', {
+        month: 'long'
+      });
+      this.analysis.monthlyTrends[month] =
+        (this.analysis.monthlyTrends[month] || 0) + amount;
 
       // Payment methods
       if (order.payments) {
@@ -119,10 +125,11 @@ class AnalysisRunner {
       }
 
       // Detect outliers (orders significantly above average)
-      if (amount > 200) { // Threshold for outliers
+      if (amount > 200) {
+        // Threshold for outliers
         this.analysis.outliers.push({
           orderId: order.orderId,
-          amount: amount,
+          amount,
           items: order.items,
           category: orderAnalysis.category
         });
@@ -137,7 +144,7 @@ class AnalysisRunner {
       ssCount > 0 ? totalConfidence / ssCount : 0;
 
     // Calculate category averages
-    Object.keys(this.analysis.categories).forEach(cat => {
+    Object.keys(this.analysis.categories).forEach((cat) => {
       const category = this.analysis.categories[cat];
       category.averageAmount = category.total / category.count;
     });
@@ -145,7 +152,9 @@ class AnalysisRunner {
     // Data quality assessment
     this.calculateDataQuality();
 
-    console.log(`✅ Analysis complete - ${this.testData.length} orders processed`);
+    console.log(
+      `✅ Analysis complete - ${this.testData.length} orders processed`
+    );
     return this.analysis;
   }
 
@@ -154,22 +163,26 @@ class AnalysisRunner {
    */
   calculateDataQuality() {
     let completenessScore = 0;
-    let integrityScore = 0;
+    const integrityScore = 0;
     const missingFields = [];
 
     // Check data completeness
     const requiredFields = ['date', 'amount', 'items', 'orderId'];
     const optionalFields = ['payments', 'shipping', 'category'];
 
-    this.testData.forEach(order => {
+    this.testData.forEach((order) => {
       let orderCompleteness = 0;
 
-      requiredFields.forEach(field => {
-        if (order[field] && order[field] !== '') orderCompleteness += 0.6;
+      requiredFields.forEach((field) => {
+        if (order[field] && order[field] !== '') {
+          orderCompleteness += 0.6;
+        }
       });
 
-      optionalFields.forEach(field => {
-        if (order[field] && order[field] !== '') orderCompleteness += 0.13;
+      optionalFields.forEach((field) => {
+        if (order[field] && order[field] !== '') {
+          orderCompleteness += 0.13;
+        }
       });
 
       completenessScore += Math.min(orderCompleteness, 1.0);
@@ -180,7 +193,7 @@ class AnalysisRunner {
 
     // Check data integrity (valid dates, amounts, etc.)
     let validRecords = 0;
-    this.testData.forEach(order => {
+    this.testData.forEach((order) => {
       const hasValidDate = !isNaN(new Date(order.date).getTime());
       const hasValidAmount = !isNaN(order.amount) && order.amount > 0;
       const hasValidItems = order.items && order.items.length > 0;
@@ -190,10 +203,12 @@ class AnalysisRunner {
       }
     });
 
-    this.analysis.dataQuality.dataIntegrity = validRecords / this.testData.length;
+    this.analysis.dataQuality.dataIntegrity =
+      validRecords / this.testData.length;
     this.analysis.dataQuality.overallCompleteness =
       (this.analysis.dataQuality.amazonDataCompleteness +
-       this.analysis.dataQuality.dataIntegrity) / 2;
+        this.analysis.dataQuality.dataIntegrity) /
+      2;
   }
 
   /**
@@ -201,16 +216,22 @@ class AnalysisRunner {
    * @returns {Object} Date range information
    */
   getDateRange() {
-    const dates = this.testData.map(order => new Date(order.date))
-      .filter(date => !isNaN(date.getTime()));
+    const dates = this.testData
+      .map((order) => new Date(order.date))
+      .filter((date) => !isNaN(date.getTime()));
 
-    if (dates.length === 0) return { start: 'Unknown', end: 'Unknown' };
+    if (dates.length === 0) {
+      return { start: 'Unknown', end: 'Unknown' };
+    }
 
     const sortedDates = dates.sort((a, b) => a - b);
     return {
       start: sortedDates[0].toISOString().split('T')[0],
       end: sortedDates[sortedDates.length - 1].toISOString().split('T')[0],
-      span: Math.ceil((sortedDates[sortedDates.length - 1] - sortedDates[0]) / (1000 * 60 * 60 * 24))
+      span: Math.ceil(
+        (sortedDates[sortedDates.length - 1] - sortedDates[0]) /
+          (1000 * 60 * 60 * 24)
+      )
     };
   }
 

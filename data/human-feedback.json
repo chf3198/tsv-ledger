@@ -1,0 +1,363 @@
+{
+  "feedback": [
+    {
+      "id": "fb_1767754025443_ufe0xeyn1",
+      "timestamp": "2026-01-07T02:47:05.443Z",
+      "type": "decision",
+      "category": "file-management",
+      "rating": -1,
+      "context": {
+        "cli": true
+      },
+      "decision": "",
+      "expectedOutcome": "",
+      "actualOutcome": "",
+      "userId": "curtisfranks",
+      "comments": "Poor decision on file organization",
+      "metadata": {}
+    },
+    {
+      "id": "fb_1767754029939_0ikw7bofu",
+      "timestamp": "2026-01-07T02:47:09.939Z",
+      "type": "decision",
+      "category": "file-management",
+      "rating": 1,
+      "context": {
+        "cli": true
+      },
+      "decision": "",
+      "expectedOutcome": "",
+      "actualOutcome": "",
+      "userId": "curtisfranks",
+      "comments": "Actually good decision",
+      "metadata": {}
+    },
+    {
+      "id": "fb_1767754029994_x9x6yomkl",
+      "timestamp": "2026-01-07T02:47:09.994Z",
+      "type": "decision",
+      "category": "code-quality",
+      "rating": 1,
+      "context": {
+        "cli": true
+      },
+      "decision": "",
+      "expectedOutcome": "",
+      "actualOutcome": "",
+      "userId": "curtisfranks",
+      "comments": "Excellent code quality suggestions",
+      "metadata": {}
+    },
+    {
+      "id": "fb_1767754030042_ljmvzvzf9",
+      "timestamp": "2026-01-07T02:47:10.042Z",
+      "type": "decision",
+      "category": "code-quality",
+      "rating": -1,
+      "context": {
+        "cli": true
+      },
+      "decision": "",
+      "expectedOutcome": "",
+      "actualOutcome": "",
+      "userId": "curtisfranks",
+      "comments": "Code quality check was too strict",
+      "metadata": {}
+    },
+    {
+      "id": "fb_1767754079767_hjfak641l",
+      "timestamp": "2026-01-07T02:47:59.767Z",
+      "type": "decision",
+      "category": "documentation",
+      "rating": 1,
+      "context": {
+        "cli": true
+      },
+      "decision": "",
+      "expectedOutcome": "",
+      "actualOutcome": "",
+      "userId": "curtisfranks",
+      "comments": "Excellent documentation quality",
+      "metadata": {}
+    },
+    {
+      "id": "fb_1767754079866_86ak4kxjc",
+      "timestamp": "2026-01-07T02:47:59.866Z",
+      "type": "decision",
+      "category": "documentation",
+      "rating": 1,
+      "context": {
+        "cli": true
+      },
+      "decision": "",
+      "expectedOutcome": "",
+      "actualOutcome": "",
+      "userId": "curtisfranks",
+      "comments": "Excellent documentation quality",
+      "metadata": {}
+    },
+    {
+      "id": "fb_1767754079921_yir0vt5wu",
+      "timestamp": "2026-01-07T02:47:59.921Z",
+      "type": "decision",
+      "category": "documentation",
+      "rating": 1,
+      "context": {
+        "cli": true
+      },
+      "decision": "",
+      "expectedOutcome": "",
+      "actualOutcome": "",
+      "userId": "curtisfranks",
+      "comments": "Excellent documentation quality",
+      "metadata": {}
+    },
+    {
+      "id": "fb_1767754079983_ov1avo51a",
+      "timestamp": "2026-01-07T02:47:59.983Z",
+      "type": "decision",
+      "category": "documentation",
+      "rating": 1,
+      "context": {
+        "cli": true
+      },
+      "decision": "",
+      "expectedOutcome": "",
+      "actualOutcome": "",
+      "userId": "curtisfranks",
+      "comments": "Excellent documentation quality",
+      "metadata": {}
+    },
+    {
+      "id": "fb_1767754080031_klquu2561",
+      "timestamp": "2026-01-07T02:48:00.031Z",
+      "type": "decision",
+      "category": "documentation",
+      "rating": 1,
+      "context": {
+        "cli": true
+      },
+      "decision": "",
+      "expectedOutcome": "",
+      "actualOutcome": "",
+      "userId": "curtisfranks",
+      "comments": "Excellent documentation quality",
+      "metadata": {}
+    },
+    {
+      "id": "fb_1767754080080_h4pkojpro",
+      "timestamp": "2026-01-07T02:48:00.080Z",
+      "type": "decision",
+      "category": "documentation",
+      "rating": 1,
+      "context": {
+        "cli": true
+      },
+      "decision": "",
+      "expectedOutcome": "",
+      "actualOutcome": "",
+      "userId": "curtisfranks",
+      "comments": "Excellent documentation quality",
+      "metadata": {}
+    }
+  ],
+  "stats": {
+    "totalFeedback": 10,
+    "positiveFeedback": 8,
+    "negativeFeedback": 2,
+    "neutralFeedback": 0,
+    "categories": {
+      "file-management": {
+        "total": 2,
+        "positive": 1,
+        "negative": 1,
+        "neutral": 0
+      },
+      "code-quality": {
+        "total": 2,
+        "positive": 1,
+        "negative": 1,
+        "neutral": 0
+      },
+      "documentation": {
+        "total": 6,
+        "positive": 6,
+        "negative": 0,
+        "neutral": 0
+      }
+    },
+    "patterns": {
+      "general": {
+        "feedback": [
+          {
+            "id": "fb_1767754025443_ufe0xeyn1",
+            "timestamp": "2026-01-07T02:47:05.443Z",
+            "type": "decision",
+            "category": "file-management",
+            "rating": -1,
+            "context": {
+              "cli": true
+            },
+            "decision": "",
+            "expectedOutcome": "",
+            "actualOutcome": "",
+            "userId": "curtisfranks",
+            "comments": "Poor decision on file organization",
+            "metadata": {}
+          },
+          {
+            "id": "fb_1767754029939_0ikw7bofu",
+            "timestamp": "2026-01-07T02:47:09.939Z",
+            "type": "decision",
+            "category": "file-management",
+            "rating": 1,
+            "context": {
+              "cli": true
+            },
+            "decision": "",
+            "expectedOutcome": "",
+            "actualOutcome": "",
+            "userId": "curtisfranks",
+            "comments": "Actually good decision",
+            "metadata": {}
+          },
+          {
+            "id": "fb_1767754029994_x9x6yomkl",
+            "timestamp": "2026-01-07T02:47:09.994Z",
+            "type": "decision",
+            "category": "code-quality",
+            "rating": 1,
+            "context": {
+              "cli": true
+            },
+            "decision": "",
+            "expectedOutcome": "",
+            "actualOutcome": "",
+            "userId": "curtisfranks",
+            "comments": "Excellent code quality suggestions",
+            "metadata": {}
+          },
+          {
+            "id": "fb_1767754030042_ljmvzvzf9",
+            "timestamp": "2026-01-07T02:47:10.042Z",
+            "type": "decision",
+            "category": "code-quality",
+            "rating": -1,
+            "context": {
+              "cli": true
+            },
+            "decision": "",
+            "expectedOutcome": "",
+            "actualOutcome": "",
+            "userId": "curtisfranks",
+            "comments": "Code quality check was too strict",
+            "metadata": {}
+          },
+          {
+            "id": "fb_1767754079767_hjfak641l",
+            "timestamp": "2026-01-07T02:47:59.767Z",
+            "type": "decision",
+            "category": "documentation",
+            "rating": 1,
+            "context": {
+              "cli": true
+            },
+            "decision": "",
+            "expectedOutcome": "",
+            "actualOutcome": "",
+            "userId": "curtisfranks",
+            "comments": "Excellent documentation quality",
+            "metadata": {}
+          },
+          {
+            "id": "fb_1767754079866_86ak4kxjc",
+            "timestamp": "2026-01-07T02:47:59.866Z",
+            "type": "decision",
+            "category": "documentation",
+            "rating": 1,
+            "context": {
+              "cli": true
+            },
+            "decision": "",
+            "expectedOutcome": "",
+            "actualOutcome": "",
+            "userId": "curtisfranks",
+            "comments": "Excellent documentation quality",
+            "metadata": {}
+          },
+          {
+            "id": "fb_1767754079921_yir0vt5wu",
+            "timestamp": "2026-01-07T02:47:59.921Z",
+            "type": "decision",
+            "category": "documentation",
+            "rating": 1,
+            "context": {
+              "cli": true
+            },
+            "decision": "",
+            "expectedOutcome": "",
+            "actualOutcome": "",
+            "userId": "curtisfranks",
+            "comments": "Excellent documentation quality",
+            "metadata": {}
+          },
+          {
+            "id": "fb_1767754079983_ov1avo51a",
+            "timestamp": "2026-01-07T02:47:59.983Z",
+            "type": "decision",
+            "category": "documentation",
+            "rating": 1,
+            "context": {
+              "cli": true
+            },
+            "decision": "",
+            "expectedOutcome": "",
+            "actualOutcome": "",
+            "userId": "curtisfranks",
+            "comments": "Excellent documentation quality",
+            "metadata": {}
+          },
+          {
+            "id": "fb_1767754080031_klquu2561",
+            "timestamp": "2026-01-07T02:48:00.031Z",
+            "type": "decision",
+            "category": "documentation",
+            "rating": 1,
+            "context": {
+              "cli": true
+            },
+            "decision": "",
+            "expectedOutcome": "",
+            "actualOutcome": "",
+            "userId": "curtisfranks",
+            "comments": "Excellent documentation quality",
+            "metadata": {}
+          },
+          {
+            "id": "fb_1767754080080_h4pkojpro",
+            "timestamp": "2026-01-07T02:48:00.080Z",
+            "type": "decision",
+            "category": "documentation",
+            "rating": 1,
+            "context": {
+              "cli": true
+            },
+            "decision": "",
+            "expectedOutcome": "",
+            "actualOutcome": "",
+            "userId": "curtisfranks",
+            "comments": "Excellent documentation quality",
+            "metadata": {}
+          }
+        ],
+        "averageRating": 0.6,
+        "commonOutcomes": {},
+        "recommendations": [
+          "Continue using this approach - positive feedback received"
+        ]
+      }
+    },
+    "learningOutcomes": {}
+  },
+  "lastUpdated": "2026-01-07T02:48:00.081Z"
+}

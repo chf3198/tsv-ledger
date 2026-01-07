@@ -4,7 +4,7 @@
  * Handles Puppeteer browser and page setup
  */
 
-const puppeteer = require("puppeteer");
+const puppeteer = require('puppeteer');
 
 /**
  * Manages browser and page lifecycle
@@ -13,7 +13,7 @@ class BrowserManager {
   constructor() {
     this.browser = null;
     this.page = null;
-    this.baseUrl = "http://localhost:3000";
+    this.baseUrl = 'http://localhost:3000';
   }
 
   /**
@@ -21,15 +21,15 @@ class BrowserManager {
    * @param {string} message - Message to log
    * @param {string} level - Log level
    */
-  log(message, level = "info") {
+  log(message, level = 'info') {
     const timestamp = new Date().toISOString();
     const prefix =
       {
-        info: "ℹ️",
-        error: "❌",
-        success: "✅",
-        progress: "🔄",
-      }[level] || "ℹ️";
+        info: 'ℹ️',
+        error: '❌',
+        success: '✅',
+        progress: '🔄'
+      }[level] || 'ℹ️';
 
     console.log(`[${timestamp}] ${prefix} ${message}`);
   }
@@ -39,25 +39,25 @@ class BrowserManager {
    * @returns {Promise<void>}
    */
   async initialize() {
-    this.log("🌐 Launching browser...");
+    this.log('🌐 Launching browser...');
     this.browser = await puppeteer.launch({
       headless: true,
-      args: ["--no-sandbox", "--disable-setuid-sandbox"],
+      args: ['--no-sandbox', '--disable-setuid-sandbox']
     });
 
     this.page = await this.browser.newPage();
     await this.page.setViewport({ width: 1280, height: 720 });
 
     // Set up console logging
-    this.page.on("console", (msg) => {
-      this.log(`Browser console: ${msg.text()}`, "info");
+    this.page.on('console', (msg) => {
+      this.log(`Browser console: ${msg.text()}`, 'info');
     });
 
-    this.page.on("pageerror", (error) => {
-      this.log(`Browser page error: ${error.message}`, "error");
+    this.page.on('pageerror', (error) => {
+      this.log(`Browser page error: ${error.message}`, 'error');
     });
 
-    this.log("✅ Browser initialized");
+    this.log('✅ Browser initialized');
   }
 
   /**
@@ -65,7 +65,7 @@ class BrowserManager {
    * @returns {Promise<void>}
    */
   async cleanup() {
-    this.log("🧹 Cleaning up browser...");
+    this.log('🧹 Cleaning up browser...');
 
     if (this.page) {
       await this.page.close();
@@ -75,7 +75,7 @@ class BrowserManager {
       await this.browser.close();
     }
 
-    this.log("✅ Browser cleanup complete");
+    this.log('✅ Browser cleanup complete');
   }
 
   /**
@@ -83,10 +83,10 @@ class BrowserManager {
    * @param {string} pagePath - Path to navigate to
    * @returns {Promise<void>}
    */
-  async navigateToPage(pagePath = "/") {
+  async navigateToPage(pagePath = '/') {
     const url = `${this.baseUrl}${pagePath}`;
     this.log(`📍 Navigating to ${url}`);
-    await this.page.goto(url, { waitUntil: "networkidle2" });
+    await this.page.goto(url, { waitUntil: 'networkidle2' });
   }
 
   /**
@@ -100,7 +100,7 @@ class BrowserManager {
       await this.page.waitForSelector(selector, { timeout });
       return true;
     } catch (error) {
-      this.log(`Element not found: ${selector}`, "error");
+      this.log(`Element not found: ${selector}`, 'error');
       return false;
     }
   }
@@ -111,13 +111,13 @@ class BrowserManager {
    * @param {string} description - Description for logging
    * @returns {Promise<boolean>}
    */
-  async clickElement(selector, description = "element") {
+  async clickElement(selector, description = 'element') {
     try {
       await this.page.click(selector);
       this.log(`🖱️ Clicked ${description}`);
       return true;
     } catch (error) {
-      this.log(`Failed to click ${description}: ${error.message}`, "error");
+      this.log(`Failed to click ${description}: ${error.message}`, 'error');
       return false;
     }
   }
@@ -129,13 +129,13 @@ class BrowserManager {
    * @param {string} description - Description for logging
    * @returns {Promise<boolean>}
    */
-  async fillFormField(selector, value, description = "field") {
+  async fillFormField(selector, value, description = 'field') {
     try {
       await this.page.type(selector, value);
       this.log(`✏️ Filled ${description} with: ${value}`);
       return true;
     } catch (error) {
-      this.log(`Failed to fill ${description}: ${error.message}`, "error");
+      this.log(`Failed to fill ${description}: ${error.message}`, 'error');
       return false;
     }
   }
@@ -150,15 +150,15 @@ class BrowserManager {
       await this.page.waitForFunction(
         () => {
           const loadingElements =
-            document.querySelectorAll(".loading, .spinner");
+            document.querySelectorAll('.loading, .spinner');
           return loadingElements.length === 0;
         },
         { timeout }
       );
-      this.log("📊 Analysis loaded successfully");
+      this.log('📊 Analysis loaded successfully');
       return true;
     } catch (error) {
-      this.log(`Analysis load timeout: ${error.message}`, "error");
+      this.log(`Analysis load timeout: ${error.message}`, 'error');
       return false;
     }
   }
@@ -172,13 +172,13 @@ class BrowserManager {
     try {
       await this.page.evaluate((id) => {
         // Hide all sections
-        const sections = document.querySelectorAll(".section");
-        sections.forEach((sec) => sec.classList.remove("active"));
+        const sections = document.querySelectorAll('.section');
+        sections.forEach((sec) => sec.classList.remove('active'));
 
         // Show target section
         const targetSection = document.getElementById(id);
         if (targetSection) {
-          targetSection.classList.add("active");
+          targetSection.classList.add('active');
           return true;
         }
         return false;
@@ -189,7 +189,7 @@ class BrowserManager {
     } catch (error) {
       this.log(
         `Failed to navigate to section ${sectionId}: ${error.message}`,
-        "error"
+        'error'
       );
       return false;
     }
@@ -201,17 +201,17 @@ class BrowserManager {
    */
   async testServerHealth() {
     try {
-      await this.navigateToPage("/");
+      await this.navigateToPage('/');
       const title = await this.page.title();
-      if (title.includes("TSV Ledger")) {
-        this.log("✅ Server is healthy and responding");
+      if (title.includes('TSV Ledger')) {
+        this.log('✅ Server is healthy and responding');
         return true;
       } else {
-        this.log(`❌ Unexpected page title: ${title}`, "error");
+        this.log(`❌ Unexpected page title: ${title}`, 'error');
         return false;
       }
     } catch (error) {
-      this.log(`❌ Server health check failed: ${error.message}`, "error");
+      this.log(`❌ Server health check failed: ${error.message}`, 'error');
       return false;
     }
   }

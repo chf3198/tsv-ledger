@@ -73,20 +73,20 @@ router.post('/employee-benefits-filter', (req, res) => {
       let analysis = {};
 
       switch (analysisType) {
-        case 'summary':
-          analysis = generateBenefitsSummary(filteredExpenditures);
-          break;
-        case 'category-breakdown':
-          analysis = generateCategoryBreakdown(filteredExpenditures);
-          break;
-        case 'temporal-analysis':
-          analysis = generateTemporalAnalysis(filteredExpenditures);
-          break;
-        case 'anomaly-detection':
-          analysis = generateAnomalyDetection(filteredExpenditures);
-          break;
-        default:
-          analysis = generateBenefitsSummary(filteredExpenditures);
+      case 'summary':
+        analysis = generateBenefitsSummary(filteredExpenditures);
+        break;
+      case 'category-breakdown':
+        analysis = generateCategoryBreakdown(filteredExpenditures);
+        break;
+      case 'temporal-analysis':
+        analysis = generateTemporalAnalysis(filteredExpenditures);
+        break;
+      case 'anomaly-detection':
+        analysis = generateAnomalyDetection(filteredExpenditures);
+        break;
+      default:
+        analysis = generateBenefitsSummary(filteredExpenditures);
       }
 
       res.json({
@@ -94,7 +94,7 @@ router.post('/employee-benefits-filter', (req, res) => {
         data: {
           totalRecords: filteredExpenditures.length,
           dateRange: getDateRange(filteredExpenditures),
-          analysis: analysis
+          analysis
         },
         expenditures: filteredExpenditures.slice(0, 100) // Limit response size
       });
@@ -129,11 +129,11 @@ function generateBenefitsSummary(expenditures) {
 
   return {
     type: 'summary',
-    totalSpent: totalSpent,
+    totalSpent,
     averageTransaction: avgTransaction,
     transactionCount: expenditures.length,
-    categoryBreakdown: categoryBreakdown,
-    sourceBreakdown: sourceBreakdown,
+    categoryBreakdown,
+    sourceBreakdown,
     topCategory: Object.entries(categoryBreakdown).sort(([,a], [,b]) => b - a)[0]
   };
 }
@@ -174,7 +174,7 @@ function generateCategoryBreakdown(expenditures) {
 
   return {
     type: 'category-breakdown',
-    categories: categories,
+    categories,
     categoryCount: Object.keys(categories).length
   };
 }
@@ -200,9 +200,9 @@ function generateTemporalAnalysis(expenditures) {
 
   return {
     type: 'temporal-analysis',
-    monthlySpending: monthlySpending,
-    weeklySpending: weeklySpending,
-    dailySpending: dailySpending,
+    monthlySpending,
+    weeklySpending,
+    dailySpending,
     trends: {
       increasingMonths: getIncreasingPeriods(Object.entries(monthlySpending).sort()),
       peakSpendingDay: Object.entries(dailySpending).sort(([,a], [,b]) => b - a)[0]
@@ -234,7 +234,7 @@ function generateAnomalyDetection(expenditures) {
   return {
     type: 'anomaly-detection',
     statistics: {
-      mean: mean,
+      mean,
       standardDeviation: stdDev,
       minAmount: Math.min(...amounts),
       maxAmount: Math.max(...amounts)
@@ -253,7 +253,9 @@ function generateAnomalyDetection(expenditures) {
  * Get date range from expenditures
  */
 function getDateRange(expenditures) {
-  if (expenditures.length === 0) return null;
+  if (expenditures.length === 0) {
+    return null;
+  }
 
   const dates = expenditures.map(exp => new Date(exp.date)).sort((a, b) => a - b);
   return {

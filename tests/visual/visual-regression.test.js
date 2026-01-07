@@ -340,7 +340,9 @@ test.describe('Visual Regression Testing Suite', () => {
       // Prefer the first visible loading element
       let visibleLoading = null;
       for (const el of allLoading) {
-        if (await el.isVisible()) { visibleLoading = el; break; }
+        if (await el.isVisible()) {
+          visibleLoading = el; break;
+        }
       }
 
       if (visibleLoading) {
@@ -394,7 +396,9 @@ test.describe('Visual Regression Testing Suite', () => {
       // Wait for status text to settle and not be a Loading placeholder
       await page.waitForFunction(() => {
         const el = document.getElementById('selectionStatus');
-        if (!el) return false;
+        if (!el) {
+          return false;
+        }
         const txt = (el.textContent || '').trim();
         return txt.length > 0 && !/loading/i.test(txt);
       }, { timeout: 10000 });
@@ -424,7 +428,9 @@ test.describe('Visual Regression Testing Suite', () => {
       await page.waitForSelector('#selectionStatus', { state: 'visible', timeout: 10000 });
       await page.waitForFunction(() => {
         const el = document.getElementById('selectionStatus');
-        if (!el) return false;
+        if (!el) {
+          return false;
+        }
         const txt = (el.textContent || '').trim();
         return txt.length > 0 && !/loading/i.test(txt);
       }, { timeout: 10000 });

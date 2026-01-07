@@ -12,13 +12,17 @@ test.describe('Benefits allocations (clean)', () => {
       try {
         const mgr = (typeof employeeBenefitsManager !== 'undefined') ? employeeBenefitsManager : (window.employeeBenefitsManager || null);
         return !!(mgr && typeof mgr.showSelectionModal === 'function');
-      } catch (e) { return false; }
+      } catch (e) {
+        return false;
+      }
     }, { timeout: 20000 });
 
     // open selection modal
     await page.evaluate(() => {
       const mgr = (typeof employeeBenefitsManager !== 'undefined') ? employeeBenefitsManager : (window.employeeBenefitsManager || null);
-      if (mgr && typeof mgr.showSelectionModal === 'function') mgr.showSelectionModal();
+      if (mgr && typeof mgr.showSelectionModal === 'function') {
+        mgr.showSelectionModal();
+      }
     });
 
     await page.waitForSelector('#businessSuppliesList .col-md-6', { timeout: 10000 });
@@ -37,12 +41,20 @@ test.describe('Benefits allocations (clean)', () => {
     await page.evaluate((id) => {
       try {
         const mgr = (typeof employeeBenefitsManager !== 'undefined') ? employeeBenefitsManager : (window.employeeBenefitsManager || null);
-        if (!mgr) return;
-        if (!mgr.itemProgressiveAllocations) mgr.itemProgressiveAllocations = new Map();
+        if (!mgr) {
+          return;
+        }
+        if (!mgr.itemProgressiveAllocations) {
+          mgr.itemProgressiveAllocations = new Map();
+        }
         mgr.itemProgressiveAllocations.set(id, { benefits: 50, business: 50, total: 100 });
-        if (!mgr.selectedItems) mgr.selectedItems = new Set();
+        if (!mgr.selectedItems) {
+          mgr.selectedItems = new Set();
+        }
         mgr.selectedItems.add(id);
-        if (typeof mgr.updateModalDisplay === 'function') mgr.updateModalDisplay();
+        if (typeof mgr.updateModalDisplay === 'function') {
+          mgr.updateModalDisplay();
+        }
       } catch (e) { }
     }, firstItemId);
 
@@ -50,9 +62,13 @@ test.describe('Benefits allocations (clean)', () => {
     await page.waitForFunction((prev) => {
       try {
         const be = parseInt(document.getElementById('benefitsItemsCount')?.textContent || '0', 10) || 0;
-        if (be > prev) return true;
+        if (be > prev) {
+          return true;
+        }
         const mgr = (typeof employeeBenefitsManager !== 'undefined') ? employeeBenefitsManager : (window.employeeBenefitsManager || null);
-        if (mgr && mgr.selectedItems && typeof mgr.selectedItems.size === 'number') return mgr.selectedItems.size > 0;
+        if (mgr && mgr.selectedItems && typeof mgr.selectedItems.size === 'number') {
+          return mgr.selectedItems.size > 0;
+        }
       } catch (e) { }
       return false;
     }, initial.benefitsCount, { timeout: 15000 });

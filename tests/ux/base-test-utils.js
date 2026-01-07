@@ -5,16 +5,16 @@
  * Provides server management, browser setup, and shared test helpers
  */
 
-const ServerManager = require("./server-manager");
-const BrowserManager = require("./browser-manager");
-const TestRunner = require("./test-runner");
+const ServerManager = require('./server-manager');
+const BrowserManager = require('./browser-manager');
+const TestRunner = require('./test-runner');
 
 /**
  * Base class for UX testing with common browser and server utilities
  */
 class BaseUXTest {
   constructor() {
-    this.baseUrl = "http://localhost:3000";
+    this.baseUrl = 'http://localhost:3000';
     this.serverManager = new ServerManager();
     this.browserManager = new BrowserManager();
     this.testRunner = new TestRunner();
@@ -30,7 +30,7 @@ class BaseUXTest {
    * @param {string} message - Message to log
    * @param {string} level - Log level (info, error, success, progress)
    */
-  log(message, level = "info") {
+  log(message, level = 'info') {
     this.testRunner.log(message, level);
   }
 
@@ -74,7 +74,7 @@ class BaseUXTest {
    * @param {string} pagePath - Path to navigate to
    * @returns {Promise<void>}
    */
-  async navigateToPage(pagePath = "/") {
+  async navigateToPage(pagePath = '/') {
     await this.browserManager.navigateToPage(pagePath);
   }
 
@@ -94,7 +94,7 @@ class BaseUXTest {
    * @param {string} description - Description for logging
    * @returns {Promise<boolean>}
    */
-  async clickElement(selector, description = "element") {
+  async clickElement(selector, description = 'element') {
     return await this.browserManager.clickElement(selector, description);
   }
 
@@ -105,7 +105,7 @@ class BaseUXTest {
    * @param {string} description - Description for logging
    * @returns {Promise<boolean>}
    */
-  async fillFormField(selector, value, description = "field") {
+  async fillFormField(selector, value, description = 'field') {
     return await this.browserManager.fillFormField(
       selector,
       value,

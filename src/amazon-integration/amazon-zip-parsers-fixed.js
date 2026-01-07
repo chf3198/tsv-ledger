@@ -4,14 +4,14 @@
  */
 
 // Import individual parsers
-const { processOrderHistoryCSV } = require("./parsers/order-parser");
-const { processSubscriptionsJSON } = require("./parsers/subscription-parser");
-const { processCartHistoryCSV } = require("./parsers/cart-parser");
-const { processReturnsCSV } = require("./parsers/returns-parser");
+const { processOrderHistoryCSV } = require('./parsers/order-parser');
+const { processSubscriptionsJSON } = require('./parsers/subscription-parser');
+const { processCartHistoryCSV } = require('./parsers/cart-parser');
+const { processReturnsCSV } = require('./parsers/returns-parser');
 
 module.exports = {
   processOrderHistoryCSV,
   processSubscriptionsJSON,
   processCartHistoryCSV,
-  processReturnsCSV,
+  processReturnsCSV
 };

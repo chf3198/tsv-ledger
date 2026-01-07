@@ -42,7 +42,7 @@ console.log(`Using separator: ${separator === '\t' ? 'TAB' : 'COMMA'}\n`);
 
 csvStream
   .pipe(csv({
-    separator: separator,
+    separator,
     skipEmptyLines: true
   }))
   .on('data', (data) => {
@@ -54,7 +54,7 @@ csvStream
     // Skip the first 5 summary rows that have different column structure
     if (lineNumber <= 5) {
       console.log(`⏭️  SKIPPING SUMMARY ROW ${lineNumber}`);
-      skippedRows.push({ line: lineNumber, reason: 'summary row', data: data });
+      skippedRows.push({ line: lineNumber, reason: 'summary row', data });
       return;
     }
 
@@ -64,14 +64,14 @@ csvStream
     console.log('Date value found:', dateValue);
 
     if (!dateValue || dateValue.trim() === '') {
-      console.log(`❌ SKIPPING: No date field`);
-      skippedRows.push({ line: lineNumber, reason: 'no date field', data: data });
+      console.log('❌ SKIPPING: No date field');
+      skippedRows.push({ line: lineNumber, reason: 'no date field', data });
       return;
     }
 
     if (!/^\d{2}\/\d{2}\/\d{4}$/.test(dateValue.trim())) {
       console.log(`❌ SKIPPING: Invalid date format: "${dateValue}"`);
-      skippedRows.push({ line: lineNumber, reason: 'invalid date format', data: data });
+      skippedRows.push({ line: lineNumber, reason: 'invalid date format', data });
       return;
     }
 
@@ -87,7 +87,7 @@ csvStream
 
     if (isNaN(parsedAmount) || parsedAmount === 0) {
       console.log(`❌ SKIPPING: Invalid amount: "${amountValue}" -> ${parsedAmount}`);
-      skippedRows.push({ line: lineNumber, reason: 'invalid amount', data: data });
+      skippedRows.push({ line: lineNumber, reason: 'invalid amount', data });
       return;
     }
 

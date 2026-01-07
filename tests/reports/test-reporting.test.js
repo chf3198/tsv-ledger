@@ -126,7 +126,7 @@ test.describe('Test Reporting Dashboard', () => {
       const bottleneckReport = path.join(reportsDir, 'bottlenecks.json');
       fs.writeFileSync(bottleneckReport, JSON.stringify({
         timestamp: new Date().toISOString(),
-        bottlenecks: bottlenecks
+        bottlenecks
       }, null, 2));
     });
   });
@@ -427,7 +427,7 @@ end_of_record`;
       // Save alert log
       const alertLog = {
         timestamp: new Date().toISOString(),
-        failures: failures,
+        failures,
         totalFailed: failures.reduce((sum, f) => sum + f.failed, 0)
       };
 
@@ -448,7 +448,7 @@ end_of_record`;
           const coverageDrop = previous.overallCoverage - current.overallCoverage;
 
           if (coverageDrop > 5) { // 5% drop threshold
-            console.log(`ALERT: Coverage regression detected!`);
+            console.log('ALERT: Coverage regression detected!');
             console.log(`Previous: ${previous.overallCoverage}%, Current: ${current.overallCoverage}%`);
             console.log(`Drop: ${coverageDrop}%`);
 

@@ -4,7 +4,7 @@
  * @module tests/component/amount-calculations-tests
  */
 
-const path = require("path");
+const path = require('path');
 
 /**
  * Amount Calculations Test Suite
@@ -25,29 +25,29 @@ class AmountCalculationsTests {
       // Load from test data if not provided
       const testDataPath = path.join(
         __dirname,
-        "../../test-data/amazon-test-sample.csv"
+        '../../test-data/amazon-test-sample.csv'
       );
-      const fs = require("fs");
+      const fs = require('fs');
 
       if (fs.existsSync(testDataPath)) {
-        const csv = require("csv-parser");
+        const csv = require('csv-parser');
         const data = [];
 
         await new Promise((resolve, reject) => {
           fs.createReadStream(testDataPath)
             .pipe(csv())
-            .on("data", (row) => {
+            .on('data', (row) => {
               if (data.length < count) {
                 data.push({
                   date: row.date,
                   amount: parseFloat(row.amount) || 0,
-                  items: row.items || "",
-                  orderId: row.orderId || `test-${data.length}`,
+                  items: row.items || '',
+                  orderId: row.orderId || `test-${data.length}`
                 });
               }
             })
-            .on("end", () => resolve())
-            .on("error", reject);
+            .on('end', () => resolve())
+            .on('error', reject);
         });
 
         this.sampleData = data;
@@ -85,10 +85,10 @@ class AmountCalculationsTests {
       data.push({
         date: new Date(Date.now() - Math.random() * 365 * 24 * 60 * 60 * 1000)
           .toISOString()
-          .split("T")[0],
+          .split('T')[0],
         amount: parseFloat(amount.toFixed(2)),
         items: `Test item ${i + 1} and accessories`,
-        orderId: `CALC-${String(i + 1).padStart(3, "0")}`,
+        orderId: `CALC-${String(i + 1).padStart(3, '0')}`
       });
     }
 
@@ -100,7 +100,7 @@ class AmountCalculationsTests {
    * @returns {Object} Test results
    */
   testAmountCalculations() {
-    console.log("\n💰 Testing Amount Calculations Component...");
+    console.log('\n💰 Testing Amount Calculations Component...');
 
     const results = {
       tested: 0,
@@ -110,7 +110,7 @@ class AmountCalculationsTests {
       negativeAmounts: 0,
       zeroAmounts: 0,
       outliers: [],
-      statistics: {},
+      statistics: {}
     };
 
     const amounts = [];
@@ -124,16 +124,20 @@ class AmountCalculationsTests {
       results.totalOriginal += order.amount;
 
       // Check for issues
-      if (order.amount < 0) results.negativeAmounts++;
-      if (order.amount === 0) results.zeroAmounts++;
+      if (order.amount < 0) {
+        results.negativeAmounts++;
+      }
+      if (order.amount === 0) {
+        results.zeroAmounts++;
+      }
 
       // Detect outliers (> 3 standard deviations from mean)
       if (amount > 300) {
         // Simple outlier detection
         results.outliers.push({
           orderId: order.orderId,
-          amount: amount,
-          items: order.items.substring(0, 40) + "...",
+          amount,
+          items: order.items.substring(0, 40) + '...'
         });
       }
 
@@ -144,7 +148,7 @@ class AmountCalculationsTests {
           orderId: order.orderId,
           original: order.amount,
           calculated: amount,
-          difference: amount - originalAbs,
+          difference: amount - originalAbs
         });
       }
     });
@@ -156,7 +160,7 @@ class AmountCalculationsTests {
       median: amounts[Math.floor(amounts.length / 2)],
       min: amounts[0],
       max: amounts[amounts.length - 1],
-      standardDeviation: 0,
+      standardDeviation: 0
     };
 
     // Calculate standard deviation
@@ -166,7 +170,7 @@ class AmountCalculationsTests {
       amounts.length;
     results.statistics.standardDeviation = Math.sqrt(variance);
 
-    console.log(`\n📊 Amount Calculation Results:`);
+    console.log('\n📊 Amount Calculation Results:');
     console.log(`   Tested Orders: ${results.tested}`);
     console.log(`   Total Calculated: $${results.totalCalculated.toFixed(2)}`);
     console.log(`   Negative Amounts: ${results.negativeAmounts}`);
@@ -174,7 +178,7 @@ class AmountCalculationsTests {
     console.log(`   Outliers (>$300): ${results.outliers.length}`);
     console.log(`   Discrepancies: ${results.discrepancies.length}`);
 
-    console.log(`\n📈 Amount Statistics:`);
+    console.log('\n📈 Amount Statistics:');
     console.log(`   Mean: $${results.statistics.mean.toFixed(2)}`);
     console.log(`   Median: $${results.statistics.median.toFixed(2)}`);
     console.log(
@@ -187,13 +191,13 @@ class AmountCalculationsTests {
     );
 
     if (results.outliers.length > 0) {
-      console.log(`\n📊 Sample Outliers:`);
+      console.log('\n📊 Sample Outliers:');
       results.outliers.slice(0, 3).forEach((outlier) => {
         console.log(`   • $${outlier.amount}: ${outlier.items}`);
       });
     }
 
-    this.testResults.set("amountCalculations", results);
+    this.testResults.set('amountCalculations', results);
     return results;
   }
 
@@ -210,8 +214,10 @@ class AmountCalculationsTests {
    * @returns {number} Score as percentage
    */
   getScore() {
-    const results = this.testResults.get("amountCalculations");
-    if (!results) return 0;
+    const results = this.testResults.get('amountCalculations');
+    if (!results) {
+      return 0;
+    }
 
     const accurate = results.tested - results.discrepancies.length;
     return (accurate / results.tested) * 100;

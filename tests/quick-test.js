@@ -2,10 +2,10 @@
 
 /**
  * Quick Console Testing Script for TSV Ledger Analysis
- * 
+ *
  * This provides quick, focused testing for specific analysis components.
  * Usage: node quick-test.js [test-name]
- * 
+ *
  * Available tests:
  * - ss (Subscribe & Save detection)
  * - categories (Category classification)
@@ -37,7 +37,9 @@ class QuickTester {
               payments: row['payments'] || row['Payment Method'] || '',
               shipping: row['shipping'] || row['Item Subtotal Tax'] || '0'
             };
-            if (order.date && order.amount && order.items) orders.push(order);
+            if (order.date && order.amount && order.items) {
+              orders.push(order);
+            }
           }
         })
         .on('end', () => resolve(orders));
@@ -47,10 +49,10 @@ class QuickTester {
   // Quick Subscribe & Save test
   async testSubscribeAndSave() {
     console.log('🔍 Quick Subscribe & Save Test\n');
-    
+
     const orders = await this.loadSampleData(200);
     const ssResults = [];
-    
+
     orders.forEach((order, index) => {
       const analysis = this.categorizer.analyzeAmazonOrder(order);
       if (analysis.subscribeAndSave.isSubscribeAndSave) {
@@ -62,27 +64,27 @@ class QuickTester {
         });
       }
     });
-    
+
     console.log(`📊 Results: Found ${ssResults.length} S&S orders out of ${orders.length} tested`);
     console.log(`📈 Detection Rate: ${(ssResults.length / orders.length * 100).toFixed(1)}%\n`);
-    
+
     console.log('🔍 Top 10 Detections:');
     ssResults.slice(0, 10).forEach((result, i) => {
       console.log(`${i + 1}. ${result.items}...`);
       console.log(`   Confidence: ${(result.confidence * 100).toFixed(1)}%`);
       console.log(`   Indicators: ${Object.entries(result.indicators).filter(([k,v]) => v).map(([k]) => k).join(', ')}\n`);
     });
-    
+
     return ssResults;
   }
 
   // Quick category test
   async testCategories() {
     console.log('🏷️ Quick Category Test\n');
-    
+
     const orders = await this.loadSampleData(100);
     const categories = {};
-    
+
     orders.forEach(order => {
       const analysis = this.categorizer.analyzeAmazonOrder(order);
       if (!categories[analysis.category]) {
@@ -94,7 +96,7 @@ class QuickTester {
         categories[analysis.category].examples.push(order.items.substring(0, 40));
       }
     });
-    
+
     console.log('📊 Category Distribution:');
     Object.entries(categories)
       .sort(([,a], [,b]) => b.count - a.count)
@@ -102,17 +104,17 @@ class QuickTester {
         console.log(`\n${cat}: ${data.count} orders ($${data.total.toLocaleString()})`);
         console.log(`Examples: ${data.examples.join(' | ')}`);
       });
-    
+
     return categories;
   }
 
   // Quick location test
   async testLocations() {
     console.log('🏠 Quick Location Test\n');
-    
+
     const orders = await this.loadSampleData(100);
     const locations = { Freeport: [], Smithville: [], 'Both Properties': [] };
-    
+
     orders.forEach(order => {
       const analysis = this.categorizer.analyzeAmazonOrder(order);
       locations[analysis.location].push({
@@ -120,7 +122,7 @@ class QuickTester {
         amount: order.amount
       });
     });
-    
+
     console.log('📊 Location Distribution:');
     Object.entries(locations).forEach(([loc, orders]) => {
       const total = orders.reduce((sum, o) => sum + Math.abs(o.amount), 0);
@@ -129,7 +131,7 @@ class QuickTester {
         console.log(`Examples: ${orders.slice(0, 3).map(o => o.items).join(' | ')}`);
       }
     });
-    
+
     return locations;
   }
 
@@ -137,24 +139,24 @@ class QuickTester {
   async interactive() {
     console.log('🎮 Interactive Testing Mode');
     console.log('Enter a product description to test analysis:\n');
-    
+
     const readline = require('readline');
     const rl = readline.createInterface({
       input: process.stdin,
       output: process.stdout
     });
-    
+
     const testProduct = (items) => {
       const testOrder = {
         date: '2025-01-01',
         amount: 25.99,
-        items: items,
+        items,
         payments: 'Credit Card',
         shipping: '0'
       };
-      
+
       const analysis = this.categorizer.analyzeAmazonOrder(testOrder);
-      
+
       console.log('\n📊 Analysis Results:');
       console.log(`Category: ${analysis.category}`);
       console.log(`Location: ${analysis.location}`);
@@ -162,7 +164,7 @@ class QuickTester {
       console.log(`Employee Benefit: ${analysis.isEmployeeBenefit ? 'YES' : 'NO'}`);
       console.log(`Season: ${analysis.seasonality.season}\n`);
     };
-    
+
     rl.on('line', (input) => {
       if (input.toLowerCase() === 'exit') {
         rl.close();
@@ -170,7 +172,7 @@ class QuickTester {
       }
       testProduct(input);
     });
-    
+
     console.log('Type "exit" to quit');
   }
 }
@@ -179,30 +181,30 @@ class QuickTester {
 async function main() {
   const testName = process.argv[2] || 'all';
   const tester = new QuickTester();
-  
+
   try {
     switch (testName) {
-      case 'ss':
-        await tester.testSubscribeAndSave();
-        break;
-      case 'categories':
-        await tester.testCategories();
-        break;
-      case 'locations':
-        await tester.testLocations();
-        break;
-      case 'interactive':
-        await tester.interactive();
-        break;
-      case 'all':
-        await tester.testSubscribeAndSave();
-        console.log('\n' + '='.repeat(50) + '\n');
-        await tester.testCategories();
-        console.log('\n' + '='.repeat(50) + '\n');
-        await tester.testLocations();
-        break;
-      default:
-        console.log('Available tests: ss, categories, locations, interactive, all');
+    case 'ss':
+      await tester.testSubscribeAndSave();
+      break;
+    case 'categories':
+      await tester.testCategories();
+      break;
+    case 'locations':
+      await tester.testLocations();
+      break;
+    case 'interactive':
+      await tester.interactive();
+      break;
+    case 'all':
+      await tester.testSubscribeAndSave();
+      console.log('\n' + '='.repeat(50) + '\n');
+      await tester.testCategories();
+      console.log('\n' + '='.repeat(50) + '\n');
+      await tester.testLocations();
+      break;
+    default:
+      console.log('Available tests: ss, categories, locations, interactive, all');
     }
   } catch (error) {
     console.error('Test failed:', error.message);

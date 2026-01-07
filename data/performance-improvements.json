@@ -1,0 +1,69 @@
+{
+  "timeline": [
+    {
+      "timestamp": "2026-01-07T03:12:25.654Z",
+      "metricType": "responseTime",
+      "baselineValue": 850,
+      "currentValue": 780,
+      "improvement": 8.235294117647058,
+      "type": "improvement"
+    },
+    {
+      "timestamp": "2026-01-07T03:12:25.661Z",
+      "metricType": "accuracy",
+      "baselineValue": 96.5,
+      "currentValue": 98.1,
+      "improvement": 1.6580310880828957,
+      "type": "improvement"
+    },
+    {
+      "timestamp": "2026-01-07T03:16:15.323Z",
+      "metricType": "responseTime",
+      "baselineValue": 850,
+      "currentValue": 780,
+      "improvement": 8.235294117647058,
+      "type": "improvement"
+    },
+    {
+      "timestamp": "2026-01-07T03:16:15.326Z",
+      "metricType": "accuracy",
+      "baselineValue": 96.5,
+      "currentValue": 98.1,
+      "improvement": 1.6580310880828957,
+      "type": "improvement"
+    }
+  ],
+  "categories": {
+    "response_time": {
+      "improvements": 2,
+      "regressions": 0,
+      "net_gain": 16.470588235294116
+    },
+    "accuracy": {
+      "improvements": 2,
+      "regressions": 0,
+      "net_gain": 3.3160621761657914
+    },
+    "error_rate": {
+      "improvements": 0,
+      "regressions": 0,
+      "net_gain": 0
+    },
+    "throughput": {
+      "improvements": 0,
+      "regressions": 0,
+      "net_gain": 0
+    },
+    "resource_usage": {
+      "improvements": 0,
+      "regressions": 0,
+      "net_gain": 0
+    }
+  },
+  "overall": {
+    "totalImprovements": 4,
+    "totalRegressions": 0,
+    "netImprovement": 19.786650411459906,
+    "improvementRate": 100
+  }
+}

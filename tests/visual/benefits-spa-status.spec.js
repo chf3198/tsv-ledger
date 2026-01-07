@@ -12,7 +12,11 @@ test.describe('Benefits SPA status', () => {
 
     // Ensure sidebar is visible so SPA nav is available (testing helper)
     await page.evaluate(() => {
-      try { if (window.__ensureSidebarState) window.__ensureSidebarState(false); } catch (e) {}
+      try {
+        if (window.__ensureSidebarState) {
+          window.__ensureSidebarState(false);
+        }
+      } catch (e) {}
     });
 
     // Navigate via the app navigation: find a nav link containing 'Benefits' and click it
@@ -30,13 +34,17 @@ test.describe('Benefits SPA status', () => {
 
     if (navInfo.matchIndex < 0) {
       // Fallback: set a generic hash that older pages used
-      await page.evaluate(() => { window.location.hash = 'benefits'; });
+      await page.evaluate(() => {
+        window.location.hash = 'benefits';
+      });
     }
 
     // Wait for the selectionStatus element to exist and become something other than Loading...
     await page.waitForFunction(() => {
       const el = document.getElementById('selectionStatus');
-      if (!el) return false;
+      if (!el) {
+        return false;
+      }
       const txt = (el.textContent || '').trim();
       return txt.length > 0 && !/loading/i.test(txt);
     }, { timeout: 20000 });

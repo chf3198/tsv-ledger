@@ -1,0 +1,383 @@
+{
+  "initiatives": [
+    {
+      "id": "opt_1767755662613_s3o15ubq6",
+      "timestamp": "2026-01-07T03:14:22.613Z",
+      "category": "instruction_optimization",
+      "name": "NEFTune Implementation",
+      "description": "Implement noise injection for better robustness",
+      "investment": 500,
+      "expectedBenefits": 2000,
+      "actualBenefits": 2500,
+      "roi": 400,
+      "status": "completed",
+      "timeline": {},
+      "context": {},
+      "completedDate": "2026-01-07T03:14:22.628Z",
+      "measuredBenefits": [
+        {
+          "type": "time_saved",
+          "value": 50
+        },
+        {
+          "type": "productivity_gain",
+          "value": 15
+        }
+      ]
+    },
+    {
+      "id": "opt_1767755662621_kfym56b2f",
+      "timestamp": "2026-01-07T03:14:22.621Z",
+      "category": "performance_improvement",
+      "name": "Response Time Optimization",
+      "description": "Reduce average response time by 20%",
+      "investment": 300,
+      "expectedBenefits": 1200,
+      "actualBenefits": 0,
+      "roi": 0,
+      "status": "in_progress",
+      "timeline": {},
+      "context": {},
+      "completedDate": null,
+      "measuredBenefits": []
+    },
+    {
+      "id": "opt_1767755670621_56i3az1cl",
+      "timestamp": "2026-01-07T03:14:30.621Z",
+      "category": "instruction_optimization",
+      "name": "NEFTune Implementation",
+      "description": "Implement noise injection for better robustness",
+      "investment": 500,
+      "expectedBenefits": 2000,
+      "actualBenefits": 2500,
+      "roi": 400,
+      "status": "completed",
+      "timeline": {},
+      "context": {},
+      "completedDate": "2026-01-07T03:14:30.632Z",
+      "measuredBenefits": [
+        {
+          "type": "time_saved",
+          "value": 50
+        },
+        {
+          "type": "productivity_gain",
+          "value": 15
+        }
+      ]
+    },
+    {
+      "id": "opt_1767755670628_b1d2torzu",
+      "timestamp": "2026-01-07T03:14:30.628Z",
+      "category": "performance_improvement",
+      "name": "Response Time Optimization",
+      "description": "Reduce average response time by 20%",
+      "investment": 300,
+      "expectedBenefits": 1200,
+      "actualBenefits": 0,
+      "roi": 0,
+      "status": "in_progress",
+      "timeline": {},
+      "context": {},
+      "completedDate": null,
+      "measuredBenefits": []
+    },
+    {
+      "id": "opt_1767755696143_wle3jrpd0",
+      "timestamp": "2026-01-07T03:14:56.143Z",
+      "category": "instruction_optimization",
+      "name": "NEFTune Implementation",
+      "description": "Implement noise injection for better robustness",
+      "investment": 500,
+      "expectedBenefits": 2000,
+      "actualBenefits": 2500,
+      "roi": 400,
+      "status": "completed",
+      "timeline": {},
+      "context": {},
+      "completedDate": "2026-01-07T03:14:56.179Z",
+      "measuredBenefits": [
+        {
+          "type": "time_saved",
+          "value": 50
+        },
+        {
+          "type": "productivity_gain",
+          "value": 15
+        }
+      ]
+    },
+    {
+      "id": "opt_1767755696163_i07qovh0c",
+      "timestamp": "2026-01-07T03:14:56.163Z",
+      "category": "performance_improvement",
+      "name": "Response Time Optimization",
+      "description": "Reduce average response time by 20%",
+      "investment": 300,
+      "expectedBenefits": 1200,
+      "actualBenefits": 0,
+      "roi": 0,
+      "status": "in_progress",
+      "timeline": {},
+      "context": {},
+      "completedDate": null,
+      "measuredBenefits": []
+    },
+    {
+      "id": "opt_1767755705219_cmhncwf8l",
+      "timestamp": "2026-01-07T03:15:05.219Z",
+      "category": "instruction_optimization",
+      "name": "NEFTune Implementation",
+      "description": "Implement noise injection for better robustness",
+      "investment": 500,
+      "expectedBenefits": 2000,
+      "actualBenefits": 2500,
+      "roi": 400,
+      "status": "completed",
+      "timeline": {},
+      "context": {},
+      "completedDate": "2026-01-07T03:15:05.227Z",
+      "measuredBenefits": [
+        {
+          "type": "time_saved",
+          "value": 50
+        },
+        {
+          "type": "productivity_gain",
+          "value": 15
+        }
+      ]
+    },
+    {
+      "id": "opt_1767755705225_zsgsf3cje",
+      "timestamp": "2026-01-07T03:15:05.225Z",
+      "category": "performance_improvement",
+      "name": "Response Time Optimization",
+      "description": "Reduce average response time by 20%",
+      "investment": 300,
+      "expectedBenefits": 1200,
+      "actualBenefits": 0,
+      "roi": 0,
+      "status": "in_progress",
+      "timeline": {},
+      "context": {},
+      "completedDate": null,
+      "measuredBenefits": []
+    },
+    {
+      "id": "opt_1767755728092_w2gp4t32q",
+      "timestamp": "2026-01-07T03:15:28.092Z",
+      "category": "instruction_optimization",
+      "name": "NEFTune Implementation",
+      "description": "Implement noise injection for better robustness",
+      "investment": 500,
+      "expectedBenefits": 2000,
+      "actualBenefits": 2500,
+      "roi": 400,
+      "status": "completed",
+      "timeline": {},
+      "context": {},
+      "completedDate": "2026-01-07T03:15:28.102Z",
+      "measuredBenefits": [
+        {
+          "type": "time_saved",
+          "value": 50
+        },
+        {
+          "type": "productivity_gain",
+          "value": 15
+        }
+      ]
+    },
+    {
+      "id": "opt_1767755728097_nqpppml87",
+      "timestamp": "2026-01-07T03:15:28.097Z",
+      "category": "performance_improvement",
+      "name": "Response Time Optimization",
+      "description": "Reduce average response time by 20%",
+      "investment": 300,
+      "expectedBenefits": 1200,
+      "actualBenefits": 0,
+      "roi": 0,
+      "status": "in_progress",
+      "timeline": {},
+      "context": {},
+      "completedDate": null,
+      "measuredBenefits": []
+    },
+    {
+      "id": "opt_1767755735628_jqhl8ctv8",
+      "timestamp": "2026-01-07T03:15:35.628Z",
+      "category": "instruction_optimization",
+      "name": "NEFTune Implementation",
+      "description": "Implement noise injection for better robustness",
+      "investment": 500,
+      "expectedBenefits": 2000,
+      "actualBenefits": 2500,
+      "roi": 400,
+      "status": "completed",
+      "timeline": {},
+      "context": {},
+      "completedDate": "2026-01-07T03:15:35.643Z",
+      "measuredBenefits": [
+        {
+          "type": "time_saved",
+          "value": 50
+        },
+        {
+          "type": "productivity_gain",
+          "value": 15
+        }
+      ]
+    },
+    {
+      "id": "opt_1767755735636_h4xec6i7q",
+      "timestamp": "2026-01-07T03:15:35.636Z",
+      "category": "performance_improvement",
+      "name": "Response Time Optimization",
+      "description": "Reduce average response time by 20%",
+      "investment": 300,
+      "expectedBenefits": 1200,
+      "actualBenefits": 0,
+      "roi": 0,
+      "status": "in_progress",
+      "timeline": {},
+      "context": {},
+      "completedDate": null,
+      "measuredBenefits": []
+    },
+    {
+      "id": "opt_1767755740670_skybtk93j",
+      "timestamp": "2026-01-07T03:15:40.670Z",
+      "category": "instruction_optimization",
+      "name": "NEFTune Implementation",
+      "description": "Implement noise injection for better robustness",
+      "investment": 500,
+      "expectedBenefits": 2000,
+      "actualBenefits": 2500,
+      "roi": 400,
+      "status": "completed",
+      "timeline": {},
+      "context": {},
+      "completedDate": "2026-01-07T03:15:40.676Z",
+      "measuredBenefits": [
+        {
+          "type": "time_saved",
+          "value": 50
+        },
+        {
+          "type": "productivity_gain",
+          "value": 15
+        }
+      ]
+    },
+    {
+      "id": "opt_1767755740674_2hpoxpzbf",
+      "timestamp": "2026-01-07T03:15:40.674Z",
+      "category": "performance_improvement",
+      "name": "Response Time Optimization",
+      "description": "Reduce average response time by 20%",
+      "investment": 300,
+      "expectedBenefits": 1200,
+      "actualBenefits": 0,
+      "roi": 0,
+      "status": "in_progress",
+      "timeline": {},
+      "context": {},
+      "completedDate": null,
+      "measuredBenefits": []
+    },
+    {
+      "id": "opt_1767755775555_ee3bunteg",
+      "timestamp": "2026-01-07T03:16:15.555Z",
+      "category": "instruction_optimization",
+      "name": "NEFTune Implementation",
+      "description": "Implement noise injection for better robustness",
+      "investment": 500,
+      "expectedBenefits": 2000,
+      "actualBenefits": 2500,
+      "roi": 400,
+      "status": "completed",
+      "timeline": {},
+      "context": {},
+      "completedDate": "2026-01-07T03:16:15.561Z",
+      "measuredBenefits": [
+        {
+          "type": "time_saved",
+          "value": 50
+        },
+        {
+          "type": "productivity_gain",
+          "value": 15
+        }
+      ]
+    },
+    {
+      "id": "opt_1767755775559_ax6o0q9jk",
+      "timestamp": "2026-01-07T03:16:15.559Z",
+      "category": "performance_improvement",
+      "name": "Response Time Optimization",
+      "description": "Reduce average response time by 20%",
+      "investment": 300,
+      "expectedBenefits": 1200,
+      "actualBenefits": 0,
+      "roi": 0,
+      "status": "in_progress",
+      "timeline": {},
+      "context": {},
+      "completedDate": null,
+      "measuredBenefits": []
+    }
+  ],
+  "categories": {
+    "instruction_optimization": {
+      "total": 8,
+      "successful": 8,
+      "totalROI": 3200
+    },
+    "performance_improvement": {
+      "total": 8,
+      "successful": 0,
+      "totalROI": 0
+    },
+    "error_reduction": {
+      "total": 0,
+      "successful": 0,
+      "totalROI": 0
+    },
+    "user_satisfaction": {
+      "total": 0,
+      "successful": 0,
+      "totalROI": 0
+    },
+    "automation_enhancement": {
+      "total": 0,
+      "successful": 0,
+      "totalROI": 0
+    },
+    "infrastructure_improvement": {
+      "total": 0,
+      "successful": 0,
+      "totalROI": 0
+    }
+  },
+  "trends": {
+    "quarterly": [
+      {
+        "quarter": "2026-Q1",
+        "investments": 4000,
+        "benefits": 20000,
+        "completedOptimizations": 8
+      }
+    ],
+    "yearly": [
+      {
+        "year": "2026",
+        "investments": 4000,
+        "benefits": 20000,
+        "completedOptimizations": 8
+      }
+    ]
+  },
+  "lastUpdated": "2026-01-07T03:16:15.559Z"
+}

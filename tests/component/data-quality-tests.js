@@ -4,7 +4,7 @@
  * @module tests/component/data-quality-tests
  */
 
-const path = require("path");
+const path = require('path');
 
 /**
  * Data Quality Test Suite
@@ -25,29 +25,29 @@ class DataQualityTests {
       // Load from test data if not provided
       const testDataPath = path.join(
         __dirname,
-        "../../test-data/amazon-test-sample.csv"
+        '../../test-data/amazon-test-sample.csv'
       );
-      const fs = require("fs");
+      const fs = require('fs');
 
       if (fs.existsSync(testDataPath)) {
-        const csv = require("csv-parser");
+        const csv = require('csv-parser');
         const data = [];
 
         await new Promise((resolve, reject) => {
           fs.createReadStream(testDataPath)
             .pipe(csv())
-            .on("data", (row) => {
+            .on('data', (row) => {
               if (data.length < count) {
                 data.push({
                   date: row.date,
                   amount: parseFloat(row.amount) || 0,
-                  items: row.items || "",
-                  orderId: row.orderId || `test-${data.length}`,
+                  items: row.items || '',
+                  orderId: row.orderId || `test-${data.length}`
                 });
               }
             })
-            .on("end", () => resolve())
-            .on("error", reject);
+            .on('end', () => resolve())
+            .on('error', reject);
         });
 
         this.sampleData = data;
@@ -67,13 +67,13 @@ class DataQualityTests {
     const data = [];
 
     for (let i = 0; i < count; i++) {
-      let order = {
+      const order = {
         date: new Date(Date.now() - Math.random() * 365 * 24 * 60 * 60 * 1000)
           .toISOString()
-          .split("T")[0],
+          .split('T')[0],
         amount: -(Math.random() * 100 + 5).toFixed(2),
         items: `Test item ${i + 1} and accessories`,
-        orderId: `QUAL-${String(i + 1).padStart(3, "0")}`,
+        orderId: `QUAL-${String(i + 1).padStart(3, '0')}`
       };
 
       // Introduce intentional quality issues for testing
@@ -81,15 +81,15 @@ class DataQualityTests {
 
       if (rand < 0.05) {
         // 5% invalid dates
-        order.date = "invalid-date";
+        order.date = 'invalid-date';
       } else if (rand < 0.1) {
         // 5% missing dates
-        order.date = "";
+        order.date = '';
       }
 
       if (rand >= 0.05 && rand < 0.08) {
         // 3% invalid amounts
-        order.amount = "not-a-number";
+        order.amount = 'not-a-number';
       } else if (rand >= 0.08 && rand < 0.11) {
         // 3% missing amounts
         order.amount = null;
@@ -97,12 +97,12 @@ class DataQualityTests {
 
       if (rand >= 0.11 && rand < 0.16) {
         // 5% empty/short items
-        order.items = rand < 0.13 ? "" : "x";
+        order.items = rand < 0.13 ? '' : 'x';
       }
 
       if (rand >= 0.16 && rand < 0.18) {
         // 2% duplicate order IDs
-        order.orderId = "QUAL-001"; // Force duplicate
+        order.orderId = 'QUAL-001'; // Force duplicate
       }
 
       data.push(order);
@@ -116,7 +116,7 @@ class DataQualityTests {
    * @returns {Object} Test results
    */
   testDataQuality() {
-    console.log("\n🔍 Testing Data Quality Component...");
+    console.log('\n🔍 Testing Data Quality Component...');
 
     const results = {
       tested: 0,
@@ -127,11 +127,11 @@ class DataQualityTests {
       emptyItems: 0,
       duplicateOrders: 0,
       qualityScore: 0,
-      issues: [],
+      issues: []
     };
 
     const orderIds = new Set();
-    const requiredFields = ["date", "amount", "items", "orderId"];
+    const requiredFields = ['date', 'amount', 'items', 'orderId'];
 
     this.sampleData.forEach((order) => {
       results.tested++;
@@ -139,7 +139,7 @@ class DataQualityTests {
 
       // Check required fields
       requiredFields.forEach((field) => {
-        if (!order[field] || order[field] === "") {
+        if (!order[field] || order[field] === '') {
           if (!results.missingFields.has(field)) {
             results.missingFields.set(field, 0);
           }
@@ -157,8 +157,8 @@ class DataQualityTests {
         recordValid = false;
         results.issues.push({
           orderId: order.orderId,
-          type: "Invalid Date",
-          value: order.date,
+          type: 'Invalid Date',
+          value: order.date
         });
       }
 
@@ -168,8 +168,8 @@ class DataQualityTests {
         recordValid = false;
         results.issues.push({
           orderId: order.orderId,
-          type: "Invalid Amount",
-          value: order.amount,
+          type: 'Invalid Amount',
+          value: order.amount
         });
       }
 
@@ -179,8 +179,8 @@ class DataQualityTests {
         recordValid = false;
         results.issues.push({
           orderId: order.orderId,
-          type: "Empty/Short Items",
-          value: order.items,
+          type: 'Empty/Short Items',
+          value: order.items
         });
       }
 
@@ -189,8 +189,8 @@ class DataQualityTests {
         results.duplicateOrders++;
         results.issues.push({
           orderId: order.orderId,
-          type: "Duplicate Order ID",
-          value: order.orderId,
+          type: 'Duplicate Order ID',
+          value: order.orderId
         });
       } else {
         orderIds.add(order.orderId);
@@ -204,32 +204,32 @@ class DataQualityTests {
     // Calculate quality score
     results.qualityScore = (results.validRecords / results.tested) * 100;
 
-    console.log(`\n📊 Data Quality Results:`);
+    console.log('\n📊 Data Quality Results:');
     console.log(`   Tested Records: ${results.tested}`);
     console.log(`   Valid Records: ${results.validRecords}`);
     console.log(`   Quality Score: ${results.qualityScore.toFixed(1)}%`);
 
-    console.log(`\n❌ Issues Found:`);
+    console.log('\n❌ Issues Found:');
     console.log(`   Invalid Dates: ${results.invalidDates}`);
     console.log(`   Invalid Amounts: ${results.invalidAmounts}`);
     console.log(`   Empty Items: ${results.emptyItems}`);
     console.log(`   Duplicate Orders: ${results.duplicateOrders}`);
 
     if (results.missingFields.size > 0) {
-      console.log(`\n📋 Missing Fields:`);
+      console.log('\n📋 Missing Fields:');
       for (const [field, count] of results.missingFields) {
         console.log(`   ${field}: ${count} records`);
       }
     }
 
     if (results.issues.length > 0) {
-      console.log(`\n⚠️  Sample Issues:`);
+      console.log('\n⚠️  Sample Issues:');
       results.issues.slice(0, 5).forEach((issue) => {
         console.log(`   • ${issue.type}: ${issue.orderId} (${issue.value})`);
       });
     }
 
-    this.testResults.set("dataQuality", results);
+    this.testResults.set('dataQuality', results);
     return results;
   }
 
@@ -246,8 +246,10 @@ class DataQualityTests {
    * @returns {number} Score as percentage
    */
   getScore() {
-    const results = this.testResults.get("dataQuality");
-    if (!results) return 0;
+    const results = this.testResults.get('dataQuality');
+    if (!results) {
+      return 0;
+    }
 
     return results.qualityScore;
   }
