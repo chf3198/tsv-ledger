@@ -1,0 +1,7 @@
+{
+  "name": "com.tsvledger.uxtesting",
+  "description": "Native messaging host for TSV Ledger UX testing",
+  "path": "/home/curtisfranks/tsv-ledger/native-host.js",
+  "type": "stdio",
+  "allowed_origins": ["chrome-extension://EXTENSION_ID/"]
+}

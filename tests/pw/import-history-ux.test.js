@@ -243,13 +243,61 @@ const { spawn } = require('child_process');
     console.log('📝 Refreshed import history text:', refreshedText);
 
     if (refreshedText.includes('No recent imports found') === false &&
-        (refreshedText.includes('Amazon') || refreshedText.includes('ZIP'))) {
+        (refreshedText.includes('Amazon') || refreshedText.includes('ZIP') || refreshedText.includes('CSV'))) {
       console.log('✅ Import history persisted across page refresh');
       testResults.passed++;
     } else {
       console.log('❌ Import history did not persist across page refresh');
       testResults.failed++;
       testResults.details.push('Import history should persist across page refreshes');
+    }
+
+    // Test 3.5: Test persistence across section navigation (without page reload)
+    console.log('\n📋 Test 3.5: Test persistence across section navigation');
+    testResults.total++;
+
+    try {
+      // Navigate away to dashboard section
+      await page.evaluate(() => {
+        const link = Array.from(document.querySelectorAll('[data-section]')).find(a => a.getAttribute('data-section') === 'dashboard');
+        if (link) {
+          link.click();
+        }
+      });
+      await page.waitForSelector('#dashboard.active', { timeout: 5000 });
+      console.log('✅ Navigated to dashboard section');
+
+      // Navigate back to data import section
+      await page.evaluate(() => {
+        const link = Array.from(document.querySelectorAll('[data-section]')).find(a => a.getAttribute('data-section') === 'data-import');
+        if (link) {
+          link.click();
+        }
+      });
+      await page.waitForSelector('#data-import.active', { timeout: 5000 });
+      console.log('✅ Navigated back to data import section');
+
+      // Check that history still shows after section navigation
+      const navText = await page.evaluate(() => {
+        const el = document.querySelector('#importHistory');
+        return el ? el.textContent : '';
+      });
+
+      console.log('📝 Import history after section navigation:', navText);
+
+      if (navText.includes('No recent imports found') === false &&
+          (navText.includes('CSV') || navText.includes('Amazon') || navText.includes('ZIP'))) {
+        console.log('✅ Import history persisted across section navigation');
+        testResults.passed++;
+      } else {
+        console.log('❌ Import history did not persist across section navigation');
+        testResults.failed++;
+        testResults.details.push('Import history should persist across section navigation without page reload');
+      }
+    } catch (error) {
+      console.log('❌ Section navigation test failed:', error.message);
+      testResults.failed++;
+      testResults.details.push('Section navigation test failed: ' + error.message);
     }
 
     // Test 4: Perform second import and verify accumulation

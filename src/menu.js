@@ -61,6 +61,12 @@ module.exports = [
     dataSection: 'premium-features'
   },
   {
+    href: '/admin.html',
+    text: 'Admin',
+    icon: 'fas fa-user-shield',
+    dataSection: null
+  },
+  {
     href: '#',
     text: 'About',
     icon: 'fas fa-info-circle',

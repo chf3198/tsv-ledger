@@ -137,9 +137,10 @@ class AmazonZipParser {
   /**
      * Validate ZIP file (basic validation)
      * @param {string} zipFilePath - Path to ZIP file
+     * @param {string} originalName - Original filename (for extension validation)
      * @returns {Object} - Validation result
      */
-  validateZipFile(zipFilePath) {
+  validateZipFile(zipFilePath, originalName) {
     try {
       // Check file exists
       if (!fs.existsSync(zipFilePath)) {
@@ -150,8 +151,9 @@ class AmazonZipParser {
         };
       }
 
-      // Check file extension
-      const ext = path.extname(zipFilePath).toLowerCase();
+      // Check file extension using original name if provided, otherwise use path
+      const filenameToCheck = originalName || zipFilePath;
+      const ext = path.extname(filenameToCheck).toLowerCase();
       if (ext !== '.zip') {
         return {
           isValid: false,

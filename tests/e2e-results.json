@@ -58,7 +58,7 @@
         "testMatch": [
           "**/*.@(spec|test).?(c|m)[jt]s?(x)"
         ],
-        "timeout": 60000
+        "timeout": 120000
       },
       {
         "outputDir": "/mnt/chromeos/removable/Drive/repos/tsv-ledger/test-results",
@@ -74,7 +74,7 @@
         "testMatch": [
           "**/*.@(spec|test).?(c|m)[jt]s?(x)"
         ],
-        "timeout": 60000
+        "timeout": 120000
       },
       {
         "outputDir": "/mnt/chromeos/removable/Drive/repos/tsv-ledger/test-results",
@@ -90,7 +90,7 @@
         "testMatch": [
           "**/*.@(spec|test).?(c|m)[jt]s?(x)"
         ],
-        "timeout": 60000
+        "timeout": 120000
       },
       {
         "outputDir": "/mnt/chromeos/removable/Drive/repos/tsv-ledger/test-results",
@@ -106,7 +106,7 @@
         "testMatch": [
           "**/*.@(spec|test).?(c|m)[jt]s?(x)"
         ],
-        "timeout": 60000
+        "timeout": 120000
       },
       {
         "outputDir": "/mnt/chromeos/removable/Drive/repos/tsv-ledger/test-results",
@@ -122,7 +122,7 @@
         "testMatch": [
           "**/*.@(spec|test).?(c|m)[jt]s?(x)"
         ],
-        "timeout": 60000
+        "timeout": 120000
       }
     ],
     "shard": null,
@@ -141,113 +141,556 @@
   },
   "suites": [
     {
-      "title": "debug-benefits.test.js",
-      "file": "debug-benefits.test.js",
+      "title": "comprehensive-ux-audit.spec.js",
+      "file": "comprehensive-ux-audit.spec.js",
       "column": 0,
       "line": 0,
       "specs": [],
       "suites": [
         {
-          "title": "Benefits Management Debug",
-          "file": "debug-benefits.test.js",
-          "line": 8,
+          "title": "Comprehensive UX Audit",
+          "file": "comprehensive-ux-audit.spec.js",
+          "line": 37,
           "column": 6,
-          "specs": [
+          "specs": [],
+          "suites": [
             {
-              "title": "debug benefits management section",
-              "ok": false,
-              "tags": [],
-              "tests": [
+              "title": "Navigation Structure",
+              "file": "comprehensive-ux-audit.spec.js",
+              "line": 86,
+              "column": 8,
+              "specs": [
                 {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
+                  "title": "sidebar contains all menu items",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
                     {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
-                      "status": "failed",
-                      "duration": 2609,
-                      "error": {
-                        "message": "Error: locator.textContent: Error: strict mode violation: locator('#benefits-management p') resolved to 3 elements:\n    1) <p class=\"text-muted\">↵                Manage Amazon items categorized …</p> aka getByText('Manage Amazon items')\n    2) <p>↵                    Configure which Amazon purch…</p> aka getByText('Configure which Amazon')\n    3) <p class=\"text-muted small\">↵                    Quickly select common employ…</p> aka getByText('Quickly select common')\n\nCall log:\n\u001b[2m  - waiting for locator('#benefits-management p')\u001b[22m\n",
-                        "stack": "Error: locator.textContent: Error: strict mode violation: locator('#benefits-management p') resolved to 3 elements:\n    1) <p class=\"text-muted\">↵                Manage Amazon items categorized …</p> aka getByText('Manage Amazon items')\n    2) <p>↵                    Configure which Amazon purch…</p> aka getByText('Configure which Amazon')\n    3) <p class=\"text-muted small\">↵                    Quickly select common employ…</p> aka getByText('Quickly select common')\n\nCall log:\n\u001b[2m  - waiting for locator('#benefits-management p')\u001b[22m\n\n    at /mnt/chromeos/removable/Drive/repos/tsv-ledger/tests/e2e/debug-benefits.test.js:55:40",
-                        "location": {
-                          "file": "/mnt/chromeos/removable/Drive/repos/tsv-ledger/tests/e2e/debug-benefits.test.js",
-                          "column": 40,
-                          "line": 55
-                        },
-                        "snippet": "\u001b[0m \u001b[90m 53 |\u001b[39m     \u001b[36mconst\u001b[39m headerText \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m header\u001b[33m.\u001b[39mtextContent()\u001b[33m;\u001b[39m\n \u001b[90m 54 |\u001b[39m     console\u001b[33m.\u001b[39mlog(\u001b[32m\"Header text:\"\u001b[39m\u001b[33m,\u001b[39m headerText)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 55 |\u001b[39m\n \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 56 |\u001b[39m     \u001b[36mconst\u001b[39m description \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m\"#benefits-management p\"\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 57 |\u001b[39m     \u001b[36mconst\u001b[39m descText \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m description\u001b[33m.\u001b[39mtextContent()\u001b[33m;\u001b[39m\n \u001b[90m 58 |\u001b[39m     console\u001b[33m.\u001b[39mlog(\u001b[32m\"Description text:\"\u001b[39m\u001b[33m,\u001b[39m descText)\u001b[33m;\u001b[39m\u001b[0m"
-                      },
-                      "errors": [
-                        {
-                          "location": {
-                            "file": "/mnt/chromeos/removable/Drive/repos/tsv-ledger/tests/e2e/debug-benefits.test.js",
-                            "column": 40,
-                            "line": 55
-                          },
-                          "message": "Error: locator.textContent: Error: strict mode violation: locator('#benefits-management p') resolved to 3 elements:\n    1) <p class=\"text-muted\">↵                Manage Amazon items categorized …</p> aka getByText('Manage Amazon items')\n    2) <p>↵                    Configure which Amazon purch…</p> aka getByText('Configure which Amazon')\n    3) <p class=\"text-muted small\">↵                    Quickly select common employ…</p> aka getByText('Quickly select common')\n\nCall log:\n\u001b[2m  - waiting for locator('#benefits-management p')\u001b[22m\n\n\n\u001b[0m \u001b[90m 53 |\u001b[39m     \u001b[36mconst\u001b[39m headerText \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m header\u001b[33m.\u001b[39mtextContent()\u001b[33m;\u001b[39m\n \u001b[90m 54 |\u001b[39m     console\u001b[33m.\u001b[39mlog(\u001b[32m\"Header text:\"\u001b[39m\u001b[33m,\u001b[39m headerText)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 55 |\u001b[39m\n \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 56 |\u001b[39m     \u001b[36mconst\u001b[39m description \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m\"#benefits-management p\"\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 57 |\u001b[39m     \u001b[36mconst\u001b[39m descText \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m description\u001b[33m.\u001b[39mtextContent()\u001b[33m;\u001b[39m\n \u001b[90m 58 |\u001b[39m     console\u001b[33m.\u001b[39mlog(\u001b[32m\"Description text:\"\u001b[39m\u001b[33m,\u001b[39m descText)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[2m    at /mnt/chromeos/removable/Drive/repos/tsv-ledger/tests/e2e/debug-benefits.test.js:55:40\u001b[22m"
-                        }
-                      ],
-                      "stdout": [
-                        {
-                          "text": "🔍 Starting benefits management debug...\n"
-                        },
-                        {
-                          "text": "✅ Navigation menu found\n"
-                        },
-                        {
-                          "text": "✅ Benefits management link found in main navigation\n"
-                        },
-                        {
-                          "text": "✅ Clicked benefits management link\n"
-                        },
-                        {
-                          "text": "✅ Benefits management section is active\n"
-                        },
-                        {
-                          "text": "Section visible: \u001b[33mtrue\u001b[39m\n"
-                        },
-                        {
-                          "text": "Header text: Benefits Management\n"
-                        }
-                      ],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-01-02T09:00:35.795Z",
+                      "timeout": 120000,
                       "annotations": [],
-                      "attachments": [
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [
                         {
-                          "name": "screenshot",
-                          "contentType": "image/png",
-                          "path": "/mnt/chromeos/removable/Drive/repos/tsv-ledger/test-results/debug-benefits-Benefits-Ma-2dc28-benefits-management-section-chromium/test-failed-1.png"
-                        },
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "/mnt/chromeos/removable/Drive/repos/tsv-ledger/test-results/debug-benefits-Benefits-Ma-2dc28-benefits-management-section-chromium/video.webm"
-                        },
-                        {
-                          "name": "error-context",
-                          "contentType": "text/markdown",
-                          "path": "/mnt/chromeos/removable/Drive/repos/tsv-ledger/test-results/debug-benefits-Benefits-Ma-2dc28-benefits-management-section-chromium/error-context.md"
+                          "workerIndex": 0,
+                          "parallelIndex": 0,
+                          "status": "interrupted",
+                          "duration": 463,
+                          "error": {
+                            "message": "Error: browserContext.newPage: Test ended.",
+                            "stack": "Error: browserContext.newPage: Test ended."
+                          },
+                          "errors": [
+                            {
+                              "message": "Error: browserContext.newPage: Test ended."
+                            }
+                          ],
+                          "stdout": [],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2026-01-07T06:26:11.125Z",
+                          "annotations": [],
+                          "attachments": []
                         }
                       ],
-                      "errorLocation": {
-                        "file": "/mnt/chromeos/removable/Drive/repos/tsv-ledger/tests/e2e/debug-benefits.test.js",
-                        "column": 40,
-                        "line": 55
-                      }
+                      "status": "skipped"
                     }
                   ],
-                  "status": "unexpected"
+                  "id": "681136d1c0bffceca13f-30405dfa9650103b8e61",
+                  "file": "comprehensive-ux-audit.spec.js",
+                  "line": 88,
+                  "column": 5
+                },
+                {
+                  "title": "sidebar toggle works",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 120000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [],
+                      "status": "skipped"
+                    }
+                  ],
+                  "id": "681136d1c0bffceca13f-fdeedd32d52671482084",
+                  "file": "comprehensive-ux-audit.spec.js",
+                  "line": 105,
+                  "column": 5
+                },
+                {
+                  "title": "sidebar contains all menu items",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 120000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "firefox",
+                      "projectName": "firefox",
+                      "results": [],
+                      "status": "skipped"
+                    }
+                  ],
+                  "id": "681136d1c0bffceca13f-9da6536a8bfc1076c0ca",
+                  "file": "comprehensive-ux-audit.spec.js",
+                  "line": 88,
+                  "column": 5
+                },
+                {
+                  "title": "sidebar toggle works",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 120000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "firefox",
+                      "projectName": "firefox",
+                      "results": [],
+                      "status": "skipped"
+                    }
+                  ],
+                  "id": "681136d1c0bffceca13f-2349df31749f8b21fc39",
+                  "file": "comprehensive-ux-audit.spec.js",
+                  "line": 105,
+                  "column": 5
+                },
+                {
+                  "title": "sidebar contains all menu items",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 120000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "webkit",
+                      "projectName": "webkit",
+                      "results": [],
+                      "status": "skipped"
+                    }
+                  ],
+                  "id": "681136d1c0bffceca13f-b01d93333740b140924d",
+                  "file": "comprehensive-ux-audit.spec.js",
+                  "line": 88,
+                  "column": 5
+                },
+                {
+                  "title": "sidebar toggle works",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 120000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "webkit",
+                      "projectName": "webkit",
+                      "results": [],
+                      "status": "skipped"
+                    }
+                  ],
+                  "id": "681136d1c0bffceca13f-5470b2aa9cda57c3f3eb",
+                  "file": "comprehensive-ux-audit.spec.js",
+                  "line": 105,
+                  "column": 5
+                },
+                {
+                  "title": "sidebar contains all menu items",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 120000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "mobile-chrome",
+                      "projectName": "mobile-chrome",
+                      "results": [],
+                      "status": "skipped"
+                    }
+                  ],
+                  "id": "681136d1c0bffceca13f-5d7d87697f84071bf4e9",
+                  "file": "comprehensive-ux-audit.spec.js",
+                  "line": 88,
+                  "column": 5
+                },
+                {
+                  "title": "sidebar toggle works",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 120000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "mobile-chrome",
+                      "projectName": "mobile-chrome",
+                      "results": [],
+                      "status": "skipped"
+                    }
+                  ],
+                  "id": "681136d1c0bffceca13f-2dbcf585589ee03246ed",
+                  "file": "comprehensive-ux-audit.spec.js",
+                  "line": 105,
+                  "column": 5
+                },
+                {
+                  "title": "sidebar contains all menu items",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 120000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "mobile-safari",
+                      "projectName": "mobile-safari",
+                      "results": [],
+                      "status": "skipped"
+                    }
+                  ],
+                  "id": "681136d1c0bffceca13f-272a80b77770d086c72a",
+                  "file": "comprehensive-ux-audit.spec.js",
+                  "line": 88,
+                  "column": 5
+                },
+                {
+                  "title": "sidebar toggle works",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 120000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "mobile-safari",
+                      "projectName": "mobile-safari",
+                      "results": [],
+                      "status": "skipped"
+                    }
+                  ],
+                  "id": "681136d1c0bffceca13f-c7fa7bf5f50750a866ee",
+                  "file": "comprehensive-ux-audit.spec.js",
+                  "line": 105,
+                  "column": 5
                 }
-              ],
-              "id": "6c6b0bff2dd196634200-8902187285d00f04609f",
-              "file": "debug-benefits.test.js",
-              "line": 22,
-              "column": 3
+              ]
+            },
+            {
+              "title": "Component Styling Verification",
+              "file": "comprehensive-ux-audit.spec.js",
+              "line": 149,
+              "column": 8,
+              "specs": [
+                {
+                  "title": "Bootstrap CSS is loaded",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 120000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [],
+                      "status": "skipped"
+                    }
+                  ],
+                  "id": "681136d1c0bffceca13f-ce44603c0baa6d8ff539",
+                  "file": "comprehensive-ux-audit.spec.js",
+                  "line": 151,
+                  "column": 5
+                },
+                {
+                  "title": "FontAwesome icons render",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 120000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [],
+                      "status": "skipped"
+                    }
+                  ],
+                  "id": "681136d1c0bffceca13f-b46f8925141fa58408fb",
+                  "file": "comprehensive-ux-audit.spec.js",
+                  "line": 171,
+                  "column": 5
+                },
+                {
+                  "title": "cards have proper styling",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 120000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [],
+                      "status": "skipped"
+                    }
+                  ],
+                  "id": "681136d1c0bffceca13f-cccceaf64a57db15d30d",
+                  "file": "comprehensive-ux-audit.spec.js",
+                  "line": 186,
+                  "column": 5
+                },
+                {
+                  "title": "Bootstrap CSS is loaded",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 120000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "firefox",
+                      "projectName": "firefox",
+                      "results": [],
+                      "status": "skipped"
+                    }
+                  ],
+                  "id": "681136d1c0bffceca13f-71114c7d62f42d663b08",
+                  "file": "comprehensive-ux-audit.spec.js",
+                  "line": 151,
+                  "column": 5
+                },
+                {
+                  "title": "FontAwesome icons render",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 120000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "firefox",
+                      "projectName": "firefox",
+                      "results": [],
+                      "status": "skipped"
+                    }
+                  ],
+                  "id": "681136d1c0bffceca13f-73ff192d1c4c4584d03d",
+                  "file": "comprehensive-ux-audit.spec.js",
+                  "line": 171,
+                  "column": 5
+                },
+                {
+                  "title": "cards have proper styling",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 120000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "firefox",
+                      "projectName": "firefox",
+                      "results": [],
+                      "status": "skipped"
+                    }
+                  ],
+                  "id": "681136d1c0bffceca13f-963c34b5067889b32bfe",
+                  "file": "comprehensive-ux-audit.spec.js",
+                  "line": 186,
+                  "column": 5
+                },
+                {
+                  "title": "Bootstrap CSS is loaded",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 120000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "webkit",
+                      "projectName": "webkit",
+                      "results": [],
+                      "status": "skipped"
+                    }
+                  ],
+                  "id": "681136d1c0bffceca13f-fc982345d17a7caf6d0e",
+                  "file": "comprehensive-ux-audit.spec.js",
+                  "line": 151,
+                  "column": 5
+                },
+                {
+                  "title": "FontAwesome icons render",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 120000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "webkit",
+                      "projectName": "webkit",
+                      "results": [],
+                      "status": "skipped"
+                    }
+                  ],
+                  "id": "681136d1c0bffceca13f-0f7bccd6a483d01efefb",
+                  "file": "comprehensive-ux-audit.spec.js",
+                  "line": 171,
+                  "column": 5
+                },
+                {
+                  "title": "cards have proper styling",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 120000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "webkit",
+                      "projectName": "webkit",
+                      "results": [],
+                      "status": "skipped"
+                    }
+                  ],
+                  "id": "681136d1c0bffceca13f-10a6cccb73dff09cba6c",
+                  "file": "comprehensive-ux-audit.spec.js",
+                  "line": 186,
+                  "column": 5
+                },
+                {
+                  "title": "Bootstrap CSS is loaded",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 120000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "mobile-chrome",
+                      "projectName": "mobile-chrome",
+                      "results": [],
+                      "status": "skipped"
+                    }
+                  ],
+                  "id": "681136d1c0bffceca13f-410fe48b344dd69ebd39",
+                  "file": "comprehensive-ux-audit.spec.js",
+                  "line": 151,
+                  "column": 5
+                },
+                {
+                  "title": "FontAwesome icons render",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 120000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "mobile-chrome",
+                      "projectName": "mobile-chrome",
+                      "results": [],
+                      "status": "skipped"
+                    }
+                  ],
+                  "id": "681136d1c0bffceca13f-92b4824dac7ecad01c80",
+                  "file": "comprehensive-ux-audit.spec.js",
+                  "line": 171,
+                  "column": 5
+                },
+                {
+                  "title": "cards have proper styling",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 120000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "mobile-chrome",
+                      "projectName": "mobile-chrome",
+                      "results": [],
+                      "status": "skipped"
+                    }
+                  ],
+                  "id": "681136d1c0bffceca13f-25c1b83db8102539cc56",
+                  "file": "comprehensive-ux-audit.spec.js",
+                  "line": 186,
+                  "column": 5
+                },
+                {
+                  "title": "Bootstrap CSS is loaded",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 120000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "mobile-safari",
+                      "projectName": "mobile-safari",
+                      "results": [],
+                      "status": "skipped"
+                    }
+                  ],
+                  "id": "681136d1c0bffceca13f-1e960eacbcaeb58cb6bc",
+                  "file": "comprehensive-ux-audit.spec.js",
+                  "line": 151,
+                  "column": 5
+                },
+                {
+                  "title": "FontAwesome icons render",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 120000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "mobile-safari",
+                      "projectName": "mobile-safari",
+                      "results": [],
+                      "status": "skipped"
+                    }
+                  ],
+                  "id": "681136d1c0bffceca13f-da240cd9321292cdee89",
+                  "file": "comprehensive-ux-audit.spec.js",
+                  "line": 171,
+                  "column": 5
+                },
+                {
+                  "title": "cards have proper styling",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 120000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "mobile-safari",
+                      "projectName": "mobile-safari",
+                      "results": [],
+                      "status": "skipped"
+                    }
+                  ],
+                  "id": "681136d1c0bffceca13f-ac41cb0f67029c172efc",
+                  "file": "comprehensive-ux-audit.spec.js",
+                  "line": 186,
+                  "column": 5
+                }
+              ]
             }
           ]
         }
@@ -256,11 +699,11 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-01-02T09:00:26.253Z",
-    "duration": 12815.934000000001,
+    "startTime": "2026-01-07T06:26:00.315Z",
+    "duration": 13279.994,
     "expected": 0,
-    "skipped": 0,
-    "unexpected": 1,
+    "skipped": 25,
+    "unexpected": 0,
     "flaky": 0
   }
 }

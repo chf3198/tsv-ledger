@@ -1,0 +1,29 @@
+{
+  "manifest_version": 3,
+  "name": "TSV Ledger UX Testing Controller",
+  "version": "1.0",
+  "description": "Chrome extension for automated UX testing of TSV Ledger",
+  "permissions": [
+    "activeTab",
+    "debugger",
+    "nativeMessaging",
+    "storage",
+    "tabs"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "UX Testing Controller"
+  },
+  "content_scripts": [
+    {
+      "matches": ["http://localhost:3000/*", "https://localhost:3000/*"],
+      "js": ["content.js"]
+    }
+  ],
+  "externally_connectable": {
+    "matches": ["http://localhost:3000/*", "https://localhost:3000/*"]
+  }
+}

@@ -47,6 +47,7 @@ const amazonRoutes = require("./src/routes/amazon");
 const employeeBenefitsRoutes = require("./src/routes/employee-benefits");
 const subscriptionRoutes = require("./src/routes/subscription");
 const geographicRoutes = require("./src/routes/geographic");
+const adminRoutes = require("./src/routes/admin");
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -163,6 +164,7 @@ app.use("/api", amazonRoutes);
 app.use("/api", employeeBenefitsRoutes);
 app.use("/api", subscriptionRoutes);
 app.use("/api", geographicRoutes);
+app.use("/api", adminRoutes);
 
 // Menu API endpoint
 app.get("/api/menu.json", (req, res) => {

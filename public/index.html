@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <!-- id="tsv-shell-injected" - Marker to prevent server-side shell injection (this page has its own navigation) -->
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>TSV Ledger - Expenditure Tracker</title>
@@ -8,11 +9,6 @@
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
       rel="stylesheet"
-    />
-    <!-- Shoelace CSS for components -->
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.15.0/dist/themes/light.css"
     />
     <!-- Font Awesome for icons -->
     <link
@@ -42,83 +38,93 @@
         font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
       }
 
-      /* Shoelace Drawer Styles - Navigation Sidebar Positioning
-     *
-     * The sidebar uses Shoelace's sl-drawer component with Shadow DOM.
-     * We need to override the default positioning to place it below the fixed navbar.
-     *
-     * Key positioning strategy:
-     * - Desktop: Fixed position below 60px navbar, full height minus navbar
-     * - Mobile: Default Shoelace overlay behavior
-     * - Content: 80px top padding to prevent overlap with navbar
-     */
-      .sidebar-drawer::part(panel) {
-        background: linear-gradient(
-          135deg,
-          var(--primary-color) 0%,
-          #34495e 100%
-        );
+      /* Bootstrap Offcanvas Sidebar Styles */
+      .sidebar-offcanvas {
+        background: linear-gradient(135deg, var(--primary-color) 0%, #34495e 100%);
         color: white;
-        width: var(--sidebar-width);
+        width: var(--sidebar-width) !important;
+        max-width: var(--sidebar-width) !important;
         border: none;
       }
 
-      .sidebar-drawer::part(overlay) {
-        background: rgba(0, 0, 0, 0.5);
+      .sidebar-offcanvas .sidebar-header {
+        background: rgba(0, 0, 0, 0.1);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 1rem 1.5rem;
       }
 
-      /* Desktop sidebar positioning (≥992px)
-     * - Fixed position to keep sidebar visible during scroll
-     * - Top: 60px to account for Bootstrap navbar height
-     * - Height: calc(100vh - 60px) for full viewport minus navbar
-     * - Override Shoelace defaults with !important for Shadow DOM penetration
-     */
+      .sidebar-offcanvas .sidebar-header h5 {
+        color: white;
+        margin: 0;
+      }
+
+      .sidebar-offcanvas .sidebar-body {
+        padding: 1rem 0;
+      }
+
+      /* Desktop sidebar behavior */
       @media (min-width: 992px) {
-        .sidebar-drawer {
-          --size: 100vh;
-          position: fixed;
-          top: 60px; /* Account for navbar height */
-          left: 0;
-          height: calc(100vh - 60px); /* Subtract navbar height */
-          z-index: 1000;
-          transform: none !important;
-          visibility: visible !important;
-          opacity: 1 !important;
-        }
-
-        .sidebar-drawer::part(panel) {
-          top: 0px !important; /* Position relative to the drawer host */
-          height: 100% !important; /* Fill the drawer height */
+        .sidebar-offcanvas {
           position: fixed !important;
-          left: 0 !important;
-          top: 60px !important; /* Position below navbar */
-          height: calc(100vh - 60px) !important; /* Full height minus navbar */
-          width: var(--sidebar-width) !important;
+          top: 60px;
+          left: 0;
+          height: calc(100vh - 60px);
+          z-index: 1000;
         }
 
-        .sidebar-drawer[open] {
-          transform: translateX(0) !important;
-        }
-
-        .sidebar-drawer:not([open]) {
+        .sidebar-offcanvas:not(.show) {
           transform: translateX(-100%) !important;
+          visibility: hidden !important;
         }
 
-        .sidebar-drawer::part(overlay) {
-          display: none;
+        .sidebar-offcanvas.show {
+          transform: translateX(0) !important;
+          visibility: visible !important;
+        }
+
+        .main-content {
+          margin-left: var(--sidebar-width);
+          transition: margin-left 0.3s ease;
+        }
+
+        .main-content.expanded {
+          margin-left: 0;
         }
       }
 
       /* Mobile sidebar behavior */
       @media (max-width: 991px) {
-        .sidebar-drawer {
-          --size: var(--sidebar-width);
+        .sidebar-offcanvas {
+          top: 60px;
+          height: calc(100vh - 60px);
         }
 
-        .sidebar-drawer::part(panel) {
-          top: 60px !important; /* Position below navbar on mobile */
-          height: calc(100vh - 60px) !important; /* Full height minus navbar */
+        .main-content {
+          margin-left: 0;
         }
+      }
+
+      /* Sidebar navigation link styles */
+      .sidebar-offcanvas .nav-link {
+        color: rgba(255, 255, 255, 0.8);
+        padding: 0.75rem 1.5rem;
+        border-radius: 0;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+      }
+
+      .sidebar-offcanvas .nav-link:hover,
+      .sidebar-offcanvas .nav-link.active {
+        color: white;
+        background: rgba(255, 255, 255, 0.1);
+        border-left: 3px solid var(--secondary-color);
+      }
+
+      .sidebar-offcanvas .nav-link i {
+        margin-right: 0.75rem;
+        width: 20px;
+        text-align: center;
       }
 
       .sidebar-header {
@@ -485,6 +491,11 @@
           <button
             class="navbar-toggler"
             type="button"
+          <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="offcanvas"
+            data-bs-target="#sidebar"
             aria-controls="sidebar"
             aria-label="Toggle navigation"
           >
@@ -494,12 +505,20 @@
       </div>
     </nav>
 
-    <!-- Shoelace Drawer Sidebar -->
-    <sl-drawer id="sidebar" placement="start" class="sidebar-drawer" no-header>
-      <nav class="nav nav-pills flex-column p-3" id="main-navigation">
-        <!-- Navigation items will be populated by JavaScript (shoelace-navigation.js) -->
-      </nav>
-    </sl-drawer>
+    <!-- Bootstrap Offcanvas Sidebar -->
+    <div class="offcanvas offcanvas-start sidebar-offcanvas" tabindex="-1" id="sidebar" aria-labelledby="sidebarLabel" data-bs-backdrop="false" data-bs-scroll="true">
+      <div class="offcanvas-header sidebar-header">
+        <h5 class="offcanvas-title" id="sidebarLabel">
+          <i class="fas fa-chart-line me-2"></i>TSV Ledger
+        </h5>
+        <button type="button" class="btn-close btn-close-white d-lg-none" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+      </div>
+      <div class="offcanvas-body sidebar-body">
+        <nav class="nav nav-pills flex-column" id="main-navigation">
+          <!-- Navigation items will be populated by JavaScript -->
+        </nav>
+      </div>
+    </div>
 
     <!-- Main Content Area -->
     <main class="main-content">
@@ -1879,8 +1898,6 @@
 
     <!-- Bootstrap 5 JS Bundle -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- Shoelace JS for components -->
-    <script type="module" src="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.15.0/dist/shoelace.js"></script>
     <!-- Navigation JavaScript -->
     <script src="js/shoelace-navigation-new.js"></script>
     <!-- Employee Benefits JavaScript -->
@@ -2103,8 +2120,8 @@
         // Initialize Amazon ZIP import form
         initializeAmazonZipImport();
 
-        // Initialize CSV import form
-        initializeCsvImport();
+        // CSV import form is handled by app.js module - removed duplicate handler
+        // initializeCsvImport();  // REMOVED: Was causing duplicate API calls
 
         // Initialize import history display
         updateImportHistoryDisplay();
@@ -2496,77 +2513,10 @@
         updateImportHistoryDisplay();
       }
 
-      function initializeCsvImport() {
-        const csvForm = document.getElementById("csvImportForm");
-        const fileInput = document.getElementById("csvFile");
-        const statusDiv = document.getElementById("importStatus");
-
-        if (!csvForm || !fileInput) return;
-
-        csvForm.addEventListener("submit", async function (e) {
-          e.preventDefault();
-
-          const file = fileInput.files[0];
-          if (!file) {
-            showToast("Please select a file", "warning");
-            return;
-          }
-
-          // Show loading
-          statusDiv.style.display = "block";
-          statusDiv.innerHTML =
-            '<div class="alert alert-info"><i class="fas fa-spinner fa-spin me-2"></i>Processing CSV file...</div>';
-
-          try {
-            // Read file content
-            const text = await file.text();
-
-            // Send to server
-            const response = await fetch("/api/import-csv", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ csvData: text }),
-            });
-
-            const result = await response.json();
-
-            if (response.ok) {
-              statusDiv.innerHTML = `
-                <div class="alert alert-success">
-                  <i class="fas fa-check-circle me-2"></i>
-                  <strong>Import Successful!</strong><br>
-                  ${result.message || "Data imported successfully"}
-                </div>
-              `;
-
-              // Reset form
-              csvForm.reset();
-
-              // Reload expenditures
-              loadExpenditures();
-
-              // Update import history
-              updateImportHistoryDisplay();
-            } else {
-              statusDiv.innerHTML = `
-                <div class="alert alert-danger">
-                  <i class="fas fa-exclamation-triangle me-2"></i>
-                  <strong>Import Failed</strong><br>
-                  ${result.error || "Unknown error"}
-                </div>
-              `;
-            }
-          } catch (error) {
-            statusDiv.innerHTML = `
-              <div class="alert alert-danger">
-                <i class="fas fa-exclamation-triangle me-2"></i>
-                <strong>Network Error</strong><br>
-                ${error.message}
-              </div>
-            `;
-          }
-        });
-      }
+      // REMOVED: initializeCsvImport() - This function was causing duplicate API calls
+      // The CSV import form is now handled exclusively by app.js module
+      // See public/js/app.js for the single event handler
+      // Removed on: 2025-07-14 to fix duplicate Import History entries bug
 
       // Import History Management
       function saveImportHistory(importRecord) {

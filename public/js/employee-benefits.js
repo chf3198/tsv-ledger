@@ -51,7 +51,9 @@ class EmployeeBenefitsManager {
         throw new Error("Failed to fetch Amazon items");
       }
 
-      this.amazonItems = await response.json();
+      const data = await response.json();
+      // API returns { items: [...], total: ..., summary: ... } - extract the items array
+      this.amazonItems = Array.isArray(data) ? data : (data.items || []);
 
       // Initialize progressive allocations for all items - default to 100% business supplies
       this.amazonItems.forEach((item) => {
@@ -76,7 +78,9 @@ class EmployeeBenefitsManager {
       try {
         console.log("🔄 Fallback: Loading all Amazon items...");
         const fallbackResponse = await fetch("/api/amazon-items");
-        this.amazonItems = await fallbackResponse.json();
+        const fallbackData = await fallbackResponse.json();
+        // API returns { items: [...], total: ..., summary: ... } - extract the items array
+        this.amazonItems = Array.isArray(fallbackData) ? fallbackData : (fallbackData.items || []);
 
         // Initialize progressive allocations for fallback items too
         this.amazonItems.forEach((item) => {

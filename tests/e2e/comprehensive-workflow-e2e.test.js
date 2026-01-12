@@ -56,8 +56,8 @@ test.describe('Comprehensive Data Import to Benefits Assignment E2E', () => {
     await expect(page.locator('#data-import.active')).toBeVisible();
     await page.waitForTimeout(2000); // Pause to observe
 
-    // Import Amazon CSV data
-    const csvFilePath = path.join(__dirname, '../data/test-amazon-orders.csv');
+    // Import real Amazon CSV data (subset of actual TSV business data)
+    const csvFilePath = path.join(__dirname, '../data/real-amazon-orders.csv');
     await page.setInputFiles('#csvFile', csvFilePath);
     await page.waitForTimeout(1000); // Pause to observe file selection
     await page.click('button[type="submit"]');
@@ -209,9 +209,9 @@ test.describe('Comprehensive Data Import to Benefits Assignment E2E', () => {
   }) => {
     console.log('🔄 Testing multiple imports with benefits assignment...');
 
-    // Import first dataset
+    // Import first dataset - Real Amazon data
     await PageHelpers.navigateToSection(page, 'data-import');
-    const csvFilePath1 = path.join(__dirname, '../data/test-amazon-orders.csv');
+    const csvFilePath1 = path.join(__dirname, '../data/real-amazon-orders.csv');
     await page.setInputFiles('#csvFile', csvFilePath1);
     await page.click('button[type="submit"]');
     await page.waitForTimeout(3000);

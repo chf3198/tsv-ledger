@@ -57,7 +57,7 @@ router.get('/geographic-analysis', async (req, res) => {
       }
 
       // Use geographic analysis engine
-      const analysis = await geographicAnalysisEngine.analyzeGeographicData(expenditures);
+      const analysis = analyzeGeographicData(expenditures);
 
       res.json(analysis);
     });

@@ -14,16 +14,51 @@ const path = require('path');
 /**
  * Validates a ZIP file for Amazon data import
  * @param {string} zipFilePath - Path to the ZIP file
- * @returns {Promise<Object>} Validation result with isValid and fileList
+ * @param {string} originalName - Original filename (for extension validation)
+ * @returns {Promise<Object>} Validation result with isValid, analysis data, and fileList
  */
-async function validateZipFile(zipFilePath) {
+async function validateZipFile(zipFilePath, originalName) {
   try {
-    const AmazonZipParser = require('../amazon-zip-parser');
-    const parser = new AmazonZipParser();
-    const validation = await parser.validateZipFile(zipFilePath);
-    return validation;
+    // Use AmazonZipDetector for rich analysis
+    const AmazonZipDetector = require('../amazon-zip-detector');
+    const detector = new AmazonZipDetector();
+    const analysis = await detector.analyzeZipFile(zipFilePath, { originalName });
+
+    // Transform to expected frontend format
+    if (analysis.isValid && analysis.detected) {
+      return {
+        success: true,
+        isValid: true,
+        analysis: {
+          zipInfo: analysis.zipInfo,
+          confidence: analysis.confidence,
+          fileStats: analysis.fileStats,
+          contents: analysis.contents,
+          recommendations: analysis.recommendations || []
+        }
+      };
+    } else if (analysis.isValid === false) {
+      return {
+        success: false,
+        isValid: false,
+        error: analysis.error || 'Validation failed',
+        message: analysis.message || 'Could not validate ZIP file'
+      };
+    } else {
+      return {
+        success: false,
+        isValid: false,
+        error: 'Unknown ZIP type',
+        message: 'Could not identify the ZIP file type. Please upload a valid Amazon export ZIP.'
+      };
+    }
   } catch (error) {
-    throw new Error(`ZIP validation failed: ${error.message}`);
+    return {
+      success: false,
+      isValid: false,
+      error: 'Validation error',
+      message: `ZIP validation failed: ${error.message}`
+    };
   }
 }
 
@@ -49,7 +84,7 @@ async function importFromZip(zipFilePath, options = {}) {
     if (onStatus) {
       onStatus('Extracting ZIP file...');
     }
-    const extractResult = await parser.extractAndParse(zipFilePath, {
+    const parseResult = await parser.processZipFile(zipFilePath, {
       onProgress: (step, progress) => {
         if (onProgress) {
           onProgress(progress);
@@ -59,6 +94,17 @@ async function importFromZip(zipFilePath, options = {}) {
         }
       }
     });
+
+    // Check for parse errors
+    if (!parseResult.success) {
+      throw new Error(parseResult.error || 'Failed to parse ZIP file');
+    }
+
+    const extractResult = {
+      ...parseResult.data,
+      totalFiles: parseResult.stats?.totalFiles || 0,
+      processedFiles: parseResult.stats?.processedFiles || 0
+    };
 
     if (onStatus) {
       onStatus('Processing extracted data...');
@@ -113,6 +159,25 @@ function convertParsedDataToExpenditures(parsedData) {
           });
         });
       }
+    });
+  }
+
+  // Handle subscriptions data
+  if (parsedData.subscriptions && Array.isArray(parsedData.subscriptions)) {
+    parsedData.subscriptions.forEach((subscription) => {
+      expenditures.push({
+        id: generateId(),
+        date: subscription.startDate || subscription.date || new Date().toISOString().split('T')[0],
+        amount: subscription.price || subscription.amount || 0,
+        description: subscription.title || subscription.description || 'Amazon Subscription',
+        category: 'Amazon Subscription',
+        source: 'amazon-zip-subscription',
+        metadata: {
+          subscriptionId: subscription.subscriptionId,
+          frequency: subscription.frequency,
+          status: subscription.status
+        }
+      });
     });
   }
 

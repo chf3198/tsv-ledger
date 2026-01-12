@@ -201,6 +201,12 @@ npm run test:coverage      # Combined coverage report
 
 **CRITICAL**: All UX and visual testing MUST be performed in external browsers (Chrome, Firefox, Safari, Edge), NOT VS Code's Simple Browser. The Simple Browser has known compatibility issues and does not accurately represent the user experience.
 
+**MANDATORY**: External browser testing must be VISIBLE to the user. Every testing cycle must include:
+1. Server running and confirmed accessible
+2. External browser opened with `xdg-open http://localhost:3000`
+3. User confirmation that they can see the application
+4. All testing performed in the visible external browser instance
+
 **🚫 NEVER USE** `open_simple_browser` tool for testing - it violates testing standards and produces unreliable results.
 
 **Browser Testing Checklist**:
@@ -210,6 +216,7 @@ npm run test:coverage      # Combined coverage report
 - [ ] Test all user workflows end-to-end
 - [ ] Validate responsive design on mobile/desktop
 - [ ] Confirm accessibility features work properly
+- [ ] **MANDATORY**: User can observe all testing in real-time
 
 ### CI/CD Pipeline Requirements
 

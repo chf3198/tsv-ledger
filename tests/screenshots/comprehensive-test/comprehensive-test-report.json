@@ -1,0 +1,94 @@
+{
+  "summary": {
+    "totalTests": 12,
+    "passed": 3,
+    "failed": 0,
+    "errors": []
+  },
+  "pages": {
+    "homepage": {
+      "title": "TSV Ledger - Expenditure Tracker",
+      "hasNavigation": true,
+      "hasMainContent": true,
+      "consoleErrors": 0,
+      "consoleErrorDetails": [],
+      "status": "PASS"
+    },
+    "employeeBenefits": {
+      "consoleErrors": 0,
+      "responsive": {
+        "mobile": {
+          "formVisible": false,
+          "tableVisible": false,
+          "screenshot": "employee-benefits-mobile.png"
+        },
+        "tablet": {
+          "formVisible": false,
+          "tableVisible": false,
+          "screenshot": "employee-benefits-tablet.png"
+        },
+        "desktop": {
+          "formVisible": false,
+          "tableVisible": false,
+          "screenshot": "employee-benefits-desktop.png"
+        }
+      },
+      "status": "PASS"
+    }
+  },
+  "components": {
+    "dashboard": {
+      "charts": 4,
+      "tables": 0,
+      "cards": 42,
+      "buttons": 42,
+      "links": 14,
+      "forms": 4,
+      "sections": {
+        "aiInsights": true,
+        "analytics": false,
+        "benefits": true,
+        "navigation": true
+      },
+      "jsErrors": 0,
+      "jsErrorDetails": [],
+      "screenshot": "dashboard-full.png",
+      "status": "PASS"
+    }
+  },
+  "styling": {
+    "navigation": {
+      "backgroundColor": "rgb(13, 110, 253)",
+      "color": "rgb(33, 37, 41)",
+      "fontFamily": "\"Segoe UI\", Tahoma, Geneva, Verdana, sans-serif",
+      "fontSize": "16px",
+      "padding": "8px 0px",
+      "display": "flex"
+    },
+    "buttons": {
+      "backgroundColor": "rgba(0, 0, 0, 0)",
+      "color": "rgba(255, 255, 255, 0.55)",
+      "border": "0.8px solid rgba(0, 0, 0, 0.125)",
+      "borderRadius": "6px",
+      "padding": "6px 12px",
+      "fontSize": "20px"
+    },
+    "forms": {
+      "border": "0.8px solid rgb(222, 226, 230)",
+      "borderRadius": "6px",
+      "padding": "6px 12px",
+      "fontSize": "16px",
+      "backgroundColor": "rgb(255, 255, 255)"
+    }
+  },
+  "responsive": {},
+  "performance": {
+    "loadTime": 1.5,
+    "domContentLoaded": 75.80000000074506,
+    "firstPaint": 0,
+    "largestContentfulPaint": 0,
+    "resources": 21,
+    "totalResourceSize": 4500
+  },
+  "accessibility": {}
+}

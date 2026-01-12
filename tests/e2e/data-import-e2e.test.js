@@ -54,8 +54,8 @@ test.describe('Data Import E2E Tests', () => {
     // Verify import form is visible
     await expect(page.locator('#csvImportForm')).toBeVisible();
 
-    // Upload test Amazon CSV file
-    const csvFilePath = path.join(__dirname, '../data/test-amazon-orders.csv');
+    // Upload real Amazon CSV file (subset of actual TSV business data)
+    const csvFilePath = path.join(__dirname, '../data/real-amazon-orders.csv');
     await page.setInputFiles('#csvFile', csvFilePath);
 
     // Submit the form
@@ -156,9 +156,9 @@ test.describe('Data Import E2E Tests', () => {
   test('should handle multiple sequential imports correctly', async ({
     page
   }) => {
-    // First import - Amazon CSV
+    // First import - Real Amazon CSV (subset of actual TSV data)
     await PageHelpers.navigateToSection(page, 'data-import');
-    const csvFilePath = path.join(__dirname, '../data/test-amazon-orders.csv');
+    const csvFilePath = path.join(__dirname, '../data/real-amazon-orders.csv');
     await page.setInputFiles('#csvFile', csvFilePath);
     await page.click('button[type="submit"]');
     await page.waitForSelector('.import-success', { timeout: 30000 });
@@ -167,11 +167,11 @@ test.describe('Data Import E2E Tests', () => {
     await PageHelpers.navigateToSection(page, 'expenditures');
     const countAfterFirst = await page.locator('.expenditure-row').count();
 
-    // Second import - Bank statement
+    // Second import - Real Bank statement (subset of actual TSV data)
     await PageHelpers.navigateToSection(page, 'data-import');
     const bankFilePath = path.join(
       __dirname,
-      '../data/test-bank-statement.csv'
+      '../data/real-bank-statement.csv'
     );
     await page.setInputFiles('#csv-file-input', bankFilePath);
     await page.selectOption('#import-type', 'bank-statement');
@@ -211,9 +211,9 @@ test.describe('Data Import E2E Tests', () => {
   });
 
   test('should validate data integrity after import', async ({ page }) => {
-    // Import test data
+    // Import real data (subset of actual TSV business data)
     await PageHelpers.navigateToSection(page, 'data-import');
-    const csvFilePath = path.join(__dirname, '../data/test-amazon-orders.csv');
+    const csvFilePath = path.join(__dirname, '../data/real-amazon-orders.csv');
     await page.setInputFiles('#csvFile', csvFilePath);
     await page.click('button[type="submit"]');
     await page.waitForSelector('#importStatus', { timeout: 30000 });
@@ -230,9 +230,9 @@ test.describe('Data Import E2E Tests', () => {
   test('should support manual data entry alongside imports', async ({
     page
   }) => {
-    // First import some data
+    // First import some real data
     await PageHelpers.navigateToSection(page, 'data-import');
-    const csvFilePath = path.join(__dirname, '../data/test-amazon-orders.csv');
+    const csvFilePath = path.join(__dirname, '../data/real-amazon-orders.csv');
     await page.setInputFiles('#csvFile', csvFilePath);
     await page.click('button[type="submit"]');
     await page.waitForSelector('#importStatus', { timeout: 30000 });
@@ -278,8 +278,8 @@ test.describe('Data Import E2E Tests', () => {
 
     const initialCardCount = await page.locator('#importHistory .card').count();
 
-    // Import some data
-    const csvFilePath = path.join(__dirname, '../data/test-amazon-orders.csv');
+    // Import real data (subset of actual TSV business data)
+    const csvFilePath = path.join(__dirname, '../data/real-amazon-orders.csv');
     await page.setInputFiles('#csvFile', csvFilePath);
     await page.click('button[type="submit"]');
 
@@ -297,7 +297,7 @@ test.describe('Data Import E2E Tests', () => {
     // Import another file to test multiple imports
     const bankFilePath = path.join(
       __dirname,
-      '../data/test-bank-statement.csv'
+      '../data/real-bank-statement.csv'
     );
     await page.setInputFiles('#csvFile', bankFilePath);
     await page.click('button[type="submit"]');
@@ -321,9 +321,9 @@ test.describe('Data Import E2E Tests', () => {
     expect(isTestDatabase()).toBe(true);
     expect(getDatabasePath()).toContain('test-expenditures.json');
 
-    // Import test data
+    // Import real data (subset of actual TSV business data)
     await PageHelpers.navigateToSection(page, 'data-import');
-    const csvFilePath = path.join(__dirname, '../data/test-amazon-orders.csv');
+    const csvFilePath = path.join(__dirname, '../data/real-amazon-orders.csv');
     await page.setInputFiles('#csv-file-input', csvFilePath);
     await page.selectOption('#import-type', 'amazon-csv');
     await page.click('#import-submit-btn');

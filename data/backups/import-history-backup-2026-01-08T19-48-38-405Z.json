@@ -1,0 +1,42 @@
+[
+  {
+    "timestamp": "2026-01-08T18:09:14.903Z",
+    "fileName": "Bank Statement",
+    "recordCount": 278,
+    "importType": "csv",
+    "status": "success",
+    "dataSource": "Bank of America",
+    "details": {
+      "totalParsed": 278,
+      "newRecords": 0,
+      "duplicates": 278,
+      "errors": 0,
+      "skipped": 1,
+      "fileType": "CSV",
+      "dateRange": {
+        "earliest": "2025-05-01",
+        "latest": "2025-07-01"
+      }
+    }
+  },
+  {
+    "timestamp": "2026-01-08T18:09:16.264Z",
+    "fileName": "Bank Statement",
+    "recordCount": 278,
+    "importType": "csv",
+    "status": "success",
+    "dataSource": "Bank of America",
+    "details": {
+      "totalParsed": 278,
+      "newRecords": 0,
+      "duplicates": 278,
+      "errors": 0,
+      "skipped": 1,
+      "fileType": "CSV",
+      "dateRange": {
+        "earliest": "2025-05-01",
+        "latest": "2025-07-01"
+      }
+    }
+  }
+]

@@ -23,6 +23,47 @@ const { Readable } = require('stream');
  */
 
 /**
+ * Preprocesses Bank of America DAT file to extract data section
+ * BOA files have a summary section at the top that needs to be skipped
+ * @param {string} data - Raw file data
+ * @returns {string} Preprocessed data with only the data section
+ */
+function preprocessBOAData(data) {
+  const lines = data.split(/\r?\n/);
+
+  // Look for the data header row: "Date\tDescription\tAmount\tRunning Bal."
+  const headerIndex = lines.findIndex(line => {
+    const normalized = line.toLowerCase().trim();
+    return normalized.startsWith('date\t') &&
+           normalized.includes('description') &&
+           normalized.includes('amount');
+  });
+
+  if (headerIndex > 0) {
+    // Found BOA format - return only from header row onwards
+    return lines.slice(headerIndex).join('\n');
+  }
+
+  return data;
+}
+
+/**
+ * Detects if data is Bank of America DAT format
+ * @param {string} data - Raw file data
+ * @returns {boolean} True if BOA format detected
+ */
+function isBOAFormat(data) {
+  const firstLines = data.split(/\r?\n/).slice(0, 10).join('\n').toLowerCase();
+  return (
+    firstLines.includes('beginning balance') ||
+    firstLines.includes('total credits') ||
+    firstLines.includes('total debits') ||
+    firstLines.includes('ending balance') ||
+    (firstLines.includes('date\t') && firstLines.includes('running bal'))
+  );
+}
+
+/**
  * Parses CSV/TSV data into expenditure objects
  * @param {string} csvData - Raw CSV/TSV data as string
  * @param {Object} options - Parsing options
@@ -39,23 +80,31 @@ async function parseCSVData(csvData, options = {}) {
     const skippedRows = [];
 
     let lineNumber = 0;
-    const separator = csvData.includes('\t') ? '\t' : ',';
 
-    const csvStream = Readable.from(csvData);
+    // Preprocess BOA DAT files to skip summary section
+    let processedData = csvData;
+    const isBOA = isBOAFormat(csvData);
+    if (isBOA) {
+      processedData = preprocessBOAData(csvData);
+    }
+
+    const separator = processedData.includes('\t') ? '\t' : ',';
+
+    const csvStream = Readable.from(processedData);
 
     csvStream
       .pipe(
         csv({
           separator,
-          skipEmptyLines: true,
-          headers: true
+          skipEmptyLines: true
+          // Let csv-parser auto-detect headers from first row
         })
       )
       .on('data', (data) => {
         lineNumber++;
 
         try {
-          const expenditure = parseRow(data, lineNumber);
+          const expenditure = parseRow(data, lineNumber, isBOA);
           if (expenditure) {
             results.push(expenditure);
           } else {
@@ -93,9 +142,17 @@ async function parseCSVData(csvData, options = {}) {
  * Parses a single CSV row into an expenditure object
  * @param {Object} data - Parsed CSV row data
  * @param {number} lineNumber - Line number for error reporting
+ * @param {boolean} isBOA - Whether this is Bank of America format
  * @returns {Expenditure|null} Parsed expenditure or null if invalid
  */
-function parseRow(data, lineNumber) {
+function parseRow(data, lineNumber, isBOA = false) {
+  // Bank of America DAT format detection
+  const isBOAFormat = isBOA ||
+    (data.hasOwnProperty('Date') &&
+     data.hasOwnProperty('Description') &&
+     data.hasOwnProperty('Amount') &&
+     data.hasOwnProperty('Running Bal.'));
+
   // Detect file format based on column headers
   const isAmazonFormat =
     data.hasOwnProperty('order id') ||
@@ -106,14 +163,24 @@ function parseRow(data, lineNumber) {
     data.hasOwnProperty('id') &&
     data.hasOwnProperty('asin') &&
     data.hasOwnProperty('source');
-  const isBankFormat =
-    data.hasOwnProperty('Description') &&
-    data.hasOwnProperty('') &&
-    data.hasOwnProperty('Amount');
+  const isBankFormat = isBOAFormat ||
+    (data.hasOwnProperty('Description') &&
+    data.hasOwnProperty('Amount'));
 
   let dateValue, amountValue, descValue, source;
 
-  if (isAmazonOfficialFormat) {
+  if (isBOAFormat) {
+    // Bank of America DAT format - prioritize this check
+    dateValue = data['Date'] || data.date;
+    amountValue = data['Amount'] || data.amount;
+    descValue = data['Description'] || data.description;
+    source = 'bank-boa';
+
+    // Skip rows without actual transaction data (e.g., "Beginning balance" rows)
+    if (descValue && descValue.toLowerCase().includes('beginning balance')) {
+      return null;
+    }
+  } else if (isAmazonOfficialFormat) {
     // Amazon Official Data format
     dateValue = data['Order Date'] || data.date || data.Date;
     amountValue =
@@ -229,5 +296,7 @@ module.exports = {
   parseCSVData,
   parseRow,
   parseDate,
-  parseAmount
+  parseAmount,
+  preprocessBOAData,
+  isBOAFormat
 };

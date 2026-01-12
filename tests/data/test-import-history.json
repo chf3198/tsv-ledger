@@ -1,1 +1,565 @@
-[]
+[
+  {
+    "timestamp": "2026-01-07T08:02:37.399Z",
+    "fileName": "CSV Import",
+    "recordCount": 0,
+    "importType": "csv",
+    "status": "success"
+  },
+  {
+    "timestamp": "2026-01-07T08:02:37.409Z",
+    "fileName": "CSV Import",
+    "recordCount": 0,
+    "importType": "csv",
+    "status": "success"
+  },
+  {
+    "timestamp": "2026-01-07T08:05:48.340Z",
+    "fileName": "CSV Import",
+    "recordCount": 0,
+    "importType": "csv",
+    "status": "success"
+  },
+  {
+    "timestamp": "2026-01-07T08:05:48.363Z",
+    "fileName": "CSV Import",
+    "recordCount": 0,
+    "importType": "csv",
+    "status": "success"
+  },
+  {
+    "timestamp": "2026-01-07T08:09:39.662Z",
+    "fileName": "CSV Import",
+    "recordCount": 0,
+    "importType": "csv",
+    "status": "success"
+  },
+  {
+    "timestamp": "2026-01-07T08:09:39.720Z",
+    "fileName": "CSV Import",
+    "recordCount": 0,
+    "importType": "csv",
+    "status": "success"
+  },
+  {
+    "timestamp": "2026-01-07T17:22:02.312Z",
+    "fileName": "CSV Import",
+    "recordCount": 278,
+    "importType": "csv",
+    "status": "success"
+  },
+  {
+    "timestamp": "2026-01-07T17:23:44.219Z",
+    "fileName": "CSV Import",
+    "recordCount": 2784,
+    "importType": "csv",
+    "status": "success"
+  },
+  {
+    "timestamp": "2026-01-07T18:03:49.423Z",
+    "fileName": "stmttab.dat",
+    "recordCount": 278,
+    "importType": "csv",
+    "status": "success"
+  },
+  {
+    "timestamp": "2026-01-07T18:05:23.208Z",
+    "fileName": "amazon-official-data.csv",
+    "recordCount": 2784,
+    "importType": "csv",
+    "status": "success"
+  },
+  {
+    "timestamp": "2026-01-07T18:06:49.051Z",
+    "fileName": "stmttab.dat",
+    "recordCount": 278,
+    "importType": "csv",
+    "status": "success"
+  },
+  {
+    "timestamp": "2026-01-07T18:08:20.535Z",
+    "fileName": "amazon-official-data.csv",
+    "recordCount": 2784,
+    "importType": "csv",
+    "status": "success"
+  },
+  {
+    "timestamp": "2026-01-07T18:09:22.351Z",
+    "fileName": "stmttab.dat",
+    "recordCount": 278,
+    "importType": "csv",
+    "status": "success"
+  },
+  {
+    "timestamp": "2026-01-07T18:11:37.902Z",
+    "fileName": "stmttab.dat",
+    "recordCount": 278,
+    "importType": "csv",
+    "status": "success"
+  },
+  {
+    "timestamp": "2026-01-07T18:14:39.508Z",
+    "fileName": "amazon-official-data.csv",
+    "recordCount": 2784,
+    "importType": "csv",
+    "status": "success"
+  },
+  {
+    "timestamp": "2026-01-07T18:15:24.630Z",
+    "fileName": "stmttab.dat",
+    "recordCount": 278,
+    "importType": "csv",
+    "status": "success"
+  },
+  {
+    "timestamp": "2026-01-07T18:18:37.866Z",
+    "fileName": "amazon-official-data.csv",
+    "recordCount": 2784,
+    "importType": "csv",
+    "status": "success"
+  },
+  {
+    "timestamp": "2026-01-07T18:19:51.773Z",
+    "fileName": "stmttab.dat",
+    "recordCount": 278,
+    "importType": "csv",
+    "status": "success"
+  },
+  {
+    "timestamp": "2026-01-07T18:23:11.117Z",
+    "fileName": "amazon-official-data.csv",
+    "recordCount": 2784,
+    "importType": "csv",
+    "status": "success"
+  },
+  {
+    "timestamp": "2026-01-07T18:23:51.553Z",
+    "fileName": "stmttab.dat",
+    "recordCount": 278,
+    "importType": "csv",
+    "status": "success"
+  },
+  {
+    "timestamp": "2026-01-07T18:27:23.111Z",
+    "fileName": "amazon-official-data.csv",
+    "recordCount": 2784,
+    "importType": "csv",
+    "status": "success"
+  },
+  {
+    "timestamp": "2026-01-07T18:28:09.089Z",
+    "fileName": "stmttab.dat",
+    "recordCount": 278,
+    "importType": "csv",
+    "status": "success"
+  },
+  {
+    "timestamp": "2026-01-07T18:31:53.390Z",
+    "fileName": "amazon-official-data.csv",
+    "recordCount": 2784,
+    "importType": "csv",
+    "status": "success"
+  },
+  {
+    "timestamp": "2026-01-07T18:32:18.307Z",
+    "fileName": "stmttab.dat",
+    "recordCount": 278,
+    "importType": "csv",
+    "status": "success"
+  },
+  {
+    "timestamp": "2026-01-07T18:33:58.784Z",
+    "fileName": "amazon-official-data.csv",
+    "recordCount": 2784,
+    "importType": "csv",
+    "status": "success"
+  },
+  {
+    "timestamp": "2026-01-07T19:07:38.419Z",
+    "fileName": "stmttab.dat",
+    "recordCount": 278,
+    "importType": "csv",
+    "status": "success"
+  },
+  {
+    "timestamp": "2026-01-07T19:09:17.113Z",
+    "fileName": "amazon-official-data.csv",
+    "recordCount": 2784,
+    "importType": "csv",
+    "status": "success"
+  },
+  {
+    "timestamp": "2026-01-07T19:09:24.434Z",
+    "fileName": "stmttab.dat",
+    "recordCount": 278,
+    "importType": "csv",
+    "status": "success"
+  },
+  {
+    "timestamp": "2026-01-07T19:11:01.025Z",
+    "fileName": "amazon-official-data.csv",
+    "recordCount": 2784,
+    "importType": "csv",
+    "status": "success"
+  },
+  {
+    "timestamp": "2026-01-08T08:27:04.265Z",
+    "fileName": "stmttab.dat",
+    "recordCount": 278,
+    "importType": "csv",
+    "status": "success",
+    "dataSource": "Bank of America",
+    "details": {
+      "totalParsed": 278,
+      "newRecords": 278,
+      "duplicates": 0,
+      "errors": 0,
+      "skipped": 1,
+      "fileType": "DAT",
+      "dateRange": {
+        "earliest": "2025-05-01",
+        "latest": "2025-07-01"
+      }
+    }
+  },
+  {
+    "timestamp": "2026-01-08T08:28:43.372Z",
+    "fileName": "amazon-official-data.csv",
+    "recordCount": 2784,
+    "importType": "csv",
+    "status": "success",
+    "dataSource": "Bank of America",
+    "details": {
+      "totalParsed": 2784,
+      "newRecords": 2721,
+      "duplicates": 63,
+      "errors": 0,
+      "skipped": 0,
+      "fileType": "CSV",
+      "dateRange": {
+        "earliest": "2013-01-14",
+        "latest": "2025-09-06"
+      }
+    }
+  },
+  {
+    "timestamp": "2026-01-08T20:07:51.594Z",
+    "fileName": "stmttab.dat",
+    "recordCount": 278,
+    "importType": "csv",
+    "status": "success",
+    "dataSource": "Bank of America",
+    "details": {
+      "totalParsed": 278,
+      "newRecords": 278,
+      "duplicates": 0,
+      "errors": 0,
+      "skipped": 1,
+      "fileType": "DAT",
+      "dateRange": {
+        "earliest": "2025-05-01",
+        "latest": "2025-07-01"
+      }
+    }
+  },
+  {
+    "timestamp": "2026-01-08T20:09:30.317Z",
+    "fileName": "amazon-official-data.csv",
+    "recordCount": 2784,
+    "importType": "csv",
+    "status": "success",
+    "dataSource": "Bank of America",
+    "details": {
+      "totalParsed": 2784,
+      "newRecords": 2721,
+      "duplicates": 63,
+      "errors": 0,
+      "skipped": 0,
+      "fileType": "CSV",
+      "dateRange": {
+        "earliest": "2013-01-14",
+        "latest": "2025-09-06"
+      }
+    }
+  },
+  {
+    "timestamp": "2026-01-08T20:09:32.481Z",
+    "fileName": "stmttab.dat",
+    "recordCount": 278,
+    "importType": "csv",
+    "status": "success",
+    "dataSource": "Bank of America",
+    "details": {
+      "totalParsed": 278,
+      "newRecords": 278,
+      "duplicates": 0,
+      "errors": 0,
+      "skipped": 1,
+      "fileType": "DAT",
+      "dateRange": {
+        "earliest": "2025-05-01",
+        "latest": "2025-07-01"
+      }
+    }
+  },
+  {
+    "timestamp": "2026-01-08T20:11:06.522Z",
+    "fileName": "amazon-official-data.csv",
+    "recordCount": 2784,
+    "importType": "csv",
+    "status": "success",
+    "dataSource": "Bank of America",
+    "details": {
+      "totalParsed": 2784,
+      "newRecords": 2721,
+      "duplicates": 63,
+      "errors": 0,
+      "skipped": 0,
+      "fileType": "CSV",
+      "dateRange": {
+        "earliest": "2013-01-14",
+        "latest": "2025-09-06"
+      }
+    }
+  },
+  {
+    "timestamp": "2026-01-09T21:00:09.645Z",
+    "fileName": "stmttab.dat",
+    "recordCount": 278,
+    "importType": "csv",
+    "status": "success",
+    "dataSource": "Bank of America",
+    "details": {
+      "totalParsed": 278,
+      "newRecords": 278,
+      "duplicates": 0,
+      "errors": 0,
+      "skipped": 1,
+      "fileType": "DAT",
+      "dateRange": {
+        "earliest": "2025-05-01",
+        "latest": "2025-07-01"
+      }
+    }
+  },
+  {
+    "timestamp": "2026-01-09T21:01:42.990Z",
+    "fileName": "amazon-official-data.csv",
+    "recordCount": 2784,
+    "importType": "csv",
+    "status": "success",
+    "dataSource": "Bank of America",
+    "details": {
+      "totalParsed": 2784,
+      "newRecords": 2721,
+      "duplicates": 63,
+      "errors": 0,
+      "skipped": 0,
+      "fileType": "CSV",
+      "dateRange": {
+        "earliest": "2013-01-14",
+        "latest": "2025-09-06"
+      }
+    }
+  },
+  {
+    "timestamp": "2026-01-09T21:01:50.109Z",
+    "fileName": "stmttab.dat",
+    "recordCount": 278,
+    "importType": "csv",
+    "status": "success",
+    "dataSource": "Bank of America",
+    "details": {
+      "totalParsed": 278,
+      "newRecords": 278,
+      "duplicates": 0,
+      "errors": 0,
+      "skipped": 1,
+      "fileType": "DAT",
+      "dateRange": {
+        "earliest": "2025-05-01",
+        "latest": "2025-07-01"
+      }
+    }
+  },
+  {
+    "timestamp": "2026-01-09T21:03:23.150Z",
+    "fileName": "amazon-official-data.csv",
+    "recordCount": 2784,
+    "importType": "csv",
+    "status": "success",
+    "dataSource": "Bank of America",
+    "details": {
+      "totalParsed": 2784,
+      "newRecords": 2721,
+      "duplicates": 63,
+      "errors": 0,
+      "skipped": 0,
+      "fileType": "CSV",
+      "dateRange": {
+        "earliest": "2013-01-14",
+        "latest": "2025-09-06"
+      }
+    }
+  },
+  {
+    "timestamp": "2026-01-12T05:22:43.724Z",
+    "fileName": "stmttab.dat",
+    "recordCount": 278,
+    "importType": "csv",
+    "status": "success",
+    "dataSource": "Bank of America",
+    "details": {
+      "totalParsed": 278,
+      "newRecords": 278,
+      "duplicates": 0,
+      "errors": 0,
+      "skipped": 1,
+      "fileType": "DAT",
+      "dateRange": {
+        "earliest": "2025-05-01",
+        "latest": "2025-07-01"
+      }
+    }
+  },
+  {
+    "timestamp": "2026-01-12T05:23:11.915Z",
+    "fileName": "amazon-official-data.csv",
+    "recordCount": 2784,
+    "importType": "csv",
+    "status": "success",
+    "dataSource": "Bank of America",
+    "details": {
+      "totalParsed": 2784,
+      "newRecords": 2721,
+      "duplicates": 63,
+      "errors": 0,
+      "skipped": 0,
+      "fileType": "CSV",
+      "dateRange": {
+        "earliest": "2013-01-14",
+        "latest": "2025-09-06"
+      }
+    }
+  },
+  {
+    "timestamp": "2026-01-12T05:23:17.484Z",
+    "fileName": "stmttab.dat",
+    "recordCount": 278,
+    "importType": "csv",
+    "status": "success",
+    "dataSource": "Bank of America",
+    "details": {
+      "totalParsed": 278,
+      "newRecords": 278,
+      "duplicates": 0,
+      "errors": 0,
+      "skipped": 1,
+      "fileType": "DAT",
+      "dateRange": {
+        "earliest": "2025-05-01",
+        "latest": "2025-07-01"
+      }
+    }
+  },
+  {
+    "timestamp": "2026-01-12T05:23:41.562Z",
+    "fileName": "amazon-official-data.csv",
+    "recordCount": 2784,
+    "importType": "csv",
+    "status": "success",
+    "dataSource": "Bank of America",
+    "details": {
+      "totalParsed": 2784,
+      "newRecords": 2721,
+      "duplicates": 63,
+      "errors": 0,
+      "skipped": 0,
+      "fileType": "CSV",
+      "dateRange": {
+        "earliest": "2013-01-14",
+        "latest": "2025-09-06"
+      }
+    }
+  },
+  {
+    "timestamp": "2026-01-12T05:26:15.914Z",
+    "fileName": "stmttab.dat",
+    "recordCount": 278,
+    "importType": "csv",
+    "status": "success",
+    "dataSource": "Bank of America",
+    "details": {
+      "totalParsed": 278,
+      "newRecords": 278,
+      "duplicates": 0,
+      "errors": 0,
+      "skipped": 1,
+      "fileType": "DAT",
+      "dateRange": {
+        "earliest": "2025-05-01",
+        "latest": "2025-07-01"
+      }
+    }
+  },
+  {
+    "timestamp": "2026-01-12T05:26:44.570Z",
+    "fileName": "amazon-official-data.csv",
+    "recordCount": 2784,
+    "importType": "csv",
+    "status": "success",
+    "dataSource": "Bank of America",
+    "details": {
+      "totalParsed": 2784,
+      "newRecords": 2721,
+      "duplicates": 63,
+      "errors": 0,
+      "skipped": 0,
+      "fileType": "CSV",
+      "dateRange": {
+        "earliest": "2013-01-14",
+        "latest": "2025-09-06"
+      }
+    }
+  },
+  {
+    "timestamp": "2026-01-12T05:26:47.780Z",
+    "fileName": "stmttab.dat",
+    "recordCount": 278,
+    "importType": "csv",
+    "status": "success",
+    "dataSource": "Bank of America",
+    "details": {
+      "totalParsed": 278,
+      "newRecords": 278,
+      "duplicates": 0,
+      "errors": 0,
+      "skipped": 1,
+      "fileType": "DAT",
+      "dateRange": {
+        "earliest": "2025-05-01",
+        "latest": "2025-07-01"
+      }
+    }
+  },
+  {
+    "timestamp": "2026-01-12T05:27:13.141Z",
+    "fileName": "amazon-official-data.csv",
+    "recordCount": 2784,
+    "importType": "csv",
+    "status": "success",
+    "dataSource": "Bank of America",
+    "details": {
+      "totalParsed": 2784,
+      "newRecords": 2721,
+      "duplicates": 63,
+      "errors": 0,
+      "skipped": 0,
+      "fileType": "CSV",
+      "dateRange": {
+        "earliest": "2013-01-14",
+        "latest": "2025-09-06"
+      }
+    }
+  }
+]

@@ -83,6 +83,10 @@ router.post('/import-csv', async (req, res) => {
       });
     }
 
+    // Debug: check BOA detection
+    console.log('[DEBUG] CSV Data length:', csvData.length);
+    console.log('[DEBUG] Is BOA format:', csvParser.isBOAFormat ? csvParser.isBOAFormat(csvData) : 'function not exported');
+
     statusTracker.startImport();
     statusTracker.setImportStep('Parsing CSV data...');
 
@@ -95,28 +99,83 @@ router.post('/import-csv', async (req, res) => {
       }
     });
 
+    // Debug: show parse results
+    console.log('[DEBUG] Parse result:', {
+      expenditures: parseResult.expenditures.length,
+      errors: parseResult.errors.length,
+      skipped: parseResult.skipped.length
+    });
+    if (parseResult.expenditures.length > 0) {
+      console.log('[DEBUG] First expenditure:', parseResult.expenditures[0]);
+    }
+
     statusTracker.setImportStep('Saving expenditures...');
 
     const dataFilePath = getDataFilePath();
     let savedCount = 0;
+    let newCount = 0;
+    let duplicateCount = 0;
+    const saveErrors = [];
+    let earliestDate = null;
+    let latestDate = null;
 
+    // Save each expenditure with proper callback handling
     for (const expenditure of parseResult.expenditures) {
       try {
-        addExpenditure(expenditure);
-        savedCount++;
+        await new Promise((resolve, reject) => {
+          addExpenditure(expenditure, (error, saved, isUpdate) => {
+            if (error) {
+              reject(error);
+            } else {
+              savedCount++;
+              if (isUpdate) {
+                duplicateCount++;
+              } else {
+                newCount++;
+              }
+              // Track date range
+              if (expenditure.date) {
+                const expDate = new Date(expenditure.date);
+                if (!isNaN(expDate.getTime())) {
+                  if (!earliestDate || expDate < earliestDate) {
+                    earliestDate = expDate;
+                  }
+                  if (!latestDate || expDate > latestDate) {
+                    latestDate = expDate;
+                  }
+                }
+              }
+              resolve(saved);
+            }
+          });
+        });
         statusTracker.updateImportProgress(savedCount, parseResult.expenditures.length);
       } catch (error) {
+        saveErrors.push(`Failed to save expenditure: ${error.message}`);
         statusTracker.addImportError(`Failed to save expenditure: ${error.message}`);
       }
     }
 
-    // Add to import history
+    // Add to import history with enhanced details
     const historyEntry = {
       timestamp: new Date().toISOString(),
-      fileName: req.body.fileName || 'CSV Import',
+      fileName: req.body.fileName || 'Bank Statement',
       recordCount: savedCount,
       importType: 'csv',
-      status: parseResult.errors.length > 0 ? 'partial' : 'success'
+      status: parseResult.errors.length > 0 ? 'partial' : 'success',
+      dataSource: 'Bank of America',
+      details: {
+        totalParsed: parseResult.expenditures.length,
+        newRecords: newCount,
+        duplicates: duplicateCount,
+        errors: parseResult.errors.length,
+        skipped: parseResult.skipped.length,
+        fileType: req.body.fileName ? (req.body.fileName.split('.').pop() || 'csv').toUpperCase() : 'CSV',
+        dateRange: earliestDate && latestDate ? {
+          earliest: earliestDate.toISOString().split('T')[0],
+          latest: latestDate.toISOString().split('T')[0]
+        } : null
+      }
     };
     historyManager.addImportHistoryEntry(dataFilePath, historyEntry);
 
@@ -153,7 +212,7 @@ router.post(
         return res.status(400).json({ error: 'No file uploaded' });
       }
 
-      const validation = await zipHandler.validateZipFile(req.file.path);
+      const validation = await zipHandler.validateZipFile(req.file.path, req.file.originalname);
 
       // Cleanup temp file
       zipHandler.cleanupTempFile(req.file.path);
@@ -197,23 +256,70 @@ router.post(
 
       const dataFilePath = getDataFilePath();
       let savedCount = 0;
+      let newCount = 0;
+      let duplicateCount = 0;
+      let earliestDate = null;
+      let latestDate = null;
 
       for (const expenditure of importResult.expenditures) {
         try {
-          addExpenditure(expenditure);
-          savedCount++;
+          await new Promise((resolve, reject) => {
+            addExpenditure(expenditure, (error, saved, isUpdate) => {
+              if (error) {
+                reject(error);
+              } else {
+                savedCount++;
+                if (isUpdate) {
+                  duplicateCount++;
+                } else {
+                  newCount++;
+                }
+                // Track date range
+                if (expenditure.date) {
+                  const expDate = new Date(expenditure.date);
+                  if (!isNaN(expDate.getTime())) {
+                    if (!earliestDate || expDate < earliestDate) {
+                      earliestDate = expDate;
+                    }
+                    if (!latestDate || expDate > latestDate) {
+                      latestDate = expDate;
+                    }
+                  }
+                }
+                resolve(saved);
+              }
+            });
+          });
         } catch (error) {
           statusTracker.addImportError(`Failed to save expenditure: ${error.message}`);
         }
       }
 
-      // Add to import history
+      // Determine ZIP type from filename
+      const isOrdersZip = req.file.originalname.toLowerCase().includes('order');
+      const isSubscriptionsZip = req.file.originalname.toLowerCase().includes('subscription');
+      const zipType = isOrdersZip ? 'Orders Export' : (isSubscriptionsZip ? 'Subscriptions Export' : 'Amazon Data');
+
+      // Add to import history with enhanced details
       const historyEntry = {
         timestamp: new Date().toISOString(),
         fileName: req.file.originalname,
         recordCount: savedCount,
         importType: 'amazon-zip',
-        status: 'success'
+        status: 'success',
+        dataSource: 'Amazon',
+        zipType,
+        details: {
+          totalFiles: importResult.metadata.totalFiles || 0,
+          processedFiles: importResult.metadata.processedFiles || 0,
+          fileSize: req.file.size ? `${(req.file.size / (1024 * 1024)).toFixed(2)} MB` : 'Unknown',
+          newRecords: newCount,
+          duplicates: duplicateCount,
+          dateRange: earliestDate && latestDate ? {
+            earliest: earliestDate.toISOString().split('T')[0],
+            latest: latestDate.toISOString().split('T')[0]
+          } : null
+        }
       };
       historyManager.addImportHistoryEntry(dataFilePath, historyEntry);
 

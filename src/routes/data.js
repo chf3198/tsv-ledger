@@ -114,7 +114,7 @@ router.post('/expenditures', (req, res) => {
     let finalCategory = category;
     if (!finalCategory) {
       const categorizer = new TSVCategorizer();
-      finalCategory = categorizer.categorizeExpenditure({
+      finalCategory = categorizer.categorize({
         description,
         amount: parseFloat(amount)
       });

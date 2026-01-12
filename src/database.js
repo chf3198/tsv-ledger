@@ -386,14 +386,50 @@ function getDatabasePath() {
   return getDataFilePath();
 }
 
+/**
+ * Clear all expenditure data from the database
+ * This is a destructive operation - use with caution!
+ *
+ * @param {string} confirmationCode - Must be 'CONFIRM_DELETE_ALL' to proceed
+ * @returns {Object} Result object with success status and message
+ */
+function clearAllData(confirmationCode) {
+  if (confirmationCode !== 'CONFIRM_DELETE_ALL') {
+    return {
+      success: false,
+      message: 'Invalid confirmation code. Data was NOT deleted.'
+    };
+  }
+
+  try {
+    const dataFile = getDataFilePath();
+    const previousCount = readExpenditures().length;
+    fs.writeFileSync(dataFile, JSON.stringify([]));
+    console.log(`🗑️ Database cleared: ${previousCount} expenditures deleted`);
+    return {
+      success: true,
+      message: `Successfully deleted ${previousCount} expenditures`,
+      deletedCount: previousCount
+    };
+  } catch (err) {
+    console.error('Error clearing database:', err);
+    return {
+      success: false,
+      message: `Failed to clear database: ${err.message}`
+    };
+  }
+}
+
 // Export the functions
 module.exports = {
   getAllExpenditures,
   addExpenditure,
   writeExpenditures,
+  readExpenditures,
   clearTestData,
   resetTestDatabase,
   isTestDatabase,
   getDatabasePath,
-  getDataFilePath
+  getDataFilePath,
+  clearAllData
 };
