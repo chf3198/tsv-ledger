@@ -1,0 +1,218 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e1]:
+  - navigation [ref=e2]:
+    - generic [ref=e3]:
+      - link " TSV Ledger" [ref=e4] [cursor=pointer]:
+        - /url: /
+        - generic [ref=e5]: 
+        - generic [ref=e6]: TSV Ledger
+      - button [ref=e7] [cursor=pointer]
+      - generic [ref=e10]:
+        - generic [ref=e11]: 
+        - text: System Online
+  - generic " TSV Ledger" [ref=e12]:
+    - generic [ref=e13]:
+      - heading " TSV Ledger" [level=5] [ref=e14]:
+        - generic [ref=e15]: 
+        - text: TSV Ledger
+      - button "Close" [ref=e16] [cursor=pointer]
+    - navigation [ref=e18]:
+      - link " Dashboard" [ref=e20] [cursor=pointer]:
+        - /url: "#"
+        - generic [ref=e21]: 
+        - generic [ref=e22]: Dashboard
+      - link " Bank Reconciliation" [ref=e24] [cursor=pointer]:
+        - /url: "#"
+        - generic [ref=e25]: 
+        - generic [ref=e26]: Bank Reconciliation
+      - link " Subscription Analysis" [ref=e28] [cursor=pointer]:
+        - /url: "#"
+        - generic [ref=e29]: 
+        - generic [ref=e30]: Subscription Analysis
+      - link " Benefits Management" [ref=e32] [cursor=pointer]:
+        - /url: "#"
+        - generic [ref=e33]: 
+        - generic [ref=e34]: Benefits Management
+      - link " Geographic Analysis" [ref=e36] [cursor=pointer]:
+        - /url: "#"
+        - generic [ref=e37]: 
+        - generic [ref=e38]: Geographic Analysis
+      - link " Analysis & Reports" [ref=e40] [cursor=pointer]:
+        - /url: "#"
+        - generic [ref=e41]: 
+        - generic [ref=e42]: Analysis & Reports
+      - link " AI Insights" [ref=e44] [cursor=pointer]:
+        - /url: "#"
+        - generic [ref=e45]: 
+        - generic [ref=e46]: AI Insights
+      - link " Data Import" [ref=e48] [cursor=pointer]:
+        - /url: "#"
+        - generic [ref=e49]: 
+        - generic [ref=e50]: Data Import
+      - link " Manual Entry" [ref=e52] [cursor=pointer]:
+        - /url: "#"
+        - generic [ref=e53]: 
+        - generic [ref=e54]: Manual Entry
+      - link " Premium Features" [ref=e56] [cursor=pointer]:
+        - /url: "#"
+        - generic [ref=e57]: 
+        - generic [ref=e58]: Premium Features
+      - link " Admin" [ref=e60] [cursor=pointer]:
+        - /url: /admin.html
+        - generic [ref=e61]: 
+        - generic [ref=e62]: Admin
+      - link " About" [ref=e64] [cursor=pointer]:
+        - /url: "#"
+        - generic [ref=e65]: 
+        - generic [ref=e66]: About
+      - link " Settings" [ref=e68] [cursor=pointer]:
+        - /url: "#"
+        - generic [ref=e69]: 
+        - generic [ref=e70]: Settings
+  - main [ref=e72]:
+    - generic [ref=e73]:
+      - navigation "breadcrumb" [ref=e74]:
+        - list [ref=e75]:
+          - listitem [ref=e76]:
+            - link "Dashboard" [ref=e77] [cursor=pointer]:
+              - /url: /
+          - listitem [ref=e78]: / Benefits
+      - generic [ref=e82]:
+        - generic [ref=e83]:
+          - heading " Benefits Management" [level=3] [ref=e84]:
+            - generic [ref=e85]: 
+            - text: Benefits Management
+          - paragraph [ref=e86]: Manage Amazon items categorized as board/owner benefits
+          - generic [ref=e87]: ✨ Enhanced Two-Column Interface
+        - generic [ref=e88]:
+          - generic [ref=e89]:
+            - generic [ref=e90]:
+              - paragraph [ref=e91]: Configure which Amazon purchases should be categorized as benefits for board members and owners. Items are filtered to show only business card purchases (ending in 5795).
+              - generic [ref=e92]:
+                - generic [ref=e93]: 
+                - strong [ref=e94]: "Current Status:"
+                - generic [ref=e95]:
+                  - strong [ref=e96]: "0"
+                  - text: total items •
+                  - strong [ref=e97]: "0"
+                  - text: business supplies •
+                  - strong [ref=e98]: "0"
+                  - text: benefits
+            - button " Configure Selection" [ref=e100] [cursor=pointer]:
+              - generic [ref=e101]: 
+              - text: Configure Selection
+          - generic [ref=e103]:
+            - heading "Quick Actions" [level=5] [ref=e104]
+            - group [ref=e105]:
+              - button " Generate Report" [ref=e106] [cursor=pointer]:
+                - generic [ref=e107]: 
+                - text: Generate Report
+              - button " Export Data" [ref=e108] [cursor=pointer]:
+                - generic [ref=e109]: 
+                - text: Export Data
+              - button " View Summary" [ref=e110] [cursor=pointer]:
+                - generic [ref=e111]: 
+                - text: View Summary
+            - heading "Quick Category Selection" [level=6] [ref=e112]
+            - paragraph [ref=e113]: "Quickly select common employee benefit categories:"
+            - generic [ref=e114]:
+              - button " Board Amenities" [ref=e115] [cursor=pointer]:
+                - generic [ref=e116]: 
+                - text: Board Amenities
+              - button " Wellness & Comfort" [ref=e117] [cursor=pointer]:
+                - generic [ref=e118]: 
+                - text: Wellness & Comfort
+              - button " Kitchen Equipment" [ref=e119] [cursor=pointer]:
+                - generic [ref=e120]: 
+                - text: Kitchen Equipment
+              - button " Office Supplies" [ref=e121] [cursor=pointer]:
+                - generic [ref=e122]: 
+                - text: Office Supplies
+          - generic [ref=e125]:
+            - heading " Benefits Categories Guide" [level=6] [ref=e127]:
+              - generic [ref=e128]: 
+              - text: Benefits Categories Guide
+            - generic [ref=e130]:
+              - generic [ref=e131]:
+                - heading "High-Priority Benefits" [level=6] [ref=e132]
+                - list [ref=e133]:
+                  - listitem [ref=e134]:
+                    - generic [ref=e135]: 
+                    - strong [ref=e136]: "Board Amenities:"
+                    - text: Coffee, snacks, beverages
+                  - listitem [ref=e137]:
+                    - generic [ref=e138]: 
+                    - strong [ref=e139]: "Wellness & Comfort:"
+                    - text: Ergonomic items, air purifiers
+                  - listitem [ref=e140]:
+                    - generic [ref=e141]: 
+                    - strong [ref=e142]: "Kitchen Equipment:"
+                    - text: Microwaves, coffee makers
+              - generic [ref=e143]:
+                - heading "Standard Benefits" [level=6] [ref=e144]
+                - list [ref=e145]:
+                  - listitem [ref=e146]:
+                    - generic [ref=e147]: 
+                    - strong [ref=e148]: "Office Supplies:"
+                    - text: Paper, pens, storage
+                  - listitem [ref=e149]:
+                    - generic [ref=e150]: 
+                    - strong [ref=e151]: "Employee Technology:"
+                    - text: Chargers, accessories
+                  - listitem [ref=e152]:
+                    - generic [ref=e153]: 
+                    - strong [ref=e154]: "Cleaning & Safety:"
+                    - text: Sanitizers, masks
+      - text:                 
+  - button "" [ref=e155] [cursor=pointer]:
+    - generic [ref=e156]: 
+  - dialog " Benefits Configuration Tool" [active] [ref=e157]:
+    - generic [ref=e158]:
+      - generic [ref=e159]:
+        - heading " Benefits Configuration Tool" [level=4] [ref=e160]:
+          - generic [ref=e161]: 
+          - text: Benefits Configuration Tool
+        - button "Close" [ref=e162] [cursor=pointer]
+      - generic [ref=e163]:
+        - generic [ref=e165]:
+          - generic [ref=e168]:
+            - heading "-" [level=5] [ref=e169]
+            - text: Total Items
+          - generic [ref=e172]:
+            - heading "$-" [level=5] [ref=e173]
+            - text: Business Supplies
+          - generic [ref=e176]:
+            - heading "$-" [level=5] [ref=e177]
+            - text: Board Benefits
+          - generic [ref=e180]:
+            - heading "-%" [level=5] [ref=e181]
+            - text: Benefits %
+        - generic [ref=e182]:
+          - generic [ref=e184]:
+            - generic [ref=e185]:
+              - heading " Business Supplies" [level=5] [ref=e186]:
+                - generic [ref=e187]: 
+                - text: Business Supplies
+              - generic [ref=e188]: 0 items
+            - textbox "Search business supplies..." [ref=e190]
+          - generic [ref=e193]:
+            - generic [ref=e194]:
+              - heading " Board Benefits" [level=5] [ref=e195]:
+                - generic [ref=e196]: 
+                - text: Board Benefits
+              - generic [ref=e197]: 0 items
+            - textbox "Search benefits..." [ref=e199]
+      - generic [ref=e201]:
+        - generic [ref=e203]:
+          - generic [ref=e204]: 
+          - text: Drag sliders to allocate between Business Supplies and Board Benefits
+        - button " Reset All" [ref=e205] [cursor=pointer]:
+          - generic [ref=e206]: 
+          - text: Reset All
+        - button "Close" [ref=e207] [cursor=pointer]
+        - button " Generate Report" [ref=e208] [cursor=pointer]:
+          - generic [ref=e209]: 
+          - text: Generate Report
+```

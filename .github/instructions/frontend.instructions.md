@@ -24,6 +24,7 @@ public/
 ## Component Pattern
 
 All HTML files MUST be under 300 lines. Break large files into:
+
 ```
 public/components/[feature-name]/
 ├── [feature-name].html      # Main component (<300 lines)
@@ -34,6 +35,7 @@ public/components/[feature-name]/
 ## Server Middleware
 
 The server automatically injects navigation into HTML via `src/menu.js`:
+
 ```javascript
 // server.js middleware reads HTML files and injects sidebar
 // No need to manually include navigation in each file
@@ -69,21 +71,21 @@ The server automatically injects navigation into HTML via `src/menu.js`:
 // ✅ DO: Use fetch with async/await and error handling
 async function loadData() {
   try {
-    const response = await fetch('/api/endpoint');
+    const response = await fetch("/api/endpoint");
     if (!response.ok) {
       throw new Error(`HTTP ${response.status}`);
     }
     const data = await response.json();
     renderData(data);
   } catch (error) {
-    showError('Failed to load data: ' + error.message);
-    console.error('API Error:', error);
+    showError("Failed to load data: " + error.message);
+    console.error("API Error:", error);
   }
 }
 
 // ❌ DON'T: Skip error handling or use .then() chains
-fetch('/api/endpoint')
-  .then(r => r.json())
+fetch("/api/endpoint")
+  .then((r) => r.json())
   .then(displayResults); // Missing error handling!
 ```
 
@@ -91,18 +93,18 @@ fetch('/api/endpoint')
 
 ```javascript
 // ✅ DO: Validate before submit
-form.addEventListener('submit', async (e) => {
+form.addEventListener("submit", async (e) => {
   e.preventDefault();
-  
+
   if (!validateForm()) {
     return;
   }
-  
+
   const formData = new FormData(form);
   try {
-    const response = await fetch('/api/endpoint', {
-      method: 'POST',
-      body: formData
+    const response = await fetch("/api/endpoint", {
+      method: "POST",
+      body: formData,
     });
     // Handle response
   } catch (error) {
@@ -116,24 +118,29 @@ form.addEventListener('submit', async (e) => {
 ```javascript
 // ✅ DO: Use template literals for HTML
 function renderItems(items) {
-  const html = items.map(item => `
+  const html = items
+    .map(
+      (item) => `
     <tr data-id="${item.id}">
       <td>${escapeHtml(item.name)}</td>
       <td>${formatCurrency(item.amount)}</td>
     </tr>
-  `).join('');
+  `
+    )
+    .join("");
   tableBody.innerHTML = html;
 }
 
 // ✅ DO: Always escape user content
 function escapeHtml(text) {
-  const div = document.createElement('div');
+  const div = document.createElement("div");
   div.textContent = text;
   return div.innerHTML;
 }
 ```
 
 ## ✅ DO:
+
 - Keep HTML components under 300 lines
 - Use Bootstrap 5 utility classes
 - Handle API errors with user feedback
@@ -142,6 +149,7 @@ function escapeHtml(text) {
 - Add loading indicators for async operations
 
 ## ❌ DON'T:
+
 - Create files over 300 lines
 - Use inline styles (use Bootstrap classes)
 - Skip error handling on fetch calls
@@ -165,3 +173,12 @@ npx playwright test tests/e2e/
 # Specific page test
 npx playwright test tests/e2e/navigation.spec.js
 ```
+
+## Related Instructions
+
+| Topic                            | File                                                                               |
+| -------------------------------- | ---------------------------------------------------------------------------------- |
+| Backend API patterns             | [src.instructions.md](src.instructions.md)                                         |
+| Test patterns                    | [tests.instructions.md](tests.instructions.md)                                     |
+| Full componentization guidelines | [../copilot-instructions.md](../copilot-instructions.md#componentization-strategy) |
+| Quick start                      | [../../AGENTS.md](../../AGENTS.md)                                                 |

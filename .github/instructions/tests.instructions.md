@@ -6,12 +6,12 @@ applyTo: "tests/**/*.js,tests/**/*.spec.js,tests/**/*.test.js"
 
 ## Test File Locations
 
-| Test Type | Location | Pattern |
-|-----------|----------|---------|
-| Unit tests | `tests/unit/` | `*.test.js` |
-| Integration | `tests/integration/` | `*.test.js` |
-| E2E (Playwright) | `tests/e2e/` | `*.spec.js` or `*.test.js` |
-| Playwright specific | `tests/pw/` | `*.test.js` |
+| Test Type           | Location             | Pattern                    |
+| ------------------- | -------------------- | -------------------------- |
+| Unit tests          | `tests/unit/`        | `*.test.js`                |
+| Integration         | `tests/integration/` | `*.test.js`                |
+| E2E (Playwright)    | `tests/e2e/`         | `*.spec.js` or `*.test.js` |
+| Playwright specific | `tests/pw/`          | `*.test.js`                |
 
 ## Running Tests
 
@@ -42,17 +42,18 @@ npm run test:e2e
 ## Test Patterns
 
 ### Unit Test Template
-```javascript
-const { functionName } = require('../../src/module');
 
-describe('ModuleName', () => {
-  describe('functionName', () => {
-    test('should do expected behavior', () => {
+```javascript
+const { functionName } = require("../../src/module");
+
+describe("ModuleName", () => {
+  describe("functionName", () => {
+    test("should do expected behavior", () => {
       const result = functionName(input);
       expect(result).toBe(expected);
     });
 
-    test('should handle edge case', () => {
+    test("should handle edge case", () => {
       expect(() => functionName(null)).toThrow();
     });
   });
@@ -60,29 +61,29 @@ describe('ModuleName', () => {
 ```
 
 ### Integration Test Template
-```javascript
-const request = require('supertest');
-const app = require('../../server');
 
-describe('GET /api/endpoint', () => {
-  test('returns success response', async () => {
-    const response = await request(app)
-      .get('/api/endpoint')
-      .expect(200);
-    
+```javascript
+const request = require("supertest");
+const app = require("../../server");
+
+describe("GET /api/endpoint", () => {
+  test("returns success response", async () => {
+    const response = await request(app).get("/api/endpoint").expect(200);
+
     expect(response.body.success).toBe(true);
   });
 });
 ```
 
 ### E2E Test Template (Playwright)
-```javascript
-const { test, expect } = require('@playwright/test');
 
-test('user can complete workflow', async ({ page }) => {
-  await page.goto('http://localhost:3000');
-  await page.click('button#submit');
-  await expect(page.locator('.success')).toBeVisible();
+```javascript
+const { test, expect } = require("@playwright/test");
+
+test("user can complete workflow", async ({ page }) => {
+  await page.goto("http://localhost:3000");
+  await page.click("button#submit");
+  await expect(page.locator(".success")).toBeVisible();
 });
 ```
 
@@ -92,13 +93,14 @@ test('user can complete workflow', async ({ page }) => {
 
 ```javascript
 // In test setup
-process.env.TEST_DB = 'true';
+process.env.TEST_DB = "true";
 
 // This uses tests/data/test-expenditures.json
 // NOT the production data/expenditures.json
 ```
 
 ## ✅ DO:
+
 - Test both success and error cases
 - Use descriptive test names
 - Clean up test data after tests
@@ -106,6 +108,7 @@ process.env.TEST_DB = 'true';
 - Keep tests under 300 lines
 
 ## ❌ DON'T:
+
 - Skip error case testing
 - Use production data in tests
 - Leave test data files modified
@@ -117,7 +120,7 @@ process.env.TEST_DB = 'true';
 ```javascript
 // Equality
 expect(value).toBe(expected);
-expect(obj).toEqual({ key: 'value' });
+expect(obj).toEqual({ key: "value" });
 
 // Truthiness
 expect(value).toBeTruthy();
@@ -129,7 +132,7 @@ expect(array).toHaveLength(3);
 
 // Errors
 expect(() => fn()).toThrow();
-expect(() => fn()).toThrow('specific message');
+expect(() => fn()).toThrow("specific message");
 
 // Async
 await expect(asyncFn()).resolves.toBe(value);
@@ -143,3 +146,12 @@ await expect(asyncFn()).rejects.toThrow();
 3. Use `console.log` temporarily
 4. Check test database state
 5. Verify server is running (for E2E)
+
+## Related Instructions
+
+| Topic                   | File                                                                                    |
+| ----------------------- | --------------------------------------------------------------------------------------- |
+| Backend patterns        | [src.instructions.md](src.instructions.md)                                              |
+| Frontend patterns       | [frontend.instructions.md](frontend.instructions.md)                                    |
+| Full testing guidelines | [../copilot-instructions.md](../copilot-instructions.md#comprehensive-testing-workflow) |
+| Quick start             | [../../AGENTS.md](../../AGENTS.md)                                                      |
