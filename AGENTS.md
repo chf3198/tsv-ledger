@@ -1,15 +1,8 @@
 # AGENTS.md - TSV Ledger Quick Start
 
-> **Single Source of Truth**: This file is the entry point only. Detailed rules live in path-specific instruction files.
+> **Entry point only** — All rules live in [.github/copilot-instructions.md](.github/copilot-instructions.md)
 
-## � Rule Priority (Most → Least Specific)
-
-1. **Path-specific** `.github/instructions/*.md` → Matches `applyTo` pattern
-2. **Repository-wide** `.github/copilot-instructions.md` → All files
-3. **Entry point** `AGENTS.md` → Session workflow only
-4. **Fallback** General best practices
-
-## �🚀 Quick Reference
+## 🚀 Quick Reference
 
 | What           | Where                                                                                          | When               |
 | -------------- | ---------------------------------------------------------------------------------------------- | ------------------ |
@@ -53,15 +46,24 @@ data/expenditures.json # Data (never edit directly)
 **Start**: Read [CURRENT_STATE.md](CURRENT_STATE.md) → Check `git status`  
 **End**: Update [CURRENT_STATE.md](CURRENT_STATE.md) → Commit with conventional format
 
-## 🚫 Critical Rules (Details in copilot-instructions.md)
+## 🔄 Session Handoff
 
-| Rule                             | Source                                                                       |
-| -------------------------------- | ---------------------------------------------------------------------------- |
-| Files < 300 lines                | [copilot-instructions.md#file-size](.github/copilot-instructions.md)         |
-| `isBackground: true` for servers | [copilot-instructions.md#command-execution](.github/copilot-instructions.md) |
-| No `open_simple_browser`         | [copilot-instructions.md#browser-testing](.github/copilot-instructions.md)   |
-| Run tests before commit          | [copilot-instructions.md#testing](.github/copilot-instructions.md)           |
-| Conventional commits             | [copilot-instructions.md#git](.github/copilot-instructions.md)               |
+**When to handoff** (any of these):
+
+- ✅ Major task completed
+- ⚠️ ~20+ complex exchanges
+- 🐌 Responses getting slow / summarizing
+- 🔀 Switching to unrelated topic
+- 🏁 End of work session
+
+**Commands**:
+
+```
+/handoff        # Execute full handoff protocol
+/session-start  # Initialize new session with context
+```
+
+See `.github/prompts/` for prompt files.
 
 ## 🔧 Common Fixes
 

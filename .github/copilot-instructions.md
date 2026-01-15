@@ -34,35 +34,18 @@ TSV Ledger is an advanced expense tracking platform with Amazon integration, AI 
 - `public/components/` (reusable HTML components under 300 lines each)
 - `public/js/modules/` (modular frontend JavaScript)
 
-## Comprehensive File Size Standards
+## File Size Standards
 
-**ALL FILES MUST BE UNDER 300 LINES**:
+**ALL FILES MUST BE UNDER 300 LINES** - Hard requirement for AI optimization:
 
-- Backend JS files: < 300 lines
-- Frontend JS files: < 300 lines
-- HTML component files: < 300 lines
-- Test files: < 300 lines
-- Documentation: < 300 lines
+| File Type       | Location                      | Limit       |
+| --------------- | ----------------------------- | ----------- |
+| Backend JS      | `src/**/*.js`                 | < 300 lines |
+| Frontend JS     | `public/js/**/*.js`           | < 300 lines |
+| HTML Components | `public/components/**/*.html` | < 300 lines |
+| Tests           | `tests/**/*.js`               | < 300 lines |
 
-**COMPONENTIZATION COMPLETED** ✅:
-
-- ✅ geographic-analysis.html: 1010 lines → component/geographic-analysis/geographic-analysis.html (157 lines)
-- ✅ navigation-e2e-test.html: 804 lines → component/navigation-e2e-test/navigation-e2e-test.html (196 lines)
-- ✅ employee-benefits.html: 768 lines → component/employee-benefits/employee-benefits.html (160 lines)
-- ✅ reconciliation.html: 721 lines → component/reconciliation/reconciliation.html (195 lines)
-- ✅ amazon-zip-import.html: 551 lines → component/amazon-zip-import/amazon-zip-import.html (216 lines)
-- ✅ subscription-analysis.html: 569 lines → component/subscription-analysis/subscription-analysis.html (204 lines)
-- ✅ Existing components: data-import (219 lines), bank-reconciliation (197 lines), navigation (45-297 lines)
-
-**REMAINING LARGE FILES** (require componentization for 99% quality rating):
-
-- index.html: 3200 lines (partially componentized - major sections extracted)
-- geographic-analysis.html: 1010 lines (component available)
-- navigation-e2e-test.html: 804 lines (component available)
-- employee-benefits.html: 768 lines (component available)
-- reconciliation.html: 721 lines (component available)
-- subscription-analysis.html: 569 lines (component available)
-- amazon-zip-import.html: 551 lines (component available)
+**If file exceeds limit**: Extract to `public/components/[feature]/` or `src/[feature]/`
 
 ## Architecture
 
@@ -113,27 +96,11 @@ TSV Ledger is an advanced expense tracking platform with Amazon integration, AI 
 - **GitHub Integration**: Create descriptive PR titles/descriptions; link to issues; use labels for categorization.
 - **Never Commit**: Without tests passing; sensitive data; large binary files (use .gitignore).
 
-## Comprehensive Codebase Optimization Requirements
+## Code Organization
 
-> **Full Details**: See [frontend.instructions.md](.github/instructions/frontend.instructions.md)
-
-**ALL FILES MUST BE UNDER 300 LINES** - Hard requirement for AI optimization:
-
-| File Type       | Location                      | Limit       |
-| --------------- | ----------------------------- | ----------- |
-| Backend JS      | `src/**/*.js`                 | < 300 lines |
-| Frontend JS     | `public/js/**/*.js`           | < 300 lines |
-| HTML Components | `public/components/**/*.html` | < 300 lines |
-| Tests           | `tests/**/*.js`               | < 300 lines |
-
-**Componentization**: HTML > 500 lines → break into `public/components/[feature]/`
-
-## Code Organization & Quality
-
-- **Component Architecture**: HTML > 500 lines → componentize to < 300 lines
-- **Documentation**: Maintain README.md, update CODEBASE_ARCHITECTURE.md post-changes
-- **Indexing**: Use descriptive names for Copilot optimization
-- **KTS Integration**: Update KnowledgeTransferTest/ with patterns and lessons
+- **Documentation**: Update `CODEBASE_ARCHITECTURE.md` after structural changes
+- **Naming**: Use descriptive names for Copilot optimization
+- **KTS**: Update `KnowledgeTransferTest/` with patterns and lessons learned
 
 ## Boundaries
 
@@ -143,10 +110,52 @@ TSV Ledger is an advanced expense tracking platform with Amazon integration, AI 
 
 ## Reorganization Goals
 
-- Subdivide into independent feature apps (dashboard, amazon-integration, etc.).
-- Functional design at module/feature levels.
-- Update `docs/CODEBASE_ARCHITECTURE.md` post-changes.
+- Subdivide into independent feature apps (dashboard, amazon-integration, etc.)
+- Functional design at module/feature levels
+- Track progress in `CURRENT_STATE.md`
 
-## Componentization Completion Summary
+## Session Management & Handoff Protocol
 
-**✅ MAJOR HTML COMPONENTIZATION COMPLETED** - See [frontend.instructions.md](.github/instructions/frontend.instructions.md) for details. All HTML files > 500 lines have components under 300 lines in `public/components/`.
+**Optimal Session Length**: ~20-25 complex exchanges before degradation risk increases.
+
+### Handoff Triggers (When to Execute `/handoff`)
+
+| Trigger                        | Action                        |
+| ------------------------------ | ----------------------------- |
+| Completing major feature/task  | Run `/handoff` prompt         |
+| ~20+ exchanges on complex work | Proactive handoff recommended |
+| Switching to unrelated topic   | Start new session             |
+| Slow responses / summarization | Handoff immediately           |
+| End of work session            | Always run `/handoff`         |
+
+### Handoff Execution
+
+Use prompt: `/handoff` or ask "execute handoff protocol"
+
+**Handoff Steps** (automated via `.github/prompts/handoff.prompt.md`):
+
+1. Document session accomplishments
+2. Capture in-progress work with context
+3. Update `CURRENT_STATE.md` with session summary
+4. Commit changes: `chore: session handoff - [summary]`
+5. Output formatted handoff block for next agent
+
+### New Session Start
+
+Use prompt: `/session-start` or ask "initialize session"
+
+**Startup Steps** (automated via `.github/prompts/session-start.prompt.md`):
+
+1. Read `CURRENT_STATE.md` and `TODO.md`
+2. Check `git status` and recent commits
+3. Verify environment (server status)
+4. Output session brief with priorities
+
+### Context Preservation Files
+
+| File               | Purpose                        | Update Frequency |
+| ------------------ | ------------------------------ | ---------------- |
+| `CURRENT_STATE.md` | Project status, recent changes | Every handoff    |
+| `TODO.md`          | Task tracking                  | As tasks change  |
+| `AGENTS.md`        | Quick reference                | Rarely           |
+| Todo list tool     | In-session task tracking       | During session   |

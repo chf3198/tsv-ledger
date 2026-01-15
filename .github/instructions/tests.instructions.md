@@ -105,7 +105,6 @@ process.env.TEST_DB = "true";
 - Use descriptive test names
 - Clean up test data after tests
 - Mock external dependencies
-- Keep tests under 300 lines
 
 ## ❌ DON'T:
 
@@ -113,7 +112,6 @@ process.env.TEST_DB = "true";
 - Use production data in tests
 - Leave test data files modified
 - Write tests that depend on order
-- Create tests over 300 lines
 
 ## Common Test Assertions
 

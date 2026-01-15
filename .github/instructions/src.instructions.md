@@ -91,16 +91,6 @@ router.get("/", async (req, res) => {
 module.exports = router;
 ```
 
-## File Size Limit
-
-**Maximum 300 lines per file**
-
-If approaching limit:
-
-1. Extract helper functions to separate module
-2. Split route handlers into feature-specific files
-3. Move constants to config file
-
 ## Testing Requirements
 
 Every `src/*.js` file must have corresponding test:

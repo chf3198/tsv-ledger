@@ -141,7 +141,6 @@ function escapeHtml(text) {
 
 ## ✅ DO:
 
-- Keep HTML components under 300 lines
 - Use Bootstrap 5 utility classes
 - Handle API errors with user feedback
 - Escape user-generated content
@@ -150,7 +149,6 @@ function escapeHtml(text) {
 
 ## ❌ DON'T:
 
-- Create files over 300 lines
 - Use inline styles (use Bootstrap classes)
 - Skip error handling on fetch calls
 - Trust user input without sanitization
