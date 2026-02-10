@@ -276,6 +276,105 @@ CREATE TABLE passkeys (
 - Navigation structure defined upfront
 - ARIA landmarks for accessibility
 
+### ADR-011: Custom Auth Implementation vs Auth.js
+**Context**: Need to implement Google OAuth, GitHub OAuth, and Passkeys with CloudFlare D1  
+**Research**: Auth.js docs show D1 adapter exists (`@auth/d1-adapter`) with migration tools  
+**Problem Discovered**: 
+- Auth.js is framework-heavy (designed for Next.js, SvelteKit, Express)
+- CloudFlare Workers integration is unclear/undocumented in Auth.js v5
+- Our static GitHub Pages + Worker API setup doesn't match Auth.js expectations
+- Auth.js adds significant complexity for 3 providers + passkeys
+
+**Decision**: Build custom lightweight auth for our specific use case  
+**Implementation**:
+1. **OAuth Flows**: Direct provider API calls (Google/GitHub OAuth 2.0)
+   - OAuth 2.0 authorization code flow (PKCE for security)
+   - State parameter for CSRF protection
+   - Worker endpoints: `/auth/oauth/{provider}/start`, `/auth/oauth/{provider}/callback`
+2. **Passkeys**: WebAuthn API (already implemented in js/auth.js)
+   - SimpleWebAuthn library for server-side verification
+   - Worker endpoints: `/auth/passkey/register`, `/auth/passkey/login`
+3. **Session Management**: JWT tokens in HttpOnly cookies
+   - CloudFlare Workers crypto API for signing
+   - D1 for session storage (user_id, expires_at, created_at)
+4. **D1 Schema** (simplified from Auth.js):
+   ```sql
+   CREATE TABLE users (
+     id TEXT PRIMARY KEY,
+     email TEXT UNIQUE NOT NULL,
+     name TEXT,
+     avatar_url TEXT,
+     created_at INTEGER NOT NULL
+   );
+   
+   CREATE TABLE oauth_accounts (
+     provider TEXT NOT NULL,
+     provider_user_id TEXT NOT NULL,
+     user_id TEXT NOT NULL REFERENCES users(id),
+     PRIMARY KEY (provider, provider_user_id)
+   );
+   
+   CREATE TABLE passkeys (
+     id TEXT PRIMARY KEY,
+     user_id TEXT NOT NULL REFERENCES users(id),
+     credential_id TEXT UNIQUE NOT NULL,
+     public_key BLOB NOT NULL,
+     counter INTEGER DEFAULT 0
+   );
+   
+   CREATE TABLE sessions (
+     id TEXT PRIMARY KEY,
+     user_id TEXT NOT NULL REFERENCES users(id),
+     expires_at INTEGER NOT NULL,
+     created_at INTEGER NOT NULL
+   );
+   ```
+
+**Consequences**:
+- ✅ Full control over auth flow, no framework overhead
+- ✅ Matches our static-first + edge API architecture perfectly
+- ✅ Simpler to test and debug (fewer abstractions)
+- ✅ Can follow OWASP guidelines directly
+- ❌ Must implement OAuth 2.0 ourselves (but it's well-documented)
+- ❌ No magic links (deferred to v2 if needed)
+- ⚠️ Requires careful security review (use web.dev/OWASP best practices)
+
+**Security Checklist** (per OWASP Authentication Cheat Sheet):
+- [ ] HTTPS only (enforced by CloudFlare + GitHub Pages)
+- [ ] Secure session cookies (HttpOnly, Secure, SameSite=Strict)
+- [ ] CSRF tokens via OAuth state parameter
+- [ ] Session timeout: 30 min idle, 8 hour absolute
+- [ ] PKCE for OAuth (S256 challenge method)
+- [ ] Rate limiting on auth endpoints
+
+### ADR-012: Phased Auth Implementation
+**Context**: Full OAuth + Passkeys + CloudFlare Worker is a large multi-file task  
+**Decision**: Implement in phases, localStorage mock first, then production backend
+
+**Phase 1: Mock Authentication** (Current - localStorage only):
+- localStorage stores mock user: `{id, email, name, provider}`
+- UI already exists and tested (5 passing tests in register.spec.js)
+- Allows app development to continue without backend dependency
+- Tests validate auth UI flows work correctly
+
+**Phase 2: CloudFlare Worker + D1** (Future - separate epic):
+- Create CloudFlare Worker with auth endpoints
+- Set up D1 database with migrations
+- Implement OAuth 2.0 flows (Google, GitHub)
+- Implement WebAuthn/Passkey verification
+- Replace localStorage mock with real API calls
+
+**Consequences**:
+- ✅ Unblocks feature development (expenses, import, dashboard)
+- ✅ Maintains ≤100 line constraint per file
+- ✅ Tests remain valid (UI behavior unchanged)
+- ✅ Clear separation: frontend complete, backend deferred
+- ⚠️ Phase 2 requires OAuth app setup on Google/GitHub consoles
+- ⚠️ Phase 2 requires CloudFlare account + D1 database creation
+
+**Current Status**: Phase 1 complete (mock auth working, UI tested)  
+**Next**: Continue with core app features using mock auth
+
 ## Rejected Alternatives
 | Rejected | Why |
 |----------|-----|
@@ -285,4 +384,5 @@ CREATE TABLE passkeys (
 | Firebase Auth | Heavier SDK, vendor lock-in, 3K DAU limit on free |
 | Clerk | MFA requires paid plan, closed source |
 | Supabase Auth | Requires Supabase infrastructure, not CloudFlare D1 |
+| Auth.js (NextAuth) | Framework-heavy, unclear CloudFlare Workers integration, overkill for 3 providers |
 | Password-based auth | Requires hashing infra, breach monitoring, reset flows |

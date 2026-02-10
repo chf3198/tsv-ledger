@@ -83,6 +83,48 @@
 - Shell CSS in separate file (css/shell.css) for maintainability
 - App state gained `menuOpen` and `route` properties
 
+### 2026-02-12 BUGFIX: JavaScript Module Export Errors Breaking Form Submission
+
+**Context**: 14/32 Playwright tests failing - form submissions weren't saving to localStorage
+**Outcome**: Found 3 JS errors: (1) `export` keyword in auth.js (ES module syntax in non-module script), (2) duplicate `formatCurrency` const in utils.js AND storage.js, (3) storage.js functions not exported to window
+**Insight**:
+- Plain `<script>` tags don't support ES module syntax (`export`/`import`) - causes "Unexpected token 'export'"
+- Multiple scripts defining same `const` name causes "Identifier already declared" in global scope
+- Debugging with `page.on('console')` and `page.on('pageerror')` reveals JS errors invisible to test assertions
+- Alpine.js x-model bindings work (values set correctly) but function calls fail silently if function undefined
+**Adaptation**:
+- **CHECKLIST**: After creating/moving JS files, verify window.* exports match function definitions
+- **CHECKLIST**: Use `const varName =` pattern consistently, check for name collisions across files
+- **CHECKLIST**: Debug test failures by capturing console errors: `page.on('console', msg => logs.push(msg))`
+- Removed `export` from auth.js (already had `window.authService = authService`)
+- Removed duplicate `formatCurrency` from storage.js (kept in utils.js)
+- Added window exports for loadExpenses, saveExpenses, exportToCSV, getUniqueLocations
+
+### 2026-02-10 DECISION: Phased Auth Implementation (ADR-011, ADR-012)
+
+**Context**: Continuing development after LLM comparison research - auth was next on roadmap  
+**Outcome**: 
+- Researched Auth.js + CloudFlare D1 integration
+- Discovered Auth.js is framework-heavy (Next.js/SvelteKit-focused)
+- CloudFlare Workers integration unclear/undocumented in Auth.js docs
+- Created ADR-011: Custom auth instead of Auth.js
+- Created ADR-012: Phased approach (mock first, backend later)
+
+**Insight**: 
+- Auth.js optimized for full-stack frameworks, not static-first + edge API
+- Full OAuth + Passkeys + Worker implementation is ~300+ lines across multiple files
+- Current UI tests already passing with mock auth
+- Pragmatic to defer backend until frontend features are complete
+- Phased approach maintains ≤100 line constraint and unblocks development
+
+**Adaptation**: 
+- Phase 1: Keep localStorage mock auth (current, working, tested)
+- Phase 2: CloudFlare Worker backend (separate epic, future)
+- Continue with core app features using mock
+- No code changes needed - ADRs document decision only
+
+**Tests**: 32/32 passing | **Lint**: All files ≤100 lines
+
 ---
 
 <!-- New entries go above this line -->
@@ -91,20 +133,21 @@
 
 | Metric | Count |
 |--------|-------|
-| Total Reflections | 6 |
-| Test Failures Analyzed | 1 |
+| Total Reflections | 8 |
+| Test Failures Analyzed | 2 |
 | Lint Failures Analyzed | 1 |
 | Rework Episodes | 2 |
-| Protocol Adaptations | 3 |
+| Protocol Adaptations | 4 |
 
 ## Detected Patterns
 
 *Patterns emerge after 3+ similar entries*
 
-- (none yet)
+- **JS Module Confusion**: Plain scripts vs ES modules cause syntax errors - always use window.* exports for non-module scripts
 
 ## Active Adaptations
 
 | Date | Adaptation | Source |
 |------|------------|--------|
 | 2026-02-09 | Reflection step added to loop | Initial setup |
+| 2026-02-12 | Check window exports after JS file changes | Module export bug |
