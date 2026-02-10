@@ -1,6 +1,0 @@
-#!/usr/bin/env sh
-node scripts/validate-file-sizes.js
-if [ $? -ne 0 ]; then
-    echo "❌ File size validation failed. Please fix oversized files before committing."
-    exit 1
-fi

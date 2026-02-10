@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TSV Expenses - Business Expense Tracker</title>
+
+    <!-- Pico CSS - Minimal, semantic, classless CSS -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css"
+    />
+
+    <!-- Alpine.js - Lightweight reactivity -->
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
+    ></script>
+
+    <style>
+      :root {
+        --pico-font-size: 16px;
+      }
+      .category-supplies {
+        background-color: #e3f2fd;
+      }
+      .category-benefits {
+        background-color: #f3e5f5;
+      }
+      .split-view {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+      }
+      @media (max-width: 768px) {
+        .split-view {
+          grid-template-columns: 1fr;
+        }
+      }
+      .summary-card {
+        text-align: center;
+        padding: 1rem;
+        border-radius: 8px;
+      }
+      .drag-area {
+        border: 2px dashed var(--pico-muted-border-color);
+        border-radius: 8px;
+        padding: 2rem;
+        text-align: center;
+      }
+      .drag-area.dragover {
+        border-color: var(--pico-primary);
+        background: var(--pico-primary-focus);
+      }
+      .filters {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+        margin-bottom: 1rem;
+      }
+      .totals {
+        font-weight: bold;
+        background: var(--pico-card-background-color);
+      }
+    </style>
+  </head>
+  <body x-data="expenseApp()">
+    <main class="container">
+      <header>
+        <h1>📊 TSV Expenses</h1>
+        <p>Business expense tracking for Texas Sunset Venues</p>
+      </header>
+
+      <!-- Import Section -->
+      <section>
+        <h2>📁 Import Expenses</h2>
+        <div
+          class="drag-area"
+          @dragover.prevent="dragover = true"
+          @dragleave="dragover = false"
+          @drop.prevent="handleDrop($event)"
+          :class="{ 'dragover': dragover }"
+        >
+          <p>Drag & drop CSV file here, or</p>
+          <input
+            type="file"
+            accept=".csv"
+            @change="handleFileSelect($event)"
+            id="fileInput"
+          />
+          <label for="fileInput" role="button">Choose File</label>
+        </div>
+        <template x-if="importStatus">
+          <p
+            x-text="importStatus"
+            :class="importError ? 'error' : 'success'"
+          ></p>
+        </template>
+      </section>
+
+      <!-- Summary Cards -->
+      <section class="split-view">
+        <article class="summary-card category-supplies">
+          <h3>🏢 Office Supplies</h3>
+          <p
+            style="font-size: 2rem"
+            x-text="formatCurrency(totals.supplies)"
+          ></p>
+          <small x-text="`${counts.supplies} expenses`"></small>
+        </article>
+        <article class="summary-card category-benefits">
+          <h3>👥 Employee Benefits</h3>
+          <p
+            style="font-size: 2rem"
+            x-text="formatCurrency(totals.benefits)"
+          ></p>
+          <small x-text="`${counts.benefits} expenses`"></small>
+        </article>
+      </section>
+
+      <!-- Filters -->
+      <section>
+        <h2>📋 Expenses</h2>
+        <div class="filters">
+          <select x-model="filters.location" @change="applyFilters()">
+            <option value="">All Locations</option>
+            <template x-for="loc in locations" :key="loc">
+              <option :value="loc" x-text="loc"></option>
+            </template>
+          </select>
+          <select x-model="filters.category" @change="applyFilters()">
+            <option value="">All Categories</option>
+            <option value="Office Supplies">Office Supplies</option>
+            <option value="Employee Benefits">Employee Benefits</option>
+          </select>
+          <input
+            type="date"
+            x-model="filters.startDate"
+            @change="applyFilters()"
+            placeholder="Start Date"
+          />
+          <input
+            type="date"
+            x-model="filters.endDate"
+            @change="applyFilters()"
+            placeholder="End Date"
+          />
+          <button class="secondary" @click="clearFilters()">Clear</button>
+        </div>
+      </section>
+
+      <!-- Expenses Table -->
+      <section>
+        <figure>
+          <table role="grid">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Description</th>
+                <th>Location</th>
+                <th>Category</th>
+                <th>Amount</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <template x-for="expense in filteredExpenses" :key="expense.id">
+                <tr
+                  :class="expense.category === 'Office Supplies' ? 'category-supplies' : 'category-benefits'"
+                >
+                  <td x-text="expense.date"></td>
+                  <td x-text="expense.description"></td>
+                  <td x-text="expense.location"></td>
+                  <td>
+                    <select
+                      x-model="expense.category"
+                      @change="updateExpense(expense)"
+                    >
+                      <option value="Office Supplies">Office Supplies</option>
+                      <option value="Employee Benefits">
+                        Employee Benefits
+                      </option>
+                    </select>
+                  </td>
+                  <td x-text="formatCurrency(expense.amount)"></td>
+                  <td>
+                    <button
+                      class="secondary outline"
+                      @click="deleteExpense(expense.id)"
+                    >
+                      🗑️
+                    </button>
+                  </td>
+                </tr>
+              </template>
+            </tbody>
+            <tfoot>
+              <tr class="totals">
+                <td colspan="4">Filtered Total</td>
+                <td x-text="formatCurrency(filteredTotal)"></td>
+                <td></td>
+              </tr>
+            </tfoot>
+          </table>
+        </figure>
+        <p x-show="filteredExpenses.length === 0">
+          No expenses found. Import a CSV to get started.
+        </p>
+      </section>
+
+      <!-- Add Manual Expense -->
+      <section>
+        <details>
+          <summary>➕ Add Expense Manually</summary>
+          <form @submit.prevent="addExpense()">
+            <div class="grid">
+              <input type="date" x-model="newExpense.date" required />
+              <input
+                type="text"
+                x-model="newExpense.description"
+                placeholder="Description"
+                required
+              />
+            </div>
+            <div class="grid">
+              <input
+                type="text"
+                x-model="newExpense.location"
+                placeholder="Location"
+                required
+                list="location-list"
+              />
+              <datalist id="location-list">
+                <template x-for="loc in locations" :key="loc">
+                  <option :value="loc"></option>
+                </template>
+              </datalist>
+              <select x-model="newExpense.category" required>
+                <option value="">Select Category</option>
+                <option value="Office Supplies">Office Supplies</option>
+                <option value="Employee Benefits">Employee Benefits</option>
+              </select>
+              <input
+                type="number"
+                x-model.number="newExpense.amount"
+                placeholder="Amount"
+                step="0.01"
+                min="0"
+                required
+              />
+            </div>
+            <button type="submit">Add Expense</button>
+          </form>
+        </details>
+      </section>
+
+      <!-- Export -->
+      <section>
+        <button class="outline" @click="exportCSV()">📤 Export to CSV</button>
+        <button
+          class="outline secondary"
+          @click="clearAll()"
+          style="margin-left: 1rem"
+        >
+          🗑️ Clear All Data
+        </button>
+      </section>
+    </main>
+
+    <footer class="container">
+      <small
+        >TSV Expenses v3.0 |
+        <a href="https://github.com/your-username/tsv-ledger">GitHub</a></small
+      >
+    </footer>
+
+    <script src="app.js"></script>
+  </body>
+</html>
