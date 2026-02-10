@@ -4,81 +4,53 @@
   <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>TSV Expenses</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
-  <link rel="stylesheet" href="css/app.css">
+  <link rel="stylesheet" href="css/shell.css"><link rel="stylesheet" href="css/app.css">
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </head>
 <body x-data="expenseApp()">
-  <main class="container">
-    <header>
-      <nav><h1>📊 TSV Expenses</h1>
-        <template x-if="!auth.authenticated">
-          <button data-testid="login-button" @click="showAuthModal=true" class="outline">Sign In</button>
-        </template>
-        <template x-if="auth.authenticated">
-          <div data-testid="user-menu" class="user-menu" @click="showUserMenu=!showUserMenu">
-            <span x-text="auth.user?.name || 'User'"></span> ▾
-            <div x-show="showUserMenu" class="dropdown">
-              <button data-testid="logout-button" @click="logout()">Sign Out</button></div></div>
-        </template>
-      </nav>
-      <p>Business expense tracking</p>
-    </header>
-    <!-- Auth Modal -->
-    <dialog :open="showAuthModal" data-testid="auth-modal">
-      <article><header><button data-testid="auth-modal-close" @click="showAuthModal=false" aria-label="Close">×</button>
-          <h3>Sign In</h3></header>
-        <button data-testid="auth-google" @click="authWith('google')" class="outline">🔵 Continue with Google</button>
-        <button data-testid="auth-github" @click="authWith('github')" class="outline">⚫ Continue with GitHub</button>
-        <hr><button data-testid="auth-passkey" @click="authWith('passkey')" class="secondary">🔐 Use Passkey</button>
-      </article>
-    </dialog>
-    <!-- Import -->
-    <section><h2>📁 Import</h2>
-      <div class="drag-area" @dragover.prevent="dragover=true" @dragleave="dragover=false" @drop.prevent="handleDrop($event)" :class="{dragover}">
-        <p>Drop CSV here or <input type="file" accept=".csv" @change="handleFileSelect($event)"></p></div>
-      <p x-show="importStatus" x-text="importStatus" :class="importError?'error':'success'"></p></section>
-    <!-- Summary -->
-    <section class="split-view">
-      <article class="summary-card category-supplies"><h3>🏢 Office Supplies</h3>
-        <p style="font-size:2rem" x-text="formatCurrency(totals.supplies)"></p><small x-text="`${counts.supplies} items`"></small></article>
-      <article class="summary-card category-benefits"><h3>👥 Employee Benefits</h3>
-        <p style="font-size:2rem" x-text="formatCurrency(totals.benefits)"></p><small x-text="`${counts.benefits} items`"></small></article></section>
-    <!-- Filters -->
-    <section><h2>📋 Expenses</h2>
-      <div class="filters">
-        <select x-model="filters.location" @change="applyFilters()"><option value="">All Locations</option>
-          <template x-for="loc in locations"><option :value="loc" x-text="loc"></option></template></select>
-        <select x-model="filters.category" @change="applyFilters()"><option value="">All Categories</option>
-          <option value="Office Supplies">Office Supplies</option><option value="Employee Benefits">Employee Benefits</option></select>
-        <input type="date" x-model="filters.startDate" @change="applyFilters()">
-        <input type="date" x-model="filters.endDate" @change="applyFilters()">
-        <button class="secondary" @click="clearFilters()">Clear</button></div></section>
-    <!-- Table -->
-    <section><table role="grid">
-        <thead><tr><th>Date</th><th>Description</th><th>Location</th><th>Category</th><th>Amount</th><th></th></tr></thead>
-        <tbody><template x-for="e in filteredExpenses" :key="e.id">
-            <tr :class="e.category==='Office Supplies'?'category-supplies':'category-benefits'">
-              <td x-text="e.date"></td><td x-text="e.description"></td><td x-text="e.location"></td>
-              <td><select x-model="e.category" @change="updateExpense()"><option>Office Supplies</option><option>Employee Benefits</option></select></td>
-              <td x-text="formatCurrency(e.amount)"></td>
-              <td><button class="secondary outline" @click="deleteExpense(e.id)">🗑️</button></td></tr></template></tbody>
-        <tfoot><tr class="totals"><td colspan="4">Total</td><td x-text="formatCurrency(filteredTotal)"></td><td></td></tr></tfoot></table>
-      <p x-show="!filteredExpenses.length">No expenses. Import CSV to start.</p></section>
-    <!-- Add Form -->
-    <details><summary>➕ Add Manually</summary>
-      <form @submit.prevent="addExpense()" class="grid">
-        <input type="date" x-model="newExpense.date" required>
-        <input type="text" x-model="newExpense.description" placeholder="Description" required>
-        <input type="text" x-model="newExpense.location" placeholder="Location" list="locs">
-        <datalist id="locs"><template x-for="l in locations"><option :value="l"></option></template></datalist>
-        <select x-model="newExpense.category" required><option value="">Category</option><option>Office Supplies</option><option>Employee Benefits</option></select>
-        <input type="number" x-model.number="newExpense.amount" placeholder="Amount" step="0.01" required>
-        <button type="submit">Add</button></form></details>
-    <!-- Actions -->
-    <section><button class="outline" @click="exportCSV()">📤 Export</button>
-      <button class="outline secondary" @click="clearAll()">🗑️ Clear All</button></section>
+  <!-- App Shell: Header -->
+  <header role="banner" class="app-header">
+    <button data-testid="menu-toggle" class="menu-toggle" @click="menuOpen=!menuOpen" aria-label="Menu">☰</button>
+    <h1 data-testid="logo">📊 TSV</h1>
+    <template x-if="!auth.authenticated"><button data-testid="login-button" @click="showAuthModal=true" class="outline">Sign In</button></template>
+    <template x-if="auth.authenticated"><div data-testid="user-menu" class="user-menu" @click="showUserMenu=!showUserMenu">
+        <span x-text="auth.user?.name||'User'"></span>▾<div x-show="showUserMenu" class="dropdown"><button data-testid="logout-button" @click="logout()">Sign Out</button></div></div></template>
+  </header>
+  <!-- App Shell: Navigation -->
+  <aside data-testid="main-nav" class="app-nav" :class="{'open':menuOpen}" @click.outside="menuOpen=false">
+    <nav><a href="#/" data-nav="dashboard" :class="{'active':route==='dashboard'}" @click="route='dashboard';menuOpen=false">📊 Dashboard</a>
+      <a href="#/expenses" data-nav="expenses" :class="{'active':route==='expenses'}" @click="route='expenses';menuOpen=false">💰 Expenses</a>
+      <a href="#/import" data-nav="import" :class="{'active':route==='import'}" @click="route='import';menuOpen=false">📁 Import</a>
+      <a href="#/settings" data-nav="settings" :class="{'active':route==='settings'}" @click="route='settings';menuOpen=false">⚙️ Settings</a></nav>
+  </aside>
+  <!-- App Shell: Main -->
+  <main role="main" class="app-main">
+    <!-- Auth Modal --><dialog :open="showAuthModal" data-testid="auth-modal"><article>
+        <button data-testid="auth-modal-close" @click="showAuthModal=false" aria-label="Close" class="close">×</button><h3>Sign In</h3>
+        <button data-testid="auth-google" @click="authWith('google')" class="outline">🔵 Google</button>
+        <button data-testid="auth-github" @click="authWith('github')" class="outline">⚫ GitHub</button>
+        <hr><button data-testid="auth-passkey" @click="authWith('passkey')" class="secondary">🔐 Passkey</button></article></dialog>
+    <!-- Dashboard --><section x-show="route==='dashboard'" class="split-view">
+      <article class="summary-card category-supplies"><h3>🏢 Supplies</h3><p class="amount" x-text="formatCurrency(totals.supplies)"></p><small x-text="`${counts.supplies} items`"></small></article>
+      <article class="summary-card category-benefits"><h3>👥 Benefits</h3><p class="amount" x-text="formatCurrency(totals.benefits)"></p><small x-text="`${counts.benefits} items`"></small></article></section>
+    <!-- Expenses --><section x-show="route==='expenses'"><h2>💰 Expenses</h2>
+      <div class="filters"><select x-model="filters.category" @change="applyFilters()"><option value="">All</option><option value="Office Supplies">Supplies</option><option value="Employee Benefits">Benefits</option></select>
+        <input type="date" x-model="filters.startDate" @change="applyFilters()"><input type="date" x-model="filters.endDate" @change="applyFilters()"><button class="secondary outline" @click="clearFilters()">Clear</button></div>
+      <table role="grid"><thead><tr><th>Date</th><th>Description</th><th>Category</th><th>Amount</th><th></th></tr></thead>
+        <tbody><template x-for="e in filteredExpenses" :key="e.id"><tr><td x-text="e.date"></td><td x-text="e.description"></td>
+            <td><select x-model="e.category" @change="updateExpense()"><option>Office Supplies</option><option>Employee Benefits</option></select></td>
+            <td x-text="formatCurrency(e.amount)"></td><td><button class="outline" @click="deleteExpense(e.id)">🗑️</button></td></tr></template></tbody>
+        <tfoot><tr><td colspan="3">Total</td><td x-text="formatCurrency(filteredTotal)"></td><td></td></tr></tfoot></table>
+      <p x-show="!filteredExpenses.length">No expenses yet.</p></section>
+    <!-- Import --><section x-show="route==='import'"><h2>📁 Import</h2>
+      <div class="drag-area" @dragover.prevent="dragover=true" @dragleave="dragover=false" @drop.prevent="handleDrop($event)" :class="{dragover}"><p>Drop CSV or <input type="file" accept=".csv" @change="handleFileSelect($event)"></p></div>
+      <p x-show="importStatus" x-text="importStatus" :class="importError?'error':'success'"></p>
+      <details><summary>➕ Add Manually</summary><form @submit.prevent="addExpense()" class="grid"><input type="date" x-model="newExpense.date" required>
+          <input type="text" x-model="newExpense.description" placeholder="Description" required><select x-model="newExpense.category" required><option value="">Category</option><option>Office Supplies</option><option>Employee Benefits</option></select>
+          <input type="number" x-model.number="newExpense.amount" placeholder="Amount" step="0.01" required><button type="submit">Add</button></form></details></section>
+    <!-- Settings --><section x-show="route==='settings'"><h2>⚙️ Settings</h2>
+      <button class="outline" @click="exportCSV()">📤 Export CSV</button><button class="outline secondary" @click="clearAll()">🗑️ Clear All</button></section>
   </main>
-  <footer class="container"><small>TSV Expenses v3.0</small></footer>
-  <script src="js/storage.js"></script><script src="js/csv.js"></script>
-  <script src="js/categorizer.js"></script><script src="js/app.js"></script>
+  <!-- App Shell: Footer --><footer role="contentinfo" class="app-footer"><small>TSV Expenses v3.0 • Texas Sunset Venues</small></footer>
+  <script src="js/storage.js"></script><script src="js/csv.js"></script><script src="js/categorizer.js"></script><script src="js/app.js"></script>
 </body></html>

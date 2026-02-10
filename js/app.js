@@ -33,6 +33,8 @@ function expenseApp() {
   return {
     expenses: [], filteredExpenses: [], locations: [], dragover: false,
     importStatus: '', importError: false, filters: emptyFilters(), newExpense: emptyExpense(),
+    // Shell state (ADR-010)
+    menuOpen: false, route: 'dashboard',
     // Auth state (ADR-009)
     auth: JSON.parse(localStorage.getItem('tsv-auth') || '{"user":null,"authenticated":false}'),
     showAuthModal: false, showUserMenu: false,

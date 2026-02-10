@@ -234,6 +234,48 @@ CREATE TABLE passkeys (
 - No password storage/hashing needed (passwordless-first)
 - User data syncs across devices via account linking
 
+### ADR-010: App Shell Architecture
+**Context**: Need to establish foundational UI structure before implementing features  
+**Decision**: Build app shell first with header, navigation, main content area, footer  
+**Research Sources**: Google Chrome DevRel (App Shell Model), Smashing Magazine (Skeleton Screens)
+
+**App Shell Pattern Benefits**:
+- Perceived performance: Users see structure immediately
+- PWA-ready: Service worker can cache shell for offline
+- Clear separation: UI structure vs dynamic content
+- TDD-compatible: Test shell elements exist before content
+
+**Shell Structure**:
+```html
+<body>
+  <header role="banner">
+    <nav>Logo + Auth</nav>
+  </header>
+  <aside role="navigation">Menu (hamburger on mobile)</aside>
+  <main role="main">Content area + skeleton loaders</main>
+  <footer role="contentinfo">Version + branding</footer>
+</body>
+```
+
+**Navigation Items** (Phase 1):
+| Route | Label | Icon |
+|-------|-------|------|
+| `/` | Dashboard | 📊 |
+| `/expenses` | Expenses | 💰 |
+| `/import` | Import | 📁 |
+| `/settings` | Settings | ⚙️ |
+
+**Responsive Breakpoints**:
+- Mobile: ≤640px (hamburger menu, stacked layout)
+- Tablet: 641-1024px (collapsible sidebar)
+- Desktop: >1024px (persistent sidebar)
+
+**Consequences**:
+- Foundation established before feature work
+- Enables skeleton loading states
+- Navigation structure defined upfront
+- ARIA landmarks for accessibility
+
 ## Rejected Alternatives
 | Rejected | Why |
 |----------|-----|
