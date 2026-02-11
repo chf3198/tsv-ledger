@@ -55,15 +55,21 @@ If same fix attempted 3 times without success:
 
 ## Verification Loops
 
-### After Edit
+### After EVERY Edit (Mandatory)
 
 ```
-1. Make change
-2. Run tests
-3. If pass → commit
-4. If fail → analyze OR revert
-5. NEVER move forward with failing tests
+1. Make ONE change
+2. Run: npm test 2>&1 | grep -E "(passed|failed)"
+3. Show user EXACT grep output (never interpret)
+4. Ask user: "Does this look correct?"
+5. If user approves + tests pass → commit
+6. If tests fail → IMMEDIATELY revert
+7. NEVER make second change while first is unverified
 ```
+
+**Critical**: Always show **raw data**, never my interpretation.
+- ✅ "Output: 33 passed, 7 failed"
+- ❌ "Most tests are passing" (hallucination risk)
 
 ### When Debugging
 
@@ -77,11 +83,18 @@ If same fix attempted 3 times without success:
 
 ## Red Flags (STOP IMMEDIATELY)
 
+**User must watch for these** (agent cannot reliably self-detect):
+
 1. **Tests passing → failing** without understanding why
-2. **Multiple similar fixes** that don't work
+2. **Multiple similar fixes** that don't work (>2 attempts)
 3. **Re-reading same code** without new insight
 4. **Uncertainty about what change caused issue**
 5. **User intervention required** to diagnose problem
+6. **Agent repetition** - explaining same thing multiple times
+7. **Agent interpretation** - summarizing instead of showing raw data
+
+**User action**: Say "STOP and REVERT" immediately.  
+**Agent action**: Request user confirmation if uncertain.
 
 ## Recovery From Failure Spiral
 
@@ -139,23 +152,42 @@ Use for complex changes:
 ## Task: [Feature Name]
 
 ### Pre-flight Checklist
-- [ ] All tests currently passing
-- [ ] Git status clean or changes committed
-- [ ] Understand success criteria
-- [ ] Know how to verify success
-
-### Rollback Plan
-- Last known good commit: [SHA]
-- Files that will change: [list]
-- Rollback command: `git restore [files]`
+- [ ] **USER**: Create git checkpoint: `git commit -m "checkpoint before [feature]"`
+- [ ] **USER**: Confirm actively watching for red flags
+- [ ] **AGENT**: Show current test status with `npm test 2>&1 | grep -E "passed|failed"`
+- [ ] **AGENT**: Wait for user approval to proceed
+- [ ] Know success criteria
+- [ ] Know rollback command: `git restore [files]`
 ```
 
-### During Work
+### During Work (After EACH Change)
 
-- ✅ Make one small change
-- ✅ Run `npm test && npm run lint`
-- ✅ If pass: `git commit -m "feat: [what works]"`
-- ✅ If fail: Fix immediately OR revert
+```markdown
+## Change Verification Loop
+1. **AGENT**: Make ONE small change
+2. **AGENT**: Run `npm test 2>&1 | grep -E "passed|failed"`
+3. **AGENT**: Show user EXACT output (no interpretation!)
+4. **AGENT**: Ask "Does this match expectations?"
+5. **USER**: Approve or Request Revert
+6. If approved + tests pass → `git commit -m "feat: [what works]"`
+7. If fail → `git restore [file]` immediately
+```
+
+**Critical**: Agent shows RAW DATA only. User interprets results.
+
+### Circuit Breaker (USER Enforced)
+
+```markdown
+## User Watchlist (Check during each change)
+- [ ] Has agent re-read same code 2+ times? → STOP
+- [ ] Has agent attempted same fix 3+ times? → STOP
+- [ ] Is agent's explanation becoming repetitive? → STOP
+- [ ] Are tests passing → failing without clear reason? → STOP
+- [ ] Is agent showing uncertainty but proceeding? → STOP
+- [ ] Is agent summarizing instead of showing data? → STOP
+
+If ANY checked → **USER SAYS: "STOP and REVERT NOW"**
+```
 
 ### After Work
 
@@ -228,13 +260,76 @@ npm test  # Should show original pass rate
 
 ## Commitment
 
+### Agent Commitments
+
 As an AI agent, I commit to:
 
-1. **Never batch unverified changes**
-2. **Revert immediately when tests fail**
-3. **Read test output accurately**
-4. **Stop after 2-3 failed fix attempts**
-5. **Use git checkpoints liberally**
-6. **Log failures for learning**
+1. **Show raw data, never interpret test results**
+   - Use `grep` to extract pass/fail counts
+   - Display EXACT output to user
+   - Let user interpret, not me
+
+2. **Request user approval after EACH change**
+   - Not just at the end
+   - Show what changed
+   - Wait for explicit "proceed"
+
+3. **Admit uncertainty immediately**
+   - Say "I'm not sure" instead of guessing
+   - Ask for user judgment
+   - Propose rollback if uncertain
+
+4. **Revert on first failure**
+   - If test fails, immediately suggest `git restore`
+   - Don't attempt multiple fixes without reverting
+   - Let user decide to try different approach
+
+5. **Never batch unverified changes**
+   - ONE change at a time
+   - Verify it works
+   - Commit
+   - Then next change
+
+6. **Recognize I cannot detect my own hallucinations**
+   - Rely on programmatic tools (grep, not reading)
+   - Trust environment feedback over my interpretation
+   - Ask user to verify my understanding
+
+### User Responsibilities
+
+As the overseer, user must:
+
+1. **Act as active monitor, not passive observer**
+   - Watch for red flags during conversation
+   - Don't assume agent will self-regulate
+   - Interrupt if something feels wrong
+
+2. **Enforce circuit breakers**
+   - Count agent's attempts on same issue
+   - Notice repetitive explanations
+   - Say "STOP" when red flags appear
+
+3. **Verify raw data**
+   - Don't trust agent's test result interpretations
+   - Look at grep output directly
+   - Check git diff before approving changes
+
+4. **Commit frequently**
+   - After each successful change
+   - Creates rollback points
+   - Enables bisecting if issues found later
+
+5. **Understand the code**
+   - Can't effectively oversee without domain knowledge
+   - Ask agent to explain if unclear
+   - Don't approve changes you don't understand
+
+### The Partnership Model
+
+**Agent**: Junior developer with perfect memory, no common sense  
+**User**: Senior developer with judgment, experience, oversight
+
+**Neither can succeed alone.**  
+**Together, we can prevent compounding errors.**
 
 This protocol is now part of the standard development workflow.
