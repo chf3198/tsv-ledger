@@ -89,9 +89,29 @@
 - Historical accounting doesn't need future delivery predictions
 - Reduces complexity without losing categorization capability
 
-### ADR-008: Expense Apportionment via Percentage Slider
+### ADR-008: CSV/DAT Import with Client-Side Parsing
+**Context**: Need to import Amazon Order History (CSV) and Bank of America statements (pipe-delimited DAT)  
+**Decision**: Client-side file parsing with format-specific handlers  
+**Implementation**:
+- Amazon CSV: Extract Order Date, Product Name, Total Owed, Shipping Address
+- BOA DAT: Parse pipe-delimited fields (Date|Description|Amount|Balance)
+- File input with drag-and-drop support
+- Progress feedback during parse
+- Auto-categorize on import using existing categorizer
+- Default businessPercent = 100 (all Office Supplies)
+
+**Consequences**:
+- No backend required for import (privacy-first)
+- CSV parser must handle quoted fields with embedded commas
+- BOA parser must handle pipe delimiter and optional quotes
+- Large files (>1000 rows) may cause UI lag
+- Import validation errors shown inline
+- Duplicate detection needed (by Order ID for Amazon, by date+amount for BOA)
+
+### ADR-009: Expense Apportionment via Percentage Slider (Deferred)
 **Context**: Expenses need to be split between Business Supplies and Board Member Benefits (e.g., paper towels 70% business, 30% benefits)  
-**Decision**: Card-based UI with single horizontal slider for percentage allocation  
+**Decision**: Card-based UI with single horizontal slider for percentage allocation (v2 feature)  
+**Status**: Deferred until after data import is working
 **UI Pattern** (based on Smashing Magazine slider UX research):
 - Single continuous slider: 0% (all Benefits) ↔ 100% (all Business)
 - Default: 100% Business Supplies

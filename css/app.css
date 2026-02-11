@@ -51,3 +51,35 @@
   font-weight: bold;
   background: var(--pico-card-background-color);
 }
+
+.expense-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.expense-card {
+  padding: 1rem;
+  border-radius: 8px;
+  border: 1px solid var(--pico-muted-border-color);
+}
+
+.expense-card header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+.expense-card .badge {
+  display: inline-block;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  background: var(--pico-primary-focus);
+}
+
+.expense-card footer {
+  margin-top: 0.5rem;
+  text-align: right;
+}
