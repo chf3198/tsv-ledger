@@ -1,38 +1,12 @@
 /**
  * TSV Expenses - Alpine.js App with Functional Core
- * Pure functions for logic, Alpine for reactivity
+ * Utilities loaded from utils.js
  */
-
-// Pure: (Expense[], string) -> number
-const sumByCategory = (expenses, category) => 
-  expenses.filter(e => e.category === category).reduce((sum, e) => sum + e.amount, 0);
-
-// Pure: (Expense[], string) -> number
-const countByCategory = (expenses, category) => 
-  expenses.filter(e => e.category === category).length;
-
-// Pure: (Expense[], Filters) -> Expense[]
-const filterExpenses = (expenses, { location, category, startDate, endDate }) =>
-  expenses.filter(e =>
-    (!location || e.location === location) &&
-    (!category || e.category === category) &&
-    (!startDate || e.date >= startDate) &&
-    (!endDate || e.date <= endDate)
-  ).sort((a, b) => b.date.localeCompare(a.date));
-
-// Pure: () -> string
-const today = () => new Date().toISOString().split('T')[0];
-
-// Pure: () -> Filters
-const emptyFilters = () => ({ location: '', category: '', startDate: '', endDate: '' });
-
-// Pure: () -> NewExpense
-const emptyExpense = () => ({ date: today(), description: '', location: '', category: '', amount: null });
 
 function expenseApp() {
   return {
     expenses: [], filteredExpenses: [], locations: [], dragover: false,
-    importStatus: '', importError: false, filters: emptyFilters(), newExpense: emptyExpense(),
+    importStatus: '', importError: false, importComplete: false, filters: emptyFilters(), newExpense: emptyExpense(),
     // Shell state (ADR-010)
     menuOpen: false, route: 'dashboard',
     // Auth state (ADR-009)
@@ -56,19 +30,51 @@ function expenseApp() {
     handleDrop(e) {
       this.dragover = false;
       const file = e.dataTransfer.files[0];
-      file?.name.endsWith('.csv') ? this.importCSV(file) : this.setError('Please drop a CSV file');
+      if (!file) return;
+      const ext = file.name.split('.').pop().toLowerCase();
+      if (ext === 'csv' || ext === 'dat' || ext === 'zip') this.importFile(file);
+      else this.setError('Please drop a CSV, DAT, or ZIP file');
     },
-    handleFileSelect(e) { e.target.files[0] && this.importCSV(e.target.files[0]); },
-    setError(msg) { this.importStatus = msg; this.importError = true; },
+    handleFileSelect(e) { 
+      const file = e.target.files[0];
+      if (file) this.importFile(file);
+    },
+    setError(msg) { this.importStatus = msg; this.importError = true; this.importComplete = false; },
 
-    async importCSV(file) {
-      this.importStatus = 'Importing...'; this.importError = false;
+    async importFile(file) {
+      this.importStatus = 'Importing...'; this.importError = false; this.importComplete = false;
       try {
-        const { expenses, skipped } = await parseCSVFile(file, guessCategory);
-        this.expenses = [...this.expenses, ...expenses];
-        this.save();
-        this.importStatus = `✓ Imported ${expenses.length}` + (skipped ? `, skipped ${skipped}` : '');
+        const ext = file.name.split('.').pop().toLowerCase();
+        let result;
+        
+        if (ext === 'zip') {
+          result = await importAmazonZip(file, guessCategory);
+          this.expenses = [...this.expenses, ...result.expenses];
+          this.save();
+          this.importStatus = `✓ Imported ${result.expenses.length} from ${result.filename}` + (result.skipped ? `, skipped ${result.skipped}` : '');
+        } else {
+          const text = await file.text();
+          if (ext === 'csv') {
+            result = text.includes('Order ID') && text.includes('Product Name') 
+              ? parseAmazonCSV(text, guessCategory)
+              : await parseCSVFile(file, guessCategory);
+          } else if (ext === 'dat') {
+            result = parseBOAStatement(text, guessCategory);
+          } else {
+            throw new Error('Unsupported file type');
+          }
+          this.expenses = [...this.expenses, ...result.expenses];
+          this.save();
+          this.importStatus = `✓ Imported ${result.expenses.length}` + (result.skipped ? `, skipped ${result.skipped}` : '');
+        }
+        
+        this.importComplete = true;
       } catch (e) { this.setError('Import failed: ' + e.message); }
+    },
+
+    formatDate(dateStr) {
+      const d = new Date(dateStr);
+      return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
     },
 
     addExpense() {
