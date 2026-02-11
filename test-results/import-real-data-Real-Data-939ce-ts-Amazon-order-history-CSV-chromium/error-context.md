@@ -1,14 +1,14 @@
 # Page snapshot
 
 ```yaml
-- generic [active] [ref=e1]:
+- generic [ref=e1]:
   - banner [ref=e2]:
     - heading "📊 TSV" [level=1] [ref=e3]
   - complementary [ref=e4]:
     - navigation [ref=e5]:
       - link "📊 Dashboard" [ref=e6] [cursor=pointer]:
         - /url: "#/"
-      - link "💰 Expenses" [ref=e7] [cursor=pointer]:
+      - link "💰 Expenses" [active] [ref=e7] [cursor=pointer]:
         - /url: "#/expenses"
       - link "📁 Import" [ref=e8] [cursor=pointer]:
         - /url: "#/import"

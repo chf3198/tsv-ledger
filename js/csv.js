@@ -19,9 +19,11 @@ const parseCSVHeaders = (headerLine) => {
   const h = headerLine.toLowerCase().split(',').map(s => s.trim().replace(/"/g, ''));
   const find = (patterns) => h.findIndex(col => patterns.some(p => col.includes(p)));
   return {
-    date: find(['date']), description: find(['desc', 'item', 'name']),
-    location: find(['location', 'venue', 'site']), category: find(['category', 'type']),
-    amount: find(['amount', 'total', 'price', 'cost'])
+    date: find(['order date', 'date', 'ship date']), 
+    description: find(['product name', 'desc', 'item', 'name']),
+    location: find(['location', 'venue', 'site']), 
+    category: find(['category', 'type']),
+    amount: find(['total owed', 'amount', 'total', 'price', 'cost'])
   };
 };
 
