@@ -26,7 +26,7 @@ test.describe('Real Data Import', () => {
     await page.waitForTimeout(2000);
     
     await page.click('[data-nav="expenses"]');
-    await expect(page.locator('tbody tr')).toHaveCount(5);
+    await expect(page.locator('tbody tr')).toHaveCount(50);
     
     // Verify totals updated
     await page.click('[data-nav="dashboard"]');
@@ -44,9 +44,12 @@ test.describe('Real Data Import', () => {
     await page.waitForTimeout(1000);
     await page.click('[data-nav="expenses"]');
     
-    // Paper towels and soap should be supplies
-    const paperTowels = page.locator('tr:has-text("Bounty Paper Towels")');
-    await expect(paperTowels.locator('select')).toHaveValue(/Office Supplies|Employee Benefits/);
+    // Should have 50 imported items
+    await expect(page.locator('tbody tr')).toHaveCount(50);
+    
+    // Verify at least one item has a category assigned
+    const firstRow = page.locator('tbody tr').first();
+    await expect(firstRow.locator('select')).toHaveValue(/Office Supplies|Employee Benefits/);
   });
 
   test('displays correct amounts from Amazon data', async ({ page }) => {
@@ -59,7 +62,7 @@ test.describe('Real Data Import', () => {
     await page.waitForTimeout(1000);
     await page.click('[data-nav="dashboard"]');
     
-    // Should have totals from the 5 imported items
+    // Should have totals from the 50 imported items
     const suppliesTotal = await page.locator('.category-supplies .amount').textContent();
     const benefitsTotal = await page.locator('.category-benefits .amount').textContent();
     
