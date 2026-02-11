@@ -8,9 +8,11 @@
     "dev": "npx serve -l 8080",
     "test": "npx playwright test",
     "test:headed": "npx playwright test --headed",
-    "test:ui": "npx playwright test --ui"
+    "test:ui": "npx playwright test --ui",
+    "lint": "node scripts/lint.js"
   },
   "devDependencies": {
-    "@playwright/test": "^1.40.0"
+    "@playwright/test": "^1.40.0",
+    "wrangler": "^4.63.0"
   }
 }
