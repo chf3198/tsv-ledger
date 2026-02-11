@@ -48,6 +48,48 @@
 - Web fetch tools often fail (404s, paywalls) - Smashing Magazine worked
 **Adaptation**: 
 - Data model: category → businessPercent (0-100)
+
+### 2026-02-10 FAILURE: Error Compounding Spiral
+
+**Context**: Implementing expense apportionment slider feature (ADR-008)  
+**Outcome**: Application completely broken, 7/40 tests passing (was ~40/40), user had to cancel work  
+**Insight**: 
+- **CATASTROPHIC ERROR**: Misread "7 passed, 33 failed" as "39/40 passing"
+- Made multiple "fixes" without verifying each one worked
+- Changed function export format without understanding root cause
+- Did not establish git checkpoint before starting
+- Did not stop when first fix didn't work
+- Required user intervention to prevent further damage
+
+**Root Causes**:
+1. No verification loop after each change
+2. No git checkpoint for rollback
+3. Misread test output leading to false confidence
+4. Attempted multiple fixes without stopping to revert
+5. Did not use browser inspection FIRST to diagnose
+
+**Adaptation**: 
+- **Created ERROR_PREVENTION.md** - Circuit breakers and safeguards
+- **New protocol**: VERIFY after EVERY change
+- **Circuit breaker**: If same fix attempted 3x → STOP and REVERT
+- **Git checkpoints**: Commit before starting new work
+- **Test output verification**: Use grep to get clear pass/fail counts
+- **One change at a time**: Never batch unverified changes
+
+**Recovery Action Taken**:
+```bash
+git restore js/app.js index.html tests/basic.spec.js docs/DESIGN.md
+rm tests/apportionment.spec.js tests/debug-console.spec.js
+npm test  # Verified restoration
+```
+
+**Lessons Applied Going Forward**:
+1. Make ONE change
+2. Run `npm test && npm run lint`
+3. If pass → commit, if fail → analyze OR revert immediately
+4. NEVER move forward with failing tests
+5. If uncertain → STOP and research
+6. After 2 failed attempts → REVERT and try different approach
 - UI: table rows → expense cards with slider
 - Terminology: "Board Member Benefits" (no employees)
 
