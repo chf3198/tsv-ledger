@@ -4,10 +4,23 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
+# Sample data (personal financial data)
+samples/*.dat
+samples/*.zip
+samples/*.csv
+
 # Temporary files and backups
 *.tmp
 *.bak
 *.backup
+.fuse_hidden*
+temp-*.md
+
+# Exclude kt-cli-alpha (it's its own repository)
+kt-cli-alpha/
+
+# Exclude Property Booking System (it's its own repository)
+Property Booking System/
 
 # Runtime data
 pids
@@ -121,3 +134,9 @@ Desktop.ini
 
 # Data files (for TSV Ledger)
 expenditures.json
+
+# Generated analysis output (prevent AI-created bloat from being committed)
+tools/analysis/
+data/reports/
+data/validation-results.json
+data/adherence-tracking.json

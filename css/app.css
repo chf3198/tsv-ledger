@@ -1,0 +1,53 @@
+:root {
+  --pico-font-size: 16px;
+}
+
+.category-supplies {
+  background-color: #e3f2fd;
+}
+
+.category-benefits {
+  background-color: #f3e5f5;
+}
+
+.split-view {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+@media (max-width: 768px) {
+  .split-view {
+    grid-template-columns: 1fr;
+  }
+}
+
+.summary-card {
+  text-align: center;
+  padding: 1rem;
+  border-radius: 8px;
+}
+
+.drag-area {
+  border: 2px dashed var(--pico-muted-border-color);
+  border-radius: 8px;
+  padding: 2rem;
+  text-align: center;
+}
+
+.drag-area.dragover {
+  border-color: var(--pico-primary);
+  background: var(--pico-primary-focus);
+}
+
+.filters {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+
+.totals {
+  font-weight: bold;
+  background: var(--pico-card-background-color);
+}
