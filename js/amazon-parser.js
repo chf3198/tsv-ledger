@@ -3,7 +3,13 @@
  * Format: "Order Date","Product Name","Total Owed","Shipping Address",...
  */
 
-// Pure: string -> Expense|null
+/**
+ * Parse a single Amazon CSV row into an Expense object
+ * @param {string} line - CSV line with quoted fields
+ * @param {Function} categorize - Function to categorize expenses (location, description) => category
+ * @param {number} idx - Row index for unique ID generation
+ * @returns {Object|null} Expense object or null if invalid/zero amount
+ */
 const parseAmazonRow = (line, categorize, idx) => {
   // Handle quoted CSV fields with embedded commas
   const fields = [];
@@ -48,7 +54,12 @@ const parseAmazonRow = (line, categorize, idx) => {
   };
 };
 
-// Pure: (string, fn) -> { expenses: Expense[], skipped: number }
+/**
+ * Parse complete Amazon Order History CSV export
+ * @param {string} text - Full CSV text content
+ * @param {Function} categorize - Function to categorize expenses (location, description) => category
+ * @returns {{expenses: Array<Object>, skipped: number}} Parsed expenses and count of invalid rows
+ */
 const parseAmazonCSV = (text, categorize) => {
   const lines = text.trim().split('\n').slice(1); // Skip header
   const parsed = lines.map((line, i) => parseAmazonRow(line, categorize, i));
