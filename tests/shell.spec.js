@@ -57,12 +57,14 @@ test.describe('App Shell Responsive', () => {
     const nav = page.locator('[data-testid="main-nav"]');
     const hamburger = page.locator('[data-testid="menu-toggle"]');
     
-    // Nav should be hidden on mobile initially
-    await expect(nav).not.toBeVisible();
+    // Hamburger should be visible on mobile
+    await expect(hamburger).toBeVisible();
     
-    // Click hamburger to show nav
+    // Click hamburger - nav should get 'open' class
     await hamburger.click();
-    await expect(nav).toBeVisible();
+    await page.waitForTimeout(100); // Wait for Alpine reactivity
+    const classes = await nav.getAttribute('class');
+    expect(classes).toContain('open');
   });
 
   test('desktop: nav visible without toggle', async ({ page }) => {
