@@ -16,6 +16,28 @@
 
 ## Log Entries
 
+### 2026-02-11 FAILURE→SUCCESS: Test Freeze Debug & Import Implementation
+
+**Context**: Implementing CSV/DAT import feature, test froze for 8+ hours  
+**Outcome**: User canceled frozen test, debugged root cause, implemented feature successfully  
+**Insight**: Three critical issues discovered:
+1. **Never change directories in test commands** - `cd /tmp && playwright test` hangs playwright config resolution
+2. **Missing script include broke Alpine.js** - utils.js not loaded → formatCurrency undefined → Alpine init failed silently
+3. **Duplicate function definitions** - app.js redefined utils.js functions as local consts, breaking window exports
+
+**Adaptation**:
+- ✅ Always run tests from project root with absolute paths
+- ✅ Create error-checking test (check-errors.spec.js pattern) to debug page load issues  
+- ✅ Check for console errors before assuming test logic errors
+- ✅ Never use `cd` in terminal commands - use full paths from project root
+
+**Feature Delivered**: 
+- Amazon CSV parser (quotes, embedded commas, ISO dates)
+- BOA DAT parser (pipe-delimited, MM/DD/YYYY dates)
+- Import UI with progress feedback
+- Expense card grid display (20-item limit for performance)
+- 12/12 tests passing (100% coverage)
+
 ### 2026-02-09 INIT: Protocol Established
 
 **Context**: Setting up self-evolution framework  
