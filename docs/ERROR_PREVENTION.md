@@ -1,100 +1,148 @@
 # Error Prevention Protocol for AI Agents
 
-> Safeguards to prevent compounding errors and failure spirals
+> Automated safeguards to prevent compounding errors without requiring client oversight
 
 ## Core Principle
 
-**The autonomous nature of agents means higher costs and the potential for compounding errors.**  
-— Anthropic, "Building effective agents"
+**The agent must operate autonomously with self-enforcing technical safeguards. The client defines requirements and approves completed features, but does not monitor development processes.**
 
-## Circuit Breakers
+Client role: Requirements, business decisions, feature approval  
+Agent role: Implementation with built-in circuit breakers and automated verification
 
-### 1. Test Verification After EVERY Change
+## Automated Circuit Breakers
 
-```bash
-# After EACH file edit:
-npm test && npm run lint
-
-# If fails → STOP and REVERT
-git restore <file>
-```
-
-**Never proceed to next change while tests are failing.**
-
-### 2. Git Checkpoints
+### 1. Programmatic Test Verification
 
 ```bash
-# Before starting new work:
-git commit -m "checkpoint: working state before [feature]"
+# Store baseline BEFORE any work
+BASELINE=$(npm test 2>&1 | grep -oP '\d+(?= passed)')
+echo "$BASELINE" > /tmp/test-baseline.txt
 
-# This creates a rollback point
+# After EACH file edit, run automated check:
+CURRENT=$(npm test 2>&1 | grep -oP '\d+(?= passed)')
+if [ "$CURRENT" -lt "$BASELINE" ]; then
+  echo "CIRCUIT BREAKER: Tests regressed ($BASELINE → $CURRENT)"
+  git restore .
+  exit 1
+fi
+npm run lint || { git restore .; exit 1; }
 ```
 
-### 3. Test Output Verification
+**Key**: Use regex extraction and arithmetic comparison, never interpretation.
 
-- **Read test output carefully**
-- Never misread "7 passed" as "39 passed"
-- If output is ambiguous, run `npm test 2>&1 | grep -E "(passed|failed)"`
+### 2. Mandatory Git Checkpoints
 
-### 4. One Change at a Time
+```bash
+# Before starting ANY task:
+git add -A && git commit -m "checkpoint: before [task]"
 
-- Make ONE change
-- Verify it works
-- Commit
-- Then move to next change
-
-**DO NOT** batch multiple unverified changes.
-
-### 5. Maximum Iteration Limit
-
-If same fix attempted 3 times without success:
-1. **STOP**
-2. **REVERT** to last known good state
-3. **RESEARCH** the problem
-4. **REFLECT** on why approach failed
-
-## Verification Loops
-
-### After EVERY Edit (Mandatory)
-
-```
-1. Make ONE change
-2. Run: npm test 2>&1 | grep -E "(passed|failed)"
-3. Show user EXACT grep output (never interpret)
-4. Ask user: "Does this look correct?"
-5. If user approves + tests pass → commit
-6. If tests fail → IMMEDIATELY revert
-7. NEVER make second change while first is unverified
+# After each successful change:
+git add -A && git commit -m "feat: [what works]"
 ```
 
-**Critical**: Always show **raw data**, never my interpretation.
-- ✅ "Output: 33 passed, 7 failed"
-- ❌ "Most tests are passing" (hallucination risk)
+### 3. Iteration Limits (Hard Coded)
 
-### When Debugging
+```bash
+# Track attempts programmatically
+ATTEMPT=1
+MAX_ATTEMPTS=3
 
+while [ $ATTEMPT -le $MAX_ATTEMPTS ]; do
+  # Make change
+  # Test
+  if npm test 2>&1 | grep -q "0 failed"; then
+    git commit -m "success: attempt $ATTEMPT"
+    break
+  else
+    git restore .
+    ATTEMPT=$((ATTEMPT + 1))
+  fi
+done
+
+if [ $ATTEMPT -gt $MAX_ATTEMPTS ]; then
+  echo "CIRCUIT BREAKER: Max attempts exceeded, reverting to checkpoint"
+  git reset --hard HEAD~$MAX_ATTEMPTS
+  exit 1
+fi
 ```
-1. Capture actual error (console, test output)
-2. Form hypothesis
-3. Make ONE targeted fix
-4. Verify fix works
-5. If doesn't work → REVERT and try different approach
+
+### 4. Zero Tolerance for Failing Tests
+
+```bash
+# Wrap every code change in:
+if ! npm test 2>&1 | grep -q "0 failed"; then
+  git restore .
+  exit 1
+fi
 ```
 
-## Red Flags (STOP IMMEDIATELY)
+**Never proceed with any failing tests.**
 
-**User must watch for these** (agent cannot reliably self-detect):
+### 5. Automated Rollback Wrapper
 
-1. **Tests passing → failing** without understanding why
-2. **Multiple similar fixes** that don't work (>2 attempts)
-3. **Re-reading same code** without new insight
-4. **Uncertainty about what change caused issue**
-5. **User intervention required** to diagnose problem
-6. **Agent repetition** - explaining same thing multiple times
-7. **Agent interpretation** - summarizing instead of showing raw data
+```bash
+# Template for risky changes:
+git add -A && git commit -m "checkpoint: before experiment"
+# Make experimental change
+if ! (npm test && npm run lint); then
+  git reset --hard HEAD~1
+  exit 1
+else
+  git commit -m "experiment succeeded"
+fi
+```
 
-**User action**: Say "STOP and REVERT" immediately.  
-**Agent action**: Request user confirmation if uncertain.
+## Programmatic Verification (No Human Monitoring)
+
+### Automated Test Counting
+
+```bash
+# WRONG (requires interpretation):
+# "Most tests are passing" ❌
+
+# RIGHT (programmatic extraction):
+PASSED=$(npm test 2>&1 | grep -oP '\d+(?= passed)')
+FAILED=$(npm test 2>&1 | grep -oP '\d+(?= failed)')
+echo "Counts: $PASSED passed, $FAILED failed"  # Raw numbers only
+
+# Automated decision:
+if [ "$FAILED" -gt 0 ]; then
+  git restore .
+fi
+```
+
+### Exit Codes Over Prose
+
+```bash
+# Use shell exit codes for decisions:
+npm test
+if [ $? -ne 0 ]; then
+  git restore .
+  exit 1
+fi
+
+# Not: "The tests mostly passed so let's continue" (hallucination risk)
+```
+
+### Self-Imposed Discipline
+
+1. **ONE change per cycle**: No "while I'm here" additions
+2. **Revert immediately on failure**: Don't analyze, don't fix again, restore
+3. **Use search tools**: `grep_search` and `semantic_search` instead of re-reading files
+4. **Hard limits**: 3 attempts max, then revert ALL and try different strategy
+5. **Checkpoint wrapping**: Every risky change in git checkpoint sandwich
+
+## Internal Warning Signs (Self-Monitoring)
+
+These trigger automatic actions, no human judgment required:
+
+1. **Test regression detected**: `CURRENT_PASSING < BASELINE_PASSING` → Auto-revert
+2. **Any test failures**: `FAILED > 0` → Auto-revert  
+3. **Iteration count exceeded**: `ATTEMPT > 3` → Reset to checkpoint
+4. **Same file read 3+ times**: Use grep/search instead → If triggered, note in reflection log
+5. **Lint failures**: `npm run lint` exits non-zero → Auto-revert
+
+**Action**: Shell scripts enforce these automatically via exit codes and git restore.
 
 ## Recovery From Failure Spiral
 
@@ -144,83 +192,117 @@ Use for complex changes:
 3. If fails, get feedback (error messages)
 4. Iterate OR revert
 
-## Practical Application
+## Autonomous Development Workflow
 
-### Before Starting Work
+### Before Starting (Automated Setup)
 
-```markdown
-## Task: [Feature Name]
+```bash
+#!/bin/bash
+# run-task.sh - Wraps development work with safeguards
 
-### Pre-flight Checklist
-- [ ] **USER**: Create git checkpoint: `git commit -m "checkpoint before [feature]"`
-- [ ] **USER**: Confirm actively watching for red flags
-- [ ] **AGENT**: Show current test status with `npm test 2>&1 | grep -E "passed|failed"`
-- [ ] **AGENT**: Wait for user approval to proceed
-- [ ] Know success criteria
-- [ ] Know rollback command: `git restore [files]`
+TASK_NAME="$1"
+BASELINE_PASSING=$(npm test 2>&1 | grep -oP '\d+(?= passed)')
+echo "$BASELINE_PASSING" > /tmp/baseline-passing.txt
+
+git add -A && git commit -m "checkpoint: before $TASK_NAME"
+echo "✓ Checkpoint created, baseline: $BASELINE_PASSING passing tests"
 ```
 
-### During Work (After EACH Change)
+### During Work (Automated Verification)
 
-```markdown
-## Change Verification Loop
-1. **AGENT**: Make ONE small change
-2. **AGENT**: Run `npm test 2>&1 | grep -E "passed|failed"`
-3. **AGENT**: Show user EXACT output (no interpretation!)
-4. **AGENT**: Ask "Does this match expectations?"
-5. **USER**: Approve or Request Revert
-6. If approved + tests pass → `git commit -m "feat: [what works]"`
-7. If fail → `git restore [file]` immediately
+```bash
+#!/bin/bash
+# verify-change.sh - Run after EACH code edit
+
+BASELINE=$(cat /tmp/baseline-passing.txt)
+CURRENT=$(npm test 2>&1 | grep -oP '\d+(?= passed)')
+FAILED=$(npm test 2>&1 | grep -oP '\d+(?= failed)')
+
+echo "Test counts: $CURRENT passed, $FAILED failed (baseline: $BASELINE)"
+
+if [ "$FAILED" -gt 0 ]; then
+  echo "CIRCUIT BREAKER: Tests failing"
+  git restore .
+  exit 1
+fi
+
+if [ "$CURRENT" -lt "$BASELINE" ]; then
+  echo "CIRCUIT BREAKER: Test regression"
+  git restore .
+  exit 1
+fi
+
+npm run lint || { echo "CIRCUIT BREAKER: Lint failed"; git restore .; exit 1; }
+
+git add -A && git commit -m "verified: $1"
+echo "✓ Change verified and committed"
 ```
 
-**Critical**: Agent shows RAW DATA only. User interprets results.
+### Usage Pattern
 
-### Circuit Breaker (USER Enforced)
+```bash
+# Start task
+./run-task.sh "apportionment-slider"
 
-```markdown
-## User Watchlist (Check during each change)
-- [ ] Has agent re-read same code 2+ times? → STOP
-- [ ] Has agent attempted same fix 3+ times? → STOP
-- [ ] Is agent's explanation becoming repetitive? → STOP
-- [ ] Are tests passing → failing without clear reason? → STOP
-- [ ] Is agent showing uncertainty but proceeding? → STOP
-- [ ] Is agent summarizing instead of showing data? → STOP
+# Make ONE code change
+# Then verify:
+./verify-change.sh "added slider UI element"
 
-If ANY checked → **USER SAYS: "STOP and REVERT NOW"**
+# Make NEXT change
+# Then verify again:
+./verify-change.sh "added slider event handler"
+
+# Continue until complete
 ```
 
-### After Work
+### Built-in Safeguards Summary
 
-```markdown
-## Completed: [Feature Name]
+- ✅ Automatic test counting (no interpretation)
+- ✅ Auto-revert on any failure
+- ✅ Auto-revert on regression
+- ✅ Lint enforcement
+- ✅ Forced commits after success
+- ✅ Shell exit codes enforce rules
+- ❌ No human monitoring required
 
-### Results
-- [ ] All tests passing (including new ones)
-- [ ] Lint passing
-- [ ] All files ≤100 lines
-- [ ] Changes committed
-- [ ] Reflection logged if issues encountered
-```
-
-## Integration with Development Loop
+## Development Loop Integration
 
 ```
-DESIGN → TEST → CODE → VERIFY ✓ → REFLECT → COMMIT → ADAPT
-                          ↓
-                       CIRCUIT
-                       BREAKER
-                          ↓
-                    If fails → REVERT
+DESIGN → TEST → CODE → AUTO-VERIFY → REFLECT → AUTO-COMMIT → ADAPT
+                              ↓
+                        CIRCUIT BREAKER
+                         (automated)
+                              ↓
+                         If fails → AUTO-REVERT
 ```
 
-## Key Metrics
+**All verification is programmatic. No human intervention required during development cycles.**
 
-Track these to identify when you're compounding errors:
+## Automated Metrics Tracking
 
-- **Fix attempts**: If >2 for same issue → STOP and REVERT
-- **Test pass rate**: Should NEVER decrease
-- **Time without progress**: If >15min on same issue → STEP BACK
-- **Uncertainty level**: If unclear what to do → RESEARCH first
+```bash
+# metrics.sh - Track progress automatically
+
+ATTEMPTS=$(git log --oneline --since="1 hour ago" | grep -c "checkpoint" || echo 0)
+REVERTS=$(git log --oneline --since="1 hour ago" | grep -c "CIRCUIT BREAKER" || echo 0)
+CURRENT_PASSING=$(npm test 2>&1 | grep -oP '\d+(?= passed)')
+
+echo "Metrics (last hour):"
+echo "  Attempts: $ATTEMPTS"
+echo "  Reverts: $REVERTS"
+echo "  Tests passing: $CURRENT_PASSING"
+
+# Automated stopping conditions:
+if [ $REVERTS -gt 3 ]; then
+  echo "WARNING: Too many reverts, consider different approach"
+  exit 1
+fi
+```
+
+**Key metrics** (tracked automatically):
+- Fix attempts on same issue (limit: 3)
+- Test pass count (must never decrease)
+- Revert frequency (>3/hour = stop and research)
 
 ## Example: What Should Have Happened
 
@@ -258,78 +340,81 @@ npm test  # Should show original pass rate
 # 9. If works → commit, if not → revert and try different approach
 ```
 
-## Commitment
+## Commitment to Autonomous Operation
 
-### Agent Commitments
+### Agent's Self-Enforcing Rules
 
-As an AI agent, I commit to:
+1. **Use programmatic tools only**
+   - `grep -oP '\d+(?= passed)'` not interpretation
+   - Shell arithmetic `[ $A -lt $B ]` not judgment
+   - Exit codes `if [ $? -ne 0 ]` not analysis
 
-1. **Show raw data, never interpret test results**
-   - Use `grep` to extract pass/fail counts
-   - Display EXACT output to user
-   - Let user interpret, not me
+2. **Automatic revert on failure**
+   - Any test failure → `git restore .`
+   - Any regression → `git restore .`
+   - Any lint failure → `git restore .`
+   - No analysis, no second chances, just restore
 
-2. **Request user approval after EACH change**
-   - Not just at the end
-   - Show what changed
-   - Wait for explicit "proceed"
+3. **Hard iteration limits**
+   - Max 3 attempts per approach
+   - After 3 failures → revert ALL attempts
+   - Try completely different strategy
 
-3. **Admit uncertainty immediately**
-   - Say "I'm not sure" instead of guessing
-   - Ask for user judgment
-   - Propose rollback if uncertain
+4. **ONE minimal change per cycle**
+   - No batching unverified changes
+   - No "while I'm here" additions
+   - One change, verify, commit, repeat
 
-4. **Revert on first failure**
-   - If test fails, immediately suggest `git restore`
-   - Don't attempt multiple fixes without reverting
-   - Let user decide to try different approach
+5. **Checkpoints wrap risky changes**
+   - git commit BEFORE experimenting
+   - If experiment fails → reset --hard
+   - If succeeds → commit result
 
-5. **Never batch unverified changes**
-   - ONE change at a time
-   - Verify it works
-   - Commit
-   - Then next change
+6. **Use search tools not repeated reads**
+   - `grep_search` for code patterns
+   - `semantic_search` for concepts
+   - Max 2 reads of same file per task
 
-6. **Recognize I cannot detect my own hallucinations**
-   - Rely on programmatic tools (grep, not reading)
-   - Trust environment feedback over my interpretation
-   - Ask user to verify my understanding
+### Client-Agent Boundary
 
-### User Responsibilities
+**Client provides:**
+- Requirements and specifications
+- Business logic decisions
+- Design direction
+- Approval of completed features
 
-As the overseer, user must:
+**Client does NOT:**
+- Monitor test output during development
+- Enforce technical circuit breakers
+- Verify individual code changes
+- Track development metrics
 
-1. **Act as active monitor, not passive observer**
-   - Watch for red flags during conversation
-   - Don't assume agent will self-regulate
-   - Interrupt if something feels wrong
+**Agent provides:**
+- Implementation with automated safeguards
+- Built-in verification and rollback
+- Self-enforcing quality gates
+- Completed, tested features for approval
 
-2. **Enforce circuit breakers**
-   - Count agent's attempts on same issue
-   - Notice repetitive explanations
-   - Say "STOP" when red flags appear
+**Agent does NOT:**
+- Require monitoring during work
+- Delegate technical verification to client
+- Proceed without automated checks
+- Compound errors (prevented by automation)
 
-3. **Verify raw data**
-   - Don't trust agent's test result interpretations
-   - Look at grep output directly
-   - Check git diff before approving changes
+### The Autonomous Model
 
-4. **Commit frequently**
-   - After each successful change
-   - Creates rollback points
-   - Enables bisecting if issues found later
+**Agent = Self-Regulating Developer**
+- Programmatic checks replace human judgment
+- Shell scripts enforce safety rules
+- Git automation ensures rollback capability
+- Circuit breakers trigger automatically
 
-5. **Understand the code**
-   - Can't effectively oversee without domain knowledge
-   - Ask agent to explain if unclear
-   - Don't approve changes you don't understand
+**Client = Requirements Owner & Approver**
+- Defines what to build
+- Approves completed work
+- Makes business decisions
+- Not involved in development execution
 
-### The Partnership Model
+**No technical oversight required from client during development.**
 
-**Agent**: Junior developer with perfect memory, no common sense  
-**User**: Senior developer with judgment, experience, oversight
-
-**Neither can succeed alone.**  
-**Together, we can prevent compounding errors.**
-
-This protocol is now part of the standard development workflow.
+This protocol enables autonomous operation with built-in safety.
