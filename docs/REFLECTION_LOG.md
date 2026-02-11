@@ -38,6 +38,28 @@
 - Expense card grid display (20-item limit for performance)
 - 12/12 tests passing (100% coverage)
 
+### 2026-02-11 SUCCESS: ZIP Import UAT Passed
+
+**Context**: User requested ability to import Amazon ZIP file directly without manual extraction  
+**Outcome**: Implemented JSZip-based extraction in 22-line handler, passed UAT with 2925 orders imported  
+**Insight**: 
+- JSZip library (6kb) provides excellent UX improvement - no manual extraction needed
+- Regex extraction (/Retail\.OrderHistory\.\d+\.csv$/i) automatically finds correct CSV inside archive
+- Maintaining 100-line limit forces good separation of concerns (zip-handler.js extracted from app.js)
+- Client-side processing preserves privacy for financial data
+
+**Adaptation**:
+- ✅ ZIP files now supported alongside CSV/DAT
+- ✅ Success message shows extracted filename for clarity
+- ✅ 27MB ZIP processed in <3 seconds (acceptable performance)
+- ✅ No duplicate detection yet - documented as future enhancement
+
+**UAT Results**:
+- BOA .dat import: 1756 transactions ✓
+- Amazon ZIP import: 2925 orders ✓
+- Auto-categorization working ✓
+- Performance acceptable ✓
+
 ### 2026-02-09 INIT: Protocol Established
 
 **Context**: Setting up self-evolution framework  
