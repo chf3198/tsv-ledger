@@ -32,9 +32,8 @@ function expenseApp() {
       const file = e.dataTransfer.files[0];
       if (!file) return;
       const ext = file.name.split('.').pop().toLowerCase();
-      if (ext === 'csv') this.importFile(file);
-      else if (ext === 'dat') this.importFile(file);
-      else this.setError('Please drop a CSV or DAT file');
+      if (ext === 'csv' || ext === 'dat' || ext === 'zip') this.importFile(file);
+      else this.setError('Please drop a CSV, DAT, or ZIP file');
     },
     handleFileSelect(e) { 
       const file = e.target.files[0];
@@ -45,26 +44,30 @@ function expenseApp() {
     async importFile(file) {
       this.importStatus = 'Importing...'; this.importError = false; this.importComplete = false;
       try {
-        const text = await file.text();
         const ext = file.name.split('.').pop().toLowerCase();
-        
         let result;
-        if (ext === 'csv') {
-          // Detect Amazon CSV vs generic CSV
-          if (text.includes('Order ID') && text.includes('Product Name')) {
-            result = parseAmazonCSV(text, guessCategory);
-          } else {
-            result = await parseCSVFile(file, guessCategory);
-          }
-        } else if (ext === 'dat') {
-          result = parseBOAStatement(text, guessCategory);
+        
+        if (ext === 'zip') {
+          result = await importAmazonZip(file, guessCategory);
+          this.expenses = [...this.expenses, ...result.expenses];
+          this.save();
+          this.importStatus = `✓ Imported ${result.expenses.length} from ${result.filename}` + (result.skipped ? `, skipped ${result.skipped}` : '');
         } else {
-          throw new Error('Unsupported file type');
+          const text = await file.text();
+          if (ext === 'csv') {
+            result = text.includes('Order ID') && text.includes('Product Name') 
+              ? parseAmazonCSV(text, guessCategory)
+              : await parseCSVFile(file, guessCategory);
+          } else if (ext === 'dat') {
+            result = parseBOAStatement(text, guessCategory);
+          } else {
+            throw new Error('Unsupported file type');
+          }
+          this.expenses = [...this.expenses, ...result.expenses];
+          this.save();
+          this.importStatus = `✓ Imported ${result.expenses.length}` + (result.skipped ? `, skipped ${result.skipped}` : '');
         }
-
-        this.expenses = [...this.expenses, ...result.expenses];
-        this.save();
-        this.importStatus = `✓ Imported ${result.expenses.length}` + (result.skipped ? `, skipped ${result.skipped}` : '');
+        
         this.importComplete = true;
       } catch (e) { this.setError('Import failed: ' + e.message); }
     },

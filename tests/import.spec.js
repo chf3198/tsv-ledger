@@ -13,7 +13,7 @@ test.describe('Data Import', () => {
     await page.waitForTimeout(300);
     const fileInput = page.locator('input[type="file"]');
     await expect(fileInput).toBeVisible();
-    await expect(fileInput).toHaveAttribute('accept', '.csv,.dat');
+    await expect(fileInput).toHaveAttribute('accept', '.csv,.dat,.zip');
   });
 
   test('imports Amazon CSV and displays expenses', async ({ page }) => {

@@ -91,10 +91,11 @@
 
 ### ADR-008: CSV/DAT Import with Client-Side Parsing
 **Context**: Need to import Amazon Order History (CSV) and Bank of America statements (pipe-delimited DAT)  
-**Decision**: Client-side file parsing with format-specific handlers  
+**Decision**: Client-side file parsing with format-specific handlers + ZIP extraction  
 **Implementation**:
 - Amazon CSV: Extract Order Date, Product Name, Total Owed, Shipping Address
 - BOA DAT: Parse pipe-delimited fields (Date|Description|Amount|Balance)
+- ZIP files: Auto-extract `Retail.OrderHistory.*.csv` using JSZip (6kb gzipped)
 - File input with drag-and-drop support
 - Progress feedback during parse
 - Auto-categorize on import using existing categorizer
@@ -102,6 +103,7 @@
 
 **Consequences**:
 - No backend required for import (privacy-first)
+- ZIP support eliminates manual extraction step
 - CSV parser must handle quoted fields with embedded commas
 - BOA parser must handle pipe delimiter and optional quotes
 - Large files (>1000 rows) may cause UI lag
