@@ -3,7 +3,13 @@
  * Format: Date|Description|Amount|Balance (pipe-delimited)
  */
 
-// Pure: string -> Expense|null
+/**
+ * Parse a single BOA statement line into an Expense object
+ * @param {string} line - Pipe-delimited line (Date|Description|Amount|Balance)
+ * @param {Function} categorize - Function to categorize expenses (location, description) => category
+ * @param {number} idx - Row index for unique ID generation
+ * @returns {Object|null} Expense object or null if invalid/zero amount/balance-only line
+ */
 const parseBOARow = (line, categorize, idx) => {
   // Split by pipe, handle optional quotes
   const fields = line.split('|').map(f => f.trim().replace(/^"|"$/g, ''));
@@ -41,7 +47,12 @@ const parseBOARow = (line, categorize, idx) => {
   };
 };
 
-// Pure: (string, fn) -> { expenses: Expense[], skipped: number }
+/**
+ * Parse complete BOA statement export (pipe-delimited format)
+ * @param {string} text - Full statement text content
+ * @param {Function} categorize - Function to categorize expenses (location, description) => category
+ * @returns {{expenses: Array<Object>, skipped: number}} Parsed expenses and count of invalid rows
+ */
 const parseBOAStatement = (text, categorize) => {
   const lines = text.trim().split('\n');
   const parsed = lines.map((line, i) => parseBOARow(line, categorize, i));
