@@ -46,11 +46,21 @@
 **Decision**: GitHub Pages + CloudFlare Workers
 **Consequences**: No server-side rendering, requires CORS handling
 
-### ADR-002: Two Fixed Categories
+### ADR-002: Three Fixed Categories with Uncategorized Default
 
-**Context**: User wants simple Office vs Benefits split
-**Decision**: Hard-code two categories, no custom categories
-**Consequences**: Simpler UI, less flexible for future needs
+**Context**: User wants simple Business Supplies vs Board Member Benefits split
+**Decision**: Hard-code three categories: "Business Supplies", "Board Member Benefits", "Uncategorized"
+**Default Behavior**: All imported expenses default to "Uncategorized" pending user review
+**Rationale**:
+- Prevents premature tax categorization assumptions
+- Aligns with progressive disclosure UX principles (Nielsen Norman Group)
+- Honest state representation - acknowledges categorization hasn't occurred
+- User must manually review and categorize after import
+**Consequences**: 
+- Simpler UI, clearer user workflow
+- Dashboard shows uncategorized warning until user reviews
+- No AI/keyword-based auto-categorization until v2
+- Correct terminology: "Board Member Benefits" (no employees exist)
 
 ### ADR-003: localStorage Before Backend
 
@@ -113,8 +123,8 @@
 - ZIP files: Auto-extract `Retail.OrderHistory.*.csv` using JSZip (6kb gzipped)
 - File input with drag-and-drop support
 - Progress feedback during parse
-- Auto-categorize on import using existing categorizer
-- Default businessPercent = 100 (all Office Supplies)
+- All imports default to "Uncategorized" category
+- Default businessPercent = 100 (will apply when user categorizes as Business Supplies)
 
 **Consequences**:
 
@@ -157,7 +167,8 @@ Expense {
   date: string,           // ISO 8601
   description: string,
   location: string,
-  amount: number,         // in cents (avoid float errors)
+  amount: number,         // dollars (not cents)
+  category: string,       // "Business Supplies" | "Board Member Benefits" | "Uncategorized"
   businessPercent: number // 0-100, default 100
 }
 // benefitsPercent = 100 - businessPercent (derived, not stored)

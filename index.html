@@ -33,8 +33,11 @@
         <hr><button data-testid="auth-passkey" @click="authWith('passkey')" class="secondary">🔐 Passkey</button></article></dialog>
     <!-- Dashboard --><section x-show="route==='dashboard'">
       <div class="split-view">
-        <article class="summary-card category-supplies"><h3>🏢 Supplies</h3><p class="amount" x-text="formatCurrency(totals.supplies)"></p><small x-text="`${counts.supplies} items`"></small></article>
-        <article class="summary-card category-benefits"><h3>👥 Benefits</h3><p class="amount" x-text="formatCurrency(totals.benefits)"></p><small x-text="`${counts.benefits} items`"></small></article>
+        <article class="summary-card category-supplies"><h3>🏢 Business Supplies</h3><p class="amount" x-text="formatCurrency(totals.supplies)"></p><small x-text="`${counts.supplies} items`"></small></article>
+        <article class="summary-card category-benefits"><h3>👥 Board Member Benefits</h3><p class="amount" x-text="formatCurrency(totals.benefits)"></p><small x-text="`${counts.benefits} items`"></small></article>
+      </div>
+      <div x-show="counts.uncategorized > 0" style="margin-top:1rem">
+        <article class="summary-card category-uncategorized" style="background:#fff3cd;border-left:4px solid #ffc107"><h3>⚠️ Needs Review</h3><p class="amount" x-text="counts.uncategorized"></p><small>uncategorized items</small><br><a href="#/expenses" @click="route='expenses'">Review & Categorize →</a></article>
       </div>
       <div class="expense-grid">
         <template x-for="e in expenses.slice(0,20)" :key="e.id">
@@ -48,11 +51,11 @@
       <p x-show="!expenses.length">No expenses yet. Import data to get started.</p>
     </section>
     <!-- Expenses --><section x-show="route==='expenses'"><h2>💰 Expenses</h2>
-      <div class="filters"><select x-model="filters.category" @change="applyFilters()"><option value="">All</option><option value="Office Supplies">Supplies</option><option value="Employee Benefits">Benefits</option></select>
+      <div class="filters"><select x-model="filters.category" @change="applyFilters()"><option value="">All</option><option value="Business Supplies">Business Supplies</option><option value="Board Member Benefits">Board Member Benefits</option><option value="Uncategorized">Uncategorized</option></select>
         <input type="date" x-model="filters.startDate" @change="applyFilters()"><input type="date" x-model="filters.endDate" @change="applyFilters()"><button class="secondary outline" @click="clearFilters()">Clear</button></div>
       <table role="grid"><thead><tr><th>Date</th><th>Description</th><th>Category</th><th>Amount</th><th></th></tr></thead>
         <tbody><template x-for="e in filteredExpenses" :key="e.id"><tr><td x-text="e.date"></td><td x-text="e.description"></td>
-            <td><select x-model="e.category" @change="updateExpense()"><option>Office Supplies</option><option>Employee Benefits</option></select></td>
+            <td><select x-model="e.category" @change="updateExpense()"><option>Business Supplies</option><option>Board Member Benefits</option><option>Uncategorized</option></select></td>
             <td x-text="formatCurrency(e.amount)"></td><td><button class="outline" @click="deleteExpense(e.id)">🗑️</button></td></tr></template></tbody>
         <tfoot><tr><td colspan="3">Total</td><td x-text="formatCurrency(filteredTotal)"></td><td></td></tr></tfoot></table>
       <p x-show="!filteredExpenses.length">No expenses yet.</p></section>
@@ -62,7 +65,7 @@
         <p x-text="importStatus" :class="importError?'error':'success'"></p>
       </div>
       <details><summary>➕ Add Manually</summary><form @submit.prevent="addExpense()" class="grid"><input type="date" x-model="newExpense.date" required>
-          <input type="text" x-model="newExpense.description" placeholder="Description" required><select x-model="newExpense.category" required><option value="">Category</option><option>Office Supplies</option><option>Employee Benefits</option></select>
+          <input type="text" x-model="newExpense.description" placeholder="Description" required><select x-model="newExpense.category" required><option value="">Category</option><option>Business Supplies</option><option>Board Member Benefits</option><option>Uncategorized</option></select>
           <input type="number" x-model.number="newExpense.amount" placeholder="Amount" step="0.01" required><button type="submit">Add</button></form></details>
       <h3 style="margin-top:2rem">📜 Import History</h3>
       <div x-show="!importHistory.length" class="empty-state"><p>No imports yet.</p></div>

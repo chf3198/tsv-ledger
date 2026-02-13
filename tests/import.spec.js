@@ -59,14 +59,20 @@ test.describe('Data Import', () => {
     expect(rows).toBeGreaterThan(0);
   });
 
-  test('categorizes imports automatically', async ({ page }) => {
+  test('defaults all imports to uncategorized', async ({ page }) => {
     await page.click('a[href="#/import"]');
     await page.locator('input[type="file"]').setInputFiles('test-data/amazon-sample.csv');
     await page.waitForSelector('[data-import-status="complete"]', { timeout: 5000 });
+    
+    // Check dashboard shows uncategorized warning
     await page.click('a[href="#/"]');
-
-    const paperTowels = page.locator('[data-expense-card]:has-text("Paper Towels")').first();
-    await expect(paperTowels).toContainText('Office Supplies');
+    await expect(page.locator('text=Needs Review')).toBeVisible();
+    
+    // Verify items are in expenses table with Uncategorized
+    await page.click('a[href="#/expenses"]');
+    await page.waitForTimeout(500);
+    const firstCategorySelect = page.locator('table tbody tr select').first();
+    await expect(firstCategorySelect).toHaveValue('Uncategorized');
   });
 
   test('shows import progress feedback', async ({ page }) => {

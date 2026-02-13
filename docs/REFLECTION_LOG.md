@@ -17,6 +17,33 @@
 
 ## Log Entries
 
+### 2026-02-13 CORRECTION: Removed Auto-Categorization, Default to Uncategorized
+
+**Context**: User reported terrible auto-categorization and wrong category terminology (Office Supplies vs Business Supplies, Employee Benefits vs Board Member Benefits)
+**Outcome**: Researched expense categorization best practices, implemented uncategorized default - 15/15 tests passing
+**Research Sources**:
+- Investopedia: Expense categorization for tax purposes (ordinary & necessary business expenses)
+- Nielsen Norman Group: Progressive disclosure UX (defer complexity, avoid premature decisions)
+
+**Key Insights from Research**:
+1. **Premature categorization violates progressive disclosure** - forcing immediate categorization slows users and increases errors
+2. **Tax accuracy requires user review** - auto-categorization without validation creates liability
+3. **"Uncategorized" is honest state** - acknowledges categorization hasn't occurred, signals work needed
+4. **Terminology matters** - "Board Member Benefits" correct (no employees), "Business Supplies" clearer than "Office"
+
+**Changes Implemented**:
+- categorizer.js: Always return "Uncategorized" (removed keyword matching)
+- Dashboard: Added "Needs Review" warning card for uncategorized items
+- Terminology: "Business Supplies" + "Board Member Benefits" + "Uncategorized"
+- Updated ADR-002 to document uncategorized-default approach
+- Test updated: Verify imports default to uncategorized
+
+**Adaptation**:
+- ✅ Default to "Uncategorized" for all imports until user manually categorizes
+- ✅ Use correct terminology matching DESIGN.md architecture
+- ✅ Show uncategorized count as warning/action item on dashboard
+- ✅ Reserve AI-assisted categorization for future (with user confirmation)
+
 ### 2026-02-13 SUCCESS: Import History with Duplicate Detection (ADR-013)
 
 **Context**: User needed visibility into import history and duplicate prevention for overlapping data imports

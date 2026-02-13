@@ -15,12 +15,10 @@ function expenseApp() {
     showAuthModal: false, showUserMenu: false,
 
     get totals() {
-      return { supplies: sumByCategory(this.expenses, 'Office Supplies'),
-               benefits: sumByCategory(this.expenses, 'Employee Benefits') };
+      return { supplies: sumByCategory(this.expenses, 'Business Supplies'), benefits: sumByCategory(this.expenses, 'Board Member Benefits'), uncategorized: sumByCategory(this.expenses, 'Uncategorized') };
     },
     get counts() {
-      return { supplies: countByCategory(this.expenses, 'Office Supplies'),
-               benefits: countByCategory(this.expenses, 'Employee Benefits') };
+      return { supplies: countByCategory(this.expenses, 'Business Supplies'), benefits: countByCategory(this.expenses, 'Board Member Benefits'), uncategorized: countByCategory(this.expenses, 'Uncategorized') };
     },
     get filteredTotal() { return this.filteredExpenses.reduce((s, e) => s + e.amount, 0); },
 
