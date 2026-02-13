@@ -21,12 +21,12 @@ const parseBOARow = (line, categorize, idx) => {
   // BOA format: 0:Date, 1:Description, 2:Amount, 3:Balance
   const amountStr = fields[2] || '0';
   const amount = Math.abs(parseFloat(amountStr.replace(/[^0-9.-]/g, '')));
-  
+
   if (isNaN(amount) || amount <= 0) return null;
 
   // Parse date MM/DD/YYYY to YYYY-MM-DD
   const dateParts = (fields[0] || '').split('/');
-  const date = dateParts.length === 3 
+  const date = dateParts.length === 3
     ? `${dateParts[2]}-${dateParts[0].padStart(2, '0')}-${dateParts[1].padStart(2, '0')}`
     : new Date().toISOString().split('T')[0];
 
@@ -36,8 +36,10 @@ const parseBOARow = (line, categorize, idx) => {
   const locationMatch = description.match(/(FREEPORT|SMITHVILLE|AUSTIN)/i);
   const location = locationMatch ? locationMatch[1] : 'Unknown';
 
+  // Use hash-based ID for better duplicate detection (ADR-013)
+  const descHash = description.slice(0, 20).replace(/\s+/g, '-');
   return {
-    id: `boa-${date}-${idx}`,
+    id: `boa-${date}-${amount.toFixed(2)}-${descHash}`,
     date,
     description: description.substring(0, 100), // Truncate long descriptions
     location,

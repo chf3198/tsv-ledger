@@ -22,6 +22,7 @@
     <nav><a href="#/" data-nav="dashboard" :class="{'active':route==='dashboard'}" @click="route='dashboard';menuOpen=false">📊 Dashboard</a>
       <a href="#/expenses" data-nav="expenses" :class="{'active':route==='expenses'}" @click="route='expenses';menuOpen=false">💰 Expenses</a>
       <a href="#/import" data-nav="import" :class="{'active':route==='import'}" @click="route='import';menuOpen=false">📁 Import</a>
+      <a href="#/import-history" data-nav="import-history" :class="{'active':route==='import-history'}" @click="route='import-history';menuOpen=false">📜 Import History</a>
       <a href="#/settings" data-nav="settings" :class="{'active':route==='settings'}" @click="route='settings';menuOpen=false">⚙️ Settings</a></nav>
   </aside>
   <!-- App Shell: Main -->
@@ -64,9 +65,21 @@
       <details><summary>➕ Add Manually</summary><form @submit.prevent="addExpense()" class="grid"><input type="date" x-model="newExpense.date" required>
           <input type="text" x-model="newExpense.description" placeholder="Description" required><select x-model="newExpense.category" required><option value="">Category</option><option>Office Supplies</option><option>Employee Benefits</option></select>
           <input type="number" x-model.number="newExpense.amount" placeholder="Amount" step="0.01" required><button type="submit">Add</button></form></details></section>
+    <!-- Import History --><section x-show="route==='import-history'"><h2>📜 Import History</h2>
+      <div x-show="!importHistory.length" class="empty-state"><p>No imports yet. Import your first file to get started.</p>
+        <a href="#/import" @click="route='import'">Go to Import</a></div>
+      <div class="import-timeline"><template x-for="imp in importHistory" :key="imp.id">
+          <article class="import-card" data-testid="import-card" :class="{success:imp.success,partial:imp.duplicatesCount>0}"><header><strong x-text="imp.filename"></strong>
+              <small x-text="new Date(imp.timestamp).toLocaleDateString()"></small></header>
+            <p><span class="badge" x-text="imp.type"></span></p>
+            <div class="import-stats"><span x-text="`${imp.recordsCount} new`"></span>
+              <span x-show="imp.duplicatesCount>0" x-text="`${imp.duplicatesCount} duplicates`"></span>
+              <span x-show="imp.skipped>0" x-text="`${imp.skipped} skipped`"></span></div>
+            <small x-show="imp.dateRange" x-text="formatDateRange(imp.dateRange.earliest,imp.dateRange.latest)"></small></article>
+        </template></div></section>
     <!-- Settings --><section x-show="route==='settings'"><h2>⚙️ Settings</h2>
       <button class="outline" @click="exportCSV()">📤 Export CSV</button><button class="outline secondary" @click="clearAll()">🗑️ Clear All</button></section>
   </main>
   <!-- App Shell: Footer --><footer role="contentinfo" class="app-footer"><small>TSV Expenses v3.0 • Texas Sunset Venues</small></footer>
-  <script src="js/storage.js"></script><script src="js/utils.js"></script><script src="js/csv.js"></script><script src="js/amazon-parser.js"></script><script src="js/boa-parser.js"></script><script src="js/zip-handler.js"></script><script src="js/categorizer.js"></script><script src="js/app.js"></script>
+  <script src="js/storage.js"></script><script src="js/utils.js"></script><script src="js/csv.js"></script><script src="js/amazon-parser.js"></script><script src="js/boa-parser.js"></script><script src="js/zip-handler.js"></script><script src="js/categorizer.js"></script><script src="js/import-history.js"></script><script src="js/app.js"></script>
 </body></html>

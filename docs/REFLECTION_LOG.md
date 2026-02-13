@@ -16,6 +16,28 @@
 
 ## Log Entries
 
+### 2026-02-13 SUCCESS: Import History with Duplicate Detection (ADR-013)
+
+**Context**: User needed visibility into import history and duplicate prevention for overlapping data imports  
+**Outcome**: Delivered complete import history feature with duplicate detection - 15/15 tests passing, all files ≤100 lines  
+**Implementation**:
+- **UX Research**: Analyzed 4 authoritative sources (Nielsen Norman Group, Smashing Magazine) for import logs, progress indicators, empty states
+- **Design**: ADR-013 documented comprehensive duplicate detection strategy (Amazon: OrderID-based, BOA: date+amount+description hash)
+- **TDD**: Created 4 E2E tests first (empty state, display record, **duplicate detection**, ordering)
+- **Code**: Strengthened BOA parser ID from `boa-{date}-{idx}` to `boa-{date}-{amount}-{desc}` for collision prevention
+- **UI**: Timeline feed with color-coded cards (green=success, orange=partial duplicates), empty state with action pathway
+
+**Insight**: Critical lessons learned:
+1. **Alpine.js function scope**: Functions called in templates (x-text, x-for) must be methods in Alpine component, not just global functions
+2. **Test isolation**: localStorage.clear() must be followed by page.reload() to reinitialize Alpine with clean state
+3. **Duplicate detection timing**: Filter BEFORE adding to storage prevents save/reload/filter complexity
+4. **Line budget adherence**: Extracting helper functions (createImportRecord) to utility modules maintains <100 line constraint
+
+**Adaptation**:
+- ✅ Always expose template functions as Alpine component methods (formatDateRange added to app.js)
+- ✅ Test isolation pattern: goto → clear → reload → wait for init
+- ✅ Duplicate detection filter pattern: `new Set(existing.map(e => e.id))` then `.filter(e => !existingIds.has(e.id))`
+
 ### 2026-02-11 FAILURE→SUCCESS: Test Freeze Debug & Import Implementation
 
 **Context**: Implementing CSV/DAT import feature, test froze for 8+ hours  

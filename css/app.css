@@ -83,3 +83,42 @@
   margin-top: 0.5rem;
   text-align: right;
 }
+
+.import-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.import-card {
+  padding: 1rem;
+  border-radius: 8px;
+  border-left: 4px solid var(--pico-muted-border-color);
+}
+
+.import-card.success {
+  border-left-color: #4caf50;
+}
+
+.import-card.partial {
+  border-left-color: #ff9800;
+}
+
+.import-card header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+.import-stats {
+  display: flex;
+  gap: 1rem;
+  font-size: 0.875rem;
+  color: var(--pico-muted-color);
+}
+
+.empty-state {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: var(--pico-muted-color);
+}
