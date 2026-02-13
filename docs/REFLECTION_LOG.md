@@ -6,9 +6,10 @@
 
 ```markdown
 ## [DATE] [TYPE]: [Title]
+
 **Context**: What was being attempted
 **Outcome**: What happened
-**Insight**: What was learned  
+**Insight**: What was learned
 **Adaptation**: Change made (if any)
 ```
 
@@ -18,9 +19,10 @@
 
 ### 2026-02-13 SUCCESS: Import History with Duplicate Detection (ADR-013)
 
-**Context**: User needed visibility into import history and duplicate prevention for overlapping data imports  
-**Outcome**: Delivered complete import history feature with duplicate detection - 15/15 tests passing, all files ≤100 lines  
+**Context**: User needed visibility into import history and duplicate prevention for overlapping data imports
+**Outcome**: Delivered complete import history feature with duplicate detection - 15/15 tests passing, all files ≤100 lines
 **Implementation**:
+
 - **UX Research**: Analyzed 4 authoritative sources (Nielsen Norman Group, Smashing Magazine) for import logs, progress indicators, empty states
 - **Design**: ADR-013 documented comprehensive duplicate detection strategy (Amazon: OrderID-based, BOA: date+amount+description hash)
 - **TDD**: Created 4 E2E tests first (empty state, display record, **duplicate detection**, ordering)
@@ -28,32 +30,37 @@
 - **UI**: Timeline feed with color-coded cards (green=success, orange=partial duplicates), empty state with action pathway
 
 **Insight**: Critical lessons learned:
+
 1. **Alpine.js function scope**: Functions called in templates (x-text, x-for) must be methods in Alpine component, not just global functions
 2. **Test isolation**: localStorage.clear() must be followed by page.reload() to reinitialize Alpine with clean state
 3. **Duplicate detection timing**: Filter BEFORE adding to storage prevents save/reload/filter complexity
 4. **Line budget adherence**: Extracting helper functions (createImportRecord) to utility modules maintains <100 line constraint
 
 **Adaptation**:
+
 - ✅ Always expose template functions as Alpine component methods (formatDateRange added to app.js)
 - ✅ Test isolation pattern: goto → clear → reload → wait for init
 - ✅ Duplicate detection filter pattern: `new Set(existing.map(e => e.id))` then `.filter(e => !existingIds.has(e.id))`
 
 ### 2026-02-11 FAILURE→SUCCESS: Test Freeze Debug & Import Implementation
 
-**Context**: Implementing CSV/DAT import feature, test froze for 8+ hours  
-**Outcome**: User canceled frozen test, debugged root cause, implemented feature successfully  
+**Context**: Implementing CSV/DAT import feature, test froze for 8+ hours
+**Outcome**: User canceled frozen test, debugged root cause, implemented feature successfully
 **Insight**: Three critical issues discovered:
+
 1. **Never change directories in test commands** - `cd /tmp && playwright test` hangs playwright config resolution
 2. **Missing script include broke Alpine.js** - utils.js not loaded → formatCurrency undefined → Alpine init failed silently
 3. **Duplicate function definitions** - app.js redefined utils.js functions as local consts, breaking window exports
 
 **Adaptation**:
+
 - ✅ Always run tests from project root with absolute paths
-- ✅ Create error-checking test (check-errors.spec.js pattern) to debug page load issues  
+- ✅ Create error-checking test (check-errors.spec.js pattern) to debug page load issues
 - ✅ Check for console errors before assuming test logic errors
 - ✅ Never use `cd` in terminal commands - use full paths from project root
 
-**Feature Delivered**: 
+**Feature Delivered**:
+
 - Amazon CSV parser (quotes, embedded commas, ISO dates)
 - BOA DAT parser (pipe-delimited, MM/DD/YYYY dates)
 - Import UI with progress feedback
@@ -62,21 +69,24 @@
 
 ### 2026-02-11 SUCCESS: ZIP Import UAT Passed
 
-**Context**: User requested ability to import Amazon ZIP file directly without manual extraction  
-**Outcome**: Implemented JSZip-based extraction in 22-line handler, passed UAT with 2925 orders imported  
-**Insight**: 
+**Context**: User requested ability to import Amazon ZIP file directly without manual extraction
+**Outcome**: Implemented JSZip-based extraction in 22-line handler, passed UAT with 2925 orders imported
+**Insight**:
+
 - JSZip library (6kb) provides excellent UX improvement - no manual extraction needed
 - Regex extraction (/Retail\.OrderHistory\.\d+\.csv$/i) automatically finds correct CSV inside archive
 - Maintaining 100-line limit forces good separation of concerns (zip-handler.js extracted from app.js)
 - Client-side processing preserves privacy for financial data
 
 **Adaptation**:
+
 - ✅ ZIP files now supported alongside CSV/DAT
 - ✅ Success message shows extracted filename for clarity
 - ✅ 27MB ZIP processed in <3 seconds (acceptable performance)
 - ✅ No duplicate detection yet - documented as future enhancement
 
 **UAT Results**:
+
 - BOA .dat import: 1756 transactions ✓
 - Amazon ZIP import: 2925 orders ✓
 - Auto-categorization working ✓
@@ -84,42 +94,44 @@
 
 ### 2026-02-09 INIT: Protocol Established
 
-**Context**: Setting up self-evolution framework  
-**Outcome**: Created SELF_EVOLUTION.md with reflexion loop  
-**Insight**: Structured reflection prevents repeated mistakes  
+**Context**: Setting up self-evolution framework
+**Outcome**: Created SELF_EVOLUTION.md with reflexion loop
+**Insight**: Structured reflection prevents repeated mistakes
 **Adaptation**: Added reflection step to development loop
 
 ### 2026-02-09 SUCCESS: Self-Evolution Implementation
 
-**Context**: Implementing AI agent self-improvement based on research  
+**Context**: Implementing AI agent self-improvement based on research
 **Outcome**: All tests pass, all files ≤100 lines (first draft was 116)
 **Insight**: Research-backed patterns (Reflexion, STOP, Self-Refine) provide structured framework
 **Adaptation**: Integrated REFLECT and ADAPT steps into main development loop
 
 ### 2026-02-09 SUCCESS: GitHub CI/CD Implementation
 
-**Context**: Implementing GitHub Actions for automated testing and deployment  
-**Outcome**: Created ci.yml (44 lines), deploy.yml (40 lines), PR template, dependabot  
-**Insight**: CI enforces the same checks we run locally - lint + E2E tests  
+**Context**: Implementing GitHub Actions for automated testing and deployment
+**Outcome**: Created ci.yml (44 lines), deploy.yml (40 lines), PR template, dependabot
+**Insight**: CI enforces the same checks we run locally - lint + E2E tests
 **Adaptation**: None needed - first-time implementation
 
 ### 2026-02-09 SUCCESS: Expense Apportionment UX Research
 
-**Context**: User clarified core feature - splitting expenses between Business/Benefits by percentage  
-**Outcome**: Researched slider UX best practices, documented in ADR-008  
-**Insight**: 
+**Context**: User clarified core feature - splitting expenses between Business/Benefits by percentage
+**Outcome**: Researched slider UX best practices, documented in ADR-008
+**Insight**:
+
 - Single slider (0-100%) better than dual inputs for "fuzzy" allocation
 - Thumb ≥32px, generous padding, editable inline values
 - Presets speed up common choices (100/0, 75/25, 50/50)
 - Web fetch tools often fail (404s, paywalls) - Smashing Magazine worked
-**Adaptation**: 
+  **Adaptation**:
 - Data model: category → businessPercent (0-100)
 
 ### 2026-02-10 FAILURE: Error Compounding Spiral
 
-**Context**: Implementing expense apportionment slider feature (ADR-008)  
-**Outcome**: Application completely broken, 7/40 tests passing (was ~40/40), user had to cancel work  
-**Insight**: 
+**Context**: Implementing expense apportionment slider feature (ADR-008)
+**Outcome**: Application completely broken, 7/40 tests passing (was ~40/40), user had to cancel work
+**Insight**:
+
 - **CATASTROPHIC ERROR**: Misread "7 passed, 33 failed" as "39/40 passing"
 - Made multiple "fixes" without verifying each one worked
 - Changed function export format without understanding root cause
@@ -128,13 +140,15 @@
 - Required user intervention to prevent further damage
 
 **Root Causes**:
+
 1. No verification loop after each change
 2. No git checkpoint for rollback
 3. Misread test output leading to false confidence
 4. Attempted multiple fixes without stopping to revert
 5. Did not use browser inspection FIRST to diagnose
 
-**Adaptation**: 
+**Adaptation**:
+
 - **Created ERROR_PREVENTION.md** - Circuit breakers and safeguards
 - **New protocol**: VERIFY after EVERY change
 - **Circuit breaker**: If same fix attempted 3x → STOP and REVERT
@@ -143,6 +157,7 @@
 - **One change at a time**: Never batch unverified changes
 
 **Recovery Action Taken**:
+
 ```bash
 git restore js/app.js index.html tests/basic.spec.js docs/DESIGN.md
 rm tests/apportionment.spec.js tests/debug-console.spec.js
@@ -150,35 +165,39 @@ npm test  # Verified restoration
 ```
 
 **Lessons Applied Going Forward**:
+
 1. Make ONE change
 2. Run `npm test && npm run lint`
 3. If pass → commit, if fail → analyze OR revert immediately
 4. NEVER move forward with failing tests
 5. If uncertain → STOP and research
 6. After 2 failed attempts → REVERT and try different approach
+
 - UI: table rows → expense cards with slider
 - Terminology: "Board Member Benefits" (no employees)
 
 ### 2026-02-10 SUCCESS: Auth.js Multi-Provider Authentication Design
 
-**Context**: User requested "optimally excellent User Registration" with "most advanced security protocols for free"  
-**Outcome**: Comprehensive research → ADR-009 documenting Auth.js + multi-provider OAuth + Passkeys  
+**Context**: User requested "optimally excellent User Registration" with "most advanced security protocols for free"
+**Outcome**: Comprehensive research → ADR-009 documenting Auth.js + multi-provider OAuth + Passkeys
 **Insight**:
+
 - Passkeys (WebAuthn) = gold standard: passwordless, phishing-resistant, FREE
 - Auth.js provides 80+ OAuth providers with CloudFlare D1 adapter
 - OWASP cheat sheets invaluable for security requirements (session cookies, timeouts)
 - Firebase/Clerk have free tiers but with limits; Auth.js is unlimited (self-hosted)
 - TDD worked: 5 failing tests → implement UI → all pass in one iteration
-**Adaptation**:
+  **Adaptation**:
 - Passwordless-first strategy eliminates password hashing complexity
 - Auth UI added to index.html + app.js within 100-line limits
 - Test file auth.spec.js covers modal, providers, user menu flows
 
 ### 2026-02-10 SUCCESS: App Shell Architecture Implementation
 
-**Context**: User requested "app shell" before implementing core features  
-**Outcome**: Comprehensive research (Google DevRel, Smashing Magazine) → ADR-010 → 7 tests → implementation  
+**Context**: User requested "app shell" before implementing core features
+**Outcome**: Comprehensive research (Google DevRel, Smashing Magazine) → ADR-010 → 7 tests → implementation
 **Insight**:
+
 - App shell pattern separates static UI chrome from dynamic content
 - Key structure: header (banner) + aside (nav) + main + footer
 - Mobile-first: hamburger menu with visibility toggle via CSS + Alpine state
@@ -186,7 +205,7 @@ npm test  # Verified restoration
 - Existing tests broke due to UI restructure - needed navigation clicks (`[data-nav="import"]`)
 - CSS visibility:hidden + opacity:0 required for Playwright `not.toBeVisible()` to pass
 - Form date inputs conflicted with filter date inputs - use `form input[type="date"]` selector
-**Adaptation**:
+  **Adaptation**:
 - Tests now navigate via `[data-nav="..."]` before interacting with route content
 - Shell CSS in separate file (css/shell.css) for maintainability
 - App state gained `menuOpen` and `route` properties
@@ -196,12 +215,13 @@ npm test  # Verified restoration
 **Context**: 14/32 Playwright tests failing - form submissions weren't saving to localStorage
 **Outcome**: Found 3 JS errors: (1) `export` keyword in auth.js (ES module syntax in non-module script), (2) duplicate `formatCurrency` const in utils.js AND storage.js, (3) storage.js functions not exported to window
 **Insight**:
+
 - Plain `<script>` tags don't support ES module syntax (`export`/`import`) - causes "Unexpected token 'export'"
 - Multiple scripts defining same `const` name causes "Identifier already declared" in global scope
 - Debugging with `page.on('console')` and `page.on('pageerror')` reveals JS errors invisible to test assertions
 - Alpine.js x-model bindings work (values set correctly) but function calls fail silently if function undefined
-**Adaptation**:
-- **CHECKLIST**: After creating/moving JS files, verify window.* exports match function definitions
+  **Adaptation**:
+- **CHECKLIST**: After creating/moving JS files, verify window.\* exports match function definitions
 - **CHECKLIST**: Use `const varName =` pattern consistently, check for name collisions across files
 - **CHECKLIST**: Debug test failures by capturing console errors: `page.on('console', msg => logs.push(msg))`
 - Removed `export` from auth.js (already had `window.authService = authService`)
@@ -210,22 +230,25 @@ npm test  # Verified restoration
 
 ### 2026-02-10 DECISION: Phased Auth Implementation (ADR-011, ADR-012)
 
-**Context**: Continuing development after LLM comparison research - auth was next on roadmap  
-**Outcome**: 
+**Context**: Continuing development after LLM comparison research - auth was next on roadmap
+**Outcome**:
+
 - Researched Auth.js + CloudFlare D1 integration
 - Discovered Auth.js is framework-heavy (Next.js/SvelteKit-focused)
 - CloudFlare Workers integration unclear/undocumented in Auth.js docs
 - Created ADR-011: Custom auth instead of Auth.js
 - Created ADR-012: Phased approach (mock first, backend later)
 
-**Insight**: 
+**Insight**:
+
 - Auth.js optimized for full-stack frameworks, not static-first + edge API
 - Full OAuth + Passkeys + Worker implementation is ~300+ lines across multiple files
 - Current UI tests already passing with mock auth
 - Pragmatic to defer backend until frontend features are complete
 - Phased approach maintains ≤100 line constraint and unblocks development
 
-**Adaptation**: 
+**Adaptation**:
+
 - Phase 1: Keep localStorage mock auth (current, working, tested)
 - Phase 2: CloudFlare Worker backend (separate epic, future)
 - Continue with core app features using mock
@@ -239,32 +262,33 @@ npm test  # Verified restoration
 
 ## Summary Statistics
 
-| Metric | Count |
-|--------|-------|
-| Total Reflections | 8 |
-| Test Failures Analyzed | 2 |
-| Lint Failures Analyzed | 1 |
-| Rework Episodes | 2 |
-| Protocol Adaptations | 4 |
+| Metric                 | Count |
+| ---------------------- | ----- |
+| Total Reflections      | 8     |
+| Test Failures Analyzed | 2     |
+| Lint Failures Analyzed | 1     |
+| Rework Episodes        | 2     |
+| Protocol Adaptations   | 4     |
 
 ## Detected Patterns
 
-*Patterns emerge after 3+ similar entries*
+_Patterns emerge after 3+ similar entries_
 
-- **JS Module Confusion**: Plain scripts vs ES modules cause syntax errors - always use window.* exports for non-module scripts
+- **JS Module Confusion**: Plain scripts vs ES modules cause syntax errors - always use window.\* exports for non-module scripts
 
 ## Active Adaptations
 
-| Date | Adaptation | Source |
-|------|------------|--------|
-| 2026-02-09 | Reflection step added to loop | Initial setup |
+| Date       | Adaptation                                 | Source            |
+| ---------- | ------------------------------------------ | ----------------- |
+| 2026-02-09 | Reflection step added to loop              | Initial setup     |
 | 2026-02-12 | Check window exports after JS file changes | Module export bug |
 
 ### 2026-02-11 SUCCESS: VS Code Copilot Optimization Health Check
 
-**Context**: User requested "deep health check" of codebase and AI agent instructions after successful ZIP import UAT  
-**Outcome**: Executed comprehensive health assessment + 7 optimization commits → 98/100 health score  
-**Insight**: 
+**Context**: User requested "deep health check" of codebase and AI agent instructions after successful ZIP import UAT
+**Outcome**: Executed comprehensive health assessment + 7 optimization commits → 98/100 health score
+**Insight**:
+
 - **Research-backed optimization**: Fetched VS Code Copilot docs, GitHub blog, Microsoft engineering playbook
 - **Flaky test root cause**: Alpine.js race condition - Playwright `click()` fired before Alpine bound handlers
 - **Symbol density matters**: Low symbol count (1-2 functions) reduces AI code navigation effectiveness
@@ -273,38 +297,42 @@ npm test  # Verified restoration
 - **VS Code workspace config**: .vscode/settings.json + extensions.json optimize Copilot indexing
 
 **Test Fix Details**:
+
 ```javascript
 // BEFORE (flaky):
 await hamburger.click();
-await expect(nav).toHaveClass(/open/);  // Fails - Alpine hasn't applied class yet
+await expect(nav).toHaveClass(/open/); // Fails - Alpine hasn't applied class yet
 
 // AFTER (stable):
 await page.waitForFunction(() => {
-  const body = document.querySelector('body[x-data]');
+  const body = document.querySelector("body[x-data]");
   return body && body._x_dataStack && body._x_dataStack.length > 0;
 });
 await page.evaluate(() => {
-  const body = document.querySelector('body[x-data]');
+  const body = document.querySelector("body[x-data]");
   body._x_dataStack[0].menuOpen = !body._x_dataStack[0].menuOpen;
 });
-await expect(nav).toHaveClass(/open/);  // Passes - tests reactive binding directly
+await expect(nav).toHaveClass(/open/); // Passes - tests reactive binding directly
 ```
 
 **Adaptation**:
+
 - ✅ Created HEALTH_CHECK_RESULTS.md for baseline + progress tracking
-- ✅ Always wait for framework initialization (Alpine._x_dataStack) before testing reactive features
+- ✅ Always wait for framework initialization (Alpine.\_x_dataStack) before testing reactive features
 - ✅ Test framework reactivity (data → DOM) instead of user interactions when interactions are unreliable
 - ✅ Use .vscode/ config to optimize AI workspace indexing (34 files, auto-indexed)
 - ✅ Add JSDoc to all parser functions (better IntelliSense, symbol density +159%)
 - ✅ Recommend extensions via extensions.json (ESLint, Copilot, Playwright, spell checker)
 
 **Impact**:
+
 - Health Score: 95/100 → 98/100 (+3%)
 - Test Reliability: 92% → 100% (+8%) - verified with 5x repeat runs (35/35 passed)
 - Symbol Density (parsers avg): 1.67 → 4.33 (+159%)
 - VS Code Integration: Basic → Optimized
 
 **Protocol Adherence**:
+
 - Followed git branch workflow (chore/ai-optimization)
 - Committed atomically (7 commits: test fix, 3x JSDoc, 2x .vscode, updated docs)
 - Tested after each change
@@ -312,6 +340,7 @@ await expect(nav).toHaveClass(/open/);  // Passes - tests reactive binding direc
 - Merged with comprehensive commit message
 
 **Future Opportunities**:
+
 - Extract named functions from app.js (currently 1 symbol, 97 lines)
 - Add usage examples to DESIGN.md (few-shot learning)
 - Document common patterns in ERROR_PREVENTION.md

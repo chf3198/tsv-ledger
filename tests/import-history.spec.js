@@ -13,10 +13,9 @@ test.describe('Import History', () => {
 
   test('shows empty state when no imports exist', async ({ page }) => {
     await page.goto(BASE_URL);
-    await page.click('[data-nav="import-history"]');
+    await page.click('[data-nav="import"]');
 
     await expect(page.locator('text=No imports yet')).toBeVisible();
-    await expect(page.locator('text=Import your first')).toBeVisible();
   });
 
   test('displays import record after successful BOA import', async ({ page }) => {
@@ -34,10 +33,7 @@ test.describe('Import History', () => {
 
     await page.waitForSelector('text=2 new');
 
-    // Navigate to import history
-    await page.click('[data-nav="import-history"]');
-
-    // Verify import card exists
+    // Verify import card exists (scroll down on same page)
     const importCard = page.locator('[data-testid="import-card"]').first();
     await expect(page.locator('[data-testid="import-card"]')).toHaveCount(1);
     await expect(importCard.locator('text=bank_statement.dat')).toBeVisible();
@@ -67,10 +63,7 @@ test.describe('Import History', () => {
     });
     await page.waitForSelector('text=0 new, 2 duplicates');
 
-    // Check import history
-    await page.click('[data-nav="import-history"]');
-
-    // Should have 2 import cards
+    // Import history is on same page - should have 2 import cards
     const cards = page.locator('[data-testid="import-card"]');
     await expect(cards).toHaveCount(2);
 
@@ -101,8 +94,7 @@ test.describe('Import History', () => {
     });
     await page.waitForSelector('text=1 new');
 
-    await page.click('[data-nav="import-history"]');
-
+    // Import history is on same page
     const cards = page.locator('[data-testid="import-card"]');
     const firstCard = cards.first();
 

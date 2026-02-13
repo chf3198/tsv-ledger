@@ -22,7 +22,6 @@
     <nav><a href="#/" data-nav="dashboard" :class="{'active':route==='dashboard'}" @click="route='dashboard';menuOpen=false">📊 Dashboard</a>
       <a href="#/expenses" data-nav="expenses" :class="{'active':route==='expenses'}" @click="route='expenses';menuOpen=false">💰 Expenses</a>
       <a href="#/import" data-nav="import" :class="{'active':route==='import'}" @click="route='import';menuOpen=false">📁 Import</a>
-      <a href="#/import-history" data-nav="import-history" :class="{'active':route==='import-history'}" @click="route='import-history';menuOpen=false">📜 Import History</a>
       <a href="#/settings" data-nav="settings" :class="{'active':route==='settings'}" @click="route='settings';menuOpen=false">⚙️ Settings</a></nav>
   </aside>
   <!-- App Shell: Main -->
@@ -64,10 +63,9 @@
       </div>
       <details><summary>➕ Add Manually</summary><form @submit.prevent="addExpense()" class="grid"><input type="date" x-model="newExpense.date" required>
           <input type="text" x-model="newExpense.description" placeholder="Description" required><select x-model="newExpense.category" required><option value="">Category</option><option>Office Supplies</option><option>Employee Benefits</option></select>
-          <input type="number" x-model.number="newExpense.amount" placeholder="Amount" step="0.01" required><button type="submit">Add</button></form></details></section>
-    <!-- Import History --><section x-show="route==='import-history'"><h2>📜 Import History</h2>
-      <div x-show="!importHistory.length" class="empty-state"><p>No imports yet. Import your first file to get started.</p>
-        <a href="#/import" @click="route='import'">Go to Import</a></div>
+          <input type="number" x-model.number="newExpense.amount" placeholder="Amount" step="0.01" required><button type="submit">Add</button></form></details>
+      <h3 style="margin-top:2rem">📜 Import History</h3>
+      <div x-show="!importHistory.length" class="empty-state"><p>No imports yet.</p></div>
       <div class="import-timeline"><template x-for="imp in importHistory" :key="imp.id">
           <article class="import-card" data-testid="import-card" :class="{success:imp.success,partial:imp.duplicatesCount>0}"><header><strong x-text="imp.filename"></strong>
               <small x-text="new Date(imp.timestamp).toLocaleDateString()"></small></header>
