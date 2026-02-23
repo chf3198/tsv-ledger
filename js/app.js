@@ -92,6 +92,31 @@ function expenseApp() {
     exportCSV() { exportToCSV(this.filteredExpenses, `tsv-expenses-${today()}.csv`); },
     formatCurrency,
     formatDateRange,
+    
+    // noUiSlider integration
+    initSlider(element, expense) {
+      if (!window.noUiSlider || element.noUiSlider) return;
+      
+      const initialValue = expense.businessPercent || 100;
+      
+      window.noUiSlider.create(element, {
+        start: [initialValue],
+        connect: [true, false],
+        range: { min: 0, max: 100 },
+        step: 1,
+        tooltips: { to: (v) => Math.round(v) + '%' },
+        format: { to: (v) => Math.round(v), from: (v) => Number(v) }
+      });
+      
+      element.noUiSlider.on('update', (values) => {
+        const newPercent = Math.round(values[0]);
+        if (newPercent !== expense.businessPercent) {
+          expense.businessPercent = newPercent;
+          this.updateExpense();
+        }
+      });
+    },
+    
     // Auth methods (ADR-009) - UI only, actual OAuth in CloudFlare Worker
     authWith(provider) { console.log('Auth with:', provider); this.showAuthModal = false; },
     logout() { this.auth = { user: null, authenticated: false };

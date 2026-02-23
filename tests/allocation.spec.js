@@ -24,10 +24,17 @@ test.describe('Allocation Interface', () => {
 
     await page.click('[data-nav="expenses"]');
 
-    // Should show slider
+    // Should show noUiSlider
     const slider = page.locator('[data-testid="allocation-slider"]').first();
     await expect(slider).toBeVisible();
-    await expect(slider).toHaveValue('100');
+    
+    // Check that noUiSlider was initialized (has .noUi-base child)
+    const sliderBase = slider.locator('.noUi-base');
+    await expect(sliderBase).toBeVisible();
+    
+    // Verify tooltip shows 100%
+    const tooltip = slider.locator('.noUi-tooltip');
+    await expect(tooltip).toContainText('100%');
   });
 
   test('updates allocation percentage when slider changes', async ({ page }) => {
@@ -45,8 +52,16 @@ test.describe('Allocation Interface', () => {
 
     await page.click('[data-nav="expenses"]');
 
-    const slider = page.locator('[data-testid="allocation-slider"]').first();
-    await slider.fill('75');
+    // Set slider to 75% using noUiSlider API
+    await page.evaluate(() => {
+      const sliderEl = document.querySelector('[data-testid="allocation-slider"]');
+      if (sliderEl && sliderEl.noUiSlider) {
+        sliderEl.noUiSlider.set(75);
+      }
+    });
+
+    // Wait for update
+    await page.waitForTimeout(100);
 
     // Should show split amounts
     const suppliesAmount = page.locator('[data-testid="supplies-amount"]').first();

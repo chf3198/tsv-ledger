@@ -122,3 +122,34 @@
   padding: 3rem 1rem;
   color: var(--pico-muted-color);
 }
+
+/* noUiSlider custom styling */
+.allocation-slider {
+  height: 40px;
+  margin: 8px 0;
+}
+
+.allocation-slider .noUi-connect {
+  background: linear-gradient(90deg, #4caf50 0%, #2196f3 100%);
+}
+
+.allocation-slider .noUi-handle {
+  border: 2px solid #333;
+  border-radius: 50%;
+  background: white;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.allocation-slider .noUi-handle:hover {
+  border-color: #2196f3;
+}
+
+.allocation-slider .noUi-tooltip {
+  background: #333;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 4px 8px;
+  font-size: 12px;
+}

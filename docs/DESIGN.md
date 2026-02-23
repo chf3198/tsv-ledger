@@ -521,8 +521,8 @@ CREATE TABLE passkeys (
 **Totals Calculation**:
 
 ```javascript
-totalSupplies = Σ(amount * businessPercent / 100)
-totalBenefits = Σ(amount * (100 - businessPercent) / 100)
+totalSupplies = Σ((amount * businessPercent) / 100);
+totalBenefits = Σ((amount * (100 - businessPercent)) / 100);
 ```
 
 **Migration**: Storage already migrated category to businessPercent (ADR-002), defaults:
@@ -540,6 +540,56 @@ totalBenefits = Σ(amount * (100 - businessPercent) / 100)
 - ✅ All tests passing (17/17)
 - ⚠️ No keyboard shortcuts for slider (could add arrow key increments later)
 - ⚠️ No preset buttons (e.g., "75%", "50%") - slider only
+
+### ADR-015: noUiSlider Integration for Enhanced Allocation UX
+
+**Date**: February 23, 2026  
+**Status**: Approved  
+**Context**: Allocation interface is the core app functionality. Native HTML range input lacks visual feedback that helps users understand the allocation split at a glance.
+
+**Decision**: Integrate noUiSlider library for enhanced slider UX
+
+**Rationale**:
+
+- **Visual clarity**: Colored track segments show business/benefits split instantly
+- **Live tooltips**: Percentage visible while dragging (no need to look at table columns)
+- **Professional polish**: Purpose-built allocation tool appearance
+- **Mobile-optimized**: Better touch handling, optimized targets
+- **Zero dependencies**: Standalone vanilla JS, works with Alpine.js
+- **Lightweight**: 12KB minified (smaller than Alpine.js itself)
+- **Accessible**: ARIA support, keyboard navigation built-in
+- **Cross-browser**: Consistent styling, one API (no vendor prefixes)
+- **Still under 100 lines**: Create modular `js/allocation-slider.js` component
+
+**Implementation**:
+
+```javascript
+// js/allocation-slider.js (~80 lines)
+// - Initialize noUiSlider for each expense row
+// - Colored track: green (business) to blue (benefits)
+// - Tooltip shows percentage while dragging
+// - Integrates with Alpine.js via x-init
+
+// index.html
+// - Include noUiSlider CSS and JS from CDN
+// - Replace <input type="range"> with <div> for noUiSlider
+// - Use x-init to initialize sliders
+```
+
+**Dependencies Added**:
+
+- noUiSlider 15.8.1 (via CDN, no npm build required)
+- wNumb (bundled with noUiSlider, for percentage formatting)
+
+**Consequences**:
+
+- ✅ **Better UX for core feature**: Visual split, live feedback, professional appearance
+- ✅ **Maintains constraints**: Under 100 lines, no build step (CDN), Alpine.js compatible
+- ✅ **Improved accessibility**: Better than native range for screen readers
+- ✅ **Mobile-first**: Optimized touch targets and gestures
+- ⚠️ **External dependency**: 12KB library (justified for core feature)
+- ⚠️ **Test updates**: Playwright tests need to interact with noUiSlider API
+- ⚠️ **CDN dependency**: Requires internet for first load (can cache)
 
 ## Rejected Alternatives
 
