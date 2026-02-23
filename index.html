@@ -51,14 +51,16 @@
       <p x-show="!expenses.length">No expenses yet. Import data to get started.</p>
     </section>
     <!-- Expenses --><section x-show="route==='expenses'"><h2>💰 Expenses</h2>
-      <div class="filters"><select x-model="filters.category" @change="applyFilters()"><option value="">All</option><option value="Business Supplies">Business Supplies</option><option value="Board Member Benefits">Board Member Benefits</option><option value="Uncategorized">Uncategorized</option></select>
-        <input type="date" x-model="filters.startDate" @change="applyFilters()"><input type="date" x-model="filters.endDate" @change="applyFilters()"><button class="secondary outline" @click="clearFilters()">Clear</button></div>
-      <table role="grid"><thead><tr><th>Date</th><th>Description</th><th>Category</th><th>Amount</th><th></th></tr></thead>
-        <tbody><template x-for="e in filteredExpenses" :key="e.id"><tr><td x-text="e.date"></td><td x-text="e.description"></td>
-            <td><select x-model="e.category" @change="updateExpense()"><option>Business Supplies</option><option>Board Member Benefits</option><option>Uncategorized</option></select></td>
-            <td x-text="formatCurrency(e.amount)"></td><td><button class="outline" @click="deleteExpense(e.id)">🗑️</button></td></tr></template></tbody>
-        <tfoot><tr><td colspan="3">Total</td><td x-text="formatCurrency(filteredTotal)"></td><td></td></tr></tfoot></table>
-      <p x-show="!filteredExpenses.length">No expenses yet.</p></section>
+      <table role="grid"><thead><tr><th>Date</th><th>Description</th><th>Amount</th><th>Business %</th><th>Supplies</th><th>Benefits</th><th></th></tr></thead>
+        <tbody><template x-for="e in expenses" :key="e.id"><tr><td x-text="e.date"></td><td x-text="e.description"></td>
+            <td x-text="formatCurrency(e.amount)"></td>
+            <td><input type="range" min="0" max="100" x-model.number="e.businessPercent" @input="updateExpense()" data-testid="allocation-slider" style="width:100px">
+              <span x-text="e.businessPercent + '%'"></span></td>
+            <td x-text="formatCurrency(e.amount * e.businessPercent / 100)" data-testid="supplies-amount"></td>
+            <td x-text="formatCurrency(e.amount * (100 - e.businessPercent) / 100)" data-testid="benefits-amount"></td>
+            <td><button class="outline" @click="deleteExpense(e.id)">🗑️</button></td></tr></template></tbody>
+        <tfoot><tr><td colspan="3">Total</td><td></td><td x-text="formatCurrency(totalSupplies)" data-testid="total-supplies"></td><td x-text="formatCurrency(totalBenefits)" data-testid="total-benefits"></td><td></td></tr></tfoot></table>
+      <p x-show="!expenses.length">No expenses yet.</p></section>
     <!-- Import --><section x-show="route==='import'"><h2>📁 Import</h2>
       <div class="drag-area" @dragover.prevent="dragover=true" @dragleave="dragover=false" @drop.prevent="handleDrop($event)" :class="{dragover}"><p>Drop CSV/DAT/ZIP or <input type="file" accept=".csv,.dat,.zip" @change="handleFileSelect($event)"></p></div>
       <div x-show="importStatus" :data-import-status="importComplete?'complete':'processing'">

@@ -52,11 +52,12 @@
 **Decision**: Hard-code three categories: "Business Supplies", "Board Member Benefits", "Uncategorized"
 **Default Behavior**: All imported expenses default to "Uncategorized" pending user review
 **Rationale**:
+
 - Prevents premature tax categorization assumptions
 - Aligns with progressive disclosure UX principles (Nielsen Norman Group)
 - Honest state representation - acknowledges categorization hasn't occurred
 - User must manually review and categorize after import
-**Consequences**: 
+  **Consequences**:
 - Simpler UI, clearer user workflow
 - Dashboard shows uncategorized warning until user reviews
 - No AI/keyword-based auto-categorization until v2
@@ -494,6 +495,51 @@ CREATE TABLE passkeys (
 - ✅ Under 100 lines (import-history.js ~45 lines, UI ~30 lines, tests ~65 lines)
 - ⚠️ BOA duplicate detection not perfect (same transaction on same day will collide)
 - ⚠️ No "undo import" feature (manual deletion required)
+
+### ADR-014: Percentage-Based Allocation Interface
+
+**Context**: App goal is "helping businesses determine how much of Amazon orders are employee benefits". Category dropdown (ADR-002) was vestigial from categorization approach. Needed simpler allocation interface.
+
+**Decision**: Replace category dropdown with percentage slider for business allocation
+
+**Implementation**:
+
+- Expenses view: Replace `<select>` with `<input type="range" min="0" max="100">`
+- Data model: Already had `businessPercent` field (default 100%)
+- Display: Show split amounts (Supplies $ / Benefits $) per row
+- Remove: Category filters, date filters (non-essential for allocation)
+- Keep: Delete button, search/filter for finding items
+
+**UI Structure**:
+
+```
+| Date | Description | Amount | Business % | Supplies | Benefits | Delete |
+|------|-------------|--------|------------|----------|----------|--------|
+| 2/10 | Coffee      | $50.00 | [===75%==] | $37.50   | $12.50   | 🗑️     |
+```
+
+**Totals Calculation**:
+
+```javascript
+totalSupplies = Σ(amount * businessPercent / 100)
+totalBenefits = Σ(amount * (100 - businessPercent) / 100)
+```
+
+**Migration**: Storage already migrated category to businessPercent (ADR-002), defaults:
+
+- `Business Supplies` → 100%
+- `Board Member Benefits` → 0%
+- `Uncategorized` → 100%
+
+**Consequences**:
+
+- ✅ Aligns UI with core app goal (allocation not categorization)
+- ✅ Simpler UX: one slider vs dropdown + complex categorization rules
+- ✅ Real-time visual feedback: see split amounts update as slider moves
+- ✅ Under 100 lines: HTML ~15 lines, app.js +2 computed properties, storage migration reused
+- ✅ All tests passing (17/17)
+- ⚠️ No keyboard shortcuts for slider (could add arrow key increments later)
+- ⚠️ No preset buttons (e.g., "75%", "50%") - slider only
 
 ## Rejected Alternatives
 

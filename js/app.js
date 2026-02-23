@@ -21,6 +21,8 @@ function expenseApp() {
       return { supplies: countByCategory(this.expenses, 'Business Supplies'), benefits: countByCategory(this.expenses, 'Board Member Benefits'), uncategorized: countByCategory(this.expenses, 'Uncategorized') };
     },
     get filteredTotal() { return this.filteredExpenses.reduce((s, e) => s + e.amount, 0); },
+    get totalSupplies() { return this.expenses.reduce((sum, e) => sum + (e.amount * (e.businessPercent || 100) / 100), 0); },
+    get totalBenefits() { return this.expenses.reduce((sum, e) => sum + (e.amount * (100 - (e.businessPercent || 100)) / 100), 0); },
 
     init() { this.expenses = loadExpenses(); this.importHistory = loadImportHistory(); this.refresh(); },
     refresh() { this.locations = getUniqueLocations(this.expenses); this.applyFilters(); },

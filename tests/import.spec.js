@@ -63,16 +63,16 @@ test.describe('Data Import', () => {
     await page.click('a[href="#/import"]');
     await page.locator('input[type="file"]').setInputFiles('test-data/amazon-sample.csv');
     await page.waitForSelector('[data-import-status="complete"]', { timeout: 5000 });
-    
+
     // Check dashboard shows uncategorized warning
     await page.click('a[href="#/"]');
     await expect(page.locator('text=Needs Review')).toBeVisible();
-    
-    // Verify items are in expenses table with Uncategorized
+
+    // Verify items are in expenses table with 100% business allocation (uncategorized default)
     await page.click('a[href="#/expenses"]');
     await page.waitForTimeout(500);
-    const firstCategorySelect = page.locator('table tbody tr select').first();
-    await expect(firstCategorySelect).toHaveValue('Uncategorized');
+    const firstSlider = page.locator('[data-testid="allocation-slider"]').first();
+    await expect(firstSlider).toHaveValue('100');
   });
 
   test('shows import progress feedback', async ({ page }) => {
