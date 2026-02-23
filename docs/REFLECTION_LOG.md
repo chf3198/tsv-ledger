@@ -17,21 +17,56 @@
 
 ## Log Entries
 
+### 2026-02-23 SUCCESS: Transformed Expenses View into Allocation Interface (ADR-014)
+
+**Context**: User questioned why Expenses view existed when app goal is "determining how much of Amazon orders are employee benefits". Category dropdown was vestigial from categorization approach (ADR-002). User chose "Option 2: repurpose Expenses view as allocation interface" - simplest path to core functionality.
+
+**Outcome**: Replaced category dropdown with percentage sliders - 17/17 tests passing (2 new allocation tests)
+
+**Implementation Details**:
+
+- Expenses table: Removed category dropdown, added slider (0-100%) with real-time split display
+- Data model: Leveraged existing businessPercent field (already in parsers since ADR-008)
+- Storage migration: Fixed to default Uncategorized → 100% business (was mapping to Business Supplies incorrectly)
+- Computed properties: totalSupplies and totalBenefits from percentage calculations
+- Removed: Category filters, date filters (non-essential complexity)
+- Tests: allocation.spec.js (slider visibility, percentage updates), import.spec.js (updated for slider)
+
+**Key Insights**:
+
+1. **Category dropdown was design mismatch** - app goal is allocation (percentage-based), not categorization (taxonomy)
+2. **businessPercent field existed unused** - data model was ready, just needed UI exposure
+3. **Simpler is better** - slider provides direct manipulation, immediate visual feedback (split amounts)
+4. **TDD caught storage bugs** - test revealed migration logic error (Uncategorized defaulting to 0% instead of 100%)
+5. **Server management pattern** - repeatedly killed background server by running commands in same terminal (3x this session)
+
+**Adaptation**:
+
+- ✅ Align UI with core app goal (allocation not categorization)
+- ✅ Expose existing data model (businessPercent) instead of adding complexity
+- ✅ Real-time feedback: Show split amounts (Supplies $ / Benefits $) as slider moves
+- ✅ Remove vestigial features (category dropdown, date filters)
+- ✅ Fix migration defaults: Uncategorized → 100% business (matches uncategorized-default ADR-002)
+- ⚠️ TODO: Run commands in separate terminal from background server (chronic issue)
+
 ### 2026-02-13 CORRECTION: Removed Auto-Categorization, Default to Uncategorized
 
 **Context**: User reported terrible auto-categorization and wrong category terminology (Office Supplies vs Business Supplies, Employee Benefits vs Board Member Benefits)
 **Outcome**: Researched expense categorization best practices, implemented uncategorized default - 15/15 tests passing
 **Research Sources**:
+
 - Investopedia: Expense categorization for tax purposes (ordinary & necessary business expenses)
 - Nielsen Norman Group: Progressive disclosure UX (defer complexity, avoid premature decisions)
 
 **Key Insights from Research**:
+
 1. **Premature categorization violates progressive disclosure** - forcing immediate categorization slows users and increases errors
 2. **Tax accuracy requires user review** - auto-categorization without validation creates liability
 3. **"Uncategorized" is honest state** - acknowledges categorization hasn't occurred, signals work needed
 4. **Terminology matters** - "Board Member Benefits" correct (no employees), "Business Supplies" clearer than "Office"
 
 **Changes Implemented**:
+
 - categorizer.js: Always return "Uncategorized" (removed keyword matching)
 - Dashboard: Added "Needs Review" warning card for uncategorized items
 - Terminology: "Business Supplies" + "Board Member Benefits" + "Uncategorized"
@@ -39,6 +74,7 @@
 - Test updated: Verify imports default to uncategorized
 
 **Adaptation**:
+
 - ✅ Default to "Uncategorized" for all imports until user manually categorizes
 - ✅ Use correct terminology matching DESIGN.md architecture
 - ✅ Show uncategorized count as warning/action item on dashboard
