@@ -543,8 +543,8 @@ totalBenefits = Σ((amount * (100 - businessPercent)) / 100);
 
 ### ADR-015: noUiSlider Integration for Enhanced Allocation UX
 
-**Date**: February 23, 2026  
-**Status**: Approved  
+**Date**: February 23, 2026
+**Status**: Approved
 **Context**: Allocation interface is the core app functionality. Native HTML range input lacks visual feedback that helps users understand the allocation split at a glance.
 
 **Decision**: Integrate noUiSlider library for enhanced slider UX
@@ -590,6 +590,84 @@ totalBenefits = Σ((amount * (100 - businessPercent)) / 100);
 - ⚠️ **External dependency**: 12KB library (justified for core feature)
 - ⚠️ **Test updates**: Playwright tests need to interact with noUiSlider API
 - ⚠️ **CDN dependency**: Requires internet for first load (can cache)
+
+### ADR-016: Dual-Column Allocation Board
+
+**Date**: February 24, 2026
+**Status**: Approved
+**Context**: Previous allocation interface (ADR-014, ADR-015) showed all expenses in a single table with sliders. Users had to mentally track which items were Business Supplies vs Board Member Benefits. Split items (partially allocated to both categories) were difficult to identify. Needed better visual organization to match the app's core goal: determining how Amazon orders split between business and benefits.
+
+**Decision**: Transform allocation view into dual-column board layout - "Business Supplies" | "Board Member Benefits"
+
+**Rationale**:
+
+- **Mental model match**: Columns represent the two categories users care about
+- **Spatial organization**: Items naturally sorted by allocation (100% left, 100% right, splits in both)
+- **Visual scanning**: Easier to review "what's in Business" vs "what's in Benefits"
+- **Split item visibility**: Orange border + appears in both columns when partially allocated
+- **Independent scrolling**: Each column scrolls separately, headers stay fixed
+- **Responsive**: Single column on mobile, dual columns on tablet+
+- **Search efficiency**: Single search filters both columns simultaneously
+
+**Implementation**:
+
+```javascript
+// js/app.js - Computed properties for each column
+get businessCards() {
+  return this.expenses
+    .filter(e => (e.businessPercent ?? 100) > 0)  // Has business allocation
+    .filter(e => matches search query)
+    .sort(by date DESC);
+}
+
+get benefitsCards() {
+  return this.expenses
+    .filter(e => (100 - businessPercent) > 0)  // Has benefits allocation
+    .filter(e => matches search query)
+    .sort(by date DESC);
+}
+
+// Slider initialization detects column context
+initSlider(element, expense) {
+  const isBenefitsColumn = element.closest('.benefits') !== null;
+  // Slider position: Business=businessPercent, Benefits=(100-businessPercent)
+  const initialValue = isBenefitsColumn ? (100 - businessPercent) : businessPercent;
+  // Tooltip shows actual slider value (not inverted)
+}
+```
+
+**CSS Architecture**:
+
+- Grid layout: `grid-template-columns: minmax(0, 1fr) minmax(0, 1fr)`
+- Sticky headers: `position: sticky; top: 0; z-index: 10`
+- Independent scroll: `.cards-container { overflow-y: auto }`
+- Split item indicator: Orange left border + gradient background
+- Responsive breakpoints: 640px (stack), 768px (reduced spacing), 1024px (full spacing)
+
+**UX Features**:
+
+1. **Unified search**: Single input at top filters both columns
+2. **Visible IDs**: Last 8 characters of expense ID for reference
+3. **Color coding**: Orange border for split items (in both columns)
+4. **Column totals**: Dollar amount for each category in header
+5. **Item counts**: Dynamic count updates as search filters
+6. **Lazy loading**: 50 items per page, "Load More" button
+
+**Consequences**:
+
+- ✅ **Improved clarity**: Visual separation of Business vs Benefits
+- ✅ **Split item awareness**: Immediately see items in both columns
+- ✅ **Better navigation**: Fixed headers, independent scrolling
+- ✅ **Efficient search**: One input filters all expenses
+- ✅ **Responsive design**: Works on mobile (stacked) and desktop (side-by-side)
+- ✅ **Maintains constraints**: No new dependencies, under 100 lines per file
+- ⚠️ **Duplicate rendering**: Split items render twice (acceptable for clarity)
+- ⚠️ **Complexity**: More CSS for sticky headers and scroll management
+
+**Testing**:
+
+- 17 E2E tests passing (Playwright)
+- Tests verify: dual columns visible, sticky headers, independent scrolling, search filtering, slider tooltips
 
 ## Rejected Alternatives
 

@@ -27,11 +27,11 @@ const expensesToCSV = (expenses) =>
 const loadExpenses = () => {
   try {
     const expenses = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
-    // Migrate old category field to businessPercent  
+    // Migrate old category field to businessPercent
     return expenses.map(e => ({
       ...e,
       businessPercent: e.businessPercent !== undefined ? e.businessPercent :
-        (e.category === 'Business Supplies' ? 100 : 
+        (e.category === 'Business Supplies' ? 100 :
          e.category === 'Board Member Benefits' ? 0 : 100) // Default uncategorized to 100%
     }));
   }

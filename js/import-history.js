@@ -76,3 +76,13 @@ const createImportRecord = ({ ext, result, filename, newCount, dupCount }) => {
     success: true
   };
 };
+
+const clearImportHistory = () => {
+  localStorage.removeItem(IMPORT_HISTORY_KEY);
+};
+
+// Exports
+window.loadImportHistory = loadImportHistory;
+window.addImportRecord = addImportRecord;
+window.createImportRecord = createImportRecord;
+window.clearImportHistory = clearImportHistory;

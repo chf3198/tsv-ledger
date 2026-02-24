@@ -52,17 +52,84 @@
       </div>
       <p x-show="!expenses.length">No expenses yet. Import data to get started.</p>
     </section>
-    <!-- Expenses --><section x-show="route==='expenses'"><h2>💰 Expenses</h2>
-      <table role="grid"><thead><tr><th>Date</th><th>Description</th><th>Amount</th><th>Business %</th><th>Supplies</th><th>Benefits</th><th></th></tr></thead>
-        <tbody><template x-for="e in expenses" :key="e.id"><tr><td x-text="e.date"></td><td x-text="e.description"></td>
-            <td x-text="formatCurrency(e.amount)"></td>
-            <td style="min-width:180px"><div class="allocation-slider" data-testid="allocation-slider" :data-expense-id="e.id" 
-              x-init="initSlider($el, e)"></div></td>
-            <td x-text="formatCurrency(e.amount * e.businessPercent / 100)" data-testid="supplies-amount"></td>
-            <td x-text="formatCurrency(e.amount * (100 - e.businessPercent) / 100)" data-testid="benefits-amount"></td>
-            <td><button class="outline" @click="deleteExpense(e.id)">🗑️</button></td></tr></template></tbody>
-        <tfoot><tr><td colspan="3">Total</td><td></td><td x-text="formatCurrency(totalSupplies)" data-testid="total-supplies"></td><td x-text="formatCurrency(totalBenefits)" data-testid="total-benefits"></td><td></td></tr></tfoot></table>
-      <p x-show="!expenses.length">No expenses yet.</p></section>
+    <!-- Expenses --><section x-show="route==='expenses'">
+      <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+        <h2 style="margin: 0;">💰 Expenses Allocation</h2>
+        <input type="search" placeholder="Search expenses..." x-model="allocationSearchQuery" style="flex: 0 1 300px; margin: 0;">
+      </div>
+      <div class="allocation-board">
+        <!-- Business Supplies Column -->
+        <div class="allocation-column business-supplies">
+          <div class="column-header">
+            <h3>🏢 Business Supplies</h3>
+            <p class="column-total" x-text="formatCurrency(totalSupplies)" data-testid="total-supplies"></p>
+            <small x-text="businessCards.length + ' items'"></small>
+          </div>
+          <div class="cards-container">
+            <template x-for="e in businessCardsVisible" :key="'bus-' + e.id">
+              <article class="allocation-card card-enter" :class="{'split-item': e.benefitsPercent > 0 && e.benefitsPercent < 100}" data-testid="allocation-card">
+                <header>
+                  <strong x-text="e.description" :title="e.description"></strong>
+                  <small x-text="formatDate(e.date)"></small>
+                </header>
+                <div class="card-id" x-text="'#' + String(e.id).slice(-8)"></div>
+                <div>
+                  <span class="card-amount" x-text="formatCurrency(e.amount * e.businessPercent / 100)" data-testid="supplies-amount"></span>
+                  <span class="allocation-percentage">
+                    <span class="percentage-badge" x-text="e.businessPercent + '%'"></span>
+                    <span>of <span x-text="formatCurrency(e.amount)"></span></span>
+                  </span>
+                </div>
+                <div class="allocation-slider" data-testid="allocation-slider" :data-expense-id="e.id" x-init="initSlider($el, e)"></div>
+                <div class="preset-buttons">
+                  <button @click="setAllocation(e, 100)" :class="{'active': e.businessPercent === 100}" title="100% Business">100</button>
+                  <button @click="setAllocation(e, 75)" :class="{'active': e.businessPercent === 75}" title="75% Business">75</button>
+                  <button @click="setAllocation(e, 50)" :class="{'active': e.businessPercent === 50}" title="50/50 Split">50</button>
+                  <button @click="setAllocation(e, 25)" :class="{'active': e.businessPercent === 25}" title="25% Business">25</button>
+                  <button @click="setAllocation(e, 0)" :class="{'active': e.businessPercent === 0}" title="0% Business">0</button>
+                </div>
+              </article>
+            </template>
+            <button x-show="hasMoreBusinessCards" @click="loadMoreBusiness()" class="outline">
+              Load More (<span x-text="businessCards.length - businessCardsVisible.length"></span> remaining)
+            </button>
+            <p x-show="businessCards.length === 0" class="empty-column">No items allocated to Business Supplies</p>
+          </div>
+        </div>
+
+        <!-- Board Member Benefits Column -->
+        <div class="allocation-column benefits">
+          <div class="column-header">
+            <h3>👥 Board Member Benefits</h3>
+            <p class="column-total" x-text="formatCurrency(totalBenefits)" data-testid="total-benefits"></p>
+            <small x-text="benefitsCards.length + ' items'"></small>
+          </div>
+          <div class="cards-container">
+            <template x-for="e in benefitsCardsVisible" :key="'ben-' + e.id">
+              <article class="allocation-card card-enter" :class="{'split-item': e.businessPercent > 0 && e.businessPercent < 100}" data-testid="allocation-card">
+                <header>
+                  <strong x-text="e.description" :title="e.description"></strong>
+                  <small x-text="formatDate(e.date)"></small>
+                </header>
+                <div class="card-id" x-text="'#' + String(e.id).slice(-8)"></div>
+                <div>
+                  <span class="card-amount" x-text="formatCurrency(e.amount * e.benefitsPercent / 100)" data-testid="benefits-amount"></span>
+                  <span class="allocation-percentage">
+                    <span class="percentage-badge" x-text="e.benefitsPercent + '%'"></span>
+                    <span>of <span x-text="formatCurrency(e.amount)"></span></span>
+                  </span>
+                </div>
+                <div class="allocation-slider" data-testid="allocation-slider" :data-expense-id="e.id" x-init="initSlider($el, e)"></div>
+              </article>
+            </template>
+            <button x-show="hasMoreBenefitsCards" @click="loadMoreBenefits()" class="outline">
+              Load More (<span x-text="benefitsCards.length - benefitsCardsVisible.length"></span> remaining)
+            </button>
+            <p x-show="benefitsCards.length === 0" class="empty-column">No items allocated to Benefits</p>
+          </div>
+        </div>
+      </div>
+      <p x-show="!expenses.length" class="empty-state">No expenses yet. Import data to get started.</p></section>
     <!-- Import --><section x-show="route==='import'"><h2>📁 Import</h2>
       <div class="drag-area" @dragover.prevent="dragover=true" @dragleave="dragover=false" @drop.prevent="handleDrop($event)" :class="{dragover}"><p>Drop CSV/DAT/ZIP or <input type="file" accept=".csv,.dat,.zip" @change="handleFileSelect($event)"></p></div>
       <div x-show="importStatus" :data-import-status="importComplete?'complete':'processing'">
@@ -80,7 +147,7 @@
             <div class="import-stats"><span x-text="`${imp.recordsCount} new`"></span>
               <span x-show="imp.duplicatesCount>0" x-text="`${imp.duplicatesCount} duplicates`"></span>
               <span x-show="imp.skipped>0" x-text="`${imp.skipped} skipped`"></span></div>
-            <small x-show="imp.dateRange" x-text="formatDateRange(imp.dateRange.earliest,imp.dateRange.latest)"></small></article>
+            <small x-show="imp.dateRange" x-text="imp.dateRange ? formatDateRange(imp.dateRange.earliest,imp.dateRange.latest) : ''"></small></article>
         </template></div></section>
     <!-- Settings --><section x-show="route==='settings'"><h2>⚙️ Settings</h2>
       <button class="outline" @click="exportCSV()">📤 Export CSV</button><button class="outline secondary" @click="clearAll()">🗑️ Clear All</button></section>

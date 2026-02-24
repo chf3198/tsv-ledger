@@ -17,6 +17,53 @@
 
 ## Log Entries
 
+### 2026-02-24 SUCCESS: Dual-Column Allocation Board (ADR-016)
+
+**Context**: Allocation interface (ADR-014, ADR-015) showed all expenses in single table. Users had to mentally track "what's Business vs Benefits". Split items (partially allocated) were difficult to identify. User requested dual-column layout with independent scrolling, sticky headers, search, and split item indicators.
+
+**Outcome**: Transformed single-table into dual-column board - 17/17 tests passing (1 skipped)
+
+**Implementation Details**:
+
+- **Layout**: CSS Grid `grid-template-columns: minmax(0, 1fr) minmax(0, 1fr)` - "Business Supplies" | "Board Member Benefits"
+- **Computed Properties**: `businessCards` (businessPercent > 0), `benefitsCards` (benefitsPercent > 0) - split items appear in both
+- **Sticky Headers**: `position: sticky; top: 0; z-index: 10` with column totals, item counts
+- **Independent Scrolling**: `.cards-container { overflow-y: auto }` per column, fixed headers
+- **Unified Search**: Single input at top, `allocationSearchQuery` filters both columns (description + ID)
+- **Visual Indicators**: Orange left border + gradient background for split items (in both columns)
+- **Slider Context**: `element.closest('.benefits')` detects column - Business shows businessPercent, Benefits shows (100-businessPercent)
+- **Responsive**: 640px (stack), 768px (reduced spacing), 1024px (full spacing)
+
+**Key Insights**:
+
+1. **Slider position inversion bug** - Initial implementation inverted tooltip but not slider position, then inverted both causing double-inversion. Solution: invert initialValue AND update handler, show raw tooltip value
+2. **Column detection pattern** - `element.closest('.benefits')` reliably determines context for slider behavior
+3. **Duplicate rendering acceptable** - Split items render twice (once per column) but provides clarity worth the tradeoff
+4. **Search consolidation** - Single search more efficient than per-column filters (less state, simpler UX)
+5. **CSS sticky headers + overflow-y** - Requires careful z-index, negative margins for full-width text, padding to prevent border clipping
+
+**Challenges Resolved**:
+
+- **Slider tooltips showing wrong values** - Benefits column displayed businessPercent instead of benefitsPercent
+  - Fix: Removed tooltip inversion logic, slider value already represents correct percentage for that column
+- **Slider positions identical** - Both columns showed same visual position (e.g., both at 80%)
+  - Fix 1: Initialize Benefits slider at `(100 - businessPercent)` instead of `businessPercent`
+  - Fix 2: Update handler converts Benefits slider position back to businessPercent: `100 - sliderValue`
+- **Card borders hidden under sticky header** - Top border clipped by column header overlap
+  - Fix: Negative margins on card header + increased top padding on card
+- **Search inputs taking vertical space** - Column headers too tall
+  - Fix: Moved search to top of view (next to title), removed per-column searches
+
+**Adaptation**:
+
+- ✅ Dual-column spatial organization matches mental model (Business | Benefits)
+- ✅ Split items immediately visible (orange border, appears in both columns)
+- ✅ Sticky headers + independent scrolling improves navigation
+- ✅ Unified search filters all expenses efficiently
+- ✅ Responsive design works mobile (stacked) and desktop (side-by-side)
+- ✅ Maintains constraints: No new dependencies, under 100 lines per file
+- ✅ Added comprehensive code comments and ADR-016 documentation
+
 ### 2026-02-23 SUCCESS: Transformed Expenses View into Allocation Interface (ADR-014)
 
 **Context**: User questioned why Expenses view existed when app goal is "determining how much of Amazon orders are employee benefits". Category dropdown was vestigial from categorization approach (ADR-002). User chose "Option 2: repurpose Expenses view as allocation interface" - simplest path to core functionality.

@@ -73,7 +73,7 @@ test.describe('Data Import', () => {
     await page.waitForTimeout(500);
     const firstSlider = page.locator('[data-testid="allocation-slider"]').first();
     await expect(firstSlider).toBeVisible();
-    
+
     // Verify noUiSlider shows 100%
     const tooltip = firstSlider.locator('.noUi-tooltip');
     await expect(tooltip).toContainText('100%');
