@@ -228,7 +228,6 @@ function expenseApp() {
           });
 
           this.updateExpense();
-          this.debouncedBulkApplyCheck(expense);
         }
       };
 
@@ -236,10 +235,11 @@ function expenseApp() {
       element.noUiSlider.on('slide', updateBusinessPercent);
       element.noUiSlider.on('set', updateBusinessPercent);
 
-      // Sync slider to data when it ends (ensures consistency)
+      // Only check for bulk apply when user finishes dragging (mouseup/touchend)
       element.noUiSlider.on('end', () => {
         const currentValue = isBenefitsColumn ? (100 - expense.businessPercent) : expense.businessPercent;
         element.noUiSlider.set(currentValue, false);
+        this.debouncedBulkApplyCheck(expense);
       });
     },
 
