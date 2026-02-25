@@ -6,6 +6,7 @@ input[type="range"]:active::-webkit-slider-thumb{cursor:grabbing;transform:scale
 input[type="range"]::-moz-range-thumb{width:20px;height:20px;background:var(--pico-primary);border:2px solid white;border-radius:50%;cursor:grab;box-shadow:0 2px 4px rgba(0,0,0,0.2)}
 input[type="range"]:active::-moz-range-thumb{cursor:grabbing;transform:scale(1.1)}
 .split-display{display:flex;justify-content:space-between;font-size:0.7rem;color:var(--pico-muted-color);margin-bottom:0.25rem}
+.card-payment-method{font-size:0.7rem;color:var(--pico-muted-color);margin:0.25rem 0;padding:0.15rem 0.5rem;background:var(--pico-muted-border-color);border-radius:3px;display:inline-block}
 .presets{display:flex;gap:0.25rem;justify-content:space-between}
 .presets button{padding:0.15rem 0.4rem;font-size:0.7rem;margin:0;min-width:auto;height:auto;line-height:1;border-radius:4px}
 @media (max-width:768px){

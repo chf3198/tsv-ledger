@@ -73,6 +73,7 @@
                   <small x-text="formatDate(e.date)"></small>
                 </header>
                 <div class="card-id" x-text="'#' + String(e.id).slice(-8)"></div>
+                <div class="card-payment-method" x-show="e.paymentMethod" x-text="getPaymentMethodLabel(e.paymentMethod)"></div>
                 <div>
                   <span class="card-amount" x-text="formatCurrency(e.amount * (e.businessPercent ?? 100) / 100)" data-testid="supplies-amount"></span>
                   <span class="allocation-percentage">
@@ -116,6 +117,7 @@
                   <small x-text="formatDate(e.date)"></small>
                 </header>
                 <div class="card-id" x-text="'#' + String(e.id).slice(-8)"></div>
+                <div class="card-payment-method" x-show="e.paymentMethod" x-text="getPaymentMethodLabel(e.paymentMethod)"></div>
                 <div>
                   <span class="card-amount" x-text="formatCurrency(e.amount * (100 - (e.businessPercent ?? 100)) / 100)" data-testid="benefits-amount"></span>
                   <span class="allocation-percentage">
