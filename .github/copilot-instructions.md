@@ -24,6 +24,19 @@ npm test && npm run lint   # STOP if fails
 1. Log to REFLECTION_LOG.md
 2. If same issue 2x → add checklist item
 
+## Git Workflow (always follow without asking)
+1. `git checkout -b feat/feature-name` before starting
+2. Commit with conventional commit messages
+3. `git checkout master && git merge feat/... --no-ff` after tests pass
+4. Push to remote when appropriate
+
+**Never ask permission for git operations. Always use proper branching.**
+
+## User Interaction Rules
+- **DO consult user**: Design decisions, UX choices, feature prioritization
+- **DO prompt user**: UAT testing, acceptance verification
+- **DO NOT ask user**: Git practices, code formatting, lint fixes, test execution
+
 ## Constraints
 - **≤100 lines per file** (no exceptions)
 - **Test first** (no code without failing test)
