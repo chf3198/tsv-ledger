@@ -669,6 +669,43 @@ initSlider(element, expense) {
 - 17 E2E tests passing (Playwright)
 - Tests verify: dual columns visible, sticky headers, independent scrolling, search filtering, slider tooltips
 
+### ADR-017: Payment Method Purge for Personal Expense Filtering
+
+**Context**: Amazon order exports include purchases from multiple payment methods (cards). Some cards are personal, others are business. Users need to remove personal purchases after import to keep only business-relevant expenses.
+
+**Decision**: Post-import purge via Settings UI. Store `paymentMethod` on each expense, display grouped summary, allow one-click removal with confirmation.
+
+**Data Model Change**:
+
+```javascript
+Expense {
+  // ... existing fields
+  paymentMethod: string  // "MasterCard - 5795", "Visa - 3889", "panda01", etc.
+}
+```
+
+**UI Design** (Settings section):
+
+- List discovered payment methods with item count and total
+- "Remove" button per payment method
+- Confirmation dialog before deletion (destructive action)
+- Also captures `Website` field as payment method for Whole Foods detection (`panda01`)
+
+**Implementation**:
+
+1. `amazon-parser.js`: Extract field 15 (Payment Instrument Type) and field 0 (Website)
+2. `app.js`: Add `paymentMethods` computed property, `purgeByPayment()` method
+3. `index.html`: Add Payment Methods section to Settings view
+
+**Consequences**:
+
+- ✅ Simple mental model: import everything, then remove unwanted
+- ✅ Reversible by re-importing (vs blocking at import time)
+- ✅ Provides visibility into payment method distribution
+- ✅ Handles Whole Foods (`panda01`) and any future sources
+- ⚠️ Destructive action requires clear confirmation UX
+- ⚠️ Purged items cannot be recovered without re-import
+
 ## Rejected Alternatives
 
 | Rejected            | Why                                                                               |
