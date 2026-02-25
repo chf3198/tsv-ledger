@@ -72,7 +72,10 @@
                   <strong x-text="e.description" :title="e.description"></strong>
                   <small x-text="formatDate(e.date)"></small>
                 </header>
-                <div class="card-id" x-text="'#' + String(e.id).slice(-8)"></div>
+                <div class="card-meta-row">
+                  <span class="card-id"><span x-text="'#' + String(e.id).slice(-8)"></span><span x-show="e.itemTotal > 1" class="item-position" x-text="' (' + e.itemIndex + '/' + e.itemTotal + ')'"></span></span>
+                  <span class="card-payment-method" x-show="e.paymentMethod" x-text="getPaymentMethodLabel(e.paymentMethod)"></span>
+                </div>
                 <div>
                   <span class="card-amount" x-text="formatCurrency(e.amount * (e.businessPercent ?? 100) / 100)" data-testid="supplies-amount"></span>
                   <span class="allocation-percentage">
@@ -115,7 +118,10 @@
                   <strong x-text="e.description" :title="e.description"></strong>
                   <small x-text="formatDate(e.date)"></small>
                 </header>
-                <div class="card-id" x-text="'#' + String(e.id).slice(-8)"></div>
+                <div class="card-meta-row">
+                  <span class="card-id"><span x-text="'#' + String(e.id).slice(-8)"></span><span x-show="e.itemTotal > 1" class="item-position" x-text="' (' + e.itemIndex + '/' + e.itemTotal + ')'"></span></span>
+                  <span class="card-payment-method" x-show="e.paymentMethod" x-text="getPaymentMethodLabel(e.paymentMethod)"></span>
+                </div>
                 <div>
                   <span class="card-amount" x-text="formatCurrency(e.amount * (100 - (e.businessPercent ?? 100)) / 100)" data-testid="benefits-amount"></span>
                   <span class="allocation-percentage">

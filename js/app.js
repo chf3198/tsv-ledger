@@ -93,7 +93,7 @@ function expenseApp() {
     loadMoreBenefits() { this.benefitsCardsPage++; },
 
     init() { this.expenses = loadExpenses(); this.importHistory = loadImportHistory(); this.refresh(); },
-    refresh() { this.locations = getUniqueLocations(this.expenses); this.applyFilters(); },
+    refresh() { computeItemPositions(this.expenses); this.locations = getUniqueLocations(this.expenses); this.applyFilters(); },
     save() { saveExpenses(this.expenses); this.refresh(); },
 
     handleDrop(e) {
