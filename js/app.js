@@ -185,17 +185,21 @@ function expenseApp() {
         format: { to: (v) => Math.round(v), from: (v) => Number(v) }
       });
 
-      // Update handler: Convert slider position to businessPercent
+      // Update handlers: Convert slider position to businessPercent
       // Business column: slider value IS businessPercent
       // Benefits column: slider value is benefitsPercent, so businessPercent = 100 - slider
-      element.noUiSlider.on('update', (values) => {
+      const updateBusinessPercent = (values) => {
         const sliderValue = Math.round(values[0]);
         const newBusinessPercent = isBenefitsColumn ? (100 - sliderValue) : sliderValue;
         if (newBusinessPercent !== expense.businessPercent) {
           expense.businessPercent = newBusinessPercent;
           this.updateExpense();
         }
-      });
+      };
+
+      // Listen to both 'slide' (user interaction) and 'set' (programmatic)
+      element.noUiSlider.on('slide', updateBusinessPercent);
+      element.noUiSlider.on('set', updateBusinessPercent);
     },
 
     // Preset allocation buttons

@@ -67,16 +67,16 @@
           </div>
           <div class="cards-container">
             <template x-for="e in businessCardsVisible" :key="'bus-' + e.id">
-              <article class="allocation-card card-enter" :class="{'split-item': e.benefitsPercent > 0 && e.benefitsPercent < 100}" data-testid="allocation-card">
+              <article class="allocation-card card-enter" :class="{'split-item': (100 - (e.businessPercent ?? 100)) > 0 && (100 - (e.businessPercent ?? 100)) < 100}" data-testid="allocation-card">
                 <header>
                   <strong x-text="e.description" :title="e.description"></strong>
                   <small x-text="formatDate(e.date)"></small>
                 </header>
                 <div class="card-id" x-text="'#' + String(e.id).slice(-8)"></div>
                 <div>
-                  <span class="card-amount" x-text="formatCurrency(e.amount * e.businessPercent / 100)" data-testid="supplies-amount"></span>
+                  <span class="card-amount" x-text="formatCurrency(e.amount * (e.businessPercent ?? 100) / 100)" data-testid="supplies-amount"></span>
                   <span class="allocation-percentage">
-                    <span class="percentage-badge" x-text="e.businessPercent + '%'"></span>
+                    <span class="percentage-badge" x-text="(e.businessPercent ?? 100) + '%'"></span>
                     <span>of <span x-text="formatCurrency(e.amount)"></span></span>
                   </span>
                 </div>
@@ -106,16 +106,16 @@
           </div>
           <div class="cards-container">
             <template x-for="e in benefitsCardsVisible" :key="'ben-' + e.id">
-              <article class="allocation-card card-enter" :class="{'split-item': e.businessPercent > 0 && e.businessPercent < 100}" data-testid="allocation-card">
+              <article class="allocation-card card-enter" :class="{'split-item': (e.businessPercent ?? 100) > 0 && (e.businessPercent ?? 100) < 100}" data-testid="allocation-card">
                 <header>
                   <strong x-text="e.description" :title="e.description"></strong>
                   <small x-text="formatDate(e.date)"></small>
                 </header>
                 <div class="card-id" x-text="'#' + String(e.id).slice(-8)"></div>
                 <div>
-                  <span class="card-amount" x-text="formatCurrency(e.amount * e.benefitsPercent / 100)" data-testid="benefits-amount"></span>
+                  <span class="card-amount" x-text="formatCurrency(e.amount * (100 - (e.businessPercent ?? 100)) / 100)" data-testid="benefits-amount"></span>
                   <span class="allocation-percentage">
-                    <span class="percentage-badge" x-text="e.benefitsPercent + '%'"></span>
+                    <span class="percentage-badge" x-text="(100 - (e.businessPercent ?? 100)) + '%'"></span>
                     <span>of <span x-text="formatCurrency(e.amount)"></span></span>
                   </span>
                 </div>

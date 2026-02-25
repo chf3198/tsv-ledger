@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [3.1.0] - 2026-02-24
 
 ### Added
+
 - **Dual-Column Allocation Board** (ADR-016): "Business Supplies" | "Board Member Benefits" layout
   - Independent vertical scrolling per column with sticky headers
   - Split items (partial allocations) appear in both columns with orange border indicator
@@ -21,12 +22,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Comprehensive code documentation comments in js/app.js and css/app.css
 
 ### Changed
+
 - Moved search filter from individual column headers to top of allocation view
 - Consolidated separate search queries into single `allocationSearchQuery`
 - Slider initialization now detects column context via `element.closest('.benefits')`
 - Update handler converts slider position to businessPercent based on column
 
 ### Fixed
+
 - Slider tooltips displaying incorrect percentages in Benefits column
 - Slider visual positions showing identical values instead of inverse split
 - Card borders being hidden under sticky column headers
@@ -35,6 +38,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [3.0.0] - 2026-02-23
 
 ### Added
+
 - **noUiSlider Integration** (ADR-015): Professional allocation slider with visual feedback
   - Colored track segments (green for business, blue for benefits)
   - Live tooltips showing percentage while dragging
@@ -46,16 +50,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Preset allocation buttons (100%, 75%, 50%, 25%, 0%)
 
 ### Changed
+
 - Transformed Expenses view from categorization to allocation interface
 - Removed category dropdown, date filters (non-essential complexity)
 - Updated all tests to work with allocation sliders
 
 ### Fixed
+
 - Storage migration: Uncategorized now defaults to 100% business (was incorrectly mapping to 0%)
 
 ## [2.1.0] - 2026-02-13
 
 ### Added
+
 - **Import History Timeline** (ADR-013): Complete import audit trail
   - Color-coded cards (green=success, orange=partial duplicates)
   - Empty state with clear action pathway
@@ -66,31 +73,37 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Duplicate count reporting on partial imports
 
 ### Changed
+
 - Strengthened BOA expense IDs: `boa-{date}-{amount}-{desc}` (collision-resistant)
 - All imports now default to "Uncategorized" status
 
 ### Fixed
+
 - Alpine.js template functions now properly scoped to component
 - Test isolation: localStorage.clear() followed by page.reload()
 
 ## [2.0.0] - 2026-02-13
 
 ### Changed
+
 - **Breaking**: Removed auto-categorization, all imports default to "Uncategorized"
 - **Breaking**: Updated terminology
   - "Office Supplies" → "Business Supplies"
   - "Employee Benefits" → "Board Member Benefits"
 
 ### Added
+
 - Dashboard "Needs Review" warning card for uncategorized items
 - Progressive disclosure UX pattern (defer categorization decision)
 
 ### Removed
+
 - Keyword-based auto-categorization from categorizer.js
 
 ## [1.0.0] - 2026-02-12
 
 ### Added
+
 - Initial release with core functionality
 - CSV/DAT import support (Amazon, Bank of America)
 - Three-category expense tracking (Business Supplies, Board Member Benefits, Uncategorized)
