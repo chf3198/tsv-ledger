@@ -14,7 +14,7 @@ const parseAmazonRow = (line, categorize, idx) => {
   // Handle quoted CSV fields with embedded commas
   const fields = [];
   let current = '', inQuotes = false;
-  
+
   for (const c of line) {
     if (c === '"') inQuotes = !inQuotes;
     else if (c === ',' && !inQuotes) {
@@ -30,7 +30,7 @@ const parseAmazonRow = (line, categorize, idx) => {
   // 12:ASIN, 13:Condition, 14:Qty, 15:Payment, 16:OrderStatus, 17:ShipStatus,
   // 18:ShipDate, 19:ShippingOption, 20:ShipAddress, 21:BillAddress, 22:Tracking,
   // 23:ProductName, 24-27: Gift fields, 28: SerialNumber
-  
+
   const amount = parseFloat((fields[9] || '0').replace(/[^0-9.-]/g, ''));
   if (isNaN(amount) || amount <= 0) return null;
 
@@ -43,6 +43,10 @@ const parseAmazonRow = (line, categorize, idx) => {
   const dateStr = fields[2] || '';
   const date = dateStr ? new Date(dateStr).toISOString().split('T')[0] : new Date().toISOString().split('T')[0];
 
+  // Payment method: use Website (field 0) for Whole Foods (panda01), else Payment Instrument (field 15)
+  const website = fields[0] || '';
+  const paymentMethod = website !== 'Amazon.com' ? website : (fields[15] || 'Unknown');
+
   return {
     id: `amazon-${fields[1]}-${idx}`, // OrderID + index
     date,
@@ -50,7 +54,8 @@ const parseAmazonRow = (line, categorize, idx) => {
     location,
     amount,
     category: categorize('', fields[23] || ''),
-    businessPercent: 100 // Default: all business
+    businessPercent: 100, // Default: all business
+    paymentMethod
   };
 };
 

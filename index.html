@@ -5,7 +5,7 @@
   <title>TSV Expenses</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nouislider@15.8.1/dist/nouislider.min.css">
-  <link rel="stylesheet" href="css/shell.css"><link rel="stylesheet" href="css/app.css">
+  <link rel="stylesheet" href="css/shell.css"><link rel="stylesheet" href="css/app.css"><link rel="stylesheet" href="css/payment-methods.css">
   <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/nouislider@15.8.1/dist/nouislider.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
@@ -80,7 +80,11 @@
                     <span>of <span x-text="formatCurrency(e.amount)"></span></span>
                   </span>
                 </div>
-                <div class="allocation-slider" data-testid="allocation-slider" :data-expense-id="e.id" x-init="initSlider($el, e)"></div>
+                <div class="slider-with-arrows">
+                  <button class="slider-arrow" @click="setAllocation(e, 0)" title="0% Business (100% Benefits)" aria-label="Allocate 0% to Business">○</button>
+                  <div class="allocation-slider" data-testid="allocation-slider" :data-expense-id="e.id" x-init="initSlider($el, e)"></div>
+                  <button class="slider-arrow" @click="setAllocation(e, 100)" title="100% Business" aria-label="Allocate 100% to Business">●</button>
+                </div>
                 <div class="preset-buttons">
                   <button @click="setAllocation(e, 100)" :class="{'active': e.businessPercent === 100}" title="100% Business">100</button>
                   <button @click="setAllocation(e, 75)" :class="{'active': e.businessPercent === 75}" title="75% Business">75</button>
@@ -119,7 +123,11 @@
                     <span>of <span x-text="formatCurrency(e.amount)"></span></span>
                   </span>
                 </div>
-                <div class="allocation-slider" data-testid="allocation-slider" :data-expense-id="e.id" x-init="initSlider($el, e)"></div>
+                <div class="slider-with-arrows">
+                  <button class="slider-arrow" @click="setAllocation(e, 100)" title="0% Benefits (100% Business)" aria-label="Allocate 0% to Benefits">○</button>
+                  <div class="allocation-slider" data-testid="allocation-slider" :data-expense-id="e.id" x-init="initSlider($el, e)"></div>
+                  <button class="slider-arrow" @click="setAllocation(e, 0)" title="100% Benefits" aria-label="Allocate 100% to Benefits">●</button>
+                </div>
               </article>
             </template>
             <button x-show="hasMoreBenefitsCards" @click="loadMoreBenefits()" class="outline">
@@ -150,8 +158,78 @@
             <small x-show="imp.dateRange" x-text="imp.dateRange ? formatDateRange(imp.dateRange.earliest,imp.dateRange.latest) : ''"></small></article>
         </template></div></section>
     <!-- Settings --><section x-show="route==='settings'"><h2>⚙️ Settings</h2>
-      <button class="outline" @click="exportCSV()">📤 Export CSV</button><button class="outline secondary" @click="clearAll()">🗑️ Clear All</button></section>
+      <button class="outline" @click="exportCSV()">📤 Export CSV</button><button class="outline secondary" @click="clearAll()">🗑️ Clear All</button>
+      <section data-testid="payment-methods-section" style="margin-top:2rem" x-show="paymentMethods.length > 0">
+        <h3>💳 Payment Methods</h3>
+        <p style="color:var(--muted-color);margin-bottom:1rem">Remove expenses by payment method to filter out personal purchases.</p>
+        <div class="payment-methods-list">
+          <template x-for="pm in paymentMethods" :key="pm.method">
+            <div class="payment-method-row" data-testid="payment-method-row" :data-payment="pm.method">
+              <span class="pm-label" x-text="getPaymentMethodLabel(pm.method)"></span>
+              <span class="pm-stats"><span data-testid="item-count" x-text="pm.count"></span> items</span>
+              <span class="pm-total" data-testid="total-amount" x-text="formatCurrency(pm.total)"></span>
+              <button class="outline secondary" data-testid="remove-btn" @click="openPurgeModal(pm.method)">Remove</button>
+            </div>
+          </template>
+        </div>
+      </section></section>
   </main>
+
+  <!-- Payment Method Purge Confirmation Modal -->
+  <dialog :open="showPurgeModal" data-testid="purge-confirm-dialog" @click.self="closePurgeModal()">
+    <article>
+      <header><h3>⚠️ Remove Expenses?</h3><button @click="closePurgeModal()" aria-label="Close" class="close">×</button></header>
+      <p>This will permanently delete all expenses paid with:</p>
+      <p><strong x-text="getPaymentMethodLabel(purgeTarget)"></strong></p>
+      <template x-if="purgeTarget">
+        <p x-text="(() => { const pm = paymentMethods.find(p => p.method === purgeTarget); return pm ? pm.count + ' expenses totaling ' + formatCurrency(pm.total) : ''; })()"></p>
+      </template>
+      <p style="color:var(--muted-color)">This action cannot be undone.</p>
+      <footer>
+        <button class="secondary outline" data-testid="purge-cancel-btn" @click="closePurgeModal()">Cancel</button>
+        <button class="contrast" data-testid="purge-confirm-btn" @click="confirmPurge()">Remove Expenses</button>
+      </footer>
+    </article>
+  </dialog>
+
+  <!-- Bulk Allocation Modal -->
+  <dialog :open="showBulkApplyModal" class="bulk-apply-modal" @click.self="closeBulkApplyModal()">
+    <article>
+      <header>
+        <h3>✨ Apply to Matching Items?</h3>
+        <button @click="closeBulkApplyModal()" aria-label="Close" class="close">&times;</button>
+      </header>
+      <div class="modal-content">
+        <p>Found <strong x-text="bulkApplyMatches.length"></strong> matching item<span x-show="bulkApplyMatches.length !== 1">s</span> with the same description:</p>
+        <p class="allocation-preview" x-show="bulkApplySource">
+          <strong x-text="bulkApplySource?.description"></strong><br>
+          <span class="business-badge">Business: <span x-text="(bulkApplySource?.businessPercent ?? 100) + '%'"></span></span>
+          <span class="benefits-badge">Benefits: <span x-text="(100 - (bulkApplySource?.businessPercent ?? 100)) + '%'"></span></span>
+        </p>
+        <div class="matches-list">
+          <h4>Items to update:</h4>
+          <template x-for="match in bulkApplyMatches" :key="match.id">
+            <div class="match-item">
+              <div class="match-info">
+                <strong x-text="match.description"></strong>
+                <small x-text="formatDate(match.date)"></small>
+                <small x-text="formatCurrency(match.amount)"></small>
+              </div>
+              <div class="match-change">
+                <span class="current" x-text="(match.businessPercent ?? 100) + '% → '"></span>
+                <span class="new" x-text="(bulkApplySource?.businessPercent ?? 100) + '%'"></span>
+              </div>
+            </div>
+          </template>
+        </div>
+      </div>
+      <footer>
+        <button class="secondary outline" @click="closeBulkApplyModal()">Cancel</button>
+        <button @click="applyBulkAllocation()">Apply to All</button>
+      </footer>
+    </article>
+  </dialog>
+
   <!-- App Shell: Footer --><footer role="contentinfo" class="app-footer"><small>TSV Expenses v3.0 • Texas Sunset Venues</small></footer>
-  <script src="js/storage.js"></script><script src="js/utils.js"></script><script src="js/csv.js"></script><script src="js/amazon-parser.js"></script><script src="js/boa-parser.js"></script><script src="js/zip-handler.js"></script><script src="js/categorizer.js"></script><script src="js/import-history.js"></script><script src="js/app.js"></script>
+  <script src="js/storage.js"></script><script src="js/utils.js"></script><script src="js/csv.js"></script><script src="js/amazon-parser.js"></script><script src="js/boa-parser.js"></script><script src="js/zip-handler.js"></script><script src="js/categorizer.js"></script><script src="js/import-history.js"></script><script src="js/payment-methods.js"></script><script src="js/app.js"></script>
 </body></html>

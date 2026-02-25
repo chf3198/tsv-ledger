@@ -17,6 +17,37 @@
 
 ## Log Entries
 
+### 2026-02-25 SUCCESS: Payment Method Purge Feature (ADR-017)
+
+**Context**: User noticed Amazon order exports include purchases from multiple payment methods (personal and business cards mixed). Needed way to filter out personal purchases after import.
+
+**Outcome**: Implemented post-import purge via Settings UI - 26/26 tests passing (5 new tests)
+
+**Implementation Details**:
+
+- **Data Model**: Added `paymentMethod` field to expenses (extracted from Amazon CSV field 15 or field 0 for Whole Foods)
+- **Parser Update**: `amazon-parser.js` extracts Payment Instrument Type; uses Website field for non-Amazon.com sources (e.g., `panda01` for Whole Foods)
+- **New File**: `js/payment-methods.js` - utility functions for payment method stats, labels, filtering (41 lines)
+- **Settings UI**: Payment Methods section shows method, count, total; Remove button per method
+- **Confirmation Modal**: Shows method name, count, total; warns action cannot be undone
+- **State**: `showPurgeModal`, `purgeTarget` in app.js; `openPurgeModal()`, `closePurgeModal()`, `confirmPurge()` methods
+
+**Key Insights**:
+
+1. **Post-import purge > Pre-import filter** - User correctly identified chicken-egg problem with blocking at import (need data to know which cards exist)
+2. **Website field = source identification** - `panda01` in Website field indicates Whole Foods in-store purchases; Amazon.com for shipped orders
+3. **Test locator specificity** - Adding dialog header/footer elements broke shell.spec.js tests that used generic `header` locator. Fixed by using `header[role="banner"]` instead of `header, header[role="banner"]`
+
+**Adaptation**:
+
+- ✅ Clean mental model: import everything, remove unwanted payment methods later
+- ✅ Reversible: can re-import to get purged items back
+- ✅ Whole Foods detection via `panda01` Website field
+- ✅ Friendly labels: `panda01` → "Whole Foods (In-Store)"
+- ✅ All new files under 100-line limit
+
+---
+
 ### 2026-02-24 SUCCESS: Dual-Column Allocation Board (ADR-016)
 
 **Context**: Allocation interface (ADR-014, ADR-015) showed all expenses in single table. Users had to mentally track "what's Business vs Benefits". Split items (partially allocated) were difficult to identify. User requested dual-column layout with independent scrolling, sticky headers, search, and split item indicators.

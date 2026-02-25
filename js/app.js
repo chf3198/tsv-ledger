@@ -12,15 +12,24 @@ function expenseApp() {
     businessCardsPage: 1,
     benefitsCardsPage: 1,
     allocationSearchQuery: '',
+    // Bulk allocation state
+    showBulkApplyModal: false,
+    bulkApplySource: null,
+    bulkApplyMatches: [],
+    bulkApplyDebounceTimer: null,
+    lastSliderInteraction: 0,
     // Shell state (ADR-010)
     menuOpen: false, route: 'dashboard',
     // Auth state (ADR-009)
     auth: JSON.parse(localStorage.getItem('tsv-auth') || '{"user":null,"authenticated":false}'),
     showAuthModal: false, showUserMenu: false,
+    // Payment method purge state (ADR-017)
+    showPurgeModal: false, purgeTarget: null,
 
     get totals() {
       return { supplies: sumByCategory(this.expenses, 'Business Supplies'), benefits: sumByCategory(this.expenses, 'Board Member Benefits'), uncategorized: sumByCategory(this.expenses, 'Uncategorized') };
     },
+    get paymentMethods() { return getPaymentMethodStats(this.expenses); },
     get counts() {
       return { supplies: countByCategory(this.expenses, 'Business Supplies'), benefits: countByCategory(this.expenses, 'Board Member Benefits'), uncategorized: countByCategory(this.expenses, 'Uncategorized') };
     },
@@ -162,6 +171,16 @@ function expenseApp() {
     exportCSV() { exportToCSV(this.filteredExpenses, `tsv-expenses-${today()}.csv`); },
     formatCurrency,
     formatDateRange,
+    getPaymentMethodLabel,
+
+    // Payment method purge (ADR-017)
+    openPurgeModal(method) { this.purgeTarget = method; this.showPurgeModal = true; },
+    closePurgeModal() { this.purgeTarget = null; this.showPurgeModal = false; },
+    confirmPurge() {
+      if (!this.purgeTarget) return;
+      this.expenses = filterByPaymentMethod(this.expenses, this.purgeTarget);
+      this.save(); this.closePurgeModal();
+    },
 
     // noUiSlider integration
     // Initializes allocation slider - position and value depend on column context
@@ -170,7 +189,7 @@ function expenseApp() {
     initSlider(element, expense) {
       if (!window.noUiSlider || element.noUiSlider) return;
 
-      const businessPercent = expense.businessPercent || 100;
+      const businessPercent = expense.businessPercent ?? 100;
       const isBenefitsColumn = element.closest('.benefits') !== null;
       const initialValue = isBenefitsColumn ? (100 - businessPercent) : businessPercent;
 
@@ -191,26 +210,117 @@ function expenseApp() {
       const updateBusinessPercent = (values) => {
         const sliderValue = Math.round(values[0]);
         const newBusinessPercent = isBenefitsColumn ? (100 - sliderValue) : sliderValue;
+
+        // Mark that user is actively interacting with slider
+        this.lastSliderInteraction = Date.now();
+
         if (newBusinessPercent !== expense.businessPercent) {
           expense.businessPercent = newBusinessPercent;
+
+          // Update all other sliders for this expense to stay in sync
+          const allSliders = document.querySelectorAll(`[data-expense-id="${expense.id}"]`);
+          allSliders.forEach(slider => {
+            if (slider !== element && slider.noUiSlider) {
+              const isOtherBenefits = slider.closest('.benefits') !== null;
+              const targetValue = isOtherBenefits ? (100 - newBusinessPercent) : newBusinessPercent;
+              slider.noUiSlider.set(targetValue, false); // false = don't fire events
+            }
+          });
+
           this.updateExpense();
+          this.debouncedBulkApplyCheck(expense);
         }
       };
 
       // Listen to both 'slide' (user interaction) and 'set' (programmatic)
       element.noUiSlider.on('slide', updateBusinessPercent);
       element.noUiSlider.on('set', updateBusinessPercent);
+
+      // Sync slider to data when it ends (ensures consistency)
+      element.noUiSlider.on('end', () => {
+        const currentValue = isBenefitsColumn ? (100 - expense.businessPercent) : expense.businessPercent;
+        element.noUiSlider.set(currentValue, false);
+      });
     },
 
     // Preset allocation buttons
     setAllocation(expense, percent) {
       expense.businessPercent = percent;
-      // Update slider if it exists
-      const sliderEl = document.querySelector(`[data-expense-id="${expense.id}"]`);
-      if (sliderEl && sliderEl.noUiSlider) {
-        sliderEl.noUiSlider.set(percent);
-      }
+
+      // Update all sliders for this expense immediately
+      const allSliders = document.querySelectorAll(`[data-expense-id="${expense.id}"]`);
+      allSliders.forEach(slider => {
+        if (slider.noUiSlider) {
+          const isSliderBenefits = slider.closest('.benefits') !== null;
+          const targetValue = isSliderBenefits ? (100 - percent) : percent;
+          slider.noUiSlider.set(targetValue, false);
+        }
+      });
+
       this.updateExpense();
+      this.debouncedBulkApplyCheck(expense);
+    },
+
+    // Debounced bulk apply check to prevent modal during rapid changes
+    debouncedBulkApplyCheck(expense) {
+      clearTimeout(this.bulkApplyDebounceTimer);
+      this.bulkApplyDebounceTimer = setTimeout(() => {
+        // Only show modal if user hasn't interacted with slider recently
+        const timeSinceLastInteraction = Date.now() - this.lastSliderInteraction;
+        if (timeSinceLastInteraction > 500) {
+          this.checkForBulkApplyOpportunity(expense);
+        }
+      }, 800); // Wait 800ms after last change
+    },
+
+    // Bulk allocation: Find matching expenses
+    findMatchingExpenses(sourceExpense) {
+      const normalizedDescription = sourceExpense.description.trim().toLowerCase();
+      return this.expenses.filter(e =>
+        e.id !== sourceExpense.id &&
+        e.description.trim().toLowerCase() === normalizedDescription &&
+        e.businessPercent !== sourceExpense.businessPercent
+      );
+    },
+
+    // Bulk allocation: Check if bulk apply should be offered
+    checkForBulkApplyOpportunity(expense) {
+      const matches = this.findMatchingExpenses(expense);
+      if (matches.length > 0) {
+        this.bulkApplySource = expense;
+        this.bulkApplyMatches = matches;
+        this.showBulkApplyModal = true;
+      }
+    },
+
+    // Bulk allocation: Apply to all matching items
+    applyBulkAllocation() {
+      if (!this.bulkApplySource || this.bulkApplyMatches.length === 0) return;
+
+      const targetPercent = this.bulkApplySource.businessPercent;
+      this.bulkApplyMatches.forEach(expense => {
+        expense.businessPercent = targetPercent;
+
+        // Update all sliders for this expense
+        const sliders = document.querySelectorAll(`[data-expense-id="${expense.id}"]`);
+        sliders.forEach(slider => {
+          if (slider.noUiSlider) {
+            const isSliderBenefits = slider.closest('.benefits') !== null;
+            const sliderValue = isSliderBenefits ? (100 - targetPercent) : targetPercent;
+            slider.noUiSlider.set(sliderValue, false);
+          }
+        });
+      });
+
+      this.updateExpense();
+      this.closeBulkApplyModal();
+    },
+
+    // Bulk allocation: Close modal
+    closeBulkApplyModal() {
+      this.showBulkApplyModal = false;
+      this.bulkApplySource = null;
+      this.bulkApplyMatches = [];
     },
 
     // Auth methods (ADR-009) - UI only, actual OAuth in CloudFlare Worker
