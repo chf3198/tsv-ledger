@@ -10,4 +10,4 @@ database_id = "02c7429d-79c9-47f4-a24c-74e0580f37df"
 
 [vars]
 AUTH_SECRET = "dev-secret-change-in-production"
-FRONTEND_URL = "https://curtisfranks.github.io/tsv-ledger"
+FRONTEND_URL = "https://chf3198.github.io/tsv-ledger"

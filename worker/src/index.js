@@ -11,7 +11,7 @@ import { handleExpenses } from './expenses.js';
 
 // CORS configured for GitHub Pages frontend
 const ALLOWED_ORIGINS = [
-  'https://curtisfranks.github.io',
+  'https://chf3198.github.io',
   'http://localhost:3000',  // Local development
   'http://127.0.0.1:3000'
 ];
