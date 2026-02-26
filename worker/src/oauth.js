@@ -16,7 +16,7 @@ export async function handleOAuth(request, env) {
   const parts = url.pathname.split('/');
   const provider = parts[parts.length - 2];
   const step = parts[parts.length - 1];
-  
+
   if (step === 'start') return startOAuth(provider, request, env);
   if (step === 'callback') return handleCallback(provider, request, env);
   return json({ error: 'Invalid OAuth action' }, 400);
@@ -25,11 +25,11 @@ export async function handleOAuth(request, env) {
 function startOAuth(provider, request, env) {
   const config = PROVIDERS[provider];
   if (!config) return json({ error: 'Unknown provider' }, 400);
-  
+
   const url = new URL(request.url);
   const clientId = env[`${provider.toUpperCase()}_CLIENT_ID`];
   if (!clientId) return json({ error: `${provider} not configured` }, 500);
-  
+
   const authUrl = new URL(config.authUrl);
   authUrl.searchParams.set('client_id', clientId);
   authUrl.searchParams.set('redirect_uri', `${url.origin}/auth/oauth/${provider}/callback`);
@@ -44,22 +44,22 @@ async function handleCallback(provider, request, env) {
   const url = new URL(request.url);
   const code = url.searchParams.get('code');
   if (!code) return json({ error: 'No authorization code' }, 400);
-  
+
   const redirectUri = `${url.origin}/auth/oauth/${provider}/callback`;
   const tokens = await exchangeCode(config.tokenUrl, code, env, provider, redirectUri);
   if (!tokens.access_token) return json({ error: 'Token exchange failed' }, 400);
-  
+
   const profile = await fetchProfile(config.userUrl, tokens.access_token, provider);
   const user = await findOrCreateUser(env, profile.email, profile.name, profile.image);
-  
-  await env.DB.prepare(`INSERT OR REPLACE INTO accounts 
+
+  await env.DB.prepare(`INSERT OR REPLACE INTO accounts
     (id, userId, type, provider, providerAccountId, access_token, refresh_token, expires_at) VALUES (?,?,'oauth',?,?,?,?,?)`)
-    .bind(generateId(), user.id, provider, profile.id, tokens.access_token, tokens.refresh_token, 
+    .bind(generateId(), user.id, provider, profile.id, tokens.access_token, tokens.refresh_token,
       tokens.expires_in ? Date.now() + tokens.expires_in * 1000 : null).run();
-  
+
   const sessionToken = await createSession(env, user.id);
-  return new Response(null, { status: 302, headers: { Location: `/?session=${sessionToken}`,
-    'Set-Cookie': `session=${sessionToken}; Path=/; HttpOnly; SameSite=Lax; Max-Age=604800` }});
+  const frontend = env.FRONTEND_URL || 'https://curtisfranks.github.io/tsv-ledger';
+  return new Response(null, { status: 302, headers: { Location: `${frontend}/?session=${sessionToken}` }});
 }
 
 async function exchangeCode(tokenUrl, code, env, provider, redirectUri) {
