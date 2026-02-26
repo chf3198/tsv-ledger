@@ -21,7 +21,8 @@ body{display:grid;grid-template:"header header" auto "nav main" 1fr "footer foot
 dialog .close{position:absolute;right:1rem;top:1rem;background:none;border:none;font-size:1.5rem;cursor:pointer}
 dialog article{position:relative;padding-top:2rem}
 /* User menu */
-.user-menu{position:relative;cursor:pointer}
+.user-menu{position:relative;cursor:pointer;display:flex;align-items:center;gap:0.5rem}
+.user-menu .avatar{width:24px;height:24px;border-radius:50%}
 .user-menu .dropdown{position:absolute;right:0;top:100%;background:var(--pico-card-background-color);border:1px solid var(--pico-muted-border-color);border-radius:4px;padding:0.5rem;min-width:120px;z-index:101}
 /* Summary cards */
 .split-view{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem}
