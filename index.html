@@ -15,7 +15,7 @@
   <header role="banner" class="app-header">
     <button data-testid="menu-toggle" class="menu-toggle" @click="menuOpen=!menuOpen" aria-label="Menu">☰</button>
     <h1 data-testid="logo">📊 TSV</h1>
-    <template x-if="!auth.authenticated"><button data-testid="login-button" @click="showAuthModal=true" class="outline">Sign In</button></template>
+    <template x-if="!auth.authenticated"><button data-testid="login-button" @click="showAuthModal=true" class="outline header-btn">Sign In</button></template>
     <template x-if="auth.authenticated"><div data-testid="user-menu" class="user-menu" @click="showUserMenu=!showUserMenu">
         <img x-show="auth.user?.image" :src="auth.user?.image" class="avatar" alt=""><span x-text="auth.user?.name||'User'"></span>▾<div x-show="showUserMenu" class="dropdown"><button data-testid="logout-button" @click="logout()">Sign Out</button></div></div></template>
   </header>
