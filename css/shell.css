@@ -3,7 +3,7 @@
 body{display:grid;grid-template:"header header" auto "nav main" 1fr "footer footer" auto/auto 1fr;min-height:100vh;margin:0}
 .app-header{grid-area:header;display:flex;align-items:center;gap:0.5rem;padding:0.25rem 1rem;background:var(--pico-primary-background);color:var(--pico-primary-inverse);position:sticky;top:0;z-index:100}
 .app-header h1{margin:0;font-size:1rem;flex:1}
-.auth-btn{color:#fff;cursor:pointer;padding:0.5rem 1rem}
+.auth-btn{display:inline-block;color:#fff;cursor:pointer;padding:0.5rem 1rem;font-size:0.875rem;white-space:nowrap}
 .user-dropdown{position:absolute;right:1rem;top:50px;background:#fff;border:1px solid #ccc;border-radius:4px;padding:0.5rem;z-index:101}
 .app-nav{grid-area:nav;width:200px;background:var(--pico-card-background-color);border-right:1px solid var(--pico-muted-border-color);padding:1rem 0;position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto;align-self:start}
 .app-nav nav{display:flex;flex-direction:column}

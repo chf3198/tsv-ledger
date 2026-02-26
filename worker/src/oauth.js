@@ -44,27 +44,34 @@ async function handleCallback(provider, request, env) {
   const url = new URL(request.url);
   const frontend = env.FRONTEND_URL || 'https://tsv-ledger.pages.dev';
 
-  // Handle OAuth cancellation gracefully - redirect back to app
-  const error = url.searchParams.get('error');
-  if (error) return Response.redirect(frontend, 302);
+  try {
+    // Handle OAuth cancellation gracefully - redirect back to app
+    const error = url.searchParams.get('error');
+    if (error) return Response.redirect(frontend, 302);
 
-  const code = url.searchParams.get('code');
-  if (!code) return Response.redirect(frontend, 302);
+    const code = url.searchParams.get('code');
+    if (!code) return Response.redirect(frontend, 302);
 
-  const redirectUri = `${url.origin}/auth/oauth/${provider}/callback`;
-  const tokens = await exchangeCode(config.tokenUrl, code, env, provider, redirectUri);
-  if (!tokens.access_token) return Response.redirect(`${frontend}/?error=auth_failed`, 302);
+    const redirectUri = `${url.origin}/auth/oauth/${provider}/callback`;
+    const tokens = await exchangeCode(config.tokenUrl, code, env, provider, redirectUri);
+    if (!tokens.access_token) return Response.redirect(`${frontend}/?error=auth_failed`, 302);
 
-  const profile = await fetchProfile(config.userUrl, tokens.access_token, provider);
-  const user = await findOrCreateUser(env, profile.email, profile.name, profile.image);
+    const profile = await fetchProfile(config.userUrl, tokens.access_token, provider);
+    if (!profile.email) return Response.redirect(`${frontend}/?error=no_email`, 302);
 
-  await env.DB.prepare(`INSERT OR REPLACE INTO accounts
-    (id, userId, type, provider, providerAccountId, access_token, refresh_token, expires_at) VALUES (?,?,'oauth',?,?,?,?,?)`)
-    .bind(generateId(), user.id, provider, profile.id, tokens.access_token, tokens.refresh_token,
-      tokens.expires_in ? Date.now() + tokens.expires_in * 1000 : null).run();
+    const user = await findOrCreateUser(env, profile.email, profile.name, profile.image);
 
-  const sessionToken = await createSession(env, user.id);
-  return new Response(null, { status: 302, headers: { Location: `${frontend}/?session=${sessionToken}` }});
+    await env.DB.prepare(`INSERT OR REPLACE INTO accounts
+      (id, userId, type, provider, providerAccountId, access_token, refresh_token, expires_at) VALUES (?,?,'oauth',?,?,?,?,?)`)
+      .bind(generateId(), user.id, provider, profile.id, tokens.access_token, tokens.refresh_token || null,
+        tokens.expires_in ? Date.now() + tokens.expires_in * 1000 : null).run();
+
+    const sessionToken = await createSession(env, user.id);
+    return new Response(null, { status: 302, headers: { Location: `${frontend}/?session=${sessionToken}` }});
+  } catch (e) {
+    console.error('OAuth callback error:', e.message, e.stack);
+    return Response.redirect(`${frontend}/?error=server_error`, 302);
+  }
 }
 
 async function exchangeCode(tokenUrl, code, env, provider, redirectUri) {
@@ -75,14 +82,16 @@ async function exchangeCode(tokenUrl, code, env, provider, redirectUri) {
 }
 
 async function fetchProfile(userUrl, token, provider) {
-  const res = await fetch(userUrl, { headers: { Authorization: `Bearer ${token}`, Accept: 'application/json' }});
+  const headers = { Authorization: `Bearer ${token}`, Accept: 'application/json', 'User-Agent': 'tsv-ledger' };
+  const res = await fetch(userUrl, { headers });
   const p = await res.json();
   const email = p.email || (provider === 'github' ? await getGitHubEmail(token) : null);
   return { id: p.id?.toString() || p.sub, email, name: p.name || p.login, image: p.picture || p.avatar_url };
 }
 
 async function getGitHubEmail(token) {
-  const res = await fetch('https://api.github.com/user/emails', { headers: { Authorization: `Bearer ${token}`, Accept: 'application/json' }});
+  const headers = { Authorization: `Bearer ${token}`, Accept: 'application/json', 'User-Agent': 'tsv-ledger' };
+  const res = await fetch('https://api.github.com/user/emails', { headers });
   const emails = await res.json();
   return emails.find(e => e.primary)?.email || emails[0]?.email;
 }
