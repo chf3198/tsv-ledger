@@ -20,8 +20,8 @@ function expenseApp() {
     lastSliderInteraction: 0,
     // Shell state (ADR-010)
     menuOpen: false, route: 'dashboard',
-    // Auth state (ADR-009)
-    auth: JSON.parse(localStorage.getItem('tsv-auth') || '{"user":null,"authenticated":false}'),
+    // Auth state (ADR-009) - always start unauthenticated, only true after API confirms
+    auth: { user: null, authenticated: false },
     showAuthModal: false, showUserMenu: false,
     // Payment method purge state (ADR-017)
     showPurgeModal: false, purgeTarget: null,
