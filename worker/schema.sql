@@ -59,3 +59,36 @@ CREATE TABLE IF NOT EXISTS challenges (
   challenge TEXT NOT NULL,
   expires INTEGER NOT NULL
 );
+
+-- User expenses (ADR-019: Cloud Sync)
+CREATE TABLE IF NOT EXISTS expenses (
+  id TEXT PRIMARY KEY,
+  userId TEXT NOT NULL,
+  description TEXT NOT NULL,
+  amount REAL NOT NULL,
+  date TEXT NOT NULL,
+  category TEXT DEFAULT 'Uncategorized',
+  businessPercent INTEGER DEFAULT 100,
+  paymentMethod TEXT,
+  reviewed INTEGER DEFAULT 0,
+  createdAt INTEGER DEFAULT (unixepoch()),
+  updatedAt INTEGER DEFAULT (unixepoch()),
+  FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE
+);
+
+-- Import history per user
+CREATE TABLE IF NOT EXISTS import_history (
+  id TEXT PRIMARY KEY,
+  userId TEXT NOT NULL,
+  filename TEXT NOT NULL,
+  type TEXT NOT NULL,
+  importedCount INTEGER DEFAULT 0,
+  duplicatesCount INTEGER DEFAULT 0,
+  timestamp INTEGER DEFAULT (unixepoch()),
+  FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE
+);
+
+-- Indexes for expenses
+CREATE INDEX IF NOT EXISTS idx_expenses_userId ON expenses(userId);
+CREATE INDEX IF NOT EXISTS idx_expenses_date ON expenses(date);
+CREATE INDEX IF NOT EXISTS idx_import_history_userId ON import_history(userId);

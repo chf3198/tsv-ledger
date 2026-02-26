@@ -1,11 +1,13 @@
-name = "tsv-auth"
+name = "tsv-ledger-api"
 main = "src/index.js"
 compatibility_date = "2024-01-01"
+account_id = "f7705aa5c47e40b9eba04d2ac87ae516"
 
 [[d1_databases]]
 binding = "DB"
-database_name = "tsv-auth-db"
-database_id = "local"
+database_name = "tsv-ledger-db"
+database_id = "02c7429d-79c9-47f4-a24c-74e0580f37df"
 
 [vars]
 AUTH_SECRET = "dev-secret-change-in-production"
+FRONTEND_URL = "https://chf3198.github.io/tsv-ledger"

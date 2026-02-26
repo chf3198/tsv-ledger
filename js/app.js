@@ -92,7 +92,23 @@ function expenseApp() {
     loadMoreBusiness() { this.businessCardsPage++; },
     loadMoreBenefits() { this.benefitsCardsPage++; },
 
-    init() { this.expenses = loadExpenses(); this.importHistory = loadImportHistory(); this.refresh(); },
+    init() {
+      this.expenses = loadExpenses(); this.importHistory = loadImportHistory(); this.refresh();
+      this.handleOAuthCallback();
+    },
+    handleOAuthCallback() {
+      const params = new URLSearchParams(window.location.search);
+      const session = params.get('session');
+      if (session) {
+        localStorage.setItem('tsv-session', session);
+        this.auth = { user: { name: 'User' }, authenticated: true };
+        localStorage.setItem('tsv-auth', JSON.stringify(this.auth));
+        window.history.replaceState({}, '', window.location.pathname);
+      } else {
+        const saved = localStorage.getItem('tsv-session');
+        if (saved) this.auth = { user: { name: 'User' }, authenticated: true };
+      }
+    },
     refresh() { computeItemPositions(this.expenses); this.locations = getUniqueLocations(this.expenses); this.applyFilters(); },
     save() { saveExpenses(this.expenses); this.refresh(); },
 
@@ -332,9 +348,12 @@ function expenseApp() {
       this.bulkApplyMatches = [];
     },
 
-    // Auth methods (ADR-009) - UI only, actual OAuth in CloudFlare Worker
-    authWith(provider) { console.log('Auth with:', provider); this.showAuthModal = false; },
+    // Auth methods (ADR-009) - OAuth redirects to CloudFlare Worker
+    authWith(provider) {
+      const api = window.AUTH_API || 'https://tsv-ledger-api.chf3198.workers.dev/auth';
+      window.location.href = `${api}/oauth/${provider}/start`;
+    },
     logout() { this.auth = { user: null, authenticated: false };
-      localStorage.removeItem('tsv-auth'); this.showUserMenu = false; }
+      localStorage.removeItem('tsv-auth'); localStorage.removeItem('tsv-session'); this.showUserMenu = false; }
   };
 }
