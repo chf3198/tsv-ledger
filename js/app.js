@@ -96,17 +96,22 @@ function expenseApp() {
       this.expenses = loadExpenses(); this.importHistory = loadImportHistory(); this.refresh();
       this.handleOAuthCallback();
     },
-    handleOAuthCallback() {
+    async handleOAuthCallback() {
+      const api = window.AUTH_API || 'https://tsv-ledger-api.chf3198.workers.dev/auth';
       const params = new URLSearchParams(window.location.search);
       const session = params.get('session');
       if (session) {
         localStorage.setItem('tsv-session', session);
-        this.auth = { user: { name: 'User' }, authenticated: true };
-        localStorage.setItem('tsv-auth', JSON.stringify(this.auth));
         window.history.replaceState({}, '', window.location.pathname);
-      } else {
-        const saved = localStorage.getItem('tsv-session');
-        if (saved) this.auth = { user: { name: 'User' }, authenticated: true };
+      }
+      const token = localStorage.getItem('tsv-session');
+      if (token) {
+        const res = await fetch(`${api}/session/get`, { headers: { Authorization: `Bearer ${token}` } });
+        const data = await res.json();
+        if (data.user) {
+          this.auth = { user: data.user, authenticated: true };
+          localStorage.setItem('tsv-auth', JSON.stringify(this.auth));
+        } else { localStorage.removeItem('tsv-session'); localStorage.removeItem('tsv-auth'); }
       }
     },
     refresh() { computeItemPositions(this.expenses); this.locations = getUniqueLocations(this.expenses); this.applyFilters(); },
