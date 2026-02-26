@@ -491,6 +491,36 @@
   text-align: right;
 }
 
+.card-amount-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.card-amount-row .allocation-percentage {
+  flex: 1;
+}
+.expand-toggle {
+  background: none;
+  border: none;
+  padding: 0.25rem 0.5rem;
+  cursor: pointer;
+  font-size: 0.75rem;
+  color: var(--pico-muted-color);
+  border-radius: 4px;
+  margin: 0;
+  min-width: auto;
+  height: auto;
+  line-height: 1;
+}
+.expand-toggle:hover {
+  background: var(--pico-muted-border-color);
+  color: var(--pico-primary);
+}
+
+.allocation-card.reviewed {
+  opacity: 0.85;
+}
+
 .allocation-card.split-item {
   background: linear-gradient(135deg, rgba(76, 175, 80, 0.05) 0%, rgba(33, 150, 243, 0.05) 100%);
 }

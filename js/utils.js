@@ -4,11 +4,11 @@
  */
 
 // (Expense[], string) -> number
-const sumByCategory = (expenses, category) => 
+const sumByCategory = (expenses, category) =>
   expenses.filter(e => e.category === category).reduce((sum, e) => sum + e.amount, 0);
 
 // (Expense[], string) -> number
-const countByCategory = (expenses, category) => 
+const countByCategory = (expenses, category) =>
   expenses.filter(e => e.category === category).length;
 
 // (Expense[], Filters) -> Expense[]

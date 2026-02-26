@@ -706,6 +706,54 @@ Expense {
 - ⚠️ Destructive action requires clear confirmation UX
 - ⚠️ Purged items cannot be recovered without re-import
 
+### ADR-018: Collapsible Reviewed Cards
+
+**Context**: Users need to track which expense cards have been reviewed/allocated. With thousands of items, it's hard to distinguish reviewed from unreviewed.
+
+**Decision**: Cards collapse after allocation to indicate "reviewed" state. Collapsed cards hide allocation controls but show key info. Manual expand allows re-adjustment.
+
+**State Model**:
+
+```javascript
+Expense {
+  // ... existing fields
+  reviewed: boolean  // false = expanded, true = collapsed
+}
+```
+
+**Behavior**:
+
+- New items start expanded (`reviewed: false`)
+- After allocation change (slider end or preset button), card auto-collapses (`reviewed: true`)
+- Expand icon allows manual re-expansion
+- State persists to localStorage with expense data
+
+**UI (Collapsed State)**:
+
+- Header visible: description, date
+- Meta row visible: ID, position, payment method
+- Amount row visible: allocated $, %, total, **expand icon (▶)**
+- Hidden: slider, arrow buttons, preset buttons
+
+**UI (Expanded State)**:
+
+- All elements visible
+- Collapse icon (▼) on amount row
+
+**Icon Placement**: Right-aligned on the amount row:
+
+```
+$34.67   100%  of $34.67   [▼]
+```
+
+**Consequences**:
+
+- ✅ Visual distinction between reviewed/unreviewed
+- ✅ Reduces visual clutter after review
+- ✅ State persists across sessions
+- ✅ Non-destructive: can always re-expand
+- ⚠️ Adds complexity to card rendering logic
+
 ## Rejected Alternatives
 
 | Rejected            | Why                                                                               |

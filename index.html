@@ -67,7 +67,7 @@
           </div>
           <div class="cards-container">
             <template x-for="e in businessCardsVisible" :key="'bus-' + e.id">
-              <article class="allocation-card card-enter" :class="{'split-item': (100 - (e.businessPercent ?? 100)) > 0 && (100 - (e.businessPercent ?? 100)) < 100}" data-testid="allocation-card">
+              <article class="allocation-card card-enter" :class="{'split-item': (100 - (e.businessPercent ?? 100)) > 0 && (100 - (e.businessPercent ?? 100)) < 100, 'reviewed': e.reviewed}" data-testid="allocation-card">
                 <header>
                   <strong x-text="e.description" :title="e.description"></strong>
                   <small x-text="formatDate(e.date)"></small>
@@ -76,19 +76,20 @@
                   <span class="card-id"><span x-text="'#' + String(e.id).slice(-8)"></span><span x-show="e.itemTotal > 1" class="item-position" x-text="' (' + e.itemIndex + '/' + e.itemTotal + ')'"></span></span>
                   <span class="card-payment-method" x-show="e.paymentMethod" x-text="getPaymentMethodLabel(e.paymentMethod)"></span>
                 </div>
-                <div>
+                <div class="card-amount-row">
                   <span class="card-amount" x-text="formatCurrency(e.amount * (e.businessPercent ?? 100) / 100)" data-testid="supplies-amount"></span>
                   <span class="allocation-percentage">
                     <span class="percentage-badge" x-text="(e.businessPercent ?? 100) + '%'"></span>
                     <span>of <span x-text="formatCurrency(e.amount)"></span></span>
                   </span>
+                  <button class="expand-toggle" @click="toggleReviewed(e)" data-testid="expand-toggle" :title="e.reviewed ? 'Expand controls' : 'Collapse controls'" x-text="e.reviewed ? '▶' : '▼'"></button>
                 </div>
-                <div class="slider-with-arrows">
+                <div class="slider-with-arrows" x-show="!e.reviewed">
                   <button class="slider-arrow" @click="setAllocation(e, 0)" title="0% Business (100% Benefits)" aria-label="Allocate 0% to Business">○</button>
                   <div class="allocation-slider" data-testid="allocation-slider" :data-expense-id="e.id" x-init="initSlider($el, e)"></div>
                   <button class="slider-arrow" @click="setAllocation(e, 100)" title="100% Business" aria-label="Allocate 100% to Business">●</button>
                 </div>
-                <div class="preset-buttons">
+                <div class="preset-buttons" x-show="!e.reviewed">
                   <button @click="setAllocation(e, 100)" :class="{'active': e.businessPercent === 100}" title="100% Business">100</button>
                   <button @click="setAllocation(e, 75)" :class="{'active': e.businessPercent === 75}" title="75% Business">75</button>
                   <button @click="setAllocation(e, 50)" :class="{'active': e.businessPercent === 50}" title="50/50 Split">50</button>
@@ -113,7 +114,7 @@
           </div>
           <div class="cards-container">
             <template x-for="e in benefitsCardsVisible" :key="'ben-' + e.id">
-              <article class="allocation-card card-enter" :class="{'split-item': (e.businessPercent ?? 100) > 0 && (e.businessPercent ?? 100) < 100}" data-testid="allocation-card">
+              <article class="allocation-card card-enter" :class="{'split-item': (e.businessPercent ?? 100) > 0 && (e.businessPercent ?? 100) < 100, 'reviewed': e.reviewed}" data-testid="allocation-card">
                 <header>
                   <strong x-text="e.description" :title="e.description"></strong>
                   <small x-text="formatDate(e.date)"></small>
@@ -122,14 +123,15 @@
                   <span class="card-id"><span x-text="'#' + String(e.id).slice(-8)"></span><span x-show="e.itemTotal > 1" class="item-position" x-text="' (' + e.itemIndex + '/' + e.itemTotal + ')'"></span></span>
                   <span class="card-payment-method" x-show="e.paymentMethod" x-text="getPaymentMethodLabel(e.paymentMethod)"></span>
                 </div>
-                <div>
+                <div class="card-amount-row">
                   <span class="card-amount" x-text="formatCurrency(e.amount * (100 - (e.businessPercent ?? 100)) / 100)" data-testid="benefits-amount"></span>
                   <span class="allocation-percentage">
                     <span class="percentage-badge" x-text="(100 - (e.businessPercent ?? 100)) + '%'"></span>
                     <span>of <span x-text="formatCurrency(e.amount)"></span></span>
                   </span>
+                  <button class="expand-toggle" @click="toggleReviewed(e)" data-testid="expand-toggle" :title="e.reviewed ? 'Expand controls' : 'Collapse controls'" x-text="e.reviewed ? '▶' : '▼'"></button>
                 </div>
-                <div class="slider-with-arrows">
+                <div class="slider-with-arrows" x-show="!e.reviewed">
                   <button class="slider-arrow" @click="setAllocation(e, 100)" title="0% Benefits (100% Business)" aria-label="Allocate 0% to Benefits">○</button>
                   <div class="allocation-slider" data-testid="allocation-slider" :data-expense-id="e.id" x-init="initSlider($el, e)"></div>
                   <button class="slider-arrow" @click="setAllocation(e, 0)" title="100% Benefits" aria-label="Allocate 100% to Benefits">●</button>
