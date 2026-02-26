@@ -43,11 +43,11 @@ async function handleCallback(provider, request, env) {
   const config = PROVIDERS[provider];
   const url = new URL(request.url);
   const frontend = env.FRONTEND_URL || 'https://tsv-ledger.pages.dev';
-  
+
   // Handle OAuth cancellation gracefully - redirect back to app
   const error = url.searchParams.get('error');
   if (error) return Response.redirect(frontend, 302);
-  
+
   const code = url.searchParams.get('code');
   if (!code) return Response.redirect(frontend, 302);
 

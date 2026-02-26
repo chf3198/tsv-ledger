@@ -106,12 +106,19 @@ function expenseApp() {
       }
       const token = localStorage.getItem('tsv-session');
       if (token) {
-        const res = await fetch(`${api}/session/get`, { headers: { Authorization: `Bearer ${token}` } });
-        const data = await res.json();
-        if (data.user) {
-          this.auth = { user: data.user, authenticated: true };
-          localStorage.setItem('tsv-auth', JSON.stringify(this.auth));
-        } else { localStorage.removeItem('tsv-session'); localStorage.removeItem('tsv-auth'); }
+        try {
+          const res = await fetch(`${api}/session/get`, { headers: { Authorization: `Bearer ${token}` } });
+          const data = await res.json();
+          if (data.user) {
+            this.auth = { user: data.user, authenticated: true };
+            localStorage.setItem('tsv-auth', JSON.stringify(this.auth));
+            return;
+          }
+        } catch (e) { console.error('Session check failed:', e); }
+        // Session invalid or check failed - clear everything
+        localStorage.removeItem('tsv-session');
+        localStorage.removeItem('tsv-auth');
+        this.auth = { user: null, authenticated: false };
       }
     },
     refresh() { computeItemPositions(this.expenses); this.locations = getUniqueLocations(this.expenses); this.applyFilters(); },
