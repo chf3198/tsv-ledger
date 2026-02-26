@@ -3,22 +3,20 @@
  * Handles: Passkey registration/login, OAuth callbacks, session management, expenses sync
  * ADR-009: Auth.js Multi-Provider Authentication
  * ADR-019: Cloud Sync for Multi-Device Access
+ * ADR-020: Cloudflare Pages Branch Previews
  */
 import { handlePasskey } from './passkey.js';
 import { handleOAuth } from './oauth.js';
 import { handleSession, getSessionUser } from './session.js';
 import { handleExpenses } from './expenses.js';
 
-// CORS configured for GitHub Pages frontend
-const ALLOWED_ORIGINS = [
-  'https://chf3198.github.io',
-  'http://localhost:3000',  // Local development
-  'http://127.0.0.1:3000'
-];
+// CORS: GitHub Pages, Cloudflare Pages (production + branch previews), localhost
+const STATIC_ORIGINS = ['https://chf3198.github.io', 'https://tsv-ledger.pages.dev', 'http://localhost:3000', 'http://127.0.0.1:3000'];
+const isAllowedOrigin = (origin) => STATIC_ORIGINS.includes(origin) || /^https:\/\/[a-z0-9-]+\.tsv-ledger\.pages\.dev$/.test(origin);
 
 export function getCorsHeaders(request) {
   const origin = request.headers.get('Origin') || '';
-  const allowedOrigin = ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0];
+  const allowedOrigin = isAllowedOrigin(origin) ? origin : STATIC_ORIGINS[1];
   return {
     'Access-Control-Allow-Origin': allowedOrigin,
     'Access-Control-Allow-Methods': 'GET,POST,PUT,DELETE,OPTIONS',

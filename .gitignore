@@ -141,3 +141,4 @@ data/reports/
 data/validation-results.json
 data/adherence-tracking.json
 worker/.wrangler/
+.deploy

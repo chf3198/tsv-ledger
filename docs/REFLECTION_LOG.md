@@ -17,6 +17,46 @@
 
 ## Log Entries
 
+### 2026-02-26 SUCCESS: Cloudflare Pages + OAuth Integration (ADR-019, ADR-020)
+
+**Context**: App deployed to GitHub Pages but needed:
+
+1. Backend authentication (OAuth with Google/GitHub)
+2. Branch preview deployments for efficient UAT iteration
+
+**Outcome**: Full OAuth flow working + Cloudflare Pages deployment with branch previews
+
+**Implementation Details**:
+
+- **Cloudflare Worker**: Deployed at `tsv-ledger-api.chf3198.workers.dev`
+- **D1 Database**: `tsv-ledger-db` with users, accounts, sessions, expenses tables
+- **OAuth Providers**: Google and GitHub configured with callback URLs
+- **Frontend Auth**: `handleOAuthCallback()` captures session token from URL, fetches user profile
+- **Pages Deployment**: `scripts/deploy-preview.sh` for branch UAT previews
+
+**Key Insights**:
+
+1. **Cross-origin auth requires Bearer tokens** - Third-party cookies blocked by Safari/Chrome; JWT in localStorage works across origins
+2. **GitHub username matters for URLs** - Had to fix `curtisfranks.github.io` → `chf3198.github.io` based on actual GitHub username
+3. **Pages previews solve UAT iteration** - GitHub Pages only deploys master; Cloudflare Pages enables per-branch URLs
+4. **Wrangler commands can hang** - Interactive prompts need `--commit-dirty=true` and other flags to avoid blocking
+
+**Deployment URLs**:
+| Environment | URL |
+|-------------|-----|
+| Production | https://tsv-ledger.pages.dev |
+| GitHub Pages | https://chf3198.github.io/tsv-ledger |
+| Branch previews | https://{branch}.tsv-ledger.pages.dev |
+| API | https://tsv-ledger-api.chf3198.workers.dev |
+
+**Adaptation**:
+
+- ✅ Added deploy-preview.sh script for one-command branch deploys
+- ✅ Updated Worker CORS to allow `*.tsv-ledger.pages.dev` pattern
+- ✅ OAuth callback redirects to Pages domain, not GitHub Pages
+
+---
+
 ### 2026-02-25 SUCCESS: Payment Method Purge Feature (ADR-017)
 
 **Context**: User noticed Amazon order exports include purchases from multiple payment methods (personal and business cards mixed). Needed way to filter out personal purchases after import.

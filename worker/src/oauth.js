@@ -58,7 +58,7 @@ async function handleCallback(provider, request, env) {
       tokens.expires_in ? Date.now() + tokens.expires_in * 1000 : null).run();
 
   const sessionToken = await createSession(env, user.id);
-  const frontend = env.FRONTEND_URL || 'https://chf3198.github.io/tsv-ledger';
+  const frontend = env.FRONTEND_URL || 'https://tsv-ledger.pages.dev';
   return new Response(null, { status: 302, headers: { Location: `${frontend}/?session=${sessionToken}` }});
 }
 

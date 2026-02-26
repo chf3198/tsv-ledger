@@ -5,20 +5,22 @@
 ## Current Architecture
 
 ```
-┌─────────────────────────────────┐
-│  GitHub Pages (static)          │
-│  index.html + js/*.js           │
-└──────────────┬──────────────────┘
-               │ fetch()
-┌──────────────▼──────────────────┐
-│  CloudFlare Worker (/api/*)     │
-│  worker/index.js (planned)      │
-└──────────────┬──────────────────┘
-               │ D1 SQL
-┌──────────────▼──────────────────┐
-│  CloudFlare D1 (SQLite)         │
-│  expenses table (planned)       │
-└─────────────────────────────────┘
+┌─────────────────────────────────────────────────────────┐
+│  Cloudflare Pages (static hosting)                      │
+│  tsv-ledger.pages.dev + branch previews                 │
+│  index.html + css/*.css + js/*.js                       │
+└──────────────────────┬──────────────────────────────────┘
+                       │ fetch() + Bearer token
+┌──────────────────────▼──────────────────────────────────┐
+│  CloudFlare Worker (API)                                │
+│  tsv-ledger-api.chf3198.workers.dev                     │
+│  /auth/* (OAuth, sessions) + /api/* (expenses CRUD)     │
+└──────────────────────┬──────────────────────────────────┘
+                       │ D1 SQL
+┌──────────────────────▼──────────────────────────────────┐
+│  CloudFlare D1 (SQLite)                                 │
+│  users, accounts, sessions, expenses tables             │
+└─────────────────────────────────────────────────────────┘
 ```
 
 ## Core Principles
@@ -30,13 +32,15 @@
 
 ## Approved Stack
 
-| Tool           | Purpose    | Justification                  |
-| -------------- | ---------- | ------------------------------ |
-| Alpine.js      | Reactivity | 3kb, no build, declarative     |
-| Pico CSS       | Styling    | Classless, accessible          |
-| Playwright     | E2E tests  | Industry standard              |
-| GitHub Actions | CI/CD      | Free, native integration       |
-| GitHub Pages   | Hosting    | Free, auto-deploy from Actions |
+| Tool               | Purpose        | Justification                      |
+| ------------------ | -------------- | ---------------------------------- |
+| Alpine.js          | Reactivity     | 3kb, no build, declarative         |
+| Pico CSS           | Styling        | Classless, accessible              |
+| Playwright         | E2E tests      | Industry standard                  |
+| Cloudflare Pages   | Static hosting | Branch previews for UAT, free      |
+| Cloudflare Workers | API backend    | Edge compute, D1 integration       |
+| Cloudflare D1      | Database       | SQLite at edge, free tier generous |
+| GitHub Pages       | Backup hosting | Free, auto-deploy (legacy)         |
 
 ## Decision Log
 
@@ -883,6 +887,61 @@ const rpName = "TSV Ledger";
 | -------- | ------------------------------ | ----------------------------------------------------------------------- |
 | Google   | console.cloud.google.com       | `https://tsv-ledger-api.chf3198.workers.dev/auth/oauth/google/callback` |
 | GitHub   | github.com/settings/developers | `https://tsv-ledger-api.chf3198.workers.dev/auth/oauth/github/callback` |
+
+### ADR-020: Cloudflare Pages for Branch Preview Deployments
+
+**Date**: February 26, 2026
+**Status**: Approved
+**Context**: GitHub Pages only deploys from main branch, requiring merge cycles for UAT iteration. Need branch preview URLs for efficient user acceptance testing.
+
+**Decision**: Use Cloudflare Pages alongside GitHub Pages for preview deployments
+
+**Deployment URLs**:
+| Environment | URL | Purpose |
+|-------------|-----|---------|
+| Production | `https://tsv-ledger.pages.dev` | Primary public URL |
+| Production (backup) | `https://chf3198.github.io/tsv-ledger` | GitHub Pages fallback |
+| Branch preview | `https://<branch>.tsv-ledger.pages.dev` | UAT before merge |
+
+**Deploy Script** (`scripts/deploy-preview.sh`):
+
+```bash
+#!/bin/bash
+BRANCH=$(git rev-parse --abbrev-ref HEAD)
+rm -rf .deploy && mkdir -p .deploy
+cp -r index.html css js .deploy/
+npx wrangler pages deploy .deploy --project-name tsv-ledger --branch "$BRANCH"
+```
+
+**UAT Workflow**:
+
+```
+1. Agent makes changes on feature branch
+2. Agent runs: ./scripts/deploy-preview.sh
+3. User gets preview URL: https://feat-xyz.tsv-ledger.pages.dev
+4. User performs UAT on preview
+5. If issues → Agent fixes on same branch → redeploys → repeat
+6. When approved → merge to master
+```
+
+**CORS Configuration** (Worker must allow):
+
+```javascript
+const ALLOWED_ORIGINS = [
+  "https://tsv-ledger.pages.dev",
+  "https://chf3198.github.io",
+  /\.tsv-ledger\.pages\.dev$/, // Branch previews
+];
+```
+
+**Consequences**:
+
+- ✅ Branch previews enable fast UAT iteration without merge cycles
+- ✅ Free tier includes unlimited preview deployments
+- ✅ Same Cloudflare account as Worker and D1
+- ✅ Global CDN with edge caching
+- ⚠️ Requires manual deploy script (not auto on git push)
+- ⚠️ Worker CORS must allow preview domains
 
 ## Rejected Alternatives
 
