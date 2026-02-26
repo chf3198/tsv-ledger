@@ -36,6 +36,7 @@ npm test && npm run lint   # STOP if fails
 - **DO consult user**: Design decisions, UX choices, feature prioritization
 - **DO prompt user**: UAT testing, acceptance verification
 - **DO NOT ask user**: Git practices, code formatting, lint fixes, test execution
+- **NEVER ask user to run tests**: Agent runs all automated tests (npm test, npm run lint). User only performs UAT.
 
 ## Constraints
 - **≤100 lines per file** (no exceptions)
