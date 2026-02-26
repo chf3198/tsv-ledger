@@ -3,6 +3,8 @@
 body{display:grid;grid-template:"header header" auto "nav main" 1fr "footer footer" auto/auto 1fr;min-height:100vh;margin:0}
 .app-header{grid-area:header;display:flex;align-items:center;gap:0.5rem;padding:0.25rem 1rem;background:var(--pico-primary-background);color:var(--pico-primary-inverse);position:sticky;top:0;z-index:100}
 .app-header h1{margin:0;font-size:1rem;flex:1}
+.auth-btn{color:#fff;cursor:pointer;padding:0.5rem 1rem}
+.user-dropdown{position:absolute;right:1rem;top:50px;background:#fff;border:1px solid #ccc;border-radius:4px;padding:0.5rem;z-index:101}
 .app-nav{grid-area:nav;width:200px;background:var(--pico-card-background-color);border-right:1px solid var(--pico-muted-border-color);padding:1rem 0;position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto;align-self:start}
 .app-nav nav{display:flex;flex-direction:column}
 .app-nav a{padding:0.75rem 1rem;text-decoration:none;color:var(--pico-color);border-left:3px solid transparent}
@@ -21,10 +23,6 @@ body{display:grid;grid-template:"header header" auto "nav main" 1fr "footer foot
 /* Auth Modal fix */
 dialog .close{position:absolute;right:1rem;top:1rem;background:none;border:none;font-size:1.5rem;cursor:pointer}
 dialog article{position:relative;padding-top:2rem}
-/* User menu */
-.user-menu{position:relative;cursor:pointer;display:flex;align-items:center;gap:0.5rem}
-.user-menu .avatar{width:24px;height:24px;border-radius:50%}
-.user-menu .dropdown{position:absolute;right:0;top:100%;background:var(--pico-card-background-color);border:1px solid var(--pico-muted-border-color);border-radius:4px;padding:0.5rem;min-width:120px;z-index:101}
 /* Summary cards */
 .split-view{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem}
 .summary-card{text-align:center}.summary-card .amount{font-size:2rem;margin:0.5rem 0}
