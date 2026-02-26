@@ -42,12 +42,18 @@ function startOAuth(provider, request, env) {
 async function handleCallback(provider, request, env) {
   const config = PROVIDERS[provider];
   const url = new URL(request.url);
+  const frontend = env.FRONTEND_URL || 'https://tsv-ledger.pages.dev';
+  
+  // Handle OAuth cancellation gracefully - redirect back to app
+  const error = url.searchParams.get('error');
+  if (error) return Response.redirect(frontend, 302);
+  
   const code = url.searchParams.get('code');
-  if (!code) return json({ error: 'No authorization code' }, 400);
+  if (!code) return Response.redirect(frontend, 302);
 
   const redirectUri = `${url.origin}/auth/oauth/${provider}/callback`;
   const tokens = await exchangeCode(config.tokenUrl, code, env, provider, redirectUri);
-  if (!tokens.access_token) return json({ error: 'Token exchange failed' }, 400);
+  if (!tokens.access_token) return Response.redirect(`${frontend}/?error=auth_failed`, 302);
 
   const profile = await fetchProfile(config.userUrl, tokens.access_token, provider);
   const user = await findOrCreateUser(env, profile.email, profile.name, profile.image);
@@ -58,7 +64,6 @@ async function handleCallback(provider, request, env) {
       tokens.expires_in ? Date.now() + tokens.expires_in * 1000 : null).run();
 
   const sessionToken = await createSession(env, user.id);
-  const frontend = env.FRONTEND_URL || 'https://tsv-ledger.pages.dev';
   return new Response(null, { status: 302, headers: { Location: `${frontend}/?session=${sessionToken}` }});
 }
 
