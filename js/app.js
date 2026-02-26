@@ -237,8 +237,10 @@ function expenseApp() {
 
       // Only check for bulk apply when user finishes dragging (mouseup/touchend)
       element.noUiSlider.on('end', () => {
+        expense.reviewed = true;  // Auto-collapse after slider interaction
         const currentValue = isBenefitsColumn ? (100 - expense.businessPercent) : expense.businessPercent;
         element.noUiSlider.set(currentValue, false);
+        this.updateExpense();
         this.debouncedBulkApplyCheck(expense);
       });
     },
@@ -246,6 +248,7 @@ function expenseApp() {
     // Preset allocation buttons
     setAllocation(expense, percent) {
       expense.businessPercent = percent;
+      expense.reviewed = true;  // Auto-collapse after allocation change
 
       // Update all sliders for this expense immediately
       const allSliders = document.querySelectorAll(`[data-expense-id="${expense.id}"]`);
@@ -259,6 +262,12 @@ function expenseApp() {
 
       this.updateExpense();
       this.debouncedBulkApplyCheck(expense);
+    },
+
+    // Toggle card expanded/collapsed state
+    toggleReviewed(expense) {
+      expense.reviewed = !expense.reviewed;
+      this.updateExpense();
     },
 
     // Debounced bulk apply check to prevent modal during rapid changes
