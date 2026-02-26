@@ -754,6 +754,136 @@ $34.67   100%  of $34.67   [▼]
 - ✅ Non-destructive: can always re-expand
 - ⚠️ Adds complexity to card rendering logic
 
+### ADR-019: Cloud Sync Architecture for GitHub Pages + Cloudflare Workers
+
+**Date**: February 25, 2026
+**Status**: Approved
+**Context**: App hosted on GitHub Pages (static) needs backend for authentication and data sync. Cloudflare Workers + D1 provides edge API with SQLite database.
+
+**Critical Architecture Constraint**: Cross-origin requests from GitHub Pages (`curtisfranks.github.io`) to Worker API (`tsv-ledger-api.chf3198.workers.dev`) cannot use cookies reliably due to browser restrictions on third-party cookies.
+
+**Decision**: JWT-based authentication with Bearer tokens stored in localStorage
+
+**Research Sources**:
+
+- MDN Web Authentication API documentation
+- Cloudflare Workers CORS examples
+- web.dev Passkey guides
+- Auth.js deployment documentation
+
+**Authentication Flow** (Token-based, not Cookie-based):
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│  GitHub Pages (curtisfranks.github.io/tsv-ledger)               │
+│  Static HTML/JS - Alpine.js                                      │
+└──────────────────────────┬──────────────────────────────────────┘
+                           │ Authorization: Bearer <jwt>
+                           │ (NOT cookies - cross-origin friendly)
+┌──────────────────────────▼──────────────────────────────────────┐
+│  Cloudflare Worker (tsv-ledger-api.chf3198.workers.dev)         │
+│  Routes: /auth/*, /api/expenses/*                                │
+│  CORS: Access-Control-Allow-Origin: *                            │
+└──────────────────────────┬──────────────────────────────────────┘
+                           │ D1 SQL queries
+┌──────────────────────────▼──────────────────────────────────────┐
+│  Cloudflare D1 (tsv-ledger-db)                                   │
+│  Tables: users, sessions, passkeys, expenses, import_history    │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+**Why NOT Cookies**:
+
+- Cross-origin cookies require `SameSite=None; Secure`
+- Safari ITP blocks third-party cookies entirely
+- Chrome phasing out third-party cookies
+- GitHub Pages cannot set custom response headers
+
+**Why JWT Bearer Tokens**:
+
+- Works with any CORS configuration
+- No browser cookie restrictions
+- Stored in localStorage (acceptable for session tokens)
+- Stateless verification (can also store in D1 for revocation)
+
+**Implementation Phases**:
+
+| Phase                 | Scope                               | Blocker?         |
+| --------------------- | ----------------------------------- | ---------------- |
+| 1. Auth endpoints     | Passkey + OAuth flows, JWT issuance | None             |
+| 2. Session management | Token validation, refresh, logout   | Requires Phase 1 |
+| 3. Expense sync       | CRUD with user ID                   | Requires Phase 2 |
+
+**Auth Endpoints** (Worker):
+
+```
+POST /auth/passkey/register/start   → Challenge for new passkey
+POST /auth/passkey/register/finish  → Verify & store passkey
+POST /auth/passkey/login/start      → Challenge for existing user
+POST /auth/passkey/login/finish     → Verify & issue JWT
+
+GET  /auth/oauth/google/start       → Redirect to Google OAuth
+GET  /auth/oauth/google/callback    → Exchange code, issue JWT
+GET  /auth/oauth/github/start       → Redirect to GitHub OAuth
+GET  /auth/oauth/github/callback    → Exchange code, issue JWT
+
+GET  /auth/session                  → Validate JWT, return user info
+POST /auth/session/logout           → Invalidate session in D1
+```
+
+**Frontend Token Storage**:
+
+```javascript
+// After successful auth:
+localStorage.setItem(
+  "tsv-auth",
+  JSON.stringify({
+    token: "jwt.token.here",
+    user: { id, email, name },
+    expiresAt: timestamp,
+  }),
+);
+
+// For API calls:
+fetch("/api/expenses/list", {
+  headers: { Authorization: `Bearer ${token}` },
+});
+```
+
+**Security Considerations**:
+
+- JWT signed with AUTH_SECRET (env variable on Worker)
+- Token expiry: 7 days (stored in `sessions` table for revocation)
+- Passkeys: Origin-bound, phishing-resistant
+- OAuth: PKCE flow for code exchange
+- HTTPS enforced by both GitHub Pages and Cloudflare
+
+**WebAuthn/Passkey Relying Party Configuration**:
+
+```javascript
+// CRITICAL: rpId must be the GitHub Pages domain
+const rpId = "curtisfranks.github.io"; // NOT the worker domain
+const rpName = "TSV Ledger";
+```
+
+**Consequences**:
+
+- ✅ Works with GitHub Pages static hosting
+- ✅ No third-party cookie issues
+- ✅ Passkeys provide maximum security
+- ✅ OAuth provides convenience
+- ✅ D1 stores user data, expenses, sessions
+- ⚠️ localStorage tokens accessible to XSS (mitigate with CSP)
+- ⚠️ Must configure OAuth apps on Google/GitHub consoles
+- ⚠️ Passkey rpId tied to GitHub Pages domain
+
+**OAuth Configuration Required**:
+
+| Provider | Console URL                    | Callback URL                                                            |
+| -------- | ------------------------------ | ----------------------------------------------------------------------- |
+| Google   | console.cloud.google.com       | `https://tsv-ledger-api.chf3198.workers.dev/auth/oauth/google/callback` |
+| GitHub   | github.com/settings/developers | `https://tsv-ledger-api.chf3198.workers.dev/auth/oauth/github/callback` |
+
 ## Rejected Alternatives
 
 | Rejected            | Why                                                                               |

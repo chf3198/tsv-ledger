@@ -9,14 +9,27 @@ import { handleOAuth } from './oauth.js';
 import { handleSession, getSessionUser } from './session.js';
 import { handleExpenses } from './expenses.js';
 
-const CORS = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Methods': 'GET,POST,OPTIONS',
-  'Access-Control-Allow-Headers': 'Content-Type,Authorization',
-};
+// CORS configured for GitHub Pages frontend
+const ALLOWED_ORIGINS = [
+  'https://curtisfranks.github.io',
+  'http://localhost:3000',  // Local development
+  'http://127.0.0.1:3000'
+];
+
+export function getCorsHeaders(request) {
+  const origin = request.headers.get('Origin') || '';
+  const allowedOrigin = ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0];
+  return {
+    'Access-Control-Allow-Origin': allowedOrigin,
+    'Access-Control-Allow-Methods': 'GET,POST,PUT,DELETE,OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type,Authorization',
+    'Access-Control-Max-Age': '86400',
+  };
+}
 
 export default {
   async fetch(request, env) {
+    const CORS = getCorsHeaders(request);
     if (request.method === 'OPTIONS') return new Response(null, { headers: CORS });
 
     const url = new URL(request.url);
@@ -31,21 +44,22 @@ export default {
       // Protected routes - require authentication
       if (path.startsWith('/api/')) {
         const user = await getSessionUser(request, env);
-        if (!user) return json({ error: 'Unauthorized' }, 401);
+        if (!user) return json({ error: 'Unauthorized' }, 401, request);
 
         if (path.startsWith('/api/expenses')) return handleExpenses(request, env, user.id);
       }
 
-      return json({ error: 'Not found' }, 404);
+      return json({ error: 'Not found' }, 404, request);
     } catch (e) {
-      return json({ error: e.message }, 500);
+      return json({ error: e.message }, 500, request);
     }
   }
 };
 
-export function json(data, status = 200) {
-  return new Response(JSON.stringify(data), {
-    status,
-    headers: { 'Content-Type': 'application/json', ...CORS }
-  });
+export function json(data, status = 200, request = null) {
+  const headers = {
+    'Content-Type': 'application/json',
+    ...(request ? getCorsHeaders(request) : { 'Access-Control-Allow-Origin': '*' })
+  };
+  return new Response(JSON.stringify(data), { status, headers });
 }
