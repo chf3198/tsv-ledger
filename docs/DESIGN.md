@@ -4,7 +4,9 @@
 
 ## Overview
 
-**Purpose**: Help nonprofit board members allocate Amazon/bank expenses between Business Supplies and Board Member Benefits for tax reporting.
+**Purpose**: Amazon Expense Allocation for Tax Prep — help accountants (including business owners acting as their own accountant) allocate Amazon/bank expenses between Business Supplies and Board Member Benefits for tax reporting.
+
+**Target Market**: For-profit C Corporations, S Corporations, LLCs (nonprofit on roadmap)
 
 **Core UX**: Import → Allocate (slider) → Export totals
 
@@ -137,6 +139,7 @@ See [ADR index](adr/README.md) for full Architecture Decision Records.
 | [019](adr/019-jwt-bearer-tokens.md)         | JWT Bearer tokens            | 3.1.0   |
 | [020](adr/020-cloudflare-pages-previews.md) | CF Pages previews            | 3.1.0   |
 | [021](adr/021-auth-button-visibility.md)    | Auth button visibility       | 3.1.0   |
+| [022](adr/022-product-repositioning.md)     | Product repositioning        | 3.3.0   |
 
 > ADRs 001–018 archived in [DESIGN-archive.md](DESIGN-archive.md)
 
@@ -172,8 +175,13 @@ tests/
 
 ## Non-Goals (v1)
 
-- Mobile app
-- Multi-user collaboration
-- AI auto-categorization
-- Offline sync
+See [ROADMAP.md](ROADMAP.md) for future phases.
+
+Current v1 scope intentionally excludes:
+
+- Mobile native app (web-first)
+- Multi-user collaboration (local-first)
+- AI auto-categorization (planned Phase 3)
+- Offline sync (PWA planned)
+- Accounting software integration (planned Phase 2)
 - Export to accounting software
