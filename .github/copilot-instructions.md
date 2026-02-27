@@ -55,7 +55,23 @@ npm test && npm run lint   # STOP if fails
 ```bash
 npm test          # E2E tests
 npm run lint      # 100-line check
+gh release create # GitHub releases (installed)
 ```
+
+## Release Workflow
+
+After merging to master with version bump:
+
+```bash
+git tag -a vX.Y.Z -m "Release vX.Y.Z - Description"
+git push origin master --tags
+gh release create vX.Y.Z --title "vX.Y.Z - Title" --notes "Release notes..."
+```
+
+## Environment
+
+This is a Chromebook dev environment. Agent has root/sudo access.
+Install tools via CLI as needed (apt, npm, etc). Don't ask permission.
 
 ## Knowledge Location
 
