@@ -1,7 +1,30 @@
 # Contributing to TSV Ledger
 
-Thank you for your interest in contributing! This guide will help you get set
-up without needing access to our production secrets.
+First off, thank you for considering contributing to TSV Ledger! 🎉
+
+It's people like you that make TSV Ledger such a great tool. We welcome
+contributions of all kinds: bug reports, feature suggestions, documentation
+improvements, and code contributions.
+
+This guide will help you get started. Don't worry if you're new to open source—
+we're here to help!
+
+## Table of Contents
+
+- [Code of Conduct](#code-of-conduct)
+- [Architecture Overview](#architecture-overview)
+- [Quick Start](#quick-start-no-secrets-needed)
+- [Setting Up Your Own Backend](#setting-up-your-own-backend-optional)
+- [Development Workflow](#development-workflow)
+- [Your First Contribution](#your-first-contribution)
+- [Pull Request Process](#pull-request-process)
+- [Getting Help](#getting-help)
+
+## Code of Conduct
+
+This project and everyone participating in it is governed by our
+[Code of Conduct](CODE_OF_CONDUCT.md). By participating, you are expected to
+uphold this code. Please report unacceptable behavior to chf3198@gmail.com.
 
 ## Architecture Overview
 
@@ -188,34 +211,66 @@ Use conventional commits:
 
 ## What Contributions Are Welcome?
 
-### High Priority
+### 🎯 High Priority
 
 - [ ] New bank statement parsers (Chase, Wells Fargo, etc.)
 - [ ] Accessibility improvements
 - [ ] Mobile responsiveness
 - [ ] Performance optimizations
 
-### Good First Issues
+### 🌱 Good First Issues
 
-Look for issues labeled `good first issue` in GitHub.
+New to the project? Look for issues labeled
+[`good first issue`](https://github.com/chf3198/tsv-ledger/labels/good%20first%20issue)
+in GitHub. These are specifically chosen to be approachable for newcomers.
 
-### Documentation
+### 📝 Documentation
+
+Documentation improvements are always welcome:
 
 - Typo fixes
 - Clarifying existing docs
 - Adding examples
+- Translating documentation
 
-## Questions?
+## Your First Contribution
 
-- Open a [GitHub Discussion](https://github.com/chf3198/tsv-ledger/discussions)
-- Check existing [Issues](https://github.com/chf3198/tsv-ledger/issues)
+Not sure where to start? Here's a suggested path:
+
+1. **Star the repo** ⭐ — it helps others find the project
+2. **Read the docs** — [DESIGN.md](docs/DESIGN.md) explains the architecture
+3. **Run the tests** — `npm test` to see how things work
+4. **Find an issue** — look for `good first issue` labels
+5. **Ask questions** — open a Discussion if you're unsure about anything
+
+### Never contributed to open source before?
+
+Check out these resources:
+
+- [First Timers Only](https://www.firsttimersonly.com/)
+- [How to Contribute to Open Source](https://opensource.guide/how-to-contribute/)
+- [GitHub's Git Handbook](https://guides.github.com/introduction/git-handbook/)
+
+## Getting Help
+
+- 💬 [GitHub Discussions](https://github.com/chf3198/tsv-ledger/discussions) —
+  Ask questions and discuss ideas
+- 🐛 [Issues](https://github.com/chf3198/tsv-ledger/issues) — Report bugs or
+  request features
+- 📖 [Documentation](docs/) — Read the design docs and ADRs
 
 ## Security
 
-- **Never commit `.env` files**
-- **Never commit real financial data**
-- Report security issues privately via GitHub Security Advisories
+Found a security vulnerability? **Please do not open a public issue.**
+
+Instead, report it privately via
+[GitHub Security Advisories](https://github.com/chf3198/tsv-ledger/security/advisories/new)
+or email chf3198@gmail.com. See [SECURITY.md](SECURITY.md) for our full
+security policy.
 
 ---
 
 Thank you for contributing! 🎉
+
+Every contribution matters, whether it's a typo fix or a major feature. We
+appreciate you taking the time to help make TSV Ledger better for everyone.
