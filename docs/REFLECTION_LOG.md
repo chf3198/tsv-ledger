@@ -22,6 +22,7 @@
 **Context**: Implementing dual-mode storage with clear UX for guest mode limitations.
 
 **Outcome**: Successfully implemented:
+
 - Guest warning modal after first import (not authenticated)
 - Persistent banner when data present but not signed in
 - Logout now clears ALL localStorage (OWASP compliance)
@@ -42,6 +43,7 @@
 **Root Cause**: logout() only cleared `tsv-auth` and `tsv-session`, not `tsv-expenses` or `tsv-import-history`.
 
 **Fix**: Added to logout():
+
 - `localStorage.removeItem('tsv-expenses')`
 - `localStorage.removeItem('tsv-import-history')`
 - `localStorage.removeItem('tsv-guest-acknowledged')`

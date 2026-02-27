@@ -1,0 +1,45 @@
+{
+  "generated": "2026-02-27T21:49:00.620Z",
+  "url": "https://tsv-ledger.pages.dev",
+  "results": [
+    {
+      "scenario": "guest-warning-modal",
+      "description": "Guest mode warning modal after data import",
+      "checks": [
+        "Modal is centered and fully visible",
+        "Modal has clear title with warning icon",
+        "List items are properly formatted with icons",
+        "Sign In and Continue as Guest buttons are visible and properly styled",
+        "Background is dimmed/overlaid appropriately",
+        "Modal does not block critical UI when it shouldnt"
+      ],
+      "base64": "[95751 chars - use read_file on .base64 files]",
+      "timestamp": "2026-02-27T21:48:57.777Z"
+    },
+    {
+      "scenario": "dashboard-with-data",
+      "description": "Dashboard with expense data loaded",
+      "checks": [
+        "Business Supplies and Board Member Benefits cards show totals",
+        "Expense cards are displayed in grid",
+        "Navigation is visible on left",
+        "Header shows Sign In or user profile",
+        "Footer is visible at bottom"
+      ],
+      "base64": "[84939 chars - use read_file on .base64 files]",
+      "timestamp": "2026-02-27T21:48:59.126Z"
+    },
+    {
+      "scenario": "guest-banner",
+      "description": "Guest mode warning banner",
+      "checks": [
+        "Yellow warning banner is visible at top of main content",
+        "Banner contains warning icon and Guest Mode text",
+        "Sign in button within banner is visible and styled",
+        "Banner does not overlap with header"
+      ],
+      "base64": "[73892 chars - use read_file on .base64 files]",
+      "timestamp": "2026-02-27T21:49:00.514Z"
+    }
+  ]
+}
