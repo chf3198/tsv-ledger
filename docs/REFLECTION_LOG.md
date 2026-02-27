@@ -17,6 +17,49 @@
 
 ## Log Entries
 
+### 2026-02-27 INCIDENT: GitHub Repository Showing Old Content
+
+**Context**: User reported GitHub repository page showing v2.2.1 from September 2025 instead of current v3.2.0, even after hard browser refresh. README and community files appeared missing.
+
+**Outcome**: Root cause identified and resolved in 5 minutes.
+
+**Root Cause**: GitHub's **default branch was set to `protocol-evolution-setup`** (stale branch from September 2025) instead of `master`. GitHub.com displays the default branch by default.
+
+**Investigation Path**:
+1. Verified raw.githubusercontent.com showed correct content → GitHub HAS the files
+2. Checked `gh api repos/chf3198/tsv-ledger --jq '.default_branch'` → returned `protocol-evolution-setup`
+3. This explained everything: GitHub web UI shows default branch, which was 5 months stale
+
+**Resolution**:
+```bash
+gh api -X PATCH repos/chf3198/tsv-ledger -f default_branch=master
+git push origin --delete protocol-evolution-setup feat/cloudflare-worker-api feat/universal-menu fix/sign-in-button
+```
+
+**Key Insight**: When GitHub shows old content despite confirmed pushes:
+1. **Check default branch first** - `gh api repos/{owner}/{repo} --jq '.default_branch'`
+2. raw.githubusercontent.com bypasses this - it uses explicit branch in URL
+3. Feature branches created and never deleted can accidentally become default
+
+**Adaptation**:
+- ✅ Clean up stale remote branches after merging
+- ✅ Verify default branch is correct after major branch operations
+- ✅ Use `gh api` for quick diagnosis before complex debugging
+
+---
+
+### 2026-02-27 FIX: Branding Accuracy ("Zero Dependencies" → "Open Source")
+
+**Context**: Audited feature claims in social preview banner. "Zero Dependencies" claim was inaccurate.
+
+**Finding**: App uses Alpine.js, PicoCSS, noUiSlider, JSZip via CDN - these ARE runtime dependencies.
+
+**Resolution**: Changed pill text from "Zero Dependencies" to "Open Source" (MIT licensed).
+
+**Insight**: "Zero Dependencies" in web context typically means no npm/bundler packages, but CDN libraries are still dependencies. Be precise with marketing claims.
+
+---
+
 ### 2026-02-26 SUCCESS: Cloudflare Pages + OAuth Integration (ADR-019, ADR-020)
 
 **Context**: App deployed to GitHub Pages but needed:
