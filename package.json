@@ -1,6 +1,6 @@
 {
   "name": "tsv-expenses",
-  "version": "3.2.0",
+  "version": "3.4.0",
   "description": "Minimal business expense tracker for Texas Sunset Venues - Office Supplies & Employee Benefits",
   "main": "app.js",
   "scripts": {
