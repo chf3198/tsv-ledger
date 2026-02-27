@@ -7,6 +7,34 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.2.0] - 2026-02-27
+
+### Added
+
+- **OAuth Authentication** (ADR-019, ADR-020): Google and GitHub sign-in
+  - Cloudflare Workers API for OAuth flows and session management
+  - JWT Bearer tokens for cross-origin authentication
+  - Cloudflare Pages with branch preview deployments
+- **Profile Avatar Display**: User avatar (24px) shown next to name when authenticated
+- **Auth Button E2E Tests**: Comprehensive visibility and contrast tests
+
+### Fixed
+
+- **Auth Button Visibility** (ADR-021): Sign In button now reliably visible on blue header
+  - Uses `<span>` instead of `<button>` to avoid Pico CSS conflicts
+  - `display: inline-flex` ensures consistent rendering
+  - Works correctly after sign-out flow
+- OAuth cancellation handling (no error on user cancel)
+- Session validation failure now resets auth state properly
+
+### Changed
+
+- Documentation restructured following industry best practices
+  - DESIGN.md streamlined (82% smaller)
+  - ADR directory with individual decision records
+  - README.md updated with current features and structure
+  - CHANGELOG.md follows Keep a Changelog 1.1.0
+
 ## [3.1.0] - 2026-02-24
 
 ### Added
