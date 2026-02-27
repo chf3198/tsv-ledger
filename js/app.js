@@ -20,8 +20,8 @@ function expenseApp() {
     lastSliderInteraction: 0,
     // Shell state (ADR-010)
     menuOpen: false, route: 'dashboard',
-    // Auth state (ADR-009)
-    auth: JSON.parse(localStorage.getItem('tsv-auth') || '{"user":null,"authenticated":false}'),
+    // Auth state (ADR-009) - always start unauthenticated, only true after API confirms
+    auth: { user: null, authenticated: false },
     showAuthModal: false, showUserMenu: false,
     // Payment method purge state (ADR-017)
     showPurgeModal: false, purgeTarget: null,
@@ -106,12 +106,19 @@ function expenseApp() {
       }
       const token = localStorage.getItem('tsv-session');
       if (token) {
-        const res = await fetch(`${api}/session/get`, { headers: { Authorization: `Bearer ${token}` } });
-        const data = await res.json();
-        if (data.user) {
-          this.auth = { user: data.user, authenticated: true };
-          localStorage.setItem('tsv-auth', JSON.stringify(this.auth));
-        } else { localStorage.removeItem('tsv-session'); localStorage.removeItem('tsv-auth'); }
+        try {
+          const res = await fetch(`${api}/session/get`, { headers: { Authorization: `Bearer ${token}` } });
+          const data = await res.json();
+          if (data.user) {
+            this.auth = { user: data.user, authenticated: true };
+            localStorage.setItem('tsv-auth', JSON.stringify(this.auth));
+            return;
+          }
+        } catch (e) { console.error('Session check failed:', e); }
+        // Session invalid or check failed - clear everything
+        localStorage.removeItem('tsv-session');
+        localStorage.removeItem('tsv-auth');
+        this.auth = { user: null, authenticated: false };
       }
     },
     refresh() { computeItemPositions(this.expenses); this.locations = getUniqueLocations(this.expenses); this.applyFilters(); },
