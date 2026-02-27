@@ -70,6 +70,32 @@ npm run lint      # 100-line check
 gh release create # GitHub releases (installed)
 ```
 
+## Visual Testing (agent self-verification)
+
+Before asking user for UAT, capture and review screenshots:
+
+```bash
+# Capture all UI states
+npm run test:visual
+
+# Generate analysis report with screenshots
+npm run test:visual:analyze
+
+# View screenshots (start server, open preview)
+cd scripts/visual-test/screenshots && python3 -m http.server 9090
+# Then open http://localhost:9090/preview.html
+
+# Run visual regression tests (Playwright)
+npx playwright test tests/visual.spec.js --update-snapshots  # Create baselines
+npx playwright test tests/visual.spec.js                      # Compare
+```
+
+Screenshots saved to `scripts/visual-test/screenshots/`. Review for:
+- Modal positioning and visibility
+- Button styling and accessibility  
+- Layout issues (overlapping elements)
+- Mobile responsiveness
+
 ## Deployment Workflow (MANDATORY)
 
 **Production URL**: https://tsv-ledger.pages.dev
