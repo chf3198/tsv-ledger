@@ -92,10 +92,10 @@
     <rect x="280" y="0" width="130" height="40" rx="20" fill="none" stroke="#4ecdc4" stroke-width="2"/>
     <text x="345" y="27" font-family="system-ui, sans-serif" font-size="16" fill="#ffffff" text-anchor="middle">Cloud Sync</text>
 
-    <!-- No Dependencies pill -->
-    <rect x="430" y="0" width="170" height="40" rx="20" fill="#a855f7" opacity="0.2"/>
-    <rect x="430" y="0" width="170" height="40" rx="20" fill="none" stroke="#a855f7" stroke-width="2"/>
-    <text x="515" y="27" font-family="system-ui, sans-serif" font-size="16" fill="#ffffff" text-anchor="middle">Zero Dependencies</text>
+    <!-- Open Source pill -->
+    <rect x="430" y="0" width="150" height="40" rx="20" fill="#a855f7" opacity="0.2"/>
+    <rect x="430" y="0" width="150" height="40" rx="20" fill="none" stroke="#a855f7" stroke-width="2"/>
+    <text x="505" y="27" font-family="system-ui, sans-serif" font-size="16" fill="#ffffff" text-anchor="middle">Open Source</text>
   </g>
 
   <!-- Bottom URL -->
