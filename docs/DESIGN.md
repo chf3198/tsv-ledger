@@ -120,19 +120,25 @@ Header shows: [avatar] User Name ▼
 
 ## Decision Log
 
-See [docs/adr/](adr/) for full Architecture Decision Records.
+See [ADR index](adr/README.md) for full Architecture Decision Records.
 
-| ADR | Title                           | Status |
-| --- | ------------------------------- | ------ |
-| 001 | Static-first with edge API      | ✅     |
-| 002 | Three fixed categories          | ✅     |
-| 009 | Percentage allocation slider    | ✅     |
-| 011 | Custom auth (not Auth.js)       | ✅     |
-| 014 | Percentage-based allocation     | ✅     |
-| 016 | Dual-column allocation board    | ✅     |
-| 019 | JWT Bearer tokens (not cookies) | ✅     |
-| 020 | Cloudflare Pages for previews   | ✅     |
-| 021 | Auth button visibility fix      | ✅     |
+| ADR                                         | Title                        | Version |
+| ------------------------------------------- | ---------------------------- | ------- |
+| 001                                         | Static-first with edge API   | 1.0.0   |
+| 002                                         | Three fixed categories       | 1.0.0   |
+| 003                                         | localStorage before backend  | 1.0.0   |
+| 009                                         | Multi-provider OAuth         | 2.0.0   |
+| 011                                         | Custom auth (not Auth.js)    | 2.0.0   |
+| 013                                         | Duplicate detection          | 2.1.0   |
+| 014                                         | Percentage-based allocation  | 3.0.0   |
+| 015                                         | noUiSlider integration       | 3.0.0   |
+| 016                                         | Dual-column allocation board | 3.1.0   |
+| 017                                         | Payment method purge         | 3.1.0   |
+| [019](adr/019-jwt-bearer-tokens.md)         | JWT Bearer tokens            | 3.1.0   |
+| [020](adr/020-cloudflare-pages-previews.md) | CF Pages previews            | 3.1.0   |
+| [021](adr/021-auth-button-visibility.md)    | Auth button visibility       | 3.1.0   |
+
+> ADRs 001–018 archived in [DESIGN-archive.md](DESIGN-archive.md)
 
 ## Rejected Alternatives
 

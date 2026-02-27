@@ -1,19 +1,31 @@
 # Architecture Decision Records
 
-Each ADR documents a significant design decision with context, rationale, and consequences.
+> Lightweight records of significant design decisions with context and consequences.
+
+Each ADR documents a significant design decision, capturing the forces at play,
+the decision made, and its tradeoffs. ADRs are immutable once accepted—supersede
+rather than modify.
 
 ## Index
 
-| ADR                                     | Date    | Title                        | Status   |
-| --------------------------------------- | ------- | ---------------------------- | -------- |
-| [001](001-static-first-edge-api.md)     | 2026-02 | Static-first with edge API   | Accepted |
-| [002](002-three-fixed-categories.md)    | 2026-02 | Three fixed categories       | Accepted |
-| [009](009-percentage-allocation.md)     | 2026-02 | Percentage allocation slider | Accepted |
-| [011](011-custom-auth.md)               | 2026-02 | Custom auth implementation   | Accepted |
-| [016](016-dual-column-board.md)         | 2026-02 | Dual-column allocation board | Accepted |
-| [019](019-jwt-bearer-tokens.md)         | 2026-02 | JWT Bearer tokens            | Accepted |
-| [020](020-cloudflare-pages-previews.md) | 2026-02 | Cloudflare Pages previews    | Accepted |
-| [021](021-auth-button-visibility.md)    | 2026-02 | Auth button visibility       | Accepted |
+| ADR                                     | Title                           | Status   |
+| --------------------------------------- | ------------------------------- | -------- |
+| 001                                     | Static-first with edge API      | Accepted |
+| 002                                     | Three fixed categories          | Accepted |
+| 003                                     | localStorage before backend     | Accepted |
+| 009                                     | Multi-provider OAuth            | Accepted |
+| 011                                     | Custom auth (not Auth.js)       | Accepted |
+| 013                                     | Duplicate detection for imports | Accepted |
+| 014                                     | Percentage-based allocation     | Accepted |
+| 015                                     | noUiSlider for allocation UX    | Accepted |
+| 016                                     | Dual-column allocation board    | Accepted |
+| 017                                     | Payment method purge            | Accepted |
+| [019](019-jwt-bearer-tokens.md)         | JWT Bearer tokens               | Accepted |
+| [020](020-cloudflare-pages-previews.md) | Cloudflare Pages previews       | Accepted |
+| [021](021-auth-button-visibility.md)    | Auth button visibility          | Accepted |
+
+> ADRs 001–018 are archived in [DESIGN-archive.md](../DESIGN-archive.md).
+> Recent ADRs (019+) have individual files.
 
 ## Template
 
