@@ -17,6 +17,40 @@
 
 ## Log Entries
 
+### 2026-02-28 SUCCESS: Guest Mode Warnings Implementation
+
+**Context**: Implementing dual-mode storage with clear UX for guest mode limitations.
+
+**Outcome**: Successfully implemented:
+- Guest warning modal after first import (not authenticated)
+- Persistent banner when data present but not signed in
+- Logout now clears ALL localStorage (OWASP compliance)
+- 5 new E2E tests for guest mode behavior
+
+**Insight**: When adding modals that block UI interaction, existing tests will fail because they can't click through the modal. Solution: Add `localStorage.setItem('tsv-guest-acknowledged', 'true')` in test beforeEach to bypass modal for non-guest-mode tests.
+
+**Insight**: Alpine.js v3 exposes component data via `element._x_dataStack[0]` not `element.__x.$data`. This is useful for directly calling methods in E2E tests.
+
+**Adaptation**: All test files now acknowledge guest mode in beforeEach to prevent modal blocking. Guest-mode.spec.js specifically tests the modal behavior.
+
+---
+
+### 2026-02-28 FIX: Data Persistence Bug (OWASP Compliance)
+
+**Context**: User reported "when they logout the data remains" - UAT finding.
+
+**Root Cause**: logout() only cleared `tsv-auth` and `tsv-session`, not `tsv-expenses` or `tsv-import-history`.
+
+**Fix**: Added to logout():
+- `localStorage.removeItem('tsv-expenses')`
+- `localStorage.removeItem('tsv-import-history')`
+- `localStorage.removeItem('tsv-guest-acknowledged')`
+- Reset `this.expenses = []` and `this.importHistory = []`
+
+**OWASP Principle**: Always clear localStorage on session termination to prevent data leakage on shared devices.
+
+---
+
 ### 2026-02-27 INCIDENT: Cloudflare Pages Not Auto-Deploying
 
 **Context**: Pushed footer changes to GitHub master, verified git log showed commits, but UAT showed old content.
