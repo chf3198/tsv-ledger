@@ -95,9 +95,10 @@ function expenseApp() {
     loadMoreBusiness() { this.businessCardsPage++; },
     loadMoreBenefits() { this.benefitsCardsPage++; },
 
-    init() {
+    async init() {
       this.expenses = loadExpenses(); this.importHistory = loadImportHistory(); this.refresh();
-      this.handleOAuthCallback();
+      // Must await OAuth callback before checking guest mode (auth state affects modal)
+      await this.handleOAuthCallback();
       // Show guest mode warning if user has data but isn't signed in (ADR-020)
       this.checkGuestModeWarning();
     },
@@ -128,6 +129,8 @@ function expenseApp() {
           if (data.user) {
             this.auth = { user: data.user, authenticated: true };
             localStorage.setItem('tsv-auth', JSON.stringify(this.auth));
+            // Close guest warning if it was open (user just signed in)
+            this.showGuestWarningModal = false;
             return;
           }
         } catch (e) { console.error('Session check failed:', e); }
