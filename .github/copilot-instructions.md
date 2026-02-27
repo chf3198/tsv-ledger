@@ -70,6 +70,30 @@ npm run lint      # 100-line check
 gh release create # GitHub releases (installed)
 ```
 
+## Deployment Workflow (MANDATORY)
+
+**Production URL**: https://tsv-ledger.pages.dev
+
+After pushing to master, ALWAYS verify deployment against live URL:
+
+```bash
+# 1. Push to GitHub
+git push origin master
+
+# 2. Deploy to Cloudflare Pages (auto-deploy unreliable)
+npx wrangler pages deploy . --project-name=tsv-ledger --branch=master
+
+# 3. VERIFY against live production URL (not local files!)
+curl -s "https://tsv-ledger.pages.dev/" | grep "<expected change>"
+```
+
+**NEVER trust local files or git status as proof of deployment.**
+**ALWAYS verify the live URL before telling user to UAT.**
+
+If verification fails:
+1. Check `npx wrangler pages deployment list --project-name=tsv-ledger`
+2. Re-deploy manually with wrangler command above
+
 ## Release Workflow
 
 After merging to master with version bump:
