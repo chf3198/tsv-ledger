@@ -4,6 +4,8 @@ test.describe('Allocation Interface', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('http://localhost:8080');
     await page.evaluate(() => localStorage.clear());
+    // Acknowledge guest mode to prevent modal blocking tests
+    await page.evaluate(() => localStorage.setItem('tsv-guest-acknowledged', 'true'));
     await page.reload();
     await page.waitForLoadState('domcontentloaded');
   });

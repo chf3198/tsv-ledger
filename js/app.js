@@ -23,6 +23,9 @@ function expenseApp() {
     // Auth state (ADR-009) - always start unauthenticated, only true after API confirms
     auth: { user: null, authenticated: false },
     showAuthModal: false, showUserMenu: false,
+    // Guest mode warning state (ADR-020)
+    guestModeAcknowledged: localStorage.getItem('tsv-guest-acknowledged') === 'true',
+    showGuestWarningModal: false,
     // Payment method purge state (ADR-017)
     showPurgeModal: false, purgeTarget: null,
 
@@ -95,6 +98,19 @@ function expenseApp() {
     init() {
       this.expenses = loadExpenses(); this.importHistory = loadImportHistory(); this.refresh();
       this.handleOAuthCallback();
+      // Show guest mode warning if user has data but isn't signed in (ADR-020)
+      this.checkGuestModeWarning();
+    },
+    checkGuestModeWarning() {
+      // Show warning if: has data, not authenticated, hasn't acknowledged
+      if (this.expenses.length > 0 && !this.auth.authenticated && !this.guestModeAcknowledged) {
+        this.showGuestWarningModal = true;
+      }
+    },
+    acknowledgeGuestMode() {
+      this.guestModeAcknowledged = true;
+      localStorage.setItem('tsv-guest-acknowledged', 'true');
+      this.showGuestWarningModal = false;
     },
     async handleOAuthCallback() {
       const api = window.AUTH_API || 'https://tsv-ledger-api.chf3198.workers.dev/auth';
@@ -167,6 +183,8 @@ function expenseApp() {
         // Update status
         this.importStatus = [`✓ ${newExpenses.length} new`, duplicatesCount > 0 ? `${duplicatesCount} duplicates` : '', result.skipped ? `${result.skipped} skipped` : ''].filter(Boolean).join(', ');
         this.importComplete = true;
+        // Check if we should warn about guest mode after successful import
+        this.checkGuestModeWarning();
       } catch (e) { this.setError('Import failed: ' + e.message); }
     },
 
@@ -373,6 +391,9 @@ function expenseApp() {
       // Clear all user data on logout (OWASP: clear storage on session end)
       localStorage.removeItem('tsv-expenses');
       localStorage.removeItem('tsv-import-history');
+      // Reset guest mode acknowledgement so warning shows again
+      localStorage.removeItem('tsv-guest-acknowledged');
+      this.guestModeAcknowledged = false;
       this.expenses = [];
       this.importHistory = [];
       this.showUserMenu = false;

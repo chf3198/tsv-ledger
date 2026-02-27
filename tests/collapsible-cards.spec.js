@@ -5,6 +5,8 @@ test.describe('Collapsible Reviewed Cards (ADR-018)', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('http://localhost:8080');
     await page.evaluate(() => localStorage.clear());
+    // Acknowledge guest mode to prevent modal blocking tests
+    await page.evaluate(() => localStorage.setItem('tsv-guest-acknowledged', 'true'));
     await page.reload();
     await page.waitForLoadState('domcontentloaded');
   });
@@ -30,14 +32,14 @@ test.describe('Collapsible Reviewed Cards (ADR-018)', () => {
     });
     await page.reload();
     await page.click('[data-nav="expenses"]');
-    
+
     // Wait for card to be visible
     const card = page.locator('.allocation-column.business-supplies [data-testid="allocation-card"]').first();
     await expect(card).toBeVisible();
-    
+
     // Wait for slider to initialize (ensures card is fully rendered)
     await expect(card.locator('[data-testid="allocation-slider"] .noUi-base')).toBeVisible();
-    
+
     // Use slider API to change allocation, then directly set reviewed
     await page.evaluate(() => {
       const sliderEl = document.querySelector('.business-supplies [data-testid="allocation-slider"]');

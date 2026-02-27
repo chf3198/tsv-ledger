@@ -12,7 +12,11 @@ test.describe('Payment Method Purge', () => {
       { id: 'amz-5', date: '2026-01-19', description: 'Whole Foods Item', amount: 25, businessPercent: 100, paymentMethod: 'panda01' },
     ];
     await page.goto('/');
-    await page.evaluate((exp) => localStorage.setItem('tsv-expenses', JSON.stringify(exp)), testExpenses);
+    await page.evaluate((exp) => {
+      localStorage.setItem('tsv-expenses', JSON.stringify(exp));
+      // Acknowledge guest mode to prevent modal blocking tests
+      localStorage.setItem('tsv-guest-acknowledged', 'true');
+    }, testExpenses);
     await page.reload();
   });
 

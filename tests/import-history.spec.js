@@ -8,6 +8,8 @@ test.describe('Import History', () => {
     // Clear localStorage
     await page.evaluate(() => {
       localStorage.clear();
+      // Acknowledge guest mode to prevent modal blocking tests
+      localStorage.setItem('tsv-guest-acknowledged', 'true');
     });
   });
 
