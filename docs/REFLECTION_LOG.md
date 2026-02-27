@@ -26,19 +26,22 @@
 **Mistake Made**: Agent verified local files and git status instead of testing the actual live production URL.
 
 **Diagnosis**:
+
 ```bash
 npx wrangler pages deployment list --project-name=tsv-ledger
 curl -s "https://tsv-ledger.pages.dev/" | grep "app-footer"
 ```
 
 **Fix**: Manual deploy with wrangler CLI:
+
 ```bash
 npx wrangler pages deploy . --project-name=tsv-ledger --branch=master
 ```
 
-**Prevention**: 
+**Prevention**:
+
 1. ALWAYS verify changes against live production URL after push
-2. Run `curl -s "https://tsv-ledger.pages.dev/" | grep "<expected change>"` 
+2. Run `curl -s "https://tsv-ledger.pages.dev/" | grep "<expected change>"`
 3. If stale, manually deploy with wrangler
 4. Check Cloudflare Pages webhook status periodically
 

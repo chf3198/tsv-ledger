@@ -91,6 +91,7 @@ curl -s "https://tsv-ledger.pages.dev/" | grep "<expected change>"
 **ALWAYS verify the live URL before telling user to UAT.**
 
 If verification fails:
+
 1. Check `npx wrangler pages deployment list --project-name=tsv-ledger`
 2. Re-deploy manually with wrangler command above
 
