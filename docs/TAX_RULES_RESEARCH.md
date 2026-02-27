@@ -1,8 +1,8 @@
 # US Tax Rules for Expense Allocation
 
 > **Research Purpose**: Understand IRS rules for allocating Amazon orders between Business Expenses and Employee/Owner/Member Benefits (Fringe Benefits) across different entity types.
-> 
-> **Date**: February 2026  
+>
+> **Date**: February 2026
 > **Primary Sources**: IRS Publications 15-B (2026), 463 (2024), S Corporation Compensation Guide
 
 ---
@@ -16,6 +16,8 @@
 5. [Accountable vs Non-Accountable Plans](#accountable-vs-non-accountable-plans)
 6. [Key IRS Publications](#key-irs-publications)
 7. [App Design Implications](#app-design-implications)
+8. [Board Member / Director Benefits](#board-member--director-benefits-c-corp-specific)
+9. [Key Takeaways for App Development](#key-takeaways-for-app-development)
 
 ---
 
@@ -25,12 +27,13 @@
 
 When a business purchases items on Amazon, each purchase must be properly categorized:
 
-| Category | Tax Treatment | Examples |
-|----------|--------------|----------|
-| **Business Expense** | Deductible by company | Office supplies, equipment, software |
-| **Fringe Benefit** | May be taxable to recipient | Personal items, gifts, snacks |
+| Category             | Tax Treatment               | Examples                             |
+| -------------------- | --------------------------- | ------------------------------------ |
+| **Business Expense** | Deductible by company       | Office supplies, equipment, software |
+| **Fringe Benefit**   | May be taxable to recipient | Personal items, gifts, snacks        |
 
 **Critical Insight**: The tax treatment varies dramatically based on:
+
 1. **Entity type** (C Corp, S Corp, LLC, Sole Proprietor)
 2. **Recipient's role** (Employee, 2%+ S Corp shareholder, Partner, Owner)
 3. **Nature of expense** (Working condition vs. personal benefit)
@@ -41,14 +44,14 @@ When a business purchases items on Amazon, each purchase must be properly catego
 
 ### Tax Treatment Summary by Entity
 
-| Entity | Owner Status | Fringe Benefits Tax Treatment |
-|--------|-------------|------------------------------|
-| **C Corporation** | Owner-employees are treated as regular employees | Most fringe benefits **excludable** from income |
-| **S Corporation** | 2%+ shareholders treated as **self-employed** | Most fringe benefits **taxable** as wages |
-| **Partnership** | Partners are self-employed | Fringe benefits generally **taxable** |
-| **LLC (default)** | Depends on tax election | Follows partnership or disregarded entity rules |
-| **LLC (S Corp election)** | Same as S Corp | Same as S Corp |
-| **Sole Proprietor** | Self-employed | Cannot provide tax-free fringe benefits to self |
+| Entity                    | Owner Status                                     | Fringe Benefits Tax Treatment                   |
+| ------------------------- | ------------------------------------------------ | ----------------------------------------------- |
+| **C Corporation**         | Owner-employees are treated as regular employees | Most fringe benefits **excludable** from income |
+| **S Corporation**         | 2%+ shareholders treated as **self-employed**    | Most fringe benefits **taxable** as wages       |
+| **Partnership**           | Partners are self-employed                       | Fringe benefits generally **taxable**           |
+| **LLC (default)**         | Depends on tax election                          | Follows partnership or disregarded entity rules |
+| **LLC (S Corp election)** | Same as S Corp                                   | Same as S Corp                                  |
+| **Sole Proprietor**       | Self-employed                                    | Cannot provide tax-free fringe benefits to self |
 
 ### C Corporation Advantage
 
@@ -63,16 +66,18 @@ S Corp 2%+ Owner → Self-employed status → Benefits taxable as wages
 
 **Critical Rule**: A 2% or more S Corp shareholder is treated as a **partner** (not employee) for fringe benefit purposes.
 
-> "A 2-percent shareholder-employee is not eligible to participate in a QSEHRA."  
+> "A 2-percent shareholder-employee is not eligible to participate in a QSEHRA."
 > — IRS S Corporation Compensation Guide
 
 **Cannot exclude from income**:
+
 - Health insurance premiums (must be included in W-2 wages)
 - Health Reimbursement Arrangements (HRAs)
 - Flexible Spending Arrangements (FSAs)
 - Qualified Small Employer HRAs (QSEHRAs)
 
 **2% Shareholder Definition**:
+
 - Owns >2% of outstanding stock, OR
 - Owns >2% of total combined voting power
 
@@ -80,12 +85,12 @@ S Corp 2%+ Owner → Self-employed status → Benefits taxable as wages
 
 LLCs don't have a single default tax classification—they elect one:
 
-| LLC Type | Federal Tax Treatment |
-|----------|----------------------|
+| LLC Type                | Federal Tax Treatment           |
+| ----------------------- | ------------------------------- |
 | Single-member (default) | Disregarded entity (Schedule C) |
-| Multi-member (default) | Partnership (Form 1065) |
-| S Corp election | S Corporation rules apply |
-| C Corp election | C Corporation rules apply |
+| Multi-member (default)  | Partnership (Form 1065)         |
+| S Corp election         | S Corporation rules apply       |
+| C Corp election         | C Corporation rules apply       |
 
 **Key Form**: Form 8832, Entity Classification Election
 
@@ -95,31 +100,32 @@ LLCs don't have a single default tax classification—they elect one:
 
 ### What Are Fringe Benefits?
 
-> "A fringe benefit is a form of pay for the performance of services."  
+> "A fringe benefit is a form of pay for the performance of services."
 > — IRS Publication 15-B (2026)
 
 **General Rule**: Fringe benefits are **taxable** unless specifically excluded by law.
 
 ### Excludable Fringe Benefits (When Rules Met)
 
-| Benefit Type | 2026 Limits | Key Requirements |
-|--------------|-------------|------------------|
-| De minimis benefits | Small value only | Infrequent, administratively impractical to account |
-| Working condition benefits | No limit | Would be deductible if employee paid |
-| Achievement awards | $400-$1,600 | Length of service, safety achievement |
-| Qualified transportation | $340/month | Commuting, parking |
-| Dependent care | $7,500 | Childcare assistance |
-| Health FSA | $3,400 | Salary reduction arrangement |
-| HSA contributions | $4,400/$8,750 | High-deductible health plan required |
-| Educational assistance | $5,250 | Job-related education |
-| Employee discounts | Cost basis | On employer's products/services |
-| On-premises athletic facilities | No limit | Substantially all use by employees |
+| Benefit Type                    | 2026 Limits      | Key Requirements                                    |
+| ------------------------------- | ---------------- | --------------------------------------------------- |
+| De minimis benefits             | Small value only | Infrequent, administratively impractical to account |
+| Working condition benefits      | No limit         | Would be deductible if employee paid                |
+| Achievement awards              | $400-$1,600      | Length of service, safety achievement               |
+| Qualified transportation        | $340/month       | Commuting, parking                                  |
+| Dependent care                  | $7,500           | Childcare assistance                                |
+| Health FSA                      | $3,400           | Salary reduction arrangement                        |
+| HSA contributions               | $4,400/$8,750    | High-deductible health plan required                |
+| Educational assistance          | $5,250           | Job-related education                               |
+| Employee discounts              | Cost basis       | On employer's products/services                     |
+| On-premises athletic facilities | No limit         | Substantially all use by employees                  |
 
 ### De Minimis Benefits (Key for Amazon Orders)
 
 **Definition**: Property/service with value so small that accounting is unreasonable.
 
 **Examples of De Minimis** ✅:
+
 - Occasional snacks, coffee, soft drinks
 - Occasional meal money for overtime
 - Holiday gifts of low value (NOT cash)
@@ -127,6 +133,7 @@ LLCs don't have a single default tax classification—they elect one:
 - Occasional personal use of copier
 
 **NOT De Minimis** ❌:
+
 - Cash or cash equivalents (gift cards)
 - Season tickets to events
 - Commuting use of employer vehicle (>1 day/month)
@@ -139,6 +146,7 @@ LLCs don't have a single default tax classification—they elect one:
 **Key Test**: "If the employee paid for this, could they deduct it?"
 
 **Examples** ✅:
+
 - Business use of company car
 - Professional subscriptions
 - Job-related education
@@ -151,28 +159,30 @@ LLCs don't have a single default tax classification—they elect one:
 
 ### Scenario Matrix
 
-| Item Purchased | Business Expense? | Fringe Benefit? | Notes |
-|----------------|-------------------|-----------------|-------|
-| **Office Supplies** (pens, paper) | ✅ 100% | ❌ | Ordinary business expense |
-| **Computer Equipment** | ✅ Business use % | Taxable if personal use | Must track business vs personal |
-| **Coffee/Snacks for Office** | ✅ De minimis | ❌ If occasional | Becomes taxable if regular/excessive |
-| **Employee Birthday Gift** | ❌ | ✅ Taxable | Cash/gift cards always taxable |
-| **Holiday Turkey/Ham** | ✅ De minimis | ❌ | Traditional, low-value |
-| **Software Subscription** | ✅ Business % | Taxable personal % | Allocate by use |
-| **Home Office Equipment** | ✅ If accountable plan | Possibly | Must meet reimbursement rules |
-| **Personal Items for Owner** | ❌ | ✅ Taxable compensation | Cannot be business expense |
-| **Client Gifts** | ✅ Up to $25/person | N/A | Gift limit per recipient |
-| **Safety Equipment** | ✅ 100% | ❌ | Required for job |
+| Item Purchased                    | Business Expense?      | Fringe Benefit?         | Notes                                |
+| --------------------------------- | ---------------------- | ----------------------- | ------------------------------------ |
+| **Office Supplies** (pens, paper) | ✅ 100%                | ❌                      | Ordinary business expense            |
+| **Computer Equipment**            | ✅ Business use %      | Taxable if personal use | Must track business vs personal      |
+| **Coffee/Snacks for Office**      | ✅ De minimis          | ❌ If occasional        | Becomes taxable if regular/excessive |
+| **Employee Birthday Gift**        | ❌                     | ✅ Taxable              | Cash/gift cards always taxable       |
+| **Holiday Turkey/Ham**            | ✅ De minimis          | ❌                      | Traditional, low-value               |
+| **Software Subscription**         | ✅ Business %          | Taxable personal %      | Allocate by use                      |
+| **Home Office Equipment**         | ✅ If accountable plan | Possibly                | Must meet reimbursement rules        |
+| **Personal Items for Owner**      | ❌                     | ✅ Taxable compensation | Cannot be business expense           |
+| **Client Gifts**                  | ✅ Up to $25/person    | N/A                     | Gift limit per recipient             |
+| **Safety Equipment**              | ✅ 100%                | ❌                      | Required for job                     |
 
 ### The Allocation Challenge
 
 **Why This Matters**: A single Amazon order often contains:
+
 - Business supplies (100% deductible)
 - Mixed-use items (must allocate %)
 - Personal items (taxable benefit)
 - Items for multiple employees (track per person)
 
 **Example Order**:
+
 ```
 Amazon Order #123-456
 ├── Printer Paper (100% business)          $30.00
@@ -198,24 +208,25 @@ Allocation:
 
 For expense reimbursements to be **tax-free**, they must meet ALL three rules:
 
-| Rule | Requirement | Timeline |
-|------|-------------|----------|
-| 1 | **Business Connection** | Expenses must be business-related |
-| 2 | **Adequate Accounting** | Substantiate within **60 days** |
-| 3 | **Return Excess** | Return excess reimbursement within **120 days** |
+| Rule | Requirement             | Timeline                                        |
+| ---- | ----------------------- | ----------------------------------------------- |
+| 1    | **Business Connection** | Expenses must be business-related               |
+| 2    | **Adequate Accounting** | Substantiate within **60 days**                 |
+| 3    | **Return Excess**       | Return excess reimbursement within **120 days** |
 
 ### Substantiation Requirements
 
-| Expense Type | Must Prove |
-|--------------|-----------|
-| Travel | Amount, Date, Place, Business Purpose |
-| Meals | Amount, Date, Place, Business Purpose, Attendees |
-| Gifts | Amount, Date, Description, Business Purpose, Recipient |
-| Transportation | Amount, Date, Destination, Business Purpose |
+| Expense Type   | Must Prove                                             |
+| -------------- | ------------------------------------------------------ |
+| Travel         | Amount, Date, Place, Business Purpose                  |
+| Meals          | Amount, Date, Place, Business Purpose, Attendees       |
+| Gifts          | Amount, Date, Description, Business Purpose, Recipient |
+| Transportation | Amount, Date, Destination, Business Purpose            |
 
 ### Non-Accountable Plan Consequences
 
 If ANY requirement not met:
+
 - Entire reimbursement = **taxable wages**
 - Included in employee's W-2 Box 1
 - Subject to income tax withholding
@@ -227,23 +238,23 @@ If ANY requirement not met:
 
 ### Primary References
 
-| Publication | Title | Key Topics |
-|-------------|-------|------------|
+| Publication         | Title                                   | Key Topics                                   |
+| ------------------- | --------------------------------------- | -------------------------------------------- |
 | **Pub 15-B (2026)** | Employer's Tax Guide to Fringe Benefits | Fringe benefit rules, exclusions, valuations |
-| **Pub 463 (2024)** | Travel, Gift, and Car Expenses | Substantiation, accountable plans |
-| **Pub 535 (2022)** | Business Expenses (discontinued) | Deducting business expenses |
-| **Pub 334** | Tax Guide for Small Business | Schedule C guidance |
-| **Pub 542** | Corporations | C Corp rules |
+| **Pub 463 (2024)**  | Travel, Gift, and Car Expenses          | Substantiation, accountable plans            |
+| **Pub 535 (2022)**  | Business Expenses (discontinued)        | Deducting business expenses                  |
+| **Pub 334**         | Tax Guide for Small Business            | Schedule C guidance                          |
+| **Pub 542**         | Corporations                            | C Corp rules                                 |
 
 ### Critical IRC Sections
 
-| Section | Topic |
-|---------|-------|
-| **IRC §1372** | S Corp shareholders treated as partners for fringe benefits |
-| **IRC §132** | Fringe benefit exclusions |
-| **IRC §162** | Trade or business expenses |
-| **IRC §274** | Entertainment, gifts, travel expenses |
-| **IRC §105/106** | Health plan exclusions |
+| Section          | Topic                                                       |
+| ---------------- | ----------------------------------------------------------- |
+| **IRC §1372**    | S Corp shareholders treated as partners for fringe benefits |
+| **IRC §132**     | Fringe benefit exclusions                                   |
+| **IRC §162**     | Trade or business expenses                                  |
+| **IRC §274**     | Entertainment, gifts, travel expenses                       |
+| **IRC §105/106** | Health plan exclusions                                      |
 
 ---
 
@@ -251,13 +262,13 @@ If ANY requirement not met:
 
 ### Target Users (Expanded from Research)
 
-| User Type | Primary Pain Point | How App Helps |
-|-----------|-------------------|---------------|
-| **S Corp 2%+ Shareholders** | Benefits become taxable wages | Track which benefits hit W-2 |
-| **LLC Members** | Rules depend on tax election | Allocation by entity type |
-| **Nonprofit Board Members** | Board member benefits vs supplies | Clear separation for 990 |
-| **Small Business Owners** | Mixed personal/business purchases | Allocation slider |
-| **Accountants/Bookkeepers** | Client expense categorization | Batch processing |
+| User Type                   | Primary Pain Point                | How App Helps                |
+| --------------------------- | --------------------------------- | ---------------------------- |
+| **S Corp 2%+ Shareholders** | Benefits become taxable wages     | Track which benefits hit W-2 |
+| **LLC Members**             | Rules depend on tax election      | Allocation by entity type    |
+| **Nonprofit Board Members** | Board member benefits vs supplies | Clear separation for 990     |
+| **Small Business Owners**   | Mixed personal/business purchases | Allocation slider            |
+| **Accountants/Bookkeepers** | Client expense categorization     | Batch processing             |
 
 ### Feature Recommendations
 
@@ -286,24 +297,158 @@ If ANY requirement not met:
 ### Refined Value Proposition
 
 **Generic (Before)**:
+
 > "Personal finance tracker with bank statement import"
 
 **Specific (After)**:
+
 > "Expense allocation tool for business owners who need to separate **deductible business expenses** from **taxable fringe benefits**—especially valuable for S Corp shareholders whose benefits don't get the same tax treatment as regular employees."
+
+---
+
+## Board Member / Director Benefits (C Corp Specific)
+
+### Critical Finding: Directors CAN Receive Fringe Benefits
+
+> **"You don't have to be an employee of the provider to be a recipient of a fringe benefit. If you're a partner, a director, or an independent contractor, you can also be the recipient of a fringe benefit."**
+> — IRS Publication 525 (2026)
+
+This is **critically important**: Board members/directors are explicitly eligible for fringe benefits, even if they are NOT employees.
+
+### Director vs Employee vs Shareholder
+
+A person can hold multiple roles simultaneously:
+
+| Role              | Tax Form for Compensation | Fringe Benefits Eligible? | Notes                                   |
+| ----------------- | ------------------------- | ------------------------- | --------------------------------------- |
+| **Director only** | 1099-NEC (if ≥$600)       | ✅ Yes                    | Self-employment income                  |
+| **Employee only** | W-2                       | ✅ Yes                    | Standard employee benefits              |
+| **Director + Employee** | W-2 for salary, possibly 1099-NEC for director fees | ✅ Yes | Most common for small C Corp owners |
+| **Shareholder only** | Dividends on 1099-DIV | ❌ Not as shareholder | Distributions ≠ compensation |
+
+### How Director Fees Are Reported
+
+| Scenario                              | How Reported                             | Tax Type                |
+| ------------------------------------- | ---------------------------------------- | ----------------------- |
+| Director is NOT an employee           | Form 1099-NEC Box 1                      | Self-employment income  |
+| Director IS an employee               | W-2 (may combine with salary)            | Wages                   |
+| Director fees paid to another company | 1099-NEC to the company                  | Business income         |
+
+### C Corp Owner-Directors: The Best of Both Worlds
+
+For **C Corporation** owners who are BOTH directors AND employees:
+
+```
+Owner Status in C Corp:
+├── Shareholder (owns stock)
+├── Director (board member) 
+└── Employee (works for company)
+
+All three roles CAN receive fringe benefits when acting as director or employee!
+```
+
+**Key Advantage**: Unlike S Corps (where 2%+ shareholders lose most benefit exclusions), C Corp owner-employees retain full eligibility for tax-free fringe benefits.
+
+### Vacation Rental Management: Special Considerations
+
+For a C Corp providing **Short Term Vacation Rental Management** services:
+
+#### Site Visits = Business Travel
+
+When owner-directors visit rental properties:
+
+| Expense Type         | Treatment                              | Documentation Needed                      |
+| -------------------- | -------------------------------------- | ----------------------------------------- |
+| Travel to property   | Business expense (IRC §162)            | Business purpose, dates, location         |
+| Lodging at property  | Complex—see below                      | Careful allocation required               |
+| Meals during travel  | 50% deductible (business days)         | Business purpose, attendees               |
+| Supplies used on-site| Depends on use—see allocation          | Track business vs personal use            |
+
+#### Lodging at Your Own Rental Property
+
+**Tricky Issue**: When owner stays at a property the company manages:
+
+| Scenario                          | Tax Treatment                                            |
+| --------------------------------- | -------------------------------------------------------- |
+| Property inspection/work only     | Business expense (working condition fringe)              |
+| Extended stay beyond business need| Personal use portion = taxable compensation              |
+| Family members accompany          | Family portion generally = personal/taxable              |
+| Stay during peak rental season    | Stronger argument for taxable (foregone rental income)   |
+
+**Best Practice**: Document the business purpose for each day of the visit.
+
+#### Supplies Used While Visiting Properties
+
+**The Core Question**: When you use business supplies (toilet paper, cleaning supplies, coffee, etc.) at rental properties for your personal needs during site visits:
+
+| Analysis Factor              | Business Expense                    | Taxable Benefit                     |
+| ---------------------------- | ----------------------------------- | ----------------------------------- |
+| Primary purpose of supplies  | Stocked for guests/operations       | Bought specifically for owner use   |
+| Amount of personal use       | Incidental to business visit        | Substantial personal benefit        |
+| Would expense exist anyway?  | Yes—part of operations              | No—extra expense for owner          |
+| Documentation                | Part of property operating costs    | Tracked as owner benefit            |
+
+**Practical Approach**:
+
+1. **De Minimis**: Incidental personal use (coffee, toilet paper, basic supplies already stocked) = likely de minimis, not taxable
+2. **Substantial**: Extended stays, family use, special purchases for owner = allocate as taxable benefit
+3. **Working Condition**: Supplies needed to perform inspection/management duties = business expense
+
+### Reporting Board Member Benefits
+
+#### If Treated as Employee (Most Common for Small C Corps)
+
+- Include fringe benefit value in W-2 Box 1 (unless excludable)
+- Taxable benefits subject to FICA
+- Excludable benefits documented but not included
+
+#### If Director Only (Not Employee)
+
+- Director fees reported on 1099-NEC
+- Taxable fringe benefits may be reported on 1099-NEC or separately
+- Self-employment tax applies to director fees
+
+### Questions to Consider for App Design
+
+Based on this research, the app should help users answer:
+
+1. **What role am I acting in?**
+   - Employee conducting business
+   - Director performing oversight
+   - Shareholder (not a service role)
+
+2. **What is the primary purpose of this expense?**
+   - Guest/customer service
+   - Property maintenance/operations
+   - Personal convenience during business travel
+   - Purely personal benefit
+
+3. **How much personal benefit was received?**
+   - Incidental (de minimis)
+   - Substantial (requires allocation)
+   - 100% personal (fully taxable)
+
+4. **Is there documentation of business purpose?**
+   - Inspection reports
+   - Board meeting minutes
+   - Property management records
 
 ---
 
 ## Research Status
 
-| Area | Status | Source |
-|------|--------|--------|
-| C Corp fringe benefits | ✅ Complete | Pub 15-B (2026) |
+| Area                        | Status      | Source               |
+| --------------------------- | ----------- | -------------------- |
+| C Corp fringe benefits      | ✅ Complete | Pub 15-B (2026)      |
 | S Corp 2% shareholder rules | ✅ Complete | IRS.gov S Corp guide |
-| LLC tax elections | ✅ Complete | IRS.gov LLC page |
-| Accountable plan rules | ✅ Complete | Pub 463 (2024) |
-| De minimis benefits | ✅ Complete | Pub 15-B (2026) |
-| Working condition benefits | ✅ Complete | Pub 15-B (2026) |
-| Amazon allocation scenarios | ✅ Complete | Synthesis of rules |
+| LLC tax elections           | ✅ Complete | IRS.gov LLC page     |
+| Accountable plan rules      | ✅ Complete | Pub 463 (2024)       |
+| De minimis benefits         | ✅ Complete | Pub 15-B (2026)      |
+| Working condition benefits  | ✅ Complete | Pub 15-B (2026)      |
+| Amazon allocation scenarios | ✅ Complete | Synthesis of rules   |
+| **Board member benefits**   | ✅ Complete | Pub 525, IRC §132    |
+| **Director compensation**   | ✅ Complete | 1099-NEC rules       |
+| **Vacation rental specifics**| ✅ Complete | Pub 463, 527, 525   |
 
 ---
 
@@ -320,6 +465,7 @@ For S Corporations, 2%+ shareholders lose many fringe benefit exclusions that re
 ### 3. Documentation is Everything
 
 Accountable plan rules require:
+
 - **60-day substantiation**
 - **120-day excess return**
 - Business purpose documentation
@@ -334,4 +480,4 @@ Amazon orders often mix business and personal items. Each line item may need dif
 
 ---
 
-*Research compiled from IRS.gov sources, February 2026*
+_Research compiled from IRS.gov sources, February 2026_
