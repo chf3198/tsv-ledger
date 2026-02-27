@@ -36,11 +36,13 @@
 **Context**: User needed to understand app's value for accountants and protect from liability.
 
 **Analysis Performed**:
+
 1. Competitive research: No existing tool does percentage-based allocation
 2. Tax research: C Corp on-site benefits have unique tax treatment
 3. Gap analysis: Missing fringe benefit granularity, entity awareness, audit trail
 
-**Outcome**: 
+**Outcome**:
+
 - Repositioned from "Personal finance tracker" to "Amazon Expense Allocation for Tax Prep"
 - Created 5-phase roadmap (Security, Intelligence, Export, AI, Expansion)
 - Added Terms of Service with liability disclaimers
@@ -50,8 +52,9 @@
 **Key Insight**: The app's unique value is the slider-based percentage allocation for mixed-use expenses. No competitor offers this. Position accordingly.
 
 **Files Created**:
+
 - docs/ROADMAP.md
-- docs/TERMS_OF_SERVICE.md  
+- docs/TERMS_OF_SERVICE.md
 - docs/PRIVACY_POLICY.md
 - docs/adr/022-product-repositioning.md
 
