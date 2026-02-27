@@ -17,6 +17,33 @@
 
 ## Log Entries
 
+### 2026-02-27 INCIDENT: Cloudflare Pages Not Auto-Deploying
+
+**Context**: Pushed footer changes to GitHub master, verified git log showed commits, but UAT showed old content.
+
+**Root Cause**: Cloudflare Pages webhook/integration with GitHub stopped triggering auto-deploys. Last auto-deploy was 19 hours prior.
+
+**Mistake Made**: Agent verified local files and git status instead of testing the actual live production URL.
+
+**Diagnosis**:
+```bash
+npx wrangler pages deployment list --project-name=tsv-ledger
+curl -s "https://tsv-ledger.pages.dev/" | grep "app-footer"
+```
+
+**Fix**: Manual deploy with wrangler CLI:
+```bash
+npx wrangler pages deploy . --project-name=tsv-ledger --branch=master
+```
+
+**Prevention**: 
+1. ALWAYS verify changes against live production URL after push
+2. Run `curl -s "https://tsv-ledger.pages.dev/" | grep "<expected change>"` 
+3. If stale, manually deploy with wrangler
+4. Check Cloudflare Pages webhook status periodically
+
+---
+
 ### 2026-02-27 INCIDENT: GitHub Default Branch Misconfiguration
 
 **Context**: GitHub repo page showed v2.2.1 (5 months old) despite v3.2.0 being on master.
