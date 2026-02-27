@@ -7,6 +7,39 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.4.0] - 2026-02-28
+
+### Added
+
+- **Guest Mode Warnings** (ADR-020): Clear warnings for unauthenticated users
+  - Warning modal appears after first data import in guest mode
+  - Persistent banner shows when not signed in with data present
+  - Modal explains localStorage limitations (device-only, no backup)
+  - Sign In and Continue as Guest options
+  - Acknowledgement persists until logout
+
+### Fixed
+
+- **Data Persistence Bug**: Logout now properly clears all user data (OWASP compliance)
+  - Clears `tsv-expenses` and `tsv-import-history` from localStorage
+  - Resets app state (expenses array, totals, counts)
+  - Prevents data leakage between users on shared devices
+
+### Security
+
+- **OWASP Compliance**: Clear all localStorage on session end
+- **Guest Mode Transparency**: Users clearly informed about data storage limitations
+
+## [3.3.0] - 2026-02-28
+
+### Added
+
+- **Legal Framework**: Comprehensive legal protection for tax-related features
+  - Terms of Service with tax advice disclaimer
+  - Privacy Policy with localStorage-only data handling
+  - Product repositioned as "Amazon Expense Allocation for Tax Prep"
+- **GitHub Releases**: Automated versioned releases via `gh release create`
+
 ## [3.2.0] - 2026-02-27
 
 ### Added

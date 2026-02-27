@@ -33,3 +33,7 @@ dialog article{position:relative;padding-top:2rem}
 /* Drag area */
 .drag-area{border:2px dashed var(--pico-muted-border-color);padding:2rem;text-align:center;border-radius:8px}
 .drag-area.dragover{border-color:var(--pico-primary);background:var(--pico-primary-focus)}
+/* Guest Mode Warning Banner (ADR-020) */
+.guest-warning-banner{background:#fff3cd;color:#856404;padding:0.5rem 1rem;text-align:center;border-bottom:1px solid #ffc107;display:flex;align-items:center;justify-content:center;gap:0.5rem;flex-wrap:wrap}
+.guest-warning-banner button{margin:0}
+.guest-warning-dialog article{text-align:center;max-width:400px;margin:0 auto}

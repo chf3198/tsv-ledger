@@ -13,6 +13,8 @@ test.describe('Data Import', () => {
     await page.goto('http://localhost:8080');
     // Clear localStorage to ensure test isolation
     await page.evaluate(() => localStorage.clear());
+    // Acknowledge guest mode to prevent modal blocking tests
+    await page.evaluate(() => localStorage.setItem('tsv-guest-acknowledged', 'true'));
     // Reload to reinitialize with clean state
     await page.reload();
     await page.waitForLoadState('domcontentloaded');
