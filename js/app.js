@@ -365,7 +365,20 @@ function expenseApp() {
       const api = window.AUTH_API || 'https://tsv-ledger-api.chf3198.workers.dev/auth';
       window.location.href = `${api}/oauth/${provider}/start`;
     },
-    logout() { this.auth = { user: null, authenticated: false };
-      localStorage.removeItem('tsv-auth'); localStorage.removeItem('tsv-session'); this.showUserMenu = false; }
+    logout() {
+      // Clear auth state
+      this.auth = { user: null, authenticated: false };
+      localStorage.removeItem('tsv-auth');
+      localStorage.removeItem('tsv-session');
+      // Clear all user data on logout (OWASP: clear storage on session end)
+      localStorage.removeItem('tsv-expenses');
+      localStorage.removeItem('tsv-import-history');
+      this.expenses = [];
+      this.importHistory = [];
+      this.showUserMenu = false;
+      // Reset totals
+      this.totals = { supplies: 0, benefits: 0 };
+      this.counts = { supplies: 0, benefits: 0, uncategorized: 0 };
+    }
   };
 }
