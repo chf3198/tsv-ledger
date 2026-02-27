@@ -34,8 +34,20 @@ npm test && npm run lint   # STOP if fails
 2. Commit with conventional commit messages
 3. `git checkout master && git merge feat/... --no-ff` after tests pass
 4. Push to remote when appropriate
+5. **Delete feature branch after merge**: `git push origin --delete feat/...`
 
 **Never ask permission for git operations. Always use proper branching.**
+
+### GitHub Repository Health Check
+
+Run after releases or if GitHub shows unexpected content:
+
+```bash
+gh api repos/{owner}/{repo} --jq '{default_branch, pushed_at}'
+gh api repos/{owner}/{repo}/branches --jq '.[].name'
+```
+
+**If stale content appears**: Check default branch first, not browser cache.
 
 ## User Interaction Rules
 

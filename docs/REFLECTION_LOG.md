@@ -17,34 +17,17 @@
 
 ## Log Entries
 
-### 2026-02-27 INCIDENT: GitHub Repository Showing Old Content
+### 2026-02-27 INCIDENT: GitHub Default Branch Misconfiguration
 
-**Context**: User reported GitHub repository page showing v2.2.1 from September 2025 instead of current v3.2.0, even after hard browser refresh. README and community files appeared missing.
+**Context**: GitHub repo page showed v2.2.1 (5 months old) despite v3.2.0 being on master.
 
-**Outcome**: Root cause identified and resolved in 5 minutes.
+**Root Cause**: Default branch was `protocol-evolution-setup` (stale feature branch), not `master`.
 
-**Root Cause**: GitHub's **default branch was set to `protocol-evolution-setup`** (stale branch from September 2025) instead of `master`. GitHub.com displays the default branch by default.
+**Diagnosis**: `gh api repos/{owner}/{repo} --jq '.default_branch'`
 
-**Investigation Path**:
-1. Verified raw.githubusercontent.com showed correct content → GitHub HAS the files
-2. Checked `gh api repos/chf3198/tsv-ledger --jq '.default_branch'` → returned `protocol-evolution-setup`
-3. This explained everything: GitHub web UI shows default branch, which was 5 months stale
+**Fix**: `gh api -X PATCH repos/{owner}/{repo} -f default_branch=master`
 
-**Resolution**:
-```bash
-gh api -X PATCH repos/chf3198/tsv-ledger -f default_branch=master
-git push origin --delete protocol-evolution-setup feat/cloudflare-worker-api feat/universal-menu fix/sign-in-button
-```
-
-**Key Insight**: When GitHub shows old content despite confirmed pushes:
-1. **Check default branch first** - `gh api repos/{owner}/{repo} --jq '.default_branch'`
-2. raw.githubusercontent.com bypasses this - it uses explicit branch in URL
-3. Feature branches created and never deleted can accidentally become default
-
-**Adaptation**:
-- ✅ Clean up stale remote branches after merging
-- ✅ Verify default branch is correct after major branch operations
-- ✅ Use `gh api` for quick diagnosis before complex debugging
+**Prevention**: Delete feature branches after merge. Added step 5 to Git Workflow in copilot-instructions.md.
 
 ---
 
