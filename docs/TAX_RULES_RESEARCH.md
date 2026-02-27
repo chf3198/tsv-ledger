@@ -17,7 +17,8 @@
 6. [Key IRS Publications](#key-irs-publications)
 7. [App Design Implications](#app-design-implications)
 8. [Board Member / Director Benefits](#board-member--director-benefits-c-corp-specific)
-9. [Key Takeaways for App Development](#key-takeaways-for-app-development)
+9. [C Corp On-Site Benefits: Deep Dive](#c-corp-on-site-benefits-deep-dive)
+10. [Key Takeaways for App Development](#key-takeaways-for-app-development)
 
 ---
 
@@ -319,20 +320,20 @@ This is **critically important**: Board members/directors are explicitly eligibl
 
 A person can hold multiple roles simultaneously:
 
-| Role              | Tax Form for Compensation | Fringe Benefits Eligible? | Notes                                   |
-| ----------------- | ------------------------- | ------------------------- | --------------------------------------- |
-| **Director only** | 1099-NEC (if ≥$600)       | ✅ Yes                    | Self-employment income                  |
-| **Employee only** | W-2                       | ✅ Yes                    | Standard employee benefits              |
-| **Director + Employee** | W-2 for salary, possibly 1099-NEC for director fees | ✅ Yes | Most common for small C Corp owners |
-| **Shareholder only** | Dividends on 1099-DIV | ❌ Not as shareholder | Distributions ≠ compensation |
+| Role                    | Tax Form for Compensation                           | Fringe Benefits Eligible? | Notes                               |
+| ----------------------- | --------------------------------------------------- | ------------------------- | ----------------------------------- |
+| **Director only**       | 1099-NEC (if ≥$600)                                 | ✅ Yes                    | Self-employment income              |
+| **Employee only**       | W-2                                                 | ✅ Yes                    | Standard employee benefits          |
+| **Director + Employee** | W-2 for salary, possibly 1099-NEC for director fees | ✅ Yes                    | Most common for small C Corp owners |
+| **Shareholder only**    | Dividends on 1099-DIV                               | ❌ Not as shareholder     | Distributions ≠ compensation        |
 
 ### How Director Fees Are Reported
 
-| Scenario                              | How Reported                             | Tax Type                |
-| ------------------------------------- | ---------------------------------------- | ----------------------- |
-| Director is NOT an employee           | Form 1099-NEC Box 1                      | Self-employment income  |
-| Director IS an employee               | W-2 (may combine with salary)            | Wages                   |
-| Director fees paid to another company | 1099-NEC to the company                  | Business income         |
+| Scenario                              | How Reported                  | Tax Type               |
+| ------------------------------------- | ----------------------------- | ---------------------- |
+| Director is NOT an employee           | Form 1099-NEC Box 1           | Self-employment income |
+| Director IS an employee               | W-2 (may combine with salary) | Wages                  |
+| Director fees paid to another company | 1099-NEC to the company       | Business income        |
 
 ### C Corp Owner-Directors: The Best of Both Worlds
 
@@ -341,7 +342,7 @@ For **C Corporation** owners who are BOTH directors AND employees:
 ```
 Owner Status in C Corp:
 ├── Shareholder (owns stock)
-├── Director (board member) 
+├── Director (board member)
 └── Employee (works for company)
 
 All three roles CAN receive fringe benefits when acting as director or employee!
@@ -357,23 +358,23 @@ For a C Corp providing **Short Term Vacation Rental Management** services:
 
 When owner-directors visit rental properties:
 
-| Expense Type         | Treatment                              | Documentation Needed                      |
-| -------------------- | -------------------------------------- | ----------------------------------------- |
-| Travel to property   | Business expense (IRC §162)            | Business purpose, dates, location         |
-| Lodging at property  | Complex—see below                      | Careful allocation required               |
-| Meals during travel  | 50% deductible (business days)         | Business purpose, attendees               |
-| Supplies used on-site| Depends on use—see allocation          | Track business vs personal use            |
+| Expense Type          | Treatment                      | Documentation Needed              |
+| --------------------- | ------------------------------ | --------------------------------- |
+| Travel to property    | Business expense (IRC §162)    | Business purpose, dates, location |
+| Lodging at property   | Complex—see below              | Careful allocation required       |
+| Meals during travel   | 50% deductible (business days) | Business purpose, attendees       |
+| Supplies used on-site | Depends on use—see allocation  | Track business vs personal use    |
 
 #### Lodging at Your Own Rental Property
 
 **Tricky Issue**: When owner stays at a property the company manages:
 
-| Scenario                          | Tax Treatment                                            |
-| --------------------------------- | -------------------------------------------------------- |
-| Property inspection/work only     | Business expense (working condition fringe)              |
-| Extended stay beyond business need| Personal use portion = taxable compensation              |
-| Family members accompany          | Family portion generally = personal/taxable              |
-| Stay during peak rental season    | Stronger argument for taxable (foregone rental income)   |
+| Scenario                           | Tax Treatment                                          |
+| ---------------------------------- | ------------------------------------------------------ |
+| Property inspection/work only      | Business expense (working condition fringe)            |
+| Extended stay beyond business need | Personal use portion = taxable compensation            |
+| Family members accompany           | Family portion generally = personal/taxable            |
+| Stay during peak rental season     | Stronger argument for taxable (foregone rental income) |
 
 **Best Practice**: Document the business purpose for each day of the visit.
 
@@ -381,12 +382,12 @@ When owner-directors visit rental properties:
 
 **The Core Question**: When you use business supplies (toilet paper, cleaning supplies, coffee, etc.) at rental properties for your personal needs during site visits:
 
-| Analysis Factor              | Business Expense                    | Taxable Benefit                     |
-| ---------------------------- | ----------------------------------- | ----------------------------------- |
-| Primary purpose of supplies  | Stocked for guests/operations       | Bought specifically for owner use   |
-| Amount of personal use       | Incidental to business visit        | Substantial personal benefit        |
-| Would expense exist anyway?  | Yes—part of operations              | No—extra expense for owner          |
-| Documentation                | Part of property operating costs    | Tracked as owner benefit            |
+| Analysis Factor             | Business Expense                 | Taxable Benefit                   |
+| --------------------------- | -------------------------------- | --------------------------------- |
+| Primary purpose of supplies | Stocked for guests/operations    | Bought specifically for owner use |
+| Amount of personal use      | Incidental to business visit     | Substantial personal benefit      |
+| Would expense exist anyway? | Yes—part of operations           | No—extra expense for owner        |
+| Documentation               | Part of property operating costs | Tracked as owner benefit          |
 
 **Practical Approach**:
 
@@ -435,20 +436,311 @@ Based on this research, the app should help users answer:
 
 ---
 
+## C Corp On-Site Benefits: Deep Dive
+
+### Overview: What C Corps Can Provide On-Site
+
+For a C Corporation providing services like **Short Term Vacation Rental Management**, owner-directors who must be on-site at properties can potentially receive substantial tax-advantaged benefits. This section covers the IRS rules for:
+
+1. **On-Site Lodging** (IRC §119)
+2. **On-Site Meals** (IRC §119, §132)
+3. **On-Site Consumables** (De minimis fringe benefits)
+4. **On-Site Transportation** (Working condition fringe benefits)
+
+### 1. On-Site Lodging — IRC §119
+
+#### The Three Requirements for Tax-Free Lodging
+
+Under IRC §119, the value of **lodging** furnished to an employee (or director) can be **excluded from income** if ALL THREE conditions are met:
+
+| Requirement                    | Test                                                                           | Key Question                                            |
+| ------------------------------ | ------------------------------------------------------------------------------ | ------------------------------------------------------- |
+| **1. Business Premises**       | Lodging must be furnished on the employer's business premises                  | Is this location where the employer conducts business?  |
+| **2. Employer's Convenience**  | Lodging must be furnished for the employer's convenience (not as compensation) | Is there a substantial business reason for the lodging? |
+| **3. Condition of Employment** | Employee must accept the lodging as a condition of employment                  | Must the employee accept to properly perform duties?    |
+
+> **"The value of lodging provided by the employer to an employee can be excluded from income if it's furnished on the employer's business premises, for the employer's convenience, and as a condition of employment."**
+> — IRS Publication 15-B (2026)
+
+#### What Counts as "Business Premises"?
+
+The IRS defines **business premises** broadly for IRC §119:
+
+| Location                        | Business Premises? | Example                                    |
+| ------------------------------- | ------------------ | ------------------------------------------ |
+| Company headquarters            | ✅ Yes             | Main office building                       |
+| Remote work site                | ✅ Yes             | Construction camp, managed rental property |
+| Manager's residence ON property | ✅ Yes             | Live-in property manager quarters          |
+| Employee's personal home        | ❌ No              | Home office alone doesn't qualify          |
+| Off-site hotel during travel    | ❌ No              | Travel expense rules apply instead         |
+
+**For Vacation Rental Management**: Properties you manage ARE your business premises when you're there performing management duties.
+
+#### What Satisfies "Convenience of the Employer"?
+
+The lodging must serve the employer's business needs, not be a substitute for compensation:
+
+| Scenario                            | Employer Convenience? | Why                                |
+| ----------------------------------- | --------------------- | ---------------------------------- |
+| On-call 24/7 for emergencies        | ✅ Yes                | Must be available immediately      |
+| Security/supervision duties         | ✅ Yes                | Presence required for business     |
+| No reasonable alternative available | ✅ Yes                | Remote location, no nearby lodging |
+| Extended property inspection        | ⚠️ Depends            | Document business necessity        |
+| Vacation disguised as work          | ❌ No                 | Primary purpose is personal        |
+
+**IRS Example**: "Alaska construction project site... lodging furnished to employees who work at these sites qualifies for exclusion."
+— IRS Pub 15-B (2026)
+
+#### What Makes Lodging a "Condition of Employment"?
+
+The employee must be **required** to accept the lodging to perform their duties properly:
+
+| Factor                       | Supports Condition of Employment                | Weakens Claim               |
+| ---------------------------- | ----------------------------------------------- | --------------------------- |
+| Written employment agreement | ✅ "Must stay on-site during property visits"   | No documentation            |
+| Nature of duties             | ✅ Property inspection, emergency response      | Work can be done remotely   |
+| Business necessity           | ✅ Multiple properties, after-hours emergencies | Single easy property nearby |
+| Alternative available        | ✅ No nearby hotels, unsafe area at night       | Luxury hotels next door     |
+
+#### C Corp vs S Corp for On-Site Lodging
+
+| Entity                  | Owner Can Exclude Lodging?           | Notes                                                     |
+| ----------------------- | ------------------------------------ | --------------------------------------------------------- |
+| **C Corporation**       | ✅ Yes, if IRC §119 requirements met | Owner-employee/director treated as regular employee       |
+| **S Corporation (2%+)** | ❌ No                                | 2%+ shareholders treated as self-employed; cannot exclude |
+| **Partnership/LLC**     | ❌ No                                | Partners cannot exclude                                   |
+| **Sole Proprietor**     | ❌ No                                | Cannot provide benefit to self                            |
+
+> **"Treat a 2% shareholder as you would a partner in a partnership for fringe benefit purposes, but don't treat the benefit as a reduction in distributions to the 2% shareholder."**
+> — IRS Publication 15-B (2026)
+
+### 2. On-Site Meals — IRC §119 and §132
+
+#### Tax-Free Meals Under IRC §119
+
+Meals furnished to an employee can be **excluded from income** if:
+
+1. **Furnished on business premises**, AND
+2. **Furnished for the convenience of the employer**
+
+**Convenience of Employer for Meals** includes:
+
+| Scenario                                  | Excludable? | Why                                |
+| ----------------------------------------- | ----------- | ---------------------------------- |
+| Short meal period (must eat on-site)      | ✅ Yes      | Business operations require it     |
+| Emergency on-call staff                   | ✅ Yes      | Must be immediately available      |
+| Proper meal facilities unavailable nearby | ✅ Yes      | No practical alternative           |
+| Restrict employees during meal periods    | ✅ Yes      | Security, customer service reasons |
+| Voluntary lunch in company cafeteria      | ⚠️ May be   | 50%+ rule applies (see below)      |
+
+#### The 50%+ Rule for Meals
+
+> **"If more than half of the employees to whom meals are furnished on business premises receive meals for the employer's convenience, all meals provided to employees on the business premises are treated as furnished for the employer's convenience."**
+> — IRC §119(b)(4)
+
+**Practical Application**: If most employees must eat on-site for business reasons, ALL employee meals on-site become excludable.
+
+#### De Minimis Meals (Separate from IRC §119)
+
+Even if IRC §119 doesn't apply, certain meals qualify as **de minimis**:
+
+| Meal Type                         | De Minimis?                        | Limit                       |
+| --------------------------------- | ---------------------------------- | --------------------------- |
+| Coffee, donuts, soft drinks       | ✅ Yes                             | Occasional, low value       |
+| Occasional meal for overtime work | ✅ Yes                             | Not regular pattern         |
+| Company picnics, holiday parties  | ✅ Yes                             | Infrequent events           |
+| Occasional meal enabling overtime | ✅ Yes                             | Business necessity          |
+| Regular daily lunch allowance     | ❌ No                              | Too regular, too much value |
+| Subsidized company cafeteria      | ❌ No (but may qualify under §119) |                             |
+
+#### Employer Deduction for Meals (Important 2026 Change)
+
+> **"For amounts incurred after December 31, 2025, the 50% deduction for business-related meals will no longer apply."**
+> — IRS Notice (Tax Cuts and Jobs Act effect)
+
+**After 2025**: Employer meal deductions (employer's side) are eliminated except:
+
+- De minimis meals
+- Food and beverages for employees that are excludable under IRC §119
+- Recreational expenses for employees (holiday parties, etc.)
+
+**Note**: This affects the employer's deduction, NOT whether the meal is taxable to the employee.
+
+### 3. On-Site Consumables — Bathroom & Kitchen Supplies
+
+#### The De Minimis Analysis for On-Site Supplies
+
+When board members/employees use supplies at business locations:
+
+| Item Type                            | Analysis                              | Tax Treatment                              |
+| ------------------------------------ | ------------------------------------- | ------------------------------------------ |
+| **Toilet paper, soap, paper towels** | Already stocked for operations/guests | ✅ De minimis—incidental use during work   |
+| **Coffee, tea, water**               | Commonly provided for workers         | ✅ De minimis—if occasional/low value      |
+| **Cleaning supplies**                | Business operational expense          | ✅ Business expense when used for business |
+| **Full pantry stocked for owner**    | Special personal benefit              | ⚠️ Allocate taxable portion                |
+| **Groceries beyond basics**          | Personal consumption                  | ❌ Taxable benefit                         |
+
+#### Working Condition Benefit Analysis
+
+Some supplies qualify as **working condition benefits** (not just de minimis):
+
+> **"A working condition benefit is any property or service provided to you by your employer, the cost of which would be allowable as an employee business expense deduction if you had paid for it."**
+> — IRS Publication 15-B (2026)
+
+| Supply                                    | Would Employee Deduct If Paid? | Working Condition?   |
+| ----------------------------------------- | ------------------------------ | -------------------- |
+| Cleaning supplies for property inspection | ✅ Yes—job duty                | ✅ Working condition |
+| Safety equipment, gloves                  | ✅ Yes—required for work       | ✅ Working condition |
+| Basic amenities during business stay      | ✅ Yes—travel expense          | ✅ Working condition |
+| Premium personal care items               | ❌ No—personal preference      | ❌ Taxable benefit   |
+
+#### Practical Guidance for Vacation Rental Management
+
+**Scenario**: Board members visit managed rental properties and use bathroom/kitchen supplies already stocked at the property.
+
+| Analysis Factor                     | Result                                               |
+| ----------------------------------- | ---------------------------------------------------- |
+| **Why are supplies there?**         | Stocked for rental guests and property operations    |
+| **Would they be purchased anyway?** | Yes—required for rental business                     |
+| **Personal use amount**             | Incidental to business visit                         |
+| **Tracking practicality**           | Administratively impractical to track one roll of TP |
+
+**Conclusion**: Incidental use of supplies already stocked for business operations = **de minimis**, not separately taxable.
+
+**But**: If supplies are specifically purchased FOR the owner's personal use (special groceries, personal items not available to guests), allocate as taxable benefit.
+
+### 4. On-Site Transportation — Vehicles & Local Travel
+
+#### Working Condition Benefit for Vehicles
+
+When the company provides vehicle use:
+
+> **"The use of an employer-provided vehicle is a working condition benefit to the extent the employee would be able to deduct the costs of operating the vehicle as a business expense."**
+> — IRS Publication 15-B (2026)
+
+| Vehicle Use                            | Tax Treatment                                                   |
+| -------------------------------------- | --------------------------------------------------------------- |
+| **100% Business use**                  | ✅ Fully excludable working condition benefit                   |
+| **Business + Commuting**               | Commuting portion is taxable                                    |
+| **Business + Personal**                | Personal use portion is taxable                                 |
+| **Qualified non-personal use vehicle** | ✅ Fully excludable (by design, unlikely to be used personally) |
+
+#### Qualified Transportation Fringe Benefits (§132)
+
+For 2026:
+
+| Benefit                     | Monthly Limit | Notes                                 |
+| --------------------------- | ------------- | ------------------------------------- |
+| Transit passes              | $340          | Commuter highway vehicle, transit     |
+| Qualified parking           | $340          | At or near workplace, park-and-ride   |
+| Qualified bicycle commuting | ❌ Eliminated | Permanently eliminated by P.L. 119-21 |
+
+> **Important**: 2%+ S Corp shareholders **cannot** exclude qualified transportation benefits.
+
+#### De Minimis Transportation
+
+| Transportation                     | De Minimis? | Notes                                   |
+| ---------------------------------- | ----------- | --------------------------------------- |
+| Occasional local fare (taxi, Uber) | ✅ Yes      | Under $21 per occasion                  |
+| Unsafe conditions ride home        | ✅ Yes      | Overtime, unusual circumstances         |
+| Regular commuting expense          | ❌ No       | Taxable unless qualified transportation |
+
+#### Vehicle Use at Rental Properties
+
+**Scenario**: Company provides vehicle for traveling between managed properties.
+
+| Use                                           | Tax Treatment                            |
+| --------------------------------------------- | ---------------------------------------- |
+| Driving between properties during work        | ✅ Working condition—100% excludable     |
+| Driving from home to first property           | ⚠️ Commuting—taxable (unless exceptions) |
+| Using vehicle for personal errands            | ❌ Taxable fringe benefit                |
+| De minimis personal use (stopping for coffee) | ✅ Incidental—excludable                 |
+
+**2024 Mileage Rates** (if tracking actual vs. reimbursement):
+
+- Business use: $0.67/mile standard mileage rate
+- First-year depreciation limit: $20,400 (vehicles acquired after 9/27/2017)
+
+### Summary: C Corp On-Site Benefits Matrix
+
+| Benefit Category                         | C Corp Owner-Director     | Requirements                                                       | Key IRC Section |
+| ---------------------------------------- | ------------------------- | ------------------------------------------------------------------ | --------------- |
+| **On-Site Lodging**                      | ✅ Excludable             | Business premises + Employer convenience + Condition of employment | §119            |
+| **On-Site Meals (employer convenience)** | ✅ Excludable             | Business premises + Employer convenience                           | §119            |
+| **De Minimis Meals**                     | ✅ Excludable             | Occasional, small value                                            | §132(e)         |
+| **Bathroom/Kitchen Supplies**            | ✅ De minimis             | Incidental, already stocked                                        | §132(e)         |
+| **Working Supplies**                     | ✅ Excludable             | Would be deductible if employee paid                               | §132(d)         |
+| **Business Vehicle Use**                 | ✅ Excludable             | 100% business use                                                  | §132(d)         |
+| **Personal Vehicle Use**                 | ❌ Taxable                | Personal portion                                                   | —               |
+| **Qualified Transportation**             | ✅ Excludable up to limit | $340/month transit/parking                                         | §132(f)         |
+
+### Documentation Best Practices
+
+For maximum tax benefit, document:
+
+1. **For Lodging**:
+   - Written policy requiring on-site presence
+   - Business purposes for each stay (inspection reports, emergency response logs)
+   - Board meeting minutes establishing oversight duties
+
+2. **For Meals**:
+   - Business purpose documentation
+   - Why on-site eating was necessary
+   - 50%+ calculation if relying on that rule
+
+3. **For Consumables**:
+   - Operating budget includes supplies for all properties
+   - No special purchases for owner personal use
+   - De minimis treatment is reasonable given amounts
+
+4. **For Transportation**:
+   - Mileage logs differentiating business vs personal
+   - Business purpose for each trip
+   - Vehicle use policy
+
+### C Corp Advantage Recap
+
+**Why This Matters for C Corp Owner-Directors**:
+
+```
+C Corporation Owner-Director:
+├── IRC §119 Lodging → AVAILABLE ✅
+├── IRC §119 Meals → AVAILABLE ✅
+├── De Minimis Benefits → AVAILABLE ✅
+├── Working Condition Benefits → AVAILABLE ✅
+└── Qualified Transportation → AVAILABLE ✅
+
+S Corporation 2%+ Shareholder:
+├── IRC §119 Lodging → NOT AVAILABLE ❌
+├── IRC §119 Meals → NOT AVAILABLE ❌
+├── De Minimis Benefits → Limited availability
+├── Working Condition Benefits → AVAILABLE ✅
+└── Qualified Transportation → NOT AVAILABLE ❌
+```
+
+**Bottom Line**: C Corp structure provides significant tax advantages for owner-directors who must be on-site at business locations. The same expenses that would be taxable compensation for an S Corp 2%+ shareholder can potentially be tax-free for a C Corp owner-director.
+
+---
+
 ## Research Status
 
-| Area                        | Status      | Source               |
-| --------------------------- | ----------- | -------------------- |
-| C Corp fringe benefits      | ✅ Complete | Pub 15-B (2026)      |
-| S Corp 2% shareholder rules | ✅ Complete | IRS.gov S Corp guide |
-| LLC tax elections           | ✅ Complete | IRS.gov LLC page     |
-| Accountable plan rules      | ✅ Complete | Pub 463 (2024)       |
-| De minimis benefits         | ✅ Complete | Pub 15-B (2026)      |
-| Working condition benefits  | ✅ Complete | Pub 15-B (2026)      |
-| Amazon allocation scenarios | ✅ Complete | Synthesis of rules   |
-| **Board member benefits**   | ✅ Complete | Pub 525, IRC §132    |
-| **Director compensation**   | ✅ Complete | 1099-NEC rules       |
-| **Vacation rental specifics**| ✅ Complete | Pub 463, 527, 525   |
+| Area                            | Status      | Source                          |
+| ------------------------------- | ----------- | ------------------------------- |
+| C Corp fringe benefits          | ✅ Complete | Pub 15-B (2026)                 |
+| S Corp 2% shareholder rules     | ✅ Complete | IRS.gov S Corp guide            |
+| LLC tax elections               | ✅ Complete | IRS.gov LLC page                |
+| Accountable plan rules          | ✅ Complete | Pub 463 (2024)                  |
+| De minimis benefits             | ✅ Complete | Pub 15-B (2026)                 |
+| Working condition benefits      | ✅ Complete | Pub 15-B (2026)                 |
+| Amazon allocation scenarios     | ✅ Complete | Synthesis of rules              |
+| **Board member benefits**       | ✅ Complete | Pub 525, IRC §132               |
+| **Director compensation**       | ✅ Complete | 1099-NEC rules                  |
+| **Vacation rental specifics**   | ✅ Complete | Pub 463, 527, 525               |
+| **On-site lodging (IRC §119)**  | ✅ Complete | IRC §119, Pub 15-B (2026)       |
+| **On-site meals**               | ✅ Complete | IRC §119, Pub 15-B (2026)       |
+| **On-site consumables**         | ✅ Complete | De minimis rules, Pub 15-B      |
+| **On-site transportation**      | ✅ Complete | Pub 463 (2024), Pub 15-B (2026) |
+| **C Corp vs S Corp comparison** | ✅ Complete | IRC §1372, synthesis            |
 
 ---
 
