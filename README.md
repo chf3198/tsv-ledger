@@ -3,7 +3,8 @@
 </p>
 
 <p align="center">
-  <strong>Personal finance tracker with bank statement import and smart expense allocation</strong>
+  <strong>Amazon Expense Allocation for Tax Prep</strong><br>
+  <em>Allocate business vs. benefit expenses for accountants and tax professionals</em>
 </p>
 
 <p align="center">
