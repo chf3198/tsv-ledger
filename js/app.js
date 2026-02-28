@@ -131,6 +131,8 @@ function expenseApp() {
             localStorage.setItem('tsv-auth', JSON.stringify(this.auth));
             // Close guest warning if it was open (user just signed in)
             this.showGuestWarningModal = false;
+            // Sync local data to cloud (ADR-023)
+            await this.syncToCloud();
             return;
           }
         } catch (e) { console.error('Session check failed:', e); }
@@ -141,7 +143,22 @@ function expenseApp() {
       }
     },
     refresh() { computeItemPositions(this.expenses); this.locations = getUniqueLocations(this.expenses); this.applyFilters(); },
-    save() { saveExpenses(this.expenses); this.refresh(); },
+    async save() {
+      saveExpenses(this.expenses);
+      this.refresh();
+      // Sync to cloud if authenticated (ADR-023)
+      if (this.auth.authenticated) await this.syncToCloud();
+    },
+    async syncToCloud() {
+      if (!window.cloudSync?.isAuthenticated()) return;
+      try {
+        const cloud = await window.cloudSync.fullSync();
+        // Reload from localStorage (cloud data merged in)
+        this.expenses = loadExpenses();
+        this.importHistory = loadImportHistory();
+        this.refresh();
+      } catch (e) { console.error('Cloud sync failed:', e); }
+    },
 
     handleDrop(e) {
       this.dragover = false; const file = e.dataTransfer.files[0]; if (!file) return;

@@ -140,6 +140,7 @@ See [ADR index](adr/README.md) for full Architecture Decision Records.
 | [020](adr/020-cloudflare-pages-previews.md) | CF Pages previews            | 3.1.0   |
 | [021](adr/021-auth-button-visibility.md)    | Auth button visibility       | 3.1.0   |
 | [022](adr/022-product-repositioning.md)     | Product repositioning        | 3.3.0   |
+| [023](adr/023-cloud-sync-integration.md)    | Cloud sync integration       | 3.5.0   |
 
 > ADRs 001–018 archived in [DESIGN-archive.md](DESIGN-archive.md)
 
