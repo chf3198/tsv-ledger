@@ -1,15 +1,16 @@
 /**
  * Cloud Sync Client - Syncs local data with Cloudflare D1
  * ADR-019: Cloud Sync for Multi-Device Access
+ * ADR-023: Cloud Sync Integration
  */
 
 const API_URL = 'https://tsv-ledger-api.chf3198.workers.dev';
 
 // Get session token from localStorage
-const getToken = () => {
-  const auth = JSON.parse(localStorage.getItem('tsv-auth') || '{}');
-  return auth.sessionToken;
-};
+const getToken = () => localStorage.getItem('tsv-session');
+
+// Check if user is authenticated
+const isAuthenticated = () => !!getToken();
 
 // Fetch with auth header
 const authFetch = async (path, options = {}) => {
@@ -65,4 +66,4 @@ const fullSync = async () => {
   return cloud;
 };
 
-window.cloudSync = { syncToCloud, fetchFromCloud, fullSync, getToken };
+window.cloudSync = { syncToCloud, fetchFromCloud, fullSync, getToken, isAuthenticated };
