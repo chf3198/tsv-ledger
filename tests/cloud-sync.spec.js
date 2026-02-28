@@ -1,11 +1,11 @@
 // @ts-check
 const { test, expect } = require('@playwright/test');
 
-// Cloud Sync Integration Tests (ADR-023)
+// Cloud Sync Integration Tests (ADR-023, ADR-024)
 test.describe('Cloud Sync', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/');
-    await page.evaluate(() => localStorage.setItem('tsv-guest-acknowledged', 'true'));
+    await page.evaluate(() => localStorage.clear());
     await page.reload();
   });
 
@@ -24,44 +24,50 @@ test.describe('Cloud Sync', () => {
     expect(methods.isAuthenticated).toBe(true);
   });
 
-  test('guest mode does not call sync API', async ({ page }) => {
+  test('local mode does not call cloud API', async ({ page }) => {
     const apiCalls = [];
     await page.route('**/api/expenses/**', route => {
       apiCalls.push(route.request().url());
       route.fulfill({ status: 200, body: JSON.stringify({ success: true }) });
     });
     await page.evaluate(() => {
-      localStorage.setItem('tsv-expenses', JSON.stringify([{ id: 'test-1', description: 'Test', amount: 10, date: '2026-01-01', businessPercent: 100 }]));
+      localStorage.setItem('tsv-storage-mode', 'local');
+      localStorage.setItem('tsv-expenses', JSON.stringify([{ id: 'test-1', description: 'Test', amount: 10 }]));
     });
     await page.reload();
     await page.waitForTimeout(500);
     expect(apiCalls.length).toBe(0);
   });
 
-  test('authenticated user syncs on page load', async ({ page }) => {
-    let syncCalled = false, listCalled = false;
-    await page.route('**/api/expenses/sync', route => { syncCalled = true; route.fulfill({ status: 200, body: JSON.stringify({ success: true }) }); });
-    await page.route('**/api/expenses/list', route => { listCalled = true; route.fulfill({ status: 200, body: JSON.stringify({ expenses: [], importHistory: [] }) }); });
-    await page.route('**/auth/session/get', route => { route.fulfill({ status: 200, body: JSON.stringify({ user: { id: 'user-1', email: 'test@example.com' } }) }); });
+  test('cloud mode user fetches from cloud on load', async ({ page }) => {
+    let listCalled = false;
+    await page.route('**/api/expenses/list', route => {
+      listCalled = true;
+      route.fulfill({ status: 200, body: JSON.stringify({ expenses: [{ id: 'cloud-1', description: 'Cloud' }], importHistory: [] }) });
+    });
+    await page.route('**/auth/session/get', route => {
+      route.fulfill({ status: 200, body: JSON.stringify({ user: { id: 'u1', email: 'test@test.com' } }) });
+    });
     await page.evaluate(() => {
       localStorage.setItem('tsv-session', 'mock-token');
-      localStorage.setItem('tsv-expenses', JSON.stringify([{ id: 'test-1', description: 'Test', amount: 10, date: '2026-01-01', businessPercent: 100 }]));
+      localStorage.setItem('tsv-storage-mode', 'cloud');
     });
     await page.reload();
-    await page.waitForTimeout(1500);
-    expect(syncCalled).toBe(true);
+    await page.waitForTimeout(1000);
     expect(listCalled).toBe(true);
   });
 
-  test('sign-in triggers fullSync', async ({ page }) => {
-    await page.evaluate(() => localStorage.setItem('tsv-expenses', JSON.stringify([{ id: 'local-1', description: 'Local', amount: 50, date: '2026-01-01', businessPercent: 100 }])));
+  test('auth sets cloud mode automatically', async ({ page }) => {
+    await page.route('**/auth/session/get', route => {
+      route.fulfill({ status: 200, body: JSON.stringify({ user: { id: 'u1', email: 'test@test.com' } }) });
+    });
+    await page.route('**/api/expenses/list', route => {
+      route.fulfill({ status: 200, body: JSON.stringify({ expenses: [], importHistory: [] }) });
+    });
+    await page.evaluate(() => localStorage.setItem('tsv-session', 'new-token'));
     await page.reload();
-    let syncCalled = false, listCalled = false;
-    await page.route('**/api/expenses/sync', route => { syncCalled = true; route.fulfill({ status: 200, body: JSON.stringify({ success: true }) }); });
-    await page.route('**/api/expenses/list', route => { listCalled = true; route.fulfill({ status: 200, body: JSON.stringify({ expenses: [], importHistory: [] }) }); });
-    await page.evaluate(async () => { localStorage.setItem('tsv-session', 'new-token'); await window.cloudSync.fullSync(); });
     await page.waitForTimeout(500);
-    expect(syncCalled).toBe(true);
-    expect(listCalled).toBe(true);
+    const mode = await page.evaluate(() => localStorage.getItem('tsv-storage-mode'));
+    expect(mode).toBe('cloud');
   });
 });

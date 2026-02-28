@@ -1,5 +1,5 @@
 {
-  "generated": "2026-02-27T21:49:00.620Z",
+  "generated": "2026-02-27T21:55:25.112Z",
   "url": "https://tsv-ledger.pages.dev",
   "results": [
     {
@@ -14,7 +14,7 @@
         "Modal does not block critical UI when it shouldnt"
       ],
       "base64": "[95751 chars - use read_file on .base64 files]",
-      "timestamp": "2026-02-27T21:48:57.777Z"
+      "timestamp": "2026-02-27T21:55:22.250Z"
     },
     {
       "scenario": "dashboard-with-data",
@@ -27,7 +27,7 @@
         "Footer is visible at bottom"
       ],
       "base64": "[84939 chars - use read_file on .base64 files]",
-      "timestamp": "2026-02-27T21:48:59.126Z"
+      "timestamp": "2026-02-27T21:55:23.621Z"
     },
     {
       "scenario": "guest-banner",
@@ -39,7 +39,7 @@
         "Banner does not overlap with header"
       ],
       "base64": "[73892 chars - use read_file on .base64 files]",
-      "timestamp": "2026-02-27T21:49:00.514Z"
+      "timestamp": "2026-02-27T21:55:25.009Z"
     }
   ]
 }

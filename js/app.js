@@ -23,9 +23,9 @@ function expenseApp() {
     // Auth state (ADR-009) - always start unauthenticated, only true after API confirms
     auth: { user: null, authenticated: false },
     showAuthModal: false, showUserMenu: false,
-    // Guest mode warning state (ADR-020)
-    guestModeAcknowledged: localStorage.getItem('tsv-guest-acknowledged') === 'true',
-    showGuestWarningModal: false,
+    // Storage mode state (ADR-024)
+    storageMode: localStorage.getItem('tsv-storage-mode') || null, // 'local' | 'cloud' | null
+    showStorageModeModal: false,
     // Payment method purge state (ADR-017)
     showPurgeModal: false, purgeTarget: null,
 
@@ -96,30 +96,63 @@ function expenseApp() {
     loadMoreBenefits() { this.benefitsCardsPage++; },
 
     async init() {
-      this.expenses = loadExpenses(); this.importHistory = loadImportHistory(); this.refresh();
-      // Must await OAuth callback before checking guest mode (auth state affects modal)
+      // Check for OAuth callback first
       await this.handleOAuthCallback();
+      // Load data based on storage mode
+      await this.loadData();
     },
-    // Show warning when accessing import page if not authenticated (ADR-020)
-    checkGuestModeWarning() {
-      if (!this.auth.authenticated && !this.guestModeAcknowledged) {
-        this.showGuestWarningModal = true;
-        return true; // Warning was shown
+    async loadData() {
+      if (this.storageMode === 'cloud' && this.auth.authenticated) {
+        // Cloud mode: fetch from API
+        await this.fetchFromCloud();
+      } else {
+        // Local mode or not authenticated: use localStorage
+        this.expenses = loadExpenses();
+        this.importHistory = loadImportHistory();
       }
-      return false; // No warning needed
+      this.refresh();
     },
+    async fetchFromCloud() {
+      try {
+        const data = await window.cloudSync.fetchFromCloud();
+        this.expenses = data.expenses || [];
+        this.importHistory = data.importHistory || [];
+        // Cache in localStorage for offline access
+        saveExpenses(this.expenses);
+        localStorage.setItem('tsv-import-history', JSON.stringify(this.importHistory));
+      } catch (e) {
+        console.error('Cloud fetch failed, using local cache:', e);
+        this.expenses = loadExpenses();
+        this.importHistory = loadImportHistory();
+      }
+    },
+    // Storage mode selection (ADR-024)
     navigateToImport() {
-      // Warn user about local storage before they import sensitive data
-      if (this.checkGuestModeWarning()) return; // Block navigation until acknowledged
+      // If no storage mode selected, show choice modal first
+      if (!this.storageMode) {
+        this.showStorageModeModal = true;
+        return;
+      }
+      // If cloud mode but not authenticated, require sign in
+      if (this.storageMode === 'cloud' && !this.auth.authenticated) {
+        this.showAuthModal = true;
+        return;
+      }
       this.route = 'import';
       this.menuOpen = false;
     },
-    acknowledgeGuestMode() {
-      this.guestModeAcknowledged = true;
-      localStorage.setItem('tsv-guest-acknowledged', 'true');
-      this.showGuestWarningModal = false;
-      this.route = 'import'; // Proceed to import after acknowledging
-      this.menuOpen = false;
+    async selectStorageMode(mode) {
+      this.storageMode = mode;
+      localStorage.setItem('tsv-storage-mode', mode);
+      this.showStorageModeModal = false;
+      if (mode === 'cloud') {
+        // Cloud mode requires sign in
+        this.showAuthModal = true;
+      } else {
+        // Local mode: proceed to import
+        this.route = 'import';
+        this.menuOpen = false;
+      }
     },
     async handleOAuthCallback() {
       const api = window.AUTH_API || 'https://tsv-ledger-api.chf3198.workers.dev/auth';
@@ -137,10 +170,11 @@ function expenseApp() {
           if (data.user) {
             this.auth = { user: data.user, authenticated: true };
             localStorage.setItem('tsv-auth', JSON.stringify(this.auth));
-            // Close guest warning if it was open (user just signed in)
-            this.showGuestWarningModal = false;
-            // Sync local data to cloud (ADR-023)
-            await this.syncToCloud();
+            // Set cloud mode on successful auth (ADR-024)
+            this.storageMode = 'cloud';
+            localStorage.setItem('tsv-storage-mode', 'cloud');
+            this.showStorageModeModal = false;
+            this.showAuthModal = false;
             return;
           }
         } catch (e) { console.error('Session check failed:', e); }
@@ -154,8 +188,10 @@ function expenseApp() {
     async save() {
       saveExpenses(this.expenses);
       this.refresh();
-      // Sync to cloud if authenticated (ADR-023)
-      if (this.auth.authenticated) await this.syncToCloud();
+      // Cloud mode: sync to cloud (ADR-024)
+      if (this.storageMode === 'cloud' && this.auth.authenticated) {
+        await this.syncToCloud();
+      }
     },
     async syncToCloud() {
       if (!window.cloudSync?.isAuthenticated()) return;
@@ -211,8 +247,10 @@ function expenseApp() {
         // Update status
         this.importStatus = [`✓ ${newExpenses.length} new`, duplicatesCount > 0 ? `${duplicatesCount} duplicates` : '', result.skipped ? `${result.skipped} skipped` : ''].filter(Boolean).join(', ');
         this.importComplete = true;
-        // Check if we should warn about guest mode after successful import
-        this.checkGuestModeWarning();
+        // Sync import history to cloud if in cloud mode (ADR-024)
+        if (this.storageMode === 'cloud' && this.auth.authenticated) {
+          await this.syncToCloud();
+        }
       } catch (e) { this.setError('Import failed: ' + e.message); }
     },
 
@@ -419,9 +457,9 @@ function expenseApp() {
       // Clear all user data on logout (OWASP: clear storage on session end)
       localStorage.removeItem('tsv-expenses');
       localStorage.removeItem('tsv-import-history');
-      // Reset guest mode acknowledgement so warning shows again
-      localStorage.removeItem('tsv-guest-acknowledged');
-      this.guestModeAcknowledged = false;
+      // Reset storage mode so user must choose again (ADR-024)
+      localStorage.removeItem('tsv-storage-mode');
+      this.storageMode = null;
       this.expenses = [];
       this.importHistory = [];
       this.showUserMenu = false;

@@ -25,10 +25,17 @@ async function listExpenses(env, userId) {
     'SELECT * FROM import_history WHERE userId = ? ORDER BY timestamp DESC'
   ).bind(userId).all();
 
-  // Map DB field names to frontend field names
+  // Map DB fields to frontend format
   const importHistory = history.results.map(h => ({
-    ...h,
-    recordsCount: h.importedCount // Frontend expects recordsCount
+    id: h.id,
+    type: h.type,
+    filename: h.filename,
+    recordsCount: h.recordsCount,
+    duplicatesCount: h.duplicatesCount,
+    skipped: h.skipped || 0,
+    dateRange: h.dateRangeEarliest ? { earliest: h.dateRangeEarliest, latest: h.dateRangeLatest } : null,
+    success: h.success === 1,
+    timestamp: h.timestamp
   }));
 
   return json({ expenses: expenses.results, importHistory });
@@ -50,15 +57,19 @@ async function syncExpenses(request, env, userId) {
       e.businessPercent ?? 100, e.paymentMethod || null, e.reviewed ? 1 : 0, Date.now()).run();
   }
 
-  // Upsert import history
+  // Upsert import history with all fields
   for (const h of (importHistory || [])) {
-    // Frontend uses recordsCount, DB uses importedCount - handle both
-    const importedCount = h.importedCount ?? h.recordsCount ?? 0;
+    const dateRange = h.dateRange || {};
     await env.DB.prepare(`
-      INSERT INTO import_history (id, userId, filename, type, importedCount, duplicatesCount, timestamp)
-      VALUES (?, ?, ?, ?, ?, ?, ?)
-      ON CONFLICT(id) DO NOTHING
-    `).bind(h.id, userId, h.filename, h.type, importedCount, h.duplicatesCount || 0, h.timestamp).run();
+      INSERT INTO import_history (id, userId, filename, type, recordsCount, duplicatesCount, skipped, dateRangeEarliest, dateRangeLatest, success, timestamp)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      ON CONFLICT(id) DO UPDATE SET
+        recordsCount=excluded.recordsCount, duplicatesCount=excluded.duplicatesCount,
+        skipped=excluded.skipped, dateRangeEarliest=excluded.dateRangeEarliest,
+        dateRangeLatest=excluded.dateRangeLatest, success=excluded.success
+    `).bind(h.id, userId, h.filename, h.type, h.recordsCount || 0, h.duplicatesCount || 0,
+      h.skipped || 0, dateRange.earliest || null, dateRange.latest || null,
+      h.success ? 1 : 0, h.timestamp).run();
   }
 
   return json({ success: true, synced: expenses.length });

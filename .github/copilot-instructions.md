@@ -91,8 +91,9 @@ npx playwright test tests/visual.spec.js                      # Compare
 ```
 
 Screenshots saved to `scripts/visual-test/screenshots/`. Review for:
+
 - Modal positioning and visibility
-- Button styling and accessibility  
+- Button styling and accessibility
 - Layout issues (overlapping elements)
 - Mobile responsiveness
 
