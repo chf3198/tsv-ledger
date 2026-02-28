@@ -36,24 +36,22 @@ test.describe('Visual Regression Tests', () => {
     });
   });
 
-  test('guest warning modal appearance', async ({ page }) => {
+  test('storage mode modal appearance', async ({ page }) => {
     await page.evaluate(() => {
       localStorage.clear();
-      localStorage.setItem('tsv-expenses', JSON.stringify([
-        { id: 'test-1', description: 'Test Item', date: '2026-02-20', amount: 100 }
-      ]));
     });
     await page.reload();
+    await page.click('a[data-nav="import"]');
     await page.waitForLoadState('networkidle');
     await page.waitForTimeout(500); // Wait for modal to appear
-    await expect(page).toHaveScreenshot('guest-warning-modal.png', {
+    await expect(page).toHaveScreenshot('storage-mode-modal.png', {
       maxDiffPixelRatio: 0.05,
     });
   });
 
-  test('guest banner when acknowledged', async ({ page }) => {
+  test('local mode banner when data exists', async ({ page }) => {
     await page.evaluate(() => {
-      localStorage.setItem('tsv-guest-acknowledged', 'true');
+      localStorage.setItem('tsv-storage-mode', 'local');
       localStorage.setItem('tsv-expenses', JSON.stringify([
         { id: 'test-1', description: 'Test', date: '2026-02-20', amount: 100 }
       ]));
@@ -62,7 +60,7 @@ test.describe('Visual Regression Tests', () => {
     await page.waitForLoadState('networkidle');
     // Take screenshot of just the banner area
     const banner = page.locator('.guest-warning-banner');
-    await expect(banner).toHaveScreenshot('guest-banner.png', {
+    await expect(banner).toHaveScreenshot('local-mode-banner.png', {
       maxDiffPixelRatio: 0.05,
     });
   });
@@ -79,7 +77,7 @@ test.describe('Visual Regression Tests', () => {
 
   test('expenses allocation view', async ({ page }) => {
     await page.evaluate(() => {
-      localStorage.setItem('tsv-guest-acknowledged', 'true');
+      localStorage.setItem('tsv-storage-mode', 'local');
       localStorage.setItem('tsv-expenses', JSON.stringify([
         { id: 'test-1', description: 'Office Supplies', date: '2026-02-20', amount: 150, businessPercent: 75 },
         { id: 'test-2', description: 'Team Lunch', date: '2026-02-19', amount: 75, businessPercent: 25 },
@@ -96,7 +94,7 @@ test.describe('Visual Regression Tests', () => {
   test('mobile responsive view', async ({ page }) => {
     await page.setViewportSize({ width: 375, height: 667 });
     await page.evaluate(() => {
-      localStorage.setItem('tsv-guest-acknowledged', 'true');
+      localStorage.setItem('tsv-storage-mode', 'local');
       localStorage.setItem('tsv-expenses', JSON.stringify([
         { id: 'test-1', description: 'Office Supplies', date: '2026-02-20', amount: 150 },
       ]));

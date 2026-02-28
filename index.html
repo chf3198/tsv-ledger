@@ -32,11 +32,25 @@
   </aside>
   <!-- App Shell: Main -->
   <main role="main" class="app-main">
-    <!-- Guest Mode Warning Banner (shown when signed out with data) -->
-    <aside x-show="!auth.authenticated && expenses.length > 0" x-cloak class="guest-warning-banner" role="alert">
-      ⚠️ <strong>Guest Mode</strong> — Data stored locally on this device only.
-      <button @click="showAuthModal=true" class="outline contrast" style="padding:0.25rem 0.5rem;font-size:0.875rem">Sign in to protect your data</button>
+    <!-- Local Mode Warning Banner (shown when in local storage mode) -->
+    <aside x-show="storageMode === 'local' && expenses.length > 0" x-cloak class="guest-warning-banner" role="alert">
+      ⚠️ <strong>Local Mode</strong> — Data stored on this device only.
+      <button @click="showAuthModal=true" class="outline contrast" style="padding:0.25rem 0.5rem;font-size:0.875rem">Sign in to sync to cloud</button>
     </aside>
+    <!-- Storage Mode Modal (ADR-024) --><dialog :open="showStorageModeModal" data-testid="storage-mode-modal"><article>
+        <h3>📦 Choose Storage Mode</h3>
+        <p>Where should your expense data be stored?</p>
+        <div style="display:grid;gap:1rem;margin:1.5rem 0">
+          <button data-testid="storage-cloud" @click="selectStorageMode('cloud')" class="outline">
+            <strong>☁️ Cloud Storage</strong><br>
+            <small>Sign in to sync across devices. Data backed up securely.</small>
+          </button>
+          <button data-testid="storage-local" @click="selectStorageMode('local')" class="outline secondary">
+            <strong>💻 Local Storage</strong><br>
+            <small>No account needed. Data stays on this device only.</small>
+          </button>
+        </div>
+      </article></dialog>
     <!-- Auth Modal --><dialog :open="showAuthModal" data-testid="auth-modal"><article>
         <button data-testid="auth-modal-close" @click="showAuthModal=false" aria-label="Close" class="close">×</button><h3>Sign In</h3>
         <button data-testid="auth-google" @click="authWith('google')" class="outline">🔵 Google</button>
@@ -243,26 +257,6 @@
       <footer>
         <button class="secondary outline" @click="closeBulkApplyModal()">Cancel</button>
         <button @click="applyBulkAllocation()">Apply to All</button>
-      </footer>
-    </article>
-  </dialog>
-
-  <!-- Guest Mode Warning Modal (first-time import warning) -->
-  <dialog :open="showGuestWarningModal" data-testid="guest-warning-modal" class="guest-warning-dialog">
-    <article>
-      <header><h3>⚠️ You're Using Guest Mode</h3></header>
-      <div class="modal-content">
-        <p><strong>Your data is stored only on this device.</strong></p>
-        <ul style="text-align:left;margin:1rem 0">
-          <li>🚫 Lost if you clear browser data</li>
-          <li>🚫 Not accessible from other devices</li>
-          <li>🚫 No backup or sync available</li>
-        </ul>
-        <p style="color:var(--muted-color)">For secure cloud storage with encryption, sign in with Google or GitHub.</p>
-      </div>
-      <footer style="display:flex;gap:1rem;justify-content:center">
-        <button @click="showAuthModal=true;showGuestWarningModal=false" class="outline">Sign In</button>
-        <button @click="acknowledgeGuestMode()" class="secondary" data-testid="guest-acknowledge-btn">Continue as Guest</button>
       </footer>
     </article>
   </dialog>

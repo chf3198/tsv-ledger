@@ -82,8 +82,12 @@ CREATE TABLE IF NOT EXISTS import_history (
   userId TEXT NOT NULL,
   filename TEXT NOT NULL,
   type TEXT NOT NULL,
-  importedCount INTEGER DEFAULT 0,
+  recordsCount INTEGER DEFAULT 0,
   duplicatesCount INTEGER DEFAULT 0,
+  skipped INTEGER DEFAULT 0,
+  dateRangeEarliest TEXT,
+  dateRangeLatest TEXT,
+  success INTEGER DEFAULT 1,
   timestamp INTEGER DEFAULT (unixepoch()),
   FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE
 );
