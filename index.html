@@ -27,7 +27,7 @@
   <aside data-testid="main-nav" class="app-nav" :class="{'open':menuOpen}" @click.outside="menuOpen=false">
     <nav><a href="#/" data-nav="dashboard" :class="{'active':route==='dashboard'}" @click="route='dashboard';menuOpen=false">📊 Dashboard</a>
       <a href="#/expenses" data-nav="expenses" :class="{'active':route==='expenses'}" @click="route='expenses';menuOpen=false">💰 Expenses</a>
-      <a href="#/import" data-nav="import" :class="{'active':route==='import'}" @click="route='import';menuOpen=false">📁 Import</a>
+      <a href="#/import" data-nav="import" :class="{'active':route==='import'}" @click.prevent="navigateToImport()">📁 Import</a>
       <a href="#/settings" data-nav="settings" :class="{'active':route==='settings'}" @click="route='settings';menuOpen=false">⚙️ Settings</a></nav>
   </aside>
   <!-- App Shell: Main -->

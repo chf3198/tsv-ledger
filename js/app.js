@@ -99,19 +99,27 @@ function expenseApp() {
       this.expenses = loadExpenses(); this.importHistory = loadImportHistory(); this.refresh();
       // Must await OAuth callback before checking guest mode (auth state affects modal)
       await this.handleOAuthCallback();
-      // Show guest mode warning if user has data but isn't signed in (ADR-020)
-      this.checkGuestModeWarning();
     },
+    // Show warning when accessing import page if not authenticated (ADR-020)
     checkGuestModeWarning() {
-      // Show warning if: has data, not authenticated, hasn't acknowledged
-      if (this.expenses.length > 0 && !this.auth.authenticated && !this.guestModeAcknowledged) {
+      if (!this.auth.authenticated && !this.guestModeAcknowledged) {
         this.showGuestWarningModal = true;
+        return true; // Warning was shown
       }
+      return false; // No warning needed
+    },
+    navigateToImport() {
+      // Warn user about local storage before they import sensitive data
+      if (this.checkGuestModeWarning()) return; // Block navigation until acknowledged
+      this.route = 'import';
+      this.menuOpen = false;
     },
     acknowledgeGuestMode() {
       this.guestModeAcknowledged = true;
       localStorage.setItem('tsv-guest-acknowledged', 'true');
       this.showGuestWarningModal = false;
+      this.route = 'import'; // Proceed to import after acknowledging
+      this.menuOpen = false;
     },
     async handleOAuthCallback() {
       const api = window.AUTH_API || 'https://tsv-ledger-api.chf3198.workers.dev/auth';

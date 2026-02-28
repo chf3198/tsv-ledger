@@ -9,12 +9,10 @@ test.describe('Guest Mode Warnings (ADR-020)', () => {
     await page.reload();
   });
 
-  test('shows warning modal after first import in guest mode', async ({ page }) => {
-    // Import data
+  test('shows warning modal when clicking Import as guest', async ({ page }) => {
+    // Click Import nav - should trigger warning BEFORE import page
     await page.click('a[data-nav="import"]');
     await page.waitForTimeout(300);
-    await page.locator('input[type="file"]').setInputFiles('test-data/amazon-sample.csv');
-    await page.waitForSelector('[data-import-status="complete"]', { timeout: 5000 });
 
     // Guest warning modal should appear
     await expect(page.getByTestId('guest-warning-modal')).toBeVisible();
@@ -22,31 +20,34 @@ test.describe('Guest Mode Warnings (ADR-020)', () => {
     await expect(page.getByTestId('guest-warning-modal')).toContainText('only on this device');
   });
 
-  test('acknowledge button dismisses modal and persists', async ({ page }) => {
-    // Set up data and trigger modal
-    await page.evaluate(() => {
-      localStorage.setItem('tsv-expenses', JSON.stringify([
-        { id: 'test-1', description: 'Test', date: '2026-01-01', amount: 10, category: 'Business Supplies' }
-      ]));
-    });
-    await page.reload();
-
-    // Modal should be visible
+  test('acknowledge button dismisses modal and navigates to import', async ({ page }) => {
+    // Click Import to trigger modal
+    await page.click('a[data-nav="import"]');
     await expect(page.getByTestId('guest-warning-modal')).toBeVisible();
 
     // Click acknowledge
     await page.getByTestId('guest-acknowledge-btn').click();
 
-    // Modal should be hidden
+    // Modal should be hidden and we should be on import page
     await expect(page.getByTestId('guest-warning-modal')).not.toBeVisible();
+    await expect(page.locator('a[data-nav="import"]')).toHaveClass(/active/);
+  });
 
-    // Acknowledgement should persist after reload
+  test('acknowledgement persists after reload', async ({ page }) => {
+    // Acknowledge once
+    await page.click('a[data-nav="import"]');
+    await page.getByTestId('guest-acknowledge-btn').click();
+
+    // Reload and try import again - should go directly without modal
     await page.reload();
+    await page.click('a[data-nav="dashboard"]');
+    await page.click('a[data-nav="import"]');
     await expect(page.getByTestId('guest-warning-modal')).not.toBeVisible();
+    await expect(page.locator('a[data-nav="import"]')).toHaveClass(/active/);
   });
 
   test('shows guest warning banner when not signed in with data', async ({ page }) => {
-    // Acknowledge the modal first
+    // Acknowledge the modal first, then add data
     await page.evaluate(() => {
       localStorage.setItem('tsv-expenses', JSON.stringify([
         { id: 'test-1', description: 'Test', date: '2026-01-01', amount: 10, category: 'Business Supplies' }
@@ -61,13 +62,9 @@ test.describe('Guest Mode Warnings (ADR-020)', () => {
   });
 
   test('sign in button in modal opens auth modal', async ({ page }) => {
-    // Set up data to trigger guest warning
-    await page.evaluate(() => {
-      localStorage.setItem('tsv-expenses', JSON.stringify([
-        { id: 'test-1', description: 'Test', date: '2026-01-01', amount: 10, category: 'Business Supplies' }
-      ]));
-    });
-    await page.reload();
+    // Click Import to trigger guest warning
+    await page.click('a[data-nav="import"]');
+    await expect(page.getByTestId('guest-warning-modal')).toBeVisible();
 
     // Click Sign In in guest warning modal
     await page.getByTestId('guest-warning-modal').locator('button', { hasText: 'Sign In' }).click();
@@ -103,7 +100,7 @@ test.describe('Guest Mode Warnings (ADR-020)', () => {
 
     const expenses = await page.evaluate(() => localStorage.getItem('tsv-expenses'));
     expect(expenses).toBeNull();
-    
+
     const history = await page.evaluate(() => localStorage.getItem('tsv-import-history'));
     expect(history).toBeNull();
   });
