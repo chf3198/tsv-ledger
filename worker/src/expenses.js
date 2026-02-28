@@ -25,7 +25,13 @@ async function listExpenses(env, userId) {
     'SELECT * FROM import_history WHERE userId = ? ORDER BY timestamp DESC'
   ).bind(userId).all();
 
-  return json({ expenses: expenses.results, importHistory: history.results });
+  // Map DB field names to frontend field names
+  const importHistory = history.results.map(h => ({
+    ...h,
+    recordsCount: h.importedCount // Frontend expects recordsCount
+  }));
+
+  return json({ expenses: expenses.results, importHistory });
 }
 
 async function syncExpenses(request, env, userId) {
@@ -46,11 +52,13 @@ async function syncExpenses(request, env, userId) {
 
   // Upsert import history
   for (const h of (importHistory || [])) {
+    // Frontend uses recordsCount, DB uses importedCount - handle both
+    const importedCount = h.importedCount ?? h.recordsCount ?? 0;
     await env.DB.prepare(`
       INSERT INTO import_history (id, userId, filename, type, importedCount, duplicatesCount, timestamp)
       VALUES (?, ?, ?, ?, ?, ?, ?)
       ON CONFLICT(id) DO NOTHING
-    `).bind(h.id, userId, h.filename, h.type, h.importedCount || 0, h.duplicatesCount || 0, h.timestamp).run();
+    `).bind(h.id, userId, h.filename, h.type, importedCount, h.duplicatesCount || 0, h.timestamp).run();
   }
 
   return json({ success: true, synced: expenses.length });
