@@ -39,6 +39,7 @@ test.describe('Visual Regression Tests', () => {
   test('storage mode modal appearance', async ({ page }) => {
     await page.evaluate(() => {
       localStorage.clear();
+      localStorage.setItem('tsv-onboarding-complete', 'true');
     });
     await page.reload();
     await page.click('a[data-nav="import"]');

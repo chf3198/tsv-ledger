@@ -116,6 +116,8 @@ function expenseApp() {
       await this.loadData();
     },
     async loadData() {
+      // Skip data loading during onboarding - user starts fresh
+      if (!this.onboardingComplete) return;
       if (this.storageMode === 'cloud' && this.auth.authenticated) {
         // Cloud mode: fetch from API
         await this.fetchFromCloud();
@@ -167,9 +169,10 @@ function expenseApp() {
       }
     },
     // Complete onboarding and show dashboard (ADR-025)
-    completeOnboarding() {
+    async completeOnboarding() {
       localStorage.setItem('tsv-onboarding-complete', 'true');
       this.onboardingComplete = true;
+      await this.loadData(); // Load data now that onboarding is complete
       this.route = 'dashboard';
     },
     async handleOAuthCallback() {
