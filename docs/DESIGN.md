@@ -141,6 +141,8 @@ See [ADR index](adr/README.md) for full Architecture Decision Records.
 | [021](adr/021-auth-button-visibility.md)    | Auth button visibility       | 3.1.0   |
 | [022](adr/022-product-repositioning.md)     | Product repositioning        | 3.3.0   |
 | [023](adr/023-cloud-sync-integration.md)    | Cloud sync integration       | 3.5.0   |
+| [024](adr/024-storage-mode-selection.md)    | Storage mode selection       | 3.5.0   |
+| [025](adr/025-onboarding-wizard.md)         | Onboarding wizard            | 3.6.0   |
 
 > ADRs 001–018 archived in [DESIGN-archive.md](DESIGN-archive.md)
 

@@ -22,6 +22,7 @@
 **Context**: Import history and expenses not syncing properly to cloud. Hybrid storage model (localStorage + cloud sync) causing confusion and bugs.
 
 **Outcome**: Implemented clean storage mode separation:
+
 - New modal on first Import click: "Cloud Storage" or "Local Storage"
 - Cloud mode: Requires sign-in, fetches from D1 on load, syncs on save
 - Local mode: localStorage only, no cloud API calls
@@ -32,7 +33,8 @@
 
 **Insight**: When renaming features (guest mode → storage mode), update ALL references: state variables, methods, HTML elements, CSS classes, tests, and visual regression snapshots.
 
-**Adaptation**: 
+**Adaptation**:
+
 - Tests now use `tsv-storage-mode: 'local'` instead of `tsv-guest-acknowledged: 'true'`
 - Cloud sync only runs in cloud mode, not just when authenticated
 - Import history schema updated with all frontend fields (recordsCount, dateRange, etc.)

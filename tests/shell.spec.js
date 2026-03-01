@@ -10,6 +10,12 @@ const BASE_URL = 'http://localhost:8080';
 test.describe('App Shell Structure', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto(BASE_URL);
+    // Skip onboarding wizard (ADR-025)
+    await page.evaluate(() => {
+      localStorage.setItem('tsv-storage-mode', 'local');
+      localStorage.setItem('tsv-onboarding-complete', 'true');
+    });
+    await page.reload();
   });
 
   test('has semantic header with banner role', async ({ page }) => {
@@ -82,6 +88,12 @@ test.describe('App Shell Responsive', () => {
   test('desktop: nav visible without toggle', async ({ page }) => {
     await page.setViewportSize({ width: 1200, height: 800 });
     await page.goto(BASE_URL);
+    // Skip onboarding wizard (ADR-025)
+    await page.evaluate(() => {
+      localStorage.setItem('tsv-storage-mode', 'local');
+      localStorage.setItem('tsv-onboarding-complete', 'true');
+    });
+    await page.reload();
 
     const nav = page.locator('[data-testid="main-nav"]');
     await expect(nav).toBeVisible();

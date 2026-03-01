@@ -5,8 +5,9 @@ test.describe('Collapsible Reviewed Cards (ADR-018)', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('http://localhost:8080');
     await page.evaluate(() => localStorage.clear());
-    // Acknowledge guest mode to prevent modal blocking tests
-    await page.evaluate(() => localStorage.setItem('tsv-guest-acknowledged', 'true'));
+    // Skip onboarding wizard (ADR-025)
+    await page.evaluate(() => localStorage.setItem('tsv-storage-mode', 'local'));
+    await page.evaluate(() => localStorage.setItem('tsv-onboarding-complete', 'true'));
     await page.reload();
     await page.waitForLoadState('domcontentloaded');
   });

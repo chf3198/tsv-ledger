@@ -23,8 +23,8 @@
       <button data-testid="logout-button" @click="logout()">Sign Out</button>
     </div>
   </header>
-  <!-- App Shell: Navigation -->
-  <aside data-testid="main-nav" class="app-nav" :class="{'open':menuOpen}" @click.outside="menuOpen=false">
+  <!-- App Shell: Navigation (hidden during onboarding - ADR-025) -->
+  <aside x-show="showNav" x-cloak data-testid="main-nav" class="app-nav" :class="{'open':menuOpen}" @click.outside="menuOpen=false">
     <nav><a href="#/" data-nav="dashboard" :class="{'active':route==='dashboard'}" @click="route='dashboard';menuOpen=false">📊 Dashboard</a>
       <a href="#/expenses" data-nav="expenses" :class="{'active':route==='expenses'}" @click="route='expenses';menuOpen=false">💰 Expenses</a>
       <a href="#/import" data-nav="import" :class="{'active':route==='import'}" @click.prevent="navigateToImport()">📁 Import</a>
@@ -37,20 +37,47 @@
       ⚠️ <strong>Local Mode</strong> — Data stored on this device only.
       <button @click="showAuthModal=true" class="outline contrast" style="padding:0.25rem 0.5rem;font-size:0.875rem">Sign in to sync to cloud</button>
     </aside>
-    <!-- Storage Mode Modal (ADR-024) --><dialog :open="showStorageModeModal" data-testid="storage-mode-modal"><article>
-        <h3>📦 Choose Storage Mode</h3>
-        <p>Where should your expense data be stored?</p>
-        <div style="display:grid;gap:1rem;margin:1.5rem 0">
-          <button data-testid="storage-cloud" @click="selectStorageMode('cloud')" class="outline">
-            <strong>☁️ Cloud Storage</strong><br>
-            <small>Sign in to sync across devices. Data backed up securely.</small>
+    <!-- Welcome Wizard (ADR-025) - Replaces scattered empty states -->
+    <section x-show="!showNav" x-cloak data-testid="welcome-wizard" class="welcome-wizard">
+      <!-- Step Indicator -->
+      <div data-testid="step-indicator" class="step-indicator">
+        <span :data-step="1" :data-active="onboardingStep === 1" class="step-dot">●</span>
+        <span :data-step="2" :data-active="onboardingStep === 2" class="step-dot">●</span>
+        <span :data-step="3" :data-active="onboardingStep === 3" class="step-dot">●</span>
+      </div>
+      <!-- Step 1: Welcome -->
+      <div x-show="onboardingStep === 1" class="wizard-step">
+        <h2>📊 TSV Expenses</h2>
+        <p>Track Amazon orders & bank statements.<br>Allocate expenses between Business and Personal with visual sliders.</p>
+        <button data-testid="get-started-btn" @click="onboardingStep = 2" class="primary">Get Started →</button>
+      </div>
+      <!-- Step 2: Storage Choice -->
+      <div x-show="onboardingStep === 2" data-testid="storage-choice-step" class="wizard-step">
+        <h3>Where should your data live?</h3>
+        <div class="storage-options">
+          <button data-testid="choose-cloud" @click="selectStorageMode('cloud')" class="outline">
+            <strong>☁️ Cloud Sync</strong><br>
+            <small>Access from any device • Automatic backups • Requires sign-in</small>
           </button>
-          <button data-testid="storage-local" @click="selectStorageMode('local')" class="outline secondary">
-            <strong>💻 Local Storage</strong><br>
-            <small>No account needed. Data stays on this device only.</small>
+          <button data-testid="choose-local" @click="selectStorageMode('local')" class="outline secondary">
+            <strong>💻 Local Only</strong><br>
+            <small>No account needed • Data stays on this device • You manage backups</small>
           </button>
         </div>
-      </article></dialog>
+      </div>
+      <!-- Step 3: Import -->
+      <div x-show="onboardingStep === 3" data-testid="import-step" class="wizard-step">
+        <h3>Import your first file</h3>
+        <div class="drag-area" data-testid="drop-zone" @dragover.prevent="dragover=true" @dragleave="dragover=false" @drop.prevent="handleDrop($event)" :class="{dragover}">
+          <p>Drop CSV/DAT/ZIP or <input type="file" accept=".csv,.dat,.zip" @change="handleFileSelect($event)"></p>
+        </div>
+        <small>Supported: Amazon Order History, Bank of America statements</small>
+        <div x-show="importStatus" :data-import-status="importComplete?'complete':'processing'">
+          <p x-text="importStatus" :class="importError?'error':'success'"></p>
+          <button x-show="importComplete" data-testid="view-dashboard-btn" @click="completeOnboarding()" class="primary">View Dashboard →</button>
+        </div>
+      </div>
+    </section>
     <!-- Auth Modal --><dialog :open="showAuthModal" data-testid="auth-modal"><article>
         <button data-testid="auth-modal-close" @click="showAuthModal=false" aria-label="Close" class="close">×</button><h3>Sign In</h3>
         <button data-testid="auth-google" @click="authWith('google')" class="outline">🔵 Google</button>

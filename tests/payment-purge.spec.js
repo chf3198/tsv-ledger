@@ -14,8 +14,9 @@ test.describe('Payment Method Purge', () => {
     await page.goto('/');
     await page.evaluate((exp) => {
       localStorage.setItem('tsv-expenses', JSON.stringify(exp));
-      // Acknowledge guest mode to prevent modal blocking tests
-      localStorage.setItem('tsv-guest-acknowledged', 'true');
+      // Skip onboarding wizard (ADR-025)
+      localStorage.setItem('tsv-storage-mode', 'local');
+      localStorage.setItem('tsv-onboarding-complete', 'true');
     }, testExpenses);
     await page.reload();
   });

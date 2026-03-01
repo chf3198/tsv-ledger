@@ -25,9 +25,23 @@ function expenseApp() {
     showAuthModal: false, showUserMenu: false,
     // Storage mode state (ADR-024)
     storageMode: localStorage.getItem('tsv-storage-mode') || null, // 'local' | 'cloud' | null
-    showStorageModeModal: false,
+    // Onboarding wizard state (ADR-025)
+    onboardingStep: 1, // 1=welcome, 2=storage, 3=import
+    onboardingComplete: localStorage.getItem('tsv-onboarding-complete') === 'true',
     // Payment method purge state (ADR-017)
     showPurgeModal: false, purgeTarget: null,
+
+    // Navigation visibility (ADR-025): hide nav during onboarding wizard
+    get showNav() {
+      // Once onboarding is explicitly completed, always show nav
+      if (this.onboardingComplete) return true;
+      // Returning user: has data AND storage mode (not first-time)
+      // Check localStorage directly to see if they previously completed setup
+      const hasExistingSetup = localStorage.getItem('tsv-storage-mode') !== null
+        && this.expenses.length > 0
+        && this.onboardingStep === 1; // Still on step 1 means page load, not wizard
+      return hasExistingSetup;
+    },
 
     get totals() {
       return { supplies: sumByCategory(this.expenses, 'Business Supplies'), benefits: sumByCategory(this.expenses, 'Board Member Benefits'), uncategorized: sumByCategory(this.expenses, 'Uncategorized') };
@@ -126,11 +140,11 @@ function expenseApp() {
         this.importHistory = loadImportHistory();
       }
     },
-    // Storage mode selection (ADR-024)
+    // Storage mode selection (ADR-024, simplified for ADR-025)
     navigateToImport() {
-      // If no storage mode selected, show choice modal first
-      if (!this.storageMode) {
-        this.showStorageModeModal = true;
+      // If onboarding not complete, wizard handles it
+      if (!this.showNav) {
+        this.onboardingStep = 2;
         return;
       }
       // If cloud mode but not authenticated, require sign in
@@ -144,15 +158,19 @@ function expenseApp() {
     async selectStorageMode(mode) {
       this.storageMode = mode;
       localStorage.setItem('tsv-storage-mode', mode);
-      this.showStorageModeModal = false;
       if (mode === 'cloud') {
-        // Cloud mode requires sign in
+        // Cloud mode requires sign in, then return to wizard step 3
         this.showAuthModal = true;
       } else {
-        // Local mode: proceed to import
-        this.route = 'import';
-        this.menuOpen = false;
+        // Local mode: proceed to import step in wizard
+        this.onboardingStep = 3;
       }
+    },
+    // Complete onboarding and show dashboard (ADR-025)
+    completeOnboarding() {
+      localStorage.setItem('tsv-onboarding-complete', 'true');
+      this.onboardingComplete = true;
+      this.route = 'dashboard';
     },
     async handleOAuthCallback() {
       const api = window.AUTH_API || 'https://tsv-ledger-api.chf3198.workers.dev/auth';
@@ -173,8 +191,11 @@ function expenseApp() {
             // Set cloud mode on successful auth (ADR-024)
             this.storageMode = 'cloud';
             localStorage.setItem('tsv-storage-mode', 'cloud');
-            this.showStorageModeModal = false;
             this.showAuthModal = false;
+            // ADR-025: After OAuth, proceed to import step if onboarding
+            if (!this.showNav) {
+              this.onboardingStep = 3;
+            }
             return;
           }
         } catch (e) { console.error('Session check failed:', e); }
@@ -457,15 +478,14 @@ function expenseApp() {
       // Clear all user data on logout (OWASP: clear storage on session end)
       localStorage.removeItem('tsv-expenses');
       localStorage.removeItem('tsv-import-history');
-      // Reset storage mode so user must choose again (ADR-024)
+      // Reset storage mode and onboarding (ADR-024, ADR-025)
       localStorage.removeItem('tsv-storage-mode');
+      localStorage.removeItem('tsv-onboarding-complete');
       this.storageMode = null;
+      this.onboardingStep = 1;
       this.expenses = [];
       this.importHistory = [];
       this.showUserMenu = false;
-      // Reset totals
-      this.totals = { supplies: 0, benefits: 0 };
-      this.counts = { supplies: 0, benefits: 0, uncategorized: 0 };
     }
   };
 }
