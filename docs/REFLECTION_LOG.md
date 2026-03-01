@@ -17,6 +17,33 @@
 
 ## Log Entries
 
+### 2026-02-28 IMPROVEMENT: Welcome Wizard Onboarding (ADR-025)
+
+**Context**: First-time users landed on empty Dashboard with access to useless views. Storage mode selection was hidden behind Import click.
+
+**Outcome**: Implemented 3-step welcome wizard:
+1. Welcome screen explaining app purpose
+2. Storage choice (Cloud vs Local) with clear benefits
+3. Import first file with success celebration
+
+**Key Research Findings Applied**:
+- UserOnboard: "Empty states are blank canvases you can use to educate"
+- NNGroup: Progressive disclosure via wizard reduces cognitive load
+- Basecamp pattern: "Don't start with blank slate, start with guided journey"
+- Zeigarnik Effect: Progress dots encourage completion
+
+**Simplification Achieved**:
+- Replaced 4 scattered empty states with 1 unified wizard
+- Removed storage mode modal (integrated into wizard)
+- Nav hidden during onboarding (reduces cognitive overload)
+- Single entry point: all first-time users start at step 1
+
+**Insight**: Adding features CAN simplify if done by consolidation. The wizard technically adds HTML but removes the need for empty state handling in Dashboard, Expenses, Settings, and Import.
+
+**Adaptation**: Research-first approach for UX changes. Websearch for patterns before coding.
+
+---
+
 ### 2026-02-28 IMPROVEMENT: Storage Mode Selection (ADR-024)
 
 **Context**: Import history and expenses not syncing properly to cloud. Hybrid storage model (localStorage + cloud sync) causing confusion and bugs.
