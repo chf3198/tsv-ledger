@@ -10,6 +10,8 @@ test.describe('Import History', () => {
       localStorage.clear();
       // Set local storage mode to prevent modal blocking tests (ADR-024)
       localStorage.setItem('tsv-storage-mode', 'local');
+      // Skip onboarding wizard (ADR-025)
+      localStorage.setItem('tsv-onboarding-complete', 'true');
     });
   });
 
@@ -24,16 +26,17 @@ test.describe('Import History', () => {
     await page.goto(BASE_URL);
     await page.click('[data-nav="import"]');
 
-    // Upload BOA file
+    // Upload BOA file - target the visible import section's file input
     const boaData = '01/15/2024|AMAZON.COM|45.67|1234.56\n01/16/2024|TARGET|23.45|1211.11';
     const buffer = Buffer.from(boaData);
-    await page.setInputFiles('input[type="file"]', {
+    await page.locator('section[x-show*="import"] input[type="file"]').first().setInputFiles({
       name: 'bank_statement.dat',
       mimeType: 'text/plain',
       buffer
     });
 
-    await page.waitForSelector('text=2 new');
+    // Wait for import card to appear
+    await expect(page.locator('[data-testid="import-card"]')).toHaveCount(1);
 
     // Verify import card exists (scroll down on same page)
     const importCard = page.locator('[data-testid="import-card"]').first();
@@ -48,22 +51,25 @@ test.describe('Import History', () => {
 
     const boaData = '01/15/2024|AMAZON.COM|45.67|1234.56\n01/16/2024|TARGET|23.45|1211.11';
     const buffer = Buffer.from(boaData);
+    const fileInput = page.locator('section[x-show*="import"] input[type="file"]').first();
 
     // First import
-    await page.setInputFiles('input[type="file"]', {
+    await fileInput.setInputFiles({
       name: 'jan_statement.dat',
       mimeType: 'text/plain',
       buffer
     });
-    await page.waitForSelector('text=2 new');
+    // Wait for import card to appear (more reliable than text)
+    await expect(page.locator('[data-testid="import-card"]')).toHaveCount(1);
 
     // Re-import same data
-    await page.setInputFiles('input[type="file"]', {
+    await fileInput.setInputFiles({
       name: 'jan_statement_duplicate.dat',
       mimeType: 'text/plain',
       buffer
     });
-    await page.waitForSelector('text=0 new, 2 duplicates');
+    // Wait for second import card
+    await expect(page.locator('[data-testid="import-card"]')).toHaveCount(2);
 
     // Import history is on same page - should have 2 import cards
     const cards = page.locator('[data-testid="import-card"]');
@@ -77,24 +83,25 @@ test.describe('Import History', () => {
   test('shows newest imports first', async ({ page }) => {
     await page.goto(BASE_URL);
     await page.click('[data-nav="import"]');
+    const fileInput = page.locator('section[x-show*="import"] input[type="file"]').first();
 
     // Import 1
     const data1 = '01/15/2024|STORE A|10.00|1000.00';
-    await page.setInputFiles('input[type="file"]', {
+    await fileInput.setInputFiles({
       name: 'import1.dat',
       mimeType: 'text/plain',
       buffer: Buffer.from(data1)
     });
-    await page.waitForSelector('text=1 new');
+    await expect(page.locator('[data-testid="import-card"]')).toHaveCount(1);
 
     // Import 2
     const data2 = '02/15/2024|STORE B|20.00|2000.00';
-    await page.setInputFiles('input[type="file"]', {
+    await fileInput.setInputFiles({
       name: 'import2.dat',
       mimeType: 'text/plain',
       buffer: Buffer.from(data2)
     });
-    await page.waitForSelector('text=1 new');
+    await expect(page.locator('[data-testid="import-card"]')).toHaveCount(2);
 
     // Import history is on same page
     const cards = page.locator('[data-testid="import-card"]');

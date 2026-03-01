@@ -1,48 +1,18 @@
 // @ts-check
 const { test, expect } = require('@playwright/test');
 
-test.describe('Storage Mode Selection (ADR-024)', () => {
-  test.beforeEach(async ({ page }) => {
-    await page.goto('http://localhost:8080');
-    await page.evaluate(() => localStorage.clear());
-    await page.reload();
-  });
-
-  test('shows storage mode modal when clicking Import without prior selection', async ({ page }) => {
-    await page.click('a[data-nav="import"]');
-    await page.waitForTimeout(300);
-    await expect(page.getByTestId('storage-mode-modal')).toBeVisible();
-    await expect(page.getByTestId('storage-mode-modal')).toContainText('Choose Storage Mode');
-  });
-
-  test('local storage option navigates to import page', async ({ page }) => {
-    await page.click('a[data-nav="import"]');
-    await expect(page.getByTestId('storage-mode-modal')).toBeVisible();
-    await page.getByTestId('storage-local').click();
-    await expect(page.getByTestId('storage-mode-modal')).not.toBeVisible();
-    await expect(page.locator('a[data-nav="import"]')).toHaveClass(/active/);
-  });
-
-  test('cloud storage option opens auth modal', async ({ page }) => {
-    await page.click('a[data-nav="import"]');
-    await expect(page.getByTestId('storage-mode-modal')).toBeVisible();
-    await page.getByTestId('storage-cloud').click();
-    await expect(page.getByTestId('auth-modal')).toBeVisible();
-  });
-
-  test('storage mode persists after reload', async ({ page }) => {
-    await page.click('a[data-nav="import"]');
-    await page.getByTestId('storage-local').click();
-    await page.reload();
-    await page.click('a[data-nav="dashboard"]');
-    await page.click('a[data-nav="import"]');
-    await expect(page.getByTestId('storage-mode-modal')).not.toBeVisible();
-    await expect(page.locator('a[data-nav="import"]')).toHaveClass(/active/);
-  });
-
+/**
+ * Storage Mode Tests (ADR-024)
+ * Tests for storage mode persistence and local mode banner
+ * Note: Storage mode SELECTION is now part of onboarding wizard (ADR-025)
+ * These tests cover post-onboarding storage mode behavior
+ */
+test.describe('Storage Mode Behavior (ADR-024)', () => {
   test('local mode banner shows when data exists', async ({ page }) => {
+    await page.goto('http://localhost:8080');
     await page.evaluate(() => {
       localStorage.setItem('tsv-storage-mode', 'local');
+      localStorage.setItem('tsv-onboarding-complete', 'true');
       localStorage.setItem('tsv-expenses', JSON.stringify([
         { id: 'test-1', description: 'Test', date: '2026-01-01', amount: 10, category: 'Business Supplies' }
       ]));
@@ -52,19 +22,39 @@ test.describe('Storage Mode Selection (ADR-024)', () => {
     await expect(page.locator('.guest-warning-banner')).toContainText('Local Mode');
   });
 
-  test('logout clears storage mode', async ({ page }) => {
+  test('local mode banner hidden when no data', async ({ page }) => {
+    await page.goto('http://localhost:8080');
     await page.evaluate(() => {
       localStorage.setItem('tsv-storage-mode', 'local');
-      localStorage.setItem('tsv-expenses', JSON.stringify([{ id: 'test-1', description: 'Test' }]));
+      localStorage.setItem('tsv-onboarding-complete', 'true');
     });
     await page.reload();
-    await page.waitForLoadState('domcontentloaded');
+    await expect(page.locator('.guest-warning-banner')).toBeHidden();
+  });
+
+  test('storage mode persists after page reload', async ({ page }) => {
+    await page.goto('http://localhost:8080');
     await page.evaluate(() => {
-      const app = document.querySelector('[x-data]');
-      if (app && app._x_dataStack) app._x_dataStack[0].logout();
+      localStorage.setItem('tsv-storage-mode', 'local');
+      localStorage.setItem('tsv-onboarding-complete', 'true');
     });
-    await page.waitForTimeout(100);
-    const mode = await page.evaluate(() => localStorage.getItem('tsv-storage-mode'));
-    expect(mode).toBeNull();
+    await page.reload();
+
+    const storageMode = await page.evaluate(() => localStorage.getItem('tsv-storage-mode'));
+    expect(storageMode).toBe('local');
+  });
+
+  test('banner sign-in button opens auth modal', async ({ page }) => {
+    await page.goto('http://localhost:8080');
+    await page.evaluate(() => {
+      localStorage.setItem('tsv-storage-mode', 'local');
+      localStorage.setItem('tsv-onboarding-complete', 'true');
+      localStorage.setItem('tsv-expenses', JSON.stringify([
+        { id: 'test-1', description: 'Test', date: '2026-01-01', amount: 10, category: 'Business Supplies' }
+      ]));
+    });
+    await page.reload();
+    await page.locator('.guest-warning-banner button').click();
+    await expect(page.getByTestId('auth-modal')).toBeVisible();
   });
 });

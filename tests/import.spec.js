@@ -15,6 +15,8 @@ test.describe('Data Import', () => {
     await page.evaluate(() => localStorage.clear());
     // Set local storage mode to prevent modal blocking tests (ADR-024)
     await page.evaluate(() => localStorage.setItem('tsv-storage-mode', 'local'));
+    // Skip onboarding wizard for these tests (ADR-025)
+    await page.evaluate(() => localStorage.setItem('tsv-onboarding-complete', 'true'));
     // Reload to reinitialize with clean state
     await page.reload();
     await page.waitForLoadState('domcontentloaded');
@@ -25,15 +27,18 @@ test.describe('Data Import', () => {
   test('shows file input in import section', async ({ page }) => {
     await page.click('a[data-nav="import"]');
     await page.waitForTimeout(300);
-    const fileInput = page.locator('input[type="file"]');
+    // Use visible:true to only find the visible file input (not the hidden wizard one)
+    const fileInput = page.locator('section[x-show*="import"] input[type="file"]').first();
     await expect(fileInput).toBeVisible();
     await expect(fileInput).toHaveAttribute('accept', '.csv,.dat,.zip');
   });
 
   test('imports Amazon CSV and displays expenses', async ({ page }) => {
     await page.click('a[href="#/import"]');
-    await page.locator('input[type="file"]').setInputFiles('test-data/amazon-sample.csv');
-    await page.waitForSelector('[data-import-status="complete"]', { timeout: 5000 });
+    // Target the import section's file input specifically
+    await page.locator('section[x-show*="import"] input[type="file"]').first().setInputFiles('test-data/amazon-sample.csv');
+    // Wait for success message in the import section
+    await page.locator('section[x-show*="import"] [data-import-status="complete"]').waitFor({ timeout: 5000 });
     await page.click('a[href="#/"]');
 
     const expenseCards = page.locator('[data-expense-card]');
@@ -63,8 +68,8 @@ test.describe('Data Import', () => {
 
   test('defaults all imports to uncategorized', async ({ page }) => {
     await page.click('a[href="#/import"]');
-    await page.locator('input[type="file"]').setInputFiles('test-data/amazon-sample.csv');
-    await page.waitForSelector('[data-import-status="complete"]', { timeout: 5000 });
+    await page.locator('section[x-show*="import"] input[type="file"]').first().setInputFiles('test-data/amazon-sample.csv');
+    await page.locator('section[x-show*="import"] [data-import-status="complete"]').waitFor({ timeout: 5000 });
 
     // Check dashboard shows uncategorized warning
     await page.click('a[href="#/"]');
@@ -83,9 +88,9 @@ test.describe('Data Import', () => {
 
   test('shows import progress feedback', async ({ page }) => {
     await page.click('a[href="#/import"]');
-    await page.locator('input[type="file"]').setInputFiles('test-data/amazon-sample.csv');
+    await page.locator('section[x-show*="import"] input[type="file"]').first().setInputFiles('test-data/amazon-sample.csv');
 
-    const progress = page.locator('[data-import-status]');
+    const progress = page.locator('section[x-show*="import"] [data-import-status]');
     await expect(progress).toBeVisible();
     await expect(progress).toHaveAttribute('data-import-status', 'complete', { timeout: 5000 });
   });

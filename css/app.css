@@ -846,3 +846,70 @@ dialog::backdrop {
   background: rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(4px);
 }
+
+/* Welcome Wizard (ADR-025) */
+.welcome-wizard {
+  max-width: 500px;
+  margin: 2rem auto;
+  text-align: center;
+  padding: 2rem;
+}
+
+.welcome-wizard h2 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.welcome-wizard p {
+  color: var(--pico-muted-color);
+  margin-bottom: 2rem;
+  line-height: 1.6;
+}
+
+.wizard-step {
+  animation: fadeIn 0.3s ease;
+}
+
+.step-indicator {
+  display: flex;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-bottom: 2rem;
+}
+
+.step-dot {
+  font-size: 0.75rem;
+  color: var(--pico-muted-color);
+  transition: color 0.2s ease;
+}
+
+.step-dot[data-active="true"] {
+  color: var(--pico-primary);
+}
+
+.storage-options {
+  display: grid;
+  gap: 1rem;
+  margin: 1.5rem 0;
+}
+
+.storage-options button {
+  text-align: left;
+  padding: 1.25rem;
+}
+
+.storage-options button small {
+  display: block;
+  margin-top: 0.5rem;
+  opacity: 0.8;
+}
+
+.welcome-wizard .drag-area {
+  margin: 1.5rem 0;
+}
+
+.welcome-wizard small {
+  color: var(--pico-muted-color);
+  display: block;
+  margin-bottom: 1rem;
+}
