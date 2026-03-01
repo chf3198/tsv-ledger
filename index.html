@@ -83,7 +83,7 @@
         <button data-testid="auth-google" @click="authWith('google')" class="outline">🔵 Google</button>
         <button data-testid="auth-github" @click="authWith('github')" class="outline">⚫ GitHub</button>
         <hr><button data-testid="auth-passkey" @click="authWith('passkey')" class="secondary">🔐 Passkey</button></article></dialog>
-    <!-- Dashboard --><section x-show="route==='dashboard'">
+    <!-- Dashboard --><section x-show="showNav && route==='dashboard'">
       <div class="split-view">
         <article class="summary-card category-supplies"><h3>🏢 Business Supplies</h3><p class="amount" x-text="formatCurrency(totals.supplies)"></p><small x-text="`${counts.supplies} items`"></small></article>
         <article class="summary-card category-benefits"><h3>👥 Board Member Benefits</h3><p class="amount" x-text="formatCurrency(totals.benefits)"></p><small x-text="`${counts.benefits} items`"></small></article>
@@ -102,7 +102,7 @@
       </div>
       <p x-show="!expenses.length">No expenses yet. Import data to get started.</p>
     </section>
-    <!-- Expenses --><section x-show="route==='expenses'">
+    <!-- Expenses --><section x-show="showNav && route==='expenses'">
       <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
         <h2 style="margin: 0;">💰 Expenses Allocation</h2>
         <input type="search" placeholder="Search expenses..." x-model="allocationSearchQuery" style="flex: 0 1 300px; margin: 0;">
@@ -196,7 +196,7 @@
         </div>
       </div>
       <p x-show="!expenses.length" class="empty-state">No expenses yet. Import data to get started.</p></section>
-    <!-- Import --><section x-show="route==='import'"><h2>📁 Import</h2>
+    <!-- Import --><section x-show="showNav && route==='import'"><h2>📁 Import</h2>
       <div class="drag-area" @dragover.prevent="dragover=true" @dragleave="dragover=false" @drop.prevent="handleDrop($event)" :class="{dragover}"><p>Drop CSV/DAT/ZIP or <input type="file" accept=".csv,.dat,.zip" @change="handleFileSelect($event)"></p></div>
       <div x-show="importStatus" :data-import-status="importComplete?'complete':'processing'">
         <p x-text="importStatus" :class="importError?'error':'success'"></p>
@@ -215,7 +215,7 @@
               <span x-show="imp.skipped>0" x-text="`${imp.skipped} skipped`"></span></div>
             <small x-show="imp.dateRange" x-text="imp.dateRange ? formatDateRange(imp.dateRange.earliest,imp.dateRange.latest) : ''"></small></article>
         </template></div></section>
-    <!-- Settings --><section x-show="route==='settings'"><h2>⚙️ Settings</h2>
+    <!-- Settings --><section x-show="showNav && route==='settings'"><h2>⚙️ Settings</h2>
       <button class="outline" @click="exportCSV()">📤 Export CSV</button><button class="outline secondary" @click="clearAll()">🗑️ Clear All</button>
       <section data-testid="payment-methods-section" style="margin-top:2rem" x-show="paymentMethods.length > 0">
         <h3>💳 Payment Methods</h3>

@@ -51,6 +51,7 @@ test.describe('Cloud Sync', () => {
     await page.evaluate(() => {
       localStorage.setItem('tsv-session', 'mock-token');
       localStorage.setItem('tsv-storage-mode', 'cloud');
+      localStorage.setItem('tsv-onboarding-complete', 'true');
     });
     await page.reload();
     await page.waitForTimeout(1000);
