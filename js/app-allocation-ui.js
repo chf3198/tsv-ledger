@@ -27,8 +27,11 @@ const appAllocationUI = {
       const businessPercent = isSliderBenefits ? (100 - sliderPercent) : sliderPercent;
 
       if (businessPercent !== (expense.businessPercent ?? 100)) {
-        expense.businessPercent = businessPercent;
-        this.updateExpense();
+        // Immutable update via map (Alpine reactivity)
+        this.expenses = this.expenses.map(e =>
+          e.id === expense.id ? { ...e, businessPercent } : e
+        );
+        this.save();
       }
     });
 

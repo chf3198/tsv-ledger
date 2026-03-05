@@ -44,20 +44,8 @@ const appAllocation = {
         : expense
     );
 
-    // Update sliders after state change (DOM side effects)
-    setTimeout(() => {
-      this.bulkApplyMatches.forEach(expense => {
-        const sliders = document.querySelectorAll(`[data-expense-id="${expense.id}"]`);
-        sliders.forEach(slider => {
-          if (slider.noUiSlider) {
-            const isSliderBenefits = slider.closest('.benefits') !== null;
-            const sliderValue = isSliderBenefits ? (100 - targetPercent) : targetPercent;
-            slider.noUiSlider.set(sliderValue, false);
-          }
-        });
-      });
-    }, 0);
-
+    // NOTE: Don't manually update slider DOM - Alpine will re-render correctly
+    // when reviewed property changes, which triggers x-show="!e.reviewed" update
     this.save();
     this.closeBulkApplyModal();
   },
