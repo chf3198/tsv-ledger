@@ -101,6 +101,11 @@ function expenseApp() {
     applyBulkAllocation() { return appAllocation.applyBulkAllocation.call(this); },
     closeBulkApplyModal() { return appAllocation.closeBulkApplyModal.call(this); },
 
+    // Allocation UI (app-allocation-ui.js)
+    initSlider(el, e) { return appAllocationUI.initSlider.call(this, el, e); },
+    setAllocation(e, percent) { return appAllocationUI.setAllocation.call(this, e, percent); },
+    toggleReviewed(e) { return appAllocationUI.toggleReviewed.call(this, e); },
+
     // Payment (app-payment.js)
     openPurgeModal(method) { return appPayment.openPurgeModal.call(this, method); },
     closePurgeModal() { return appPayment.closePurgeModal.call(this); },

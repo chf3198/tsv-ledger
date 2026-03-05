@@ -35,11 +35,12 @@ const appAllocation = {
     if (!this.bulkApplySource || this.bulkApplyMatches.length === 0) return;
     const targetPercent = this.bulkApplySource.businessPercent;
     const matchIds = new Set(this.bulkApplyMatches.map(e => e.id));
+    const shouldCollapse = (targetPercent === 0 || targetPercent === 100);
 
-    // Immutable update: create new objects for matched expenses (Alpine reactivity)
+    // Immutable update: create new objects with reviewed state for 0%/100% (Alpine reactivity + ADR-018)
     this.expenses = this.expenses.map(expense =>
       matchIds.has(expense.id)
-        ? { ...expense, businessPercent: targetPercent }
+        ? { ...expense, businessPercent: targetPercent, reviewed: shouldCollapse }
         : expense
     );
 

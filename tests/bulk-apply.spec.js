@@ -52,6 +52,31 @@ test.describe('Bulk Allocation: Apply to All', () => {
     }
   });
 
+  test('apply to all at 100% sets reviewed=true to collapse sliders', async ({ page }) => {
+    const firstSlider = page.locator('[data-expense-id="ghee-1"]').first();
+    const sliderHandle = firstSlider.locator('.noUi-handle');
+    const sliderBox = await firstSlider.boundingBox();
+
+    await sliderHandle.dragTo(firstSlider, {
+      targetPosition: { x: sliderBox.width * 0.99, y: sliderBox.height / 2 }
+    });
+    await page.waitForTimeout(1000);
+    await page.click('button:has-text("Apply to All")');
+    await page.waitForTimeout(500);
+
+    const expenses = await page.evaluate(() => JSON.parse(localStorage.getItem('tsv-expenses')));
+    expenses.forEach(e => {
+      expect(e.businessPercent).toBe(100);
+      expect(e.reviewed).toBe(true);
+    });
+
+    const allSliders = page.locator('[data-expense-id^="ghee-"]');
+    const count = await allSliders.count();
+    for (let i = 0; i < count; i++) {
+      await expect(allSliders.nth(i)).toBeHidden();
+    }
+  });
+
   test('visual: sliders align after bulk apply', async ({ page }) => {
     await page.evaluate(() => {
       const app = document.querySelector('[x-data]')?._x_dataStack?.[0];
@@ -71,4 +96,5 @@ test.describe('Bulk Allocation: Apply to All', () => {
 3. Tooltips show matching values?
 Report: "✅ PASS" or "❌ ISSUE: description"`);
     console.log('Bulk Apply Visual:', analysis);
+  });
 });
