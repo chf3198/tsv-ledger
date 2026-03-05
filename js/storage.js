@@ -1,6 +1,29 @@
 /**
  * Storage - Pure functions + isolated side effects
  * @module storage
+ *
+ * localStorage schema (v3.5.0):
+ * {
+ *   'tsv-expenses': Expense[],           // Main data array
+ *   'tsv-storage-mode': 'local'|'cloud', // ADR-024: User choice (local-first vs cloud sync)
+ *   'tsv-auth': { token, user, exp },    // ADR-019: JWT session (token = Bearer JWT, exp = Unix timestamp)
+ *   'tsv-onboarding-complete': 'true',   // ADR-025: Setup wizard completion flag
+ *   'tsv-guest-acknowledged': 'true',    // Guest mode warning modal state
+ *   'tsv-import-history': ImportRecord[] // ADR-013: Duplicate detection (file hash + import timestamp)
+ * }
+ *
+ * Expense schema:
+ * {
+ *   id: string,              // "amazon-{orderID}-{idx}" or "boa-{date}-{idx}"
+ *   date: string,            // ISO 8601 (YYYY-MM-DD)
+ *   description: string,     // Item description from CSV
+ *   amount: number,          // Dollars (not cents)
+ *   businessPercent: number, // 0-100, default 100 (ADR-014: replaces old 'category' field)
+ *   paymentMethod: string,   // Credit card last 4 or bank account name
+ *   reviewed: boolean        // Manual review flag (future use)
+ * }
+ *
+ * Migration logic (line 30-34): Converts legacy 'category' field to 'businessPercent'
  */
 
 const STORAGE_KEY = 'tsv-expenses';
