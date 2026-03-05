@@ -6,17 +6,18 @@
   "scripts": {
     "start": "npx serve -l 8080",
     "dev": "npx serve -l 8080",
-    "test": "npx playwright test",
-    "test:headed": "npx playwright test --headed",
-    "test:ui": "npx playwright test --ui",
+    "test": "node ./node_modules/.bin/playwright test",
+    "test:headed": "node ./node_modules/.bin/playwright test --headed",
+    "test:ui": "node ./node_modules/.bin/playwright test --ui",
     "test:visual": "node scripts/visual-test/capture.js all",
     "test:visual:analyze": "node scripts/visual-test/analyze.js",
-    "test:visual:update": "npx playwright test --update-snapshots",
+    "test:visual:update": "node ./node_modules/.bin/playwright test --update-snapshots",
     "lint": "node scripts/lint.js"
   },
   "devDependencies": {
     "@anthropic-ai/sdk": "^0.24.3",
     "@playwright/test": "^1.58.2",
+    "serve": "^14.2.6",
     "wrangler": "^4.63.0"
   },
   "dependencies": {

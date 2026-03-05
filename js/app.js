@@ -1,6 +1,6 @@
 /**
  * TSV Expenses - Alpine.js App with Functional Core
- * Utilities loaded from utils.js
+ * Computed getters delegated to app-getters.js (ADR-026)
  */
 
 function expenseApp() {
@@ -31,80 +31,20 @@ function expenseApp() {
     // Payment method purge state (ADR-017)
     showPurgeModal: false, purgeTarget: null,
 
-    // Navigation visibility (ADR-025): hide nav during onboarding wizard
-    get showNav() {
-      // Once onboarding is explicitly completed, always show nav
-      if (this.onboardingComplete) return true;
-      // Returning user: has data AND storage mode (not first-time)
-      // Check localStorage directly to see if they previously completed setup
-      const hasExistingSetup = localStorage.getItem('tsv-storage-mode') !== null
-        && this.expenses.length > 0
-        && this.onboardingStep === 1; // Still on step 1 means page load, not wizard
-      return hasExistingSetup;
-    },
-
-    get totals() {
-      return { supplies: sumByCategory(this.expenses, 'Business Supplies'), benefits: sumByCategory(this.expenses, 'Board Member Benefits'), uncategorized: sumByCategory(this.expenses, 'Uncategorized') };
-    },
-    get paymentMethods() { return getPaymentMethodStats(this.expenses); },
-    get counts() {
-      return { supplies: countByCategory(this.expenses, 'Business Supplies'), benefits: countByCategory(this.expenses, 'Board Member Benefits'), uncategorized: countByCategory(this.expenses, 'Uncategorized') };
-    },
-    get filteredTotal() { return this.filteredExpenses.reduce((s, e) => s + e.amount, 0); },
-    get totalSupplies() { return this.expenses.reduce((sum, e) => sum + (e.amount * (e.businessPercent ?? 100) / 100), 0); },
-    get totalBenefits() { return this.expenses.reduce((sum, e) => sum + (e.amount * (100 - (e.businessPercent ?? 100)) / 100), 0); },
-
-    // Dual-column card filtering - maintain object references for Alpine reactivity
-    // Business Supplies column: shows expenses with businessPercent > 0
-    // Filters by unified search query, sorts by date descending
-    get businessCards() {
-      return this.expenses
-        .map(e => {
-          // Add computed properties directly to expense object for template access
-          e.benefitsPercent = 100 - (e.businessPercent ?? 100);
-          return e;
-        })
-        .filter(e => (e.businessPercent ?? 100) > 0)  // Has business allocation
-        .filter(e => {
-          if (!this.allocationSearchQuery || this.allocationSearchQuery.trim() === '') return true;
-          const query = this.allocationSearchQuery.toLowerCase();
-          return e.description.toLowerCase().includes(query) ||
-                 e.id.toLowerCase().includes(query);
-        })
-        .sort((a, b) => new Date(b.date) - new Date(a.date));
-    },
-    // Board Member Benefits column: shows expenses with benefitsPercent > 0
-    // Filters by unified search query, sorts by date descending
-    get benefitsCards() {
-      return this.expenses
-        .map(e => {
-          // Add computed properties directly to expense object for template access
-          e.benefitsPercent = 100 - (e.businessPercent ?? 100);
-          return e;
-        })
-        .filter(e => e.benefitsPercent > 0)  // Has benefits allocation
-        .filter(e => {
-          if (!this.allocationSearchQuery || this.allocationSearchQuery.trim() === '') return true;
-          const query = this.allocationSearchQuery.toLowerCase();
-          return e.description.toLowerCase().includes(query) ||
-                 e.id.toLowerCase().includes(query);
-        })
-        .sort((a, b) => new Date(b.date) - new Date(a.date));
-    },
-
-    // Paginated views for lazy loading
-    get businessCardsVisible() {
-      return this.businessCards.slice(0, this.businessCardsPage * this.cardPageSize);
-    },
-    get benefitsCardsVisible() {
-      return this.benefitsCards.slice(0, this.benefitsCardsPage * this.cardPageSize);
-    },
-    get hasMoreBusinessCards() {
-      return this.businessCards.length > this.businessCardsVisible.length;
-    },
-    get hasMoreBenefitsCards() {
-      return this.benefitsCards.length > this.benefitsCardsVisible.length;
-    },
+    // Computed getters delegated to app-getters.js (ADR-026)
+    get showNav() { return window.appGetters.showNav; },
+    get totals() { return window.appGetters.totals; },
+    get paymentMethods() { return window.appGetters.paymentMethods; },
+    get counts() { return window.appGetters.counts; },
+    get filteredTotal() { return window.appGetters.filteredTotal; },
+    get totalSupplies() { return window.appGetters.totalSupplies; },
+    get totalBenefits() { return window.appGetters.totalBenefits; },
+    get businessCards() { return window.appGetters.businessCards; },
+    get benefitsCards() { return window.appGetters.benefitsCards; },
+    get businessCardsVisible() { return window.appGetters.businessCardsVisible; },
+    get benefitsCardsVisible() { return window.appGetters.benefitsCardsVisible; },
+    get hasMoreBusinessCards() { return window.appGetters.hasMoreBusinessCards; },
+    get hasMoreBenefitsCards() { return window.appGetters.hasMoreBenefitsCards; },
 
     loadMoreBusiness() { this.businessCardsPage++; },
     loadMoreBenefits() { this.benefitsCardsPage++; },

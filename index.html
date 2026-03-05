@@ -1,22 +1,31 @@
 <!doctype html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>TSV Expenses</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nouislider@15.8.1/dist/nouislider.min.css">
-  <link rel="stylesheet" href="css/shell.css"><link rel="stylesheet" href="css/app.css"><link rel="stylesheet" href="css/payment-methods.css">
+  <link rel="stylesheet" href="css/shell.css">
+  <link rel="stylesheet" href="css/app.css">
+  <link rel="stylesheet" href="css/payment-methods.css">
   <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/nouislider@15.8.1/dist/nouislider.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <!-- App modules (loaded before Alpine initialization) -->
+  <script src="js/app-getters.js"></script>
 </head>
+
 <body x-data="expenseApp()">
   <!-- App Shell: Header -->
   <header role="banner" class="app-header">
     <button data-testid="menu-toggle" class="menu-toggle" @click="menuOpen=!menuOpen" aria-label="Menu">☰</button>
     <h1 data-testid="logo">📊 TSV</h1>
-    <span data-testid="auth-button" class="auth-btn" @click="auth.authenticated ? showUserMenu=!showUserMenu : showAuthModal=true">
-      <template x-if="auth.authenticated && auth.user?.image"><img :src="auth.user.image" alt="" class="avatar"></template>
+    <span data-testid="auth-button" class="auth-btn"
+      @click="auth.authenticated ? showUserMenu=!showUserMenu : showAuthModal=true">
+      <template x-if="auth.authenticated && auth.user?.image"><img :src="auth.user.image" alt=""
+          class="avatar"></template>
       <span x-text="auth.authenticated ? (auth.user?.name || 'Profile') : 'Sign In'"></span>
     </span>
     <div x-show="showUserMenu" x-cloak class="user-dropdown" @click.outside="showUserMenu=false">
@@ -24,18 +33,25 @@
     </div>
   </header>
   <!-- App Shell: Navigation (hidden during onboarding - ADR-025) -->
-  <aside x-show="showNav" x-cloak data-testid="main-nav" class="app-nav" :class="{'open':menuOpen}" @click.outside="menuOpen=false">
-    <nav><a href="#/" data-nav="dashboard" :class="{'active':route==='dashboard'}" @click="route='dashboard';menuOpen=false">📊 Dashboard</a>
-      <a href="#/expenses" data-nav="expenses" :class="{'active':route==='expenses'}" @click="route='expenses';menuOpen=false">💰 Expenses</a>
-      <a href="#/import" data-nav="import" :class="{'active':route==='import'}" @click.prevent="navigateToImport()">📁 Import</a>
-      <a href="#/settings" data-nav="settings" :class="{'active':route==='settings'}" @click="route='settings';menuOpen=false">⚙️ Settings</a></nav>
+  <aside x-show="showNav" x-cloak data-testid="main-nav" class="app-nav" :class="{'open':menuOpen}"
+    @click.outside="menuOpen=false">
+    <nav><a href="#/" data-nav="dashboard" :class="{'active':route==='dashboard'}"
+        @click="route='dashboard';menuOpen=false">📊 Dashboard</a>
+      <a href="#/expenses" data-nav="expenses" :class="{'active':route==='expenses'}"
+        @click="route='expenses';menuOpen=false">💰 Expenses</a>
+      <a href="#/import" data-nav="import" :class="{'active':route==='import'}" @click.prevent="navigateToImport()">📁
+        Import</a>
+      <a href="#/settings" data-nav="settings" :class="{'active':route==='settings'}"
+        @click="route='settings';menuOpen=false">⚙️ Settings</a>
+    </nav>
   </aside>
   <!-- App Shell: Main -->
   <main role="main" class="app-main">
     <!-- Local Mode Warning Banner (shown when in local storage mode) -->
     <aside x-show="storageMode === 'local' && expenses.length > 0" x-cloak class="guest-warning-banner" role="alert">
       ⚠️ <strong>Local Mode</strong> — Data stored on this device only.
-      <button @click="showAuthModal=true" class="outline contrast" style="padding:0.25rem 0.5rem;font-size:0.875rem">Sign in to sync to cloud</button>
+      <button @click="showAuthModal=true" class="outline contrast"
+        style="padding:0.25rem 0.5rem;font-size:0.875rem">Sign in to sync to cloud</button>
     </aside>
     <!-- Welcome Wizard (ADR-025) - Replaces scattered empty states -->
     <section x-show="!showNav" x-cloak data-testid="welcome-wizard" class="welcome-wizard">
@@ -48,7 +64,8 @@
       <!-- Step 1: Welcome -->
       <div x-show="onboardingStep === 1" class="wizard-step">
         <h2>📊 TSV Expenses</h2>
-        <p>Track Amazon orders & bank statements.<br>Allocate expenses between Business and Personal with visual sliders.</p>
+        <p>Track Amazon orders & bank statements.<br>Allocate expenses between Business and Personal with visual
+          sliders.</p>
         <button data-testid="get-started-btn" @click="onboardingStep = 2" class="primary">Get Started →</button>
       </div>
       <!-- Step 2: Storage Choice -->
@@ -68,28 +85,48 @@
       <!-- Step 3: Import -->
       <div x-show="onboardingStep === 3" data-testid="import-step" class="wizard-step">
         <h3>Import your first file</h3>
-        <div class="drag-area" data-testid="drop-zone" @dragover.prevent="dragover=true" @dragleave="dragover=false" @drop.prevent="handleDrop($event)" :class="{dragover}">
+        <div class="drag-area" data-testid="drop-zone" @dragover.prevent="dragover=true" @dragleave="dragover=false"
+          @drop.prevent="handleDrop($event)" :class="{dragover}">
           <p>Drop CSV/DAT/ZIP or <input type="file" accept=".csv,.dat,.zip" @change="handleFileSelect($event)"></p>
         </div>
         <small>Supported: Amazon Order History, Bank of America statements</small>
         <div x-show="importStatus" :data-import-status="importComplete?'complete':'processing'">
           <p x-text="importStatus" :class="importError?'error':'success'"></p>
-          <button x-show="importComplete" data-testid="view-dashboard-btn" @click="completeOnboarding()" class="primary">View Dashboard →</button>
+          <button x-show="importComplete" data-testid="view-dashboard-btn" @click="completeOnboarding()"
+            class="primary">View Dashboard →</button>
         </div>
       </div>
     </section>
-    <!-- Auth Modal --><dialog :open="showAuthModal" data-testid="auth-modal"><article>
-        <button data-testid="auth-modal-close" @click="showAuthModal=false" aria-label="Close" class="close">×</button><h3>Sign In</h3>
+    <!-- Auth Modal -->
+    <dialog :open="showAuthModal" data-testid="auth-modal">
+      <article>
+        <button data-testid="auth-modal-close" @click="showAuthModal=false" aria-label="Close" class="close">×</button>
+        <h3>Sign In</h3>
         <button data-testid="auth-google" @click="authWith('google')" class="outline">🔵 Google</button>
         <button data-testid="auth-github" @click="authWith('github')" class="outline">⚫ GitHub</button>
-        <hr><button data-testid="auth-passkey" @click="authWith('passkey')" class="secondary">🔐 Passkey</button></article></dialog>
-    <!-- Dashboard --><section x-show="showNav && route==='dashboard'">
+        <hr><button data-testid="auth-passkey" @click="authWith('passkey')" class="secondary">🔐 Passkey</button>
+      </article>
+    </dialog>
+    <!-- Dashboard -->
+    <section x-show="showNav && route==='dashboard'">
       <div class="split-view">
-        <article class="summary-card category-supplies"><h3>🏢 Business Supplies</h3><p class="amount" x-text="formatCurrency(totals.supplies)"></p><small x-text="`${counts.supplies} items`"></small></article>
-        <article class="summary-card category-benefits"><h3>👥 Board Member Benefits</h3><p class="amount" x-text="formatCurrency(totals.benefits)"></p><small x-text="`${counts.benefits} items`"></small></article>
+        <article class="summary-card category-supplies">
+          <h3>🏢 Business Supplies</h3>
+          <p class="amount" x-text="formatCurrency(totals.supplies)"></p><small
+            x-text="`${counts.supplies} items`"></small>
+        </article>
+        <article class="summary-card category-benefits">
+          <h3>👥 Board Member Benefits</h3>
+          <p class="amount" x-text="formatCurrency(totals.benefits)"></p><small
+            x-text="`${counts.benefits} items`"></small>
+        </article>
       </div>
       <div x-show="counts.uncategorized > 0" style="margin-top:1rem">
-        <article class="summary-card category-uncategorized" style="background:#fff3cd;border-left:4px solid #ffc107"><h3>⚠️ Needs Review</h3><p class="amount" x-text="counts.uncategorized"></p><small>uncategorized items</small><br><a href="#/expenses" @click="route='expenses'">Review & Categorize →</a></article>
+        <article class="summary-card category-uncategorized" style="background:#fff3cd;border-left:4px solid #ffc107">
+          <h3>⚠️ Needs Review</h3>
+          <p class="amount" x-text="counts.uncategorized"></p><small>uncategorized items</small><br><a href="#/expenses"
+            @click="route='expenses'">Review & Categorize →</a>
+        </article>
       </div>
       <div class="expense-grid">
         <template x-for="e in expenses.slice(0,20)" :key="e.id">
@@ -102,10 +139,12 @@
       </div>
       <p x-show="!expenses.length">No expenses yet. Import data to get started.</p>
     </section>
-    <!-- Expenses --><section x-show="showNav && route==='expenses'">
+    <!-- Expenses -->
+    <section x-show="showNav && route==='expenses'">
       <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
         <h2 style="margin: 0;">💰 Expenses Allocation</h2>
-        <input type="search" placeholder="Search expenses..." x-model="allocationSearchQuery" style="flex: 0 1 300px; margin: 0;">
+        <input type="search" placeholder="Search expenses..." x-model="allocationSearchQuery"
+          style="flex: 0 1 300px; margin: 0;">
       </div>
       <div class="allocation-board">
         <!-- Business Supplies Column -->
@@ -117,34 +156,50 @@
           </div>
           <div class="cards-container">
             <template x-for="e in businessCardsVisible" :key="'bus-' + e.id">
-              <article class="allocation-card card-enter" :class="{'split-item': (100 - (e.businessPercent ?? 100)) > 0 && (100 - (e.businessPercent ?? 100)) < 100, 'reviewed': e.reviewed}" data-testid="allocation-card">
+              <article class="allocation-card card-enter"
+                :class="{'split-item': (100 - (e.businessPercent ?? 100)) > 0 && (100 - (e.businessPercent ?? 100)) < 100, 'reviewed': e.reviewed}"
+                data-testid="allocation-card">
                 <header>
                   <strong x-text="e.description" :title="e.description"></strong>
                   <small x-text="formatDate(e.date)"></small>
                 </header>
                 <div class="card-meta-row">
-                  <span class="card-id"><span x-text="'#' + String(e.id).slice(-8)"></span><span x-show="e.itemTotal > 1" class="item-position" x-text="' (' + e.itemIndex + '/' + e.itemTotal + ')'"></span></span>
-                  <span class="card-payment-method" x-show="e.paymentMethod" x-text="getPaymentMethodLabel(e.paymentMethod)"></span>
+                  <span class="card-id"><span x-text="'#' + String(e.id).slice(-8)"></span><span
+                      x-show="e.itemTotal > 1" class="item-position"
+                      x-text="' (' + e.itemIndex + '/' + e.itemTotal + ')'"></span></span>
+                  <span class="card-payment-method" x-show="e.paymentMethod"
+                    x-text="getPaymentMethodLabel(e.paymentMethod)"></span>
                 </div>
                 <div class="card-amount-row">
-                  <span class="card-amount" x-text="formatCurrency(e.amount * (e.businessPercent ?? 100) / 100)" data-testid="supplies-amount"></span>
+                  <span class="card-amount" x-text="formatCurrency(e.amount * (e.businessPercent ?? 100) / 100)"
+                    data-testid="supplies-amount"></span>
                   <span class="allocation-percentage">
                     <span class="percentage-badge" x-text="(e.businessPercent ?? 100) + '%'"></span>
                     <span>of <span x-text="formatCurrency(e.amount)"></span></span>
                   </span>
-                  <button class="expand-toggle" @click="toggleReviewed(e)" data-testid="expand-toggle" :title="e.reviewed ? 'Expand controls' : 'Collapse controls'" x-text="e.reviewed ? '▶' : '▼'"></button>
+                  <button class="expand-toggle" @click="toggleReviewed(e)" data-testid="expand-toggle"
+                    :title="e.reviewed ? 'Expand controls' : 'Collapse controls'"
+                    x-text="e.reviewed ? '▶' : '▼'"></button>
                 </div>
                 <div class="slider-with-arrows" x-show="!e.reviewed">
-                  <button class="slider-arrow" @click="setAllocation(e, 0)" title="0% Business (100% Benefits)" aria-label="Allocate 0% to Business">○</button>
-                  <div class="allocation-slider" data-testid="allocation-slider" :data-expense-id="e.id" x-init="initSlider($el, e)"></div>
-                  <button class="slider-arrow" @click="setAllocation(e, 100)" title="100% Business" aria-label="Allocate 100% to Business">●</button>
+                  <button class="slider-arrow" @click="setAllocation(e, 0)" title="0% Business (100% Benefits)"
+                    aria-label="Allocate 0% to Business">○</button>
+                  <div class="allocation-slider" data-testid="allocation-slider" :data-expense-id="e.id"
+                    x-init="initSlider($el, e)"></div>
+                  <button class="slider-arrow" @click="setAllocation(e, 100)" title="100% Business"
+                    aria-label="Allocate 100% to Business">●</button>
                 </div>
                 <div class="preset-buttons" x-show="!e.reviewed">
-                  <button @click="setAllocation(e, 100)" :class="{'active': e.businessPercent === 100}" title="100% Business">100</button>
-                  <button @click="setAllocation(e, 75)" :class="{'active': e.businessPercent === 75}" title="75% Business">75</button>
-                  <button @click="setAllocation(e, 50)" :class="{'active': e.businessPercent === 50}" title="50/50 Split">50</button>
-                  <button @click="setAllocation(e, 25)" :class="{'active': e.businessPercent === 25}" title="25% Business">25</button>
-                  <button @click="setAllocation(e, 0)" :class="{'active': e.businessPercent === 0}" title="0% Business">0</button>
+                  <button @click="setAllocation(e, 100)" :class="{'active': e.businessPercent === 100}"
+                    title="100% Business">100</button>
+                  <button @click="setAllocation(e, 75)" :class="{'active': e.businessPercent === 75}"
+                    title="75% Business">75</button>
+                  <button @click="setAllocation(e, 50)" :class="{'active': e.businessPercent === 50}"
+                    title="50/50 Split">50</button>
+                  <button @click="setAllocation(e, 25)" :class="{'active': e.businessPercent === 25}"
+                    title="25% Business">25</button>
+                  <button @click="setAllocation(e, 0)" :class="{'active': e.businessPercent === 0}"
+                    title="0% Business">0</button>
                 </div>
               </article>
             </template>
@@ -164,27 +219,38 @@
           </div>
           <div class="cards-container">
             <template x-for="e in benefitsCardsVisible" :key="'ben-' + e.id">
-              <article class="allocation-card card-enter" :class="{'split-item': (e.businessPercent ?? 100) > 0 && (e.businessPercent ?? 100) < 100, 'reviewed': e.reviewed}" data-testid="allocation-card">
+              <article class="allocation-card card-enter"
+                :class="{'split-item': (e.businessPercent ?? 100) > 0 && (e.businessPercent ?? 100) < 100, 'reviewed': e.reviewed}"
+                data-testid="allocation-card">
                 <header>
                   <strong x-text="e.description" :title="e.description"></strong>
                   <small x-text="formatDate(e.date)"></small>
                 </header>
                 <div class="card-meta-row">
-                  <span class="card-id"><span x-text="'#' + String(e.id).slice(-8)"></span><span x-show="e.itemTotal > 1" class="item-position" x-text="' (' + e.itemIndex + '/' + e.itemTotal + ')'"></span></span>
-                  <span class="card-payment-method" x-show="e.paymentMethod" x-text="getPaymentMethodLabel(e.paymentMethod)"></span>
+                  <span class="card-id"><span x-text="'#' + String(e.id).slice(-8)"></span><span
+                      x-show="e.itemTotal > 1" class="item-position"
+                      x-text="' (' + e.itemIndex + '/' + e.itemTotal + ')'"></span></span>
+                  <span class="card-payment-method" x-show="e.paymentMethod"
+                    x-text="getPaymentMethodLabel(e.paymentMethod)"></span>
                 </div>
                 <div class="card-amount-row">
-                  <span class="card-amount" x-text="formatCurrency(e.amount * (100 - (e.businessPercent ?? 100)) / 100)" data-testid="benefits-amount"></span>
+                  <span class="card-amount" x-text="formatCurrency(e.amount * (100 - (e.businessPercent ?? 100)) / 100)"
+                    data-testid="benefits-amount"></span>
                   <span class="allocation-percentage">
                     <span class="percentage-badge" x-text="(100 - (e.businessPercent ?? 100)) + '%'"></span>
                     <span>of <span x-text="formatCurrency(e.amount)"></span></span>
                   </span>
-                  <button class="expand-toggle" @click="toggleReviewed(e)" data-testid="expand-toggle" :title="e.reviewed ? 'Expand controls' : 'Collapse controls'" x-text="e.reviewed ? '▶' : '▼'"></button>
+                  <button class="expand-toggle" @click="toggleReviewed(e)" data-testid="expand-toggle"
+                    :title="e.reviewed ? 'Expand controls' : 'Collapse controls'"
+                    x-text="e.reviewed ? '▶' : '▼'"></button>
                 </div>
                 <div class="slider-with-arrows" x-show="!e.reviewed">
-                  <button class="slider-arrow" @click="setAllocation(e, 100)" title="0% Benefits (100% Business)" aria-label="Allocate 0% to Benefits">○</button>
-                  <div class="allocation-slider" data-testid="allocation-slider" :data-expense-id="e.id" x-init="initSlider($el, e)"></div>
-                  <button class="slider-arrow" @click="setAllocation(e, 0)" title="100% Benefits" aria-label="Allocate 100% to Benefits">●</button>
+                  <button class="slider-arrow" @click="setAllocation(e, 100)" title="0% Benefits (100% Business)"
+                    aria-label="Allocate 0% to Benefits">○</button>
+                  <div class="allocation-slider" data-testid="allocation-slider" :data-expense-id="e.id"
+                    x-init="initSlider($el, e)"></div>
+                  <button class="slider-arrow" @click="setAllocation(e, 0)" title="100% Benefits"
+                    aria-label="Allocate 100% to Benefits">●</button>
                 </div>
               </article>
             </template>
@@ -195,52 +261,88 @@
           </div>
         </div>
       </div>
-      <p x-show="!expenses.length" class="empty-state">No expenses yet. Import data to get started.</p></section>
-    <!-- Import --><section x-show="showNav && route==='import'"><h2>📁 Import</h2>
-      <div class="drag-area" @dragover.prevent="dragover=true" @dragleave="dragover=false" @drop.prevent="handleDrop($event)" :class="{dragover}"><p>Drop CSV/DAT/ZIP or <input type="file" accept=".csv,.dat,.zip" @change="handleFileSelect($event)"></p></div>
+      <p x-show="!expenses.length" class="empty-state">No expenses yet. Import data to get started.</p>
+    </section>
+    <!-- Import -->
+    <section x-show="showNav && route==='import'">
+      <h2>📁 Import</h2>
+      <div class="drag-area" @dragover.prevent="dragover=true" @dragleave="dragover=false"
+        @drop.prevent="handleDrop($event)" :class="{dragover}">
+        <p>Drop CSV/DAT/ZIP or <input type="file" accept=".csv,.dat,.zip" @change="handleFileSelect($event)"></p>
+      </div>
       <div x-show="importStatus" :data-import-status="importComplete?'complete':'processing'">
         <p x-text="importStatus" :class="importError?'error':'success'"></p>
       </div>
-      <details><summary>➕ Add Manually</summary><form @submit.prevent="addExpense()" class="grid"><input type="date" x-model="newExpense.date" required>
-          <input type="text" x-model="newExpense.description" placeholder="Description" required><select x-model="newExpense.category" required><option value="">Category</option><option>Business Supplies</option><option>Board Member Benefits</option><option>Uncategorized</option></select>
-          <input type="number" x-model.number="newExpense.amount" placeholder="Amount" step="0.01" required><button type="submit">Add</button></form></details>
+      <details>
+        <summary>➕ Add Manually</summary>
+        <form @submit.prevent="addExpense()" class="grid"><input type="date" x-model="newExpense.date" required>
+          <input type="text" x-model="newExpense.description" placeholder="Description" required><select
+            x-model="newExpense.category" required>
+            <option value="">Category</option>
+            <option>Business Supplies</option>
+            <option>Board Member Benefits</option>
+            <option>Uncategorized</option>
+          </select>
+          <input type="number" x-model.number="newExpense.amount" placeholder="Amount" step="0.01" required><button
+            type="submit">Add</button>
+        </form>
+      </details>
       <h3 style="margin-top:2rem">📜 Import History</h3>
-      <div x-show="!importHistory.length" class="empty-state"><p>No imports yet.</p></div>
+      <div x-show="!importHistory.length" class="empty-state">
+        <p>No imports yet.</p>
+      </div>
       <div class="import-timeline"><template x-for="imp in importHistory" :key="imp.id">
-          <article class="import-card" data-testid="import-card" :class="{success:imp.success,partial:imp.duplicatesCount>0}"><header><strong x-text="imp.filename"></strong>
-              <small x-text="new Date(imp.timestamp).toLocaleDateString()"></small></header>
+          <article class="import-card" data-testid="import-card"
+            :class="{success:imp.success,partial:imp.duplicatesCount>0}">
+            <header><strong x-text="imp.filename"></strong>
+              <small x-text="new Date(imp.timestamp).toLocaleDateString()"></small>
+            </header>
             <p><span class="badge" x-text="imp.type"></span></p>
             <div class="import-stats"><span x-text="`${imp.recordsCount} new`"></span>
               <span x-show="imp.duplicatesCount>0" x-text="`${imp.duplicatesCount} duplicates`"></span>
-              <span x-show="imp.skipped>0" x-text="`${imp.skipped} skipped`"></span></div>
-            <small x-show="imp.dateRange" x-text="imp.dateRange ? formatDateRange(imp.dateRange.earliest,imp.dateRange.latest) : ''"></small></article>
-        </template></div></section>
-    <!-- Settings --><section x-show="showNav && route==='settings'"><h2>⚙️ Settings</h2>
-      <button class="outline" @click="exportCSV()">📤 Export CSV</button><button class="outline secondary" @click="clearAll()">🗑️ Clear All</button>
+              <span x-show="imp.skipped>0" x-text="`${imp.skipped} skipped`"></span>
+            </div>
+            <small x-show="imp.dateRange"
+              x-text="imp.dateRange ? formatDateRange(imp.dateRange.earliest,imp.dateRange.latest) : ''"></small>
+          </article>
+        </template></div>
+    </section>
+    <!-- Settings -->
+    <section x-show="showNav && route==='settings'">
+      <h2>⚙️ Settings</h2>
+      <button class="outline" @click="exportCSV()">📤 Export CSV</button><button class="outline secondary"
+        @click="clearAll()">🗑️ Clear All</button>
       <section data-testid="payment-methods-section" style="margin-top:2rem" x-show="paymentMethods.length > 0">
         <h3>💳 Payment Methods</h3>
-        <p style="color:var(--muted-color);margin-bottom:1rem">Remove expenses by payment method to filter out personal purchases.</p>
+        <p style="color:var(--muted-color);margin-bottom:1rem">Remove expenses by payment method to filter out personal
+          purchases.</p>
         <div class="payment-methods-list">
           <template x-for="pm in paymentMethods" :key="pm.method">
             <div class="payment-method-row" data-testid="payment-method-row" :data-payment="pm.method">
               <span class="pm-label" x-text="getPaymentMethodLabel(pm.method)"></span>
               <span class="pm-stats"><span data-testid="item-count" x-text="pm.count"></span> items</span>
               <span class="pm-total" data-testid="total-amount" x-text="formatCurrency(pm.total)"></span>
-              <button class="outline secondary" data-testid="remove-btn" @click="openPurgeModal(pm.method)">Remove</button>
+              <button class="outline secondary" data-testid="remove-btn"
+                @click="openPurgeModal(pm.method)">Remove</button>
             </div>
           </template>
         </div>
-      </section></section>
+      </section>
+    </section>
   </main>
 
   <!-- Payment Method Purge Confirmation Modal -->
   <dialog :open="showPurgeModal" data-testid="purge-confirm-dialog" @click.self="closePurgeModal()">
     <article>
-      <header><h3>⚠️ Remove Expenses?</h3><button @click="closePurgeModal()" aria-label="Close" class="close">×</button></header>
+      <header>
+        <h3>⚠️ Remove Expenses?</h3><button @click="closePurgeModal()" aria-label="Close" class="close">×</button>
+      </header>
       <p>This will permanently delete all expenses paid with:</p>
       <p><strong x-text="getPaymentMethodLabel(purgeTarget)"></strong></p>
       <template x-if="purgeTarget">
-        <p x-text="(() => { const pm = paymentMethods.find(p => p.method === purgeTarget); return pm ? pm.count + ' expenses totaling ' + formatCurrency(pm.total) : ''; })()"></p>
+        <p
+          x-text="(() => { const pm = paymentMethods.find(p => p.method === purgeTarget); return pm ? pm.count + ' expenses totaling ' + formatCurrency(pm.total) : ''; })()">
+        </p>
       </template>
       <p style="color:var(--muted-color)">This action cannot be undone.</p>
       <footer>
@@ -258,11 +360,14 @@
         <button @click="closeBulkApplyModal()" aria-label="Close" class="close">&times;</button>
       </header>
       <div class="modal-content">
-        <p>Found <strong x-text="bulkApplyMatches.length"></strong> matching item<span x-show="bulkApplyMatches.length !== 1">s</span> with the same description:</p>
+        <p>Found <strong x-text="bulkApplyMatches.length"></strong> matching item<span
+            x-show="bulkApplyMatches.length !== 1">s</span> with the same description:</p>
         <p class="allocation-preview" x-show="bulkApplySource">
           <strong x-text="bulkApplySource?.description"></strong><br>
-          <span class="business-badge">Business: <span x-text="(bulkApplySource?.businessPercent ?? 100) + '%'"></span></span>
-          <span class="benefits-badge">Benefits: <span x-text="(100 - (bulkApplySource?.businessPercent ?? 100)) + '%'"></span></span>
+          <span class="business-badge">Business: <span
+              x-text="(bulkApplySource?.businessPercent ?? 100) + '%'"></span></span>
+          <span class="benefits-badge">Benefits: <span
+              x-text="(100 - (bulkApplySource?.businessPercent ?? 100)) + '%'"></span></span>
         </p>
         <div class="matches-list">
           <h4>Items to update:</h4>
@@ -288,6 +393,21 @@
     </article>
   </dialog>
 
-  <!-- App Shell: Footer --><footer role="contentinfo" class="app-footer"><small>TSV Ledger v3.5 • <a href="docs/TERMS_OF_SERVICE.md" style="color:inherit">Not Tax Advice</a> • <a href="docs/PRIVACY_POLICY.md" style="color:inherit">Privacy</a></small></footer>
-  <script src="js/storage.js"></script><script src="js/utils.js"></script><script src="js/csv.js"></script><script src="js/amazon-parser.js"></script><script src="js/boa-parser.js"></script><script src="js/zip-handler.js"></script><script src="js/categorizer.js"></script><script src="js/import-history.js"></script><script src="js/payment-methods.js"></script><script src="js/cloud-sync.js"></script><script src="js/app.js"></script>
-</body></html>
+  <!-- App Shell: Footer -->
+  <footer role="contentinfo" class="app-footer"><small>TSV Ledger v3.5 • <a href="docs/TERMS_OF_SERVICE.md"
+        style="color:inherit">Not Tax Advice</a> • <a href="docs/PRIVACY_POLICY.md"
+        style="color:inherit">Privacy</a></small></footer>
+  <script src="js/storage.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/csv.js"></script>
+  <script src="js/amazon-parser.js"></script>
+  <script src="js/boa-parser.js"></script>
+  <script src="js/zip-handler.js"></script>
+  <script src="js/categorizer.js"></script>
+  <script src="js/import-history.js"></script>
+  <script src="js/payment-methods.js"></script>
+  <script src="js/cloud-sync.js"></script>
+  <script src="js/app.js"></script>
+</body>
+
+</html>
