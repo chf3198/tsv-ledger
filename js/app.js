@@ -1,10 +1,18 @@
 /**
- * TSV Expenses - Alpine.js App with Functional Core
- * Computed getters delegated to app-getters.js (ADR-026)
+ * TSV Expenses - Alpine.js Core State Machine (ADR-026)
+ * Methods delegated to specialized modules:
+ * - app-auth.js: OAuth handlers
+ * - app-crud.js: CRUD operations
+ * - app-import.js: File import/parsing
+ * - app-storage.js: Storage and cloud sync
+ * - app-onboarding.js: Onboarding flow
+ * - app-allocation.js: Bulk allocation
+ * - app-payment.js: Payment purging
+ * - app-getters.js: Computed properties
  */
-
 function expenseApp() {
   return {
+    // Core state
     expenses: [], filteredExpenses: [], locations: [], dragover: false,
     importStatus: '', importError: false, importComplete: false, filters: emptyFilters(), newExpense: emptyExpense(),
     importHistory: [],
@@ -20,18 +28,17 @@ function expenseApp() {
     lastSliderInteraction: 0,
     // Shell state (ADR-010)
     menuOpen: false, route: 'dashboard',
-    // Auth state (ADR-009) - always start unauthenticated, only true after API confirms
+    // Auth state (ADR-009)
     auth: { user: null, authenticated: false },
     showAuthModal: false, showUserMenu: false,
     // Storage mode state (ADR-024)
-    storageMode: localStorage.getItem('tsv-storage-mode') || null, // 'local' | 'cloud' | null
+    storageMode: localStorage.getItem('tsv-storage-mode') || null,
     // Onboarding wizard state (ADR-025)
-    onboardingStep: 1, // 1=welcome, 2=storage, 3=import
-    onboardingComplete: localStorage.getItem('tsv-onboarding-complete') === 'true',
+    onboardingStep: 1, onboardingComplete: localStorage.getItem('tsv-onboarding-complete') === 'true',
     // Payment method purge state (ADR-017)
     showPurgeModal: false, purgeTarget: null,
 
-    // Computed getters delegated to app-getters.js (ADR-026)
+    // ===== COMPUTED GETTERS (via app-getters.js) =====
     get showNav() { return window.appGetters.showNav; },
     get totals() { return window.appGetters.totals; },
     get paymentMethods() { return window.appGetters.paymentMethods; },
@@ -46,389 +53,62 @@ function expenseApp() {
     get hasMoreBusinessCards() { return window.appGetters.hasMoreBusinessCards; },
     get hasMoreBenefitsCards() { return window.appGetters.hasMoreBenefitsCards; },
 
-    loadMoreBusiness() { this.businessCardsPage++; },
-    loadMoreBenefits() { this.benefitsCardsPage++; },
-
+    // ===== INITIALIZATION =====
     async init() {
-      // Check for OAuth callback first
-      await this.handleOAuthCallback();
-      // Load data based on storage mode
-      await this.loadData();
-    },
-    async loadData() {
-      // Skip data loading during onboarding - user starts fresh
-      if (!this.onboardingComplete) return;
-      if (this.storageMode === 'cloud' && this.auth.authenticated) {
-        // Cloud mode: fetch from API
-        await this.fetchFromCloud();
-      } else {
-        // Local mode or not authenticated: use localStorage
-        this.expenses = loadExpenses();
-        this.importHistory = loadImportHistory();
-      }
-      this.refresh();
-    },
-    async fetchFromCloud() {
-      try {
-        const data = await window.cloudSync.fetchFromCloud();
-        this.expenses = data.expenses || [];
-        this.importHistory = data.importHistory || [];
-        // Cache in localStorage for offline access
-        saveExpenses(this.expenses);
-        localStorage.setItem('tsv-import-history', JSON.stringify(this.importHistory));
-      } catch (e) {
-        console.error('Cloud fetch failed, using local cache:', e);
-        this.expenses = loadExpenses();
-        this.importHistory = loadImportHistory();
-      }
-    },
-    // Storage mode selection (ADR-024, simplified for ADR-025)
-    navigateToImport() {
-      // If onboarding not complete, wizard handles it
-      if (!this.showNav) {
-        this.onboardingStep = 2;
-        return;
-      }
-      // If cloud mode but not authenticated, require sign in
-      if (this.storageMode === 'cloud' && !this.auth.authenticated) {
-        this.showAuthModal = true;
-        return;
-      }
-      this.route = 'import';
-      this.menuOpen = false;
-    },
-    async selectStorageMode(mode) {
-      this.storageMode = mode;
-      localStorage.setItem('tsv-storage-mode', mode);
-      if (mode === 'cloud') {
-        // Cloud mode requires sign in, then return to wizard step 3
-        this.showAuthModal = true;
-      } else {
-        // Local mode: proceed to import step in wizard
-        this.onboardingStep = 3;
-      }
-    },
-    // Complete onboarding and show dashboard (ADR-025)
-    async completeOnboarding() {
-      localStorage.setItem('tsv-onboarding-complete', 'true');
-      this.onboardingComplete = true;
-      await this.loadData(); // Load data now that onboarding is complete
-      this.route = 'dashboard';
-    },
-    async handleOAuthCallback() {
-      const api = window.AUTH_API || 'https://tsv-ledger-api.chf3198.workers.dev/auth';
-      const params = new URLSearchParams(window.location.search);
-      const session = params.get('session');
-      if (session) {
-        localStorage.setItem('tsv-session', session);
-        window.history.replaceState({}, '', window.location.pathname);
-      }
-      const token = localStorage.getItem('tsv-session');
-      if (token) {
-        try {
-          const res = await fetch(`${api}/session/get`, { headers: { Authorization: `Bearer ${token}` } });
-          const data = await res.json();
-          if (data.user) {
-            this.auth = { user: data.user, authenticated: true };
-            localStorage.setItem('tsv-auth', JSON.stringify(this.auth));
-            // Set cloud mode on successful auth (ADR-024)
-            this.storageMode = 'cloud';
-            localStorage.setItem('tsv-storage-mode', 'cloud');
-            this.showAuthModal = false;
-            // ADR-025: After OAuth, proceed to import step if onboarding
-            if (!this.showNav) {
-              this.onboardingStep = 3;
-            }
-            return;
-          }
-        } catch (e) { console.error('Session check failed:', e); }
-        // Session invalid or check failed - clear everything
-        localStorage.removeItem('tsv-session');
-        localStorage.removeItem('tsv-auth');
-        this.auth = { user: null, authenticated: false };
-      }
-    },
-    refresh() { computeItemPositions(this.expenses); this.locations = getUniqueLocations(this.expenses); this.applyFilters(); },
-    async save() {
-      saveExpenses(this.expenses);
-      this.refresh();
-      // Cloud mode: sync to cloud (ADR-024)
-      if (this.storageMode === 'cloud' && this.auth.authenticated) {
-        await this.syncToCloud();
-      }
-    },
-    async syncToCloud() {
-      if (!window.cloudSync?.isAuthenticated()) return;
-      try {
-        const cloud = await window.cloudSync.fullSync();
-        // Reload from localStorage (cloud data merged in)
-        this.expenses = loadExpenses();
-        this.importHistory = loadImportHistory();
-        this.refresh();
-      } catch (e) { console.error('Cloud sync failed:', e); }
+      await appAuth.handleOAuthCallback.call(this);
+      await appStorage.loadData.call(this);
     },
 
-    handleDrop(e) {
-      this.dragover = false; const file = e.dataTransfer.files[0]; if (!file) return;
-      const ext = file.name.split('.').pop().toLowerCase();
-      (ext === 'csv' || ext === 'dat' || ext === 'zip') ? this.importFile(file) : this.setError('Please drop a CSV, DAT, or ZIP file');
-    },
-    handleFileSelect(e) { const file = e.target.files[0]; if (file) this.importFile(file); },
-    setError(msg) { this.importStatus = msg; this.importError = true; this.importComplete = false; },
+    // ===== DELEGATED METHODS (via specialized modules) =====
+    // Auth (app-auth.js)
+    authWith(provider) { return appAuth.authWith.call(this, provider); },
+    logout() { return appAuth.logout.call(this); },
 
-    async importFile(file) {
-      this.importStatus = 'Importing...'; this.importError = false; this.importComplete = false;
-      try {
-        const ext = file.name.split('.').pop().toLowerCase();
-        let result;
+    // CRUD (app-crud.js)
+    addExpense() { return appCrud.addExpense.call(this); },
+    updateExpense() { return appCrud.updateExpense.call(this); },
+    deleteExpense(id) { return appCrud.deleteExpense.call(this, id); },
+    clearAll() { return appCrud.clearAll.call(this); },
+    applyFilters() { return appCrud.applyFilters.call(this); },
+    clearFilters() { return appCrud.clearFilters.call(this); },
+    exportCSV() { return appCrud.exportCSV.call(this); },
+    formatDate(dateStr) { return appCrud.formatDate.call(this, dateStr); },
 
-        if (ext === 'zip') {
-          result = await importAmazonZip(file, guessCategory);
-        } else {
-          const text = await file.text();
-          if (ext === 'csv') {
-            result = text.includes('Order ID') && text.includes('Product Name')
-              ? parseAmazonCSV(text, guessCategory)
-              : await parseCSVFile(file, guessCategory);
-          } else if (ext === 'dat') {
-            result = parseBOAStatement(text, guessCategory);
-          } else {
-            throw new Error('Unsupported file type');
-          }
-        }
+    // Import (app-import.js)
+    handleDrop(e) { return appImport.handleDrop.call(this, e); },
+    handleFileSelect(e) { return appImport.handleFileSelect.call(this, e); },
+    setError(msg) { return appImport.setError.call(this, msg); },
+    importFile(file) { return appImport.importFile.call(this, file); },
 
-        // Duplicate detection (ADR-013)
-        const existingIds = new Set(this.expenses.map(e => e.id));
-        const newExpenses = result.expenses.filter(e => !existingIds.has(e.id));
-        const duplicatesCount = result.expenses.length - newExpenses.length;
+    // Storage (app-storage.js)
+    refresh() { return appStorage.refresh.call(this); },
+    save() { return appStorage.save.call(this); },
+    syncToCloud() { return appStorage.syncToCloud.call(this); },
+    loadData() { return appStorage.loadData.call(this); },
+    fetchFromCloud() { return appStorage.fetchFromCloud.call(this); },
 
-        this.expenses = [...this.expenses, ...newExpenses]; this.save();
+    // Onboarding (app-onboarding.js)
+    navigateToImport() { return appOnboarding.navigateToImport.call(this); },
+    selectStorageMode(mode) { return appOnboarding.selectStorageMode.call(this, mode); },
+    completeOnboarding() { return appOnboarding.completeOnboarding.call(this); },
 
-        // Track import history
-        addImportRecord(createImportRecord({ ext, result, filename: file.name, newCount: newExpenses.length, dupCount: duplicatesCount }));
-        this.importHistory = loadImportHistory();
+    // Allocation (app-allocation.js)
+    loadMoreBusiness() { return appAllocation.loadMoreBusiness.call(this); },
+    loadMoreBenefits() { return appAllocation.loadMoreBenefits.call(this); },
+    findMatchingExpenses(e) { return appAllocation.findMatchingExpenses.call(this, e); },
+    debouncedBulkApplyCheck(e) { return appAllocation.debouncedBulkApplyCheck.call(this, e); },
+    checkForBulkApplyOpportunity(e) { return appAllocation.checkForBulkApplyOpportunity.call(this, e); },
+    applyBulkAllocation() { return appAllocation.applyBulkAllocation.call(this); },
+    closeBulkApplyModal() { return appAllocation.closeBulkApplyModal.call(this); },
 
-        // Update status
-        this.importStatus = [`✓ ${newExpenses.length} new`, duplicatesCount > 0 ? `${duplicatesCount} duplicates` : '', result.skipped ? `${result.skipped} skipped` : ''].filter(Boolean).join(', ');
-        this.importComplete = true;
-        // Sync import history to cloud if in cloud mode (ADR-024)
-        if (this.storageMode === 'cloud' && this.auth.authenticated) {
-          await this.syncToCloud();
-        }
-      } catch (e) { this.setError('Import failed: ' + e.message); }
-    },
+    // Payment (app-payment.js)
+    openPurgeModal(method) { return appPayment.openPurgeModal.call(this, method); },
+    closePurgeModal() { return appPayment.closePurgeModal.call(this); },
+    confirmPurge() { return appPayment.confirmPurge.call(this); },
 
-    formatDate(dateStr) {
-      const d = new Date(dateStr);
-      return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-    },
-
-    addExpense() {
-      if (!this.newExpense.description || !this.newExpense.amount) return;
-      this.expenses = [...this.expenses, { ...this.newExpense, id: Date.now(), amount: +this.newExpense.amount }];
-      this.save(); this.newExpense = emptyExpense();
-    },
-    updateExpense() {
-      // Trigger reactivity by creating new array reference
-      this.expenses = [...this.expenses];
-      this.save();
-    },
-    deleteExpense(id) { confirm('Delete?') && (this.expenses = this.expenses.filter(e => e.id !== id), this.save()); },
-    clearAll() {
-      if (confirm('Delete ALL expenses and import history?')) {
-        this.expenses = [];
-        this.importHistory = [];
-        this.save();
-        clearImportHistory();
-      }
-    },
-    applyFilters() { this.filteredExpenses = filterExpenses(this.expenses, this.filters); },
-    clearFilters() { this.filters = emptyFilters(); this.applyFilters(); },
-    exportCSV() { exportToCSV(this.filteredExpenses, `tsv-expenses-${today()}.csv`); },
+    // Utility helpers (for templates)
     formatCurrency,
     formatDateRange,
-    getPaymentMethodLabel,
-
-    // Payment method purge (ADR-017)
-    openPurgeModal(method) { this.purgeTarget = method; this.showPurgeModal = true; },
-    closePurgeModal() { this.purgeTarget = null; this.showPurgeModal = false; },
-    confirmPurge() {
-      if (!this.purgeTarget) return;
-      this.expenses = filterByPaymentMethod(this.expenses, this.purgeTarget);
-      this.save(); this.closePurgeModal();
-    },
-
-    // noUiSlider integration
-    // Initializes allocation slider - position and value depend on column context
-    // Business column: slider at businessPercent (e.g., 80% shows slider at 80)
-    // Benefits column: slider at (100 - businessPercent) (e.g., 80% business shows slider at 20)
-    initSlider(element, expense) {
-      if (!window.noUiSlider || element.noUiSlider) return;
-
-      const businessPercent = expense.businessPercent ?? 100;
-      const isBenefitsColumn = element.closest('.benefits') !== null;
-      const initialValue = isBenefitsColumn ? (100 - businessPercent) : businessPercent;
-
-      window.noUiSlider.create(element, {
-        start: [initialValue],
-        connect: [true, false],
-        range: { min: 0, max: 100 },
-        step: 1,
-        tooltips: {
-          to: (v) => Math.round(v) + '%'
-        },
-        format: { to: (v) => Math.round(v), from: (v) => Number(v) }
-      });
-
-      // Update handlers: Convert slider position to businessPercent
-      // Business column: slider value IS businessPercent
-      // Benefits column: slider value is benefitsPercent, so businessPercent = 100 - slider
-      const updateBusinessPercent = (values) => {
-        const sliderValue = Math.round(values[0]);
-        const newBusinessPercent = isBenefitsColumn ? (100 - sliderValue) : sliderValue;
-
-        // Mark that user is actively interacting with slider
-        this.lastSliderInteraction = Date.now();
-
-        if (newBusinessPercent !== expense.businessPercent) {
-          expense.businessPercent = newBusinessPercent;
-
-          // Update all other sliders for this expense to stay in sync
-          const allSliders = document.querySelectorAll(`[data-expense-id="${expense.id}"]`);
-          allSliders.forEach(slider => {
-            if (slider !== element && slider.noUiSlider) {
-              const isOtherBenefits = slider.closest('.benefits') !== null;
-              const targetValue = isOtherBenefits ? (100 - newBusinessPercent) : newBusinessPercent;
-              slider.noUiSlider.set(targetValue, false); // false = don't fire events
-            }
-          });
-
-          this.updateExpense();
-        }
-      };
-
-      // Listen to both 'slide' (user interaction) and 'set' (programmatic)
-      element.noUiSlider.on('slide', updateBusinessPercent);
-      element.noUiSlider.on('set', updateBusinessPercent);
-
-      // Only check for bulk apply when user finishes dragging (mouseup/touchend)
-      element.noUiSlider.on('end', () => {
-        expense.reviewed = true;  // Auto-collapse after slider interaction
-        const currentValue = isBenefitsColumn ? (100 - expense.businessPercent) : expense.businessPercent;
-        element.noUiSlider.set(currentValue, false);
-        this.updateExpense();
-        this.debouncedBulkApplyCheck(expense);
-      });
-    },
-
-    // Preset allocation buttons
-    setAllocation(expense, percent) {
-      expense.businessPercent = percent;
-      expense.reviewed = true;  // Auto-collapse after allocation change
-
-      // Update all sliders for this expense immediately
-      const allSliders = document.querySelectorAll(`[data-expense-id="${expense.id}"]`);
-      allSliders.forEach(slider => {
-        if (slider.noUiSlider) {
-          const isSliderBenefits = slider.closest('.benefits') !== null;
-          const targetValue = isSliderBenefits ? (100 - percent) : percent;
-          slider.noUiSlider.set(targetValue, false);
-        }
-      });
-
-      this.updateExpense();
-      this.debouncedBulkApplyCheck(expense);
-    },
-
-    // Toggle card expanded/collapsed state
-    toggleReviewed(expense) {
-      expense.reviewed = !expense.reviewed;
-      this.updateExpense();
-    },
-
-    // Debounced bulk apply check to prevent modal during rapid changes
-    debouncedBulkApplyCheck(expense) {
-      clearTimeout(this.bulkApplyDebounceTimer);
-      this.bulkApplyDebounceTimer = setTimeout(() => {
-        // Only show modal if user hasn't interacted with slider recently
-        const timeSinceLastInteraction = Date.now() - this.lastSliderInteraction;
-        if (timeSinceLastInteraction > 500) {
-          this.checkForBulkApplyOpportunity(expense);
-        }
-      }, 800); // Wait 800ms after last change
-    },
-
-    // Bulk allocation: Find matching expenses
-    findMatchingExpenses(sourceExpense) {
-      const normalizedDescription = sourceExpense.description.trim().toLowerCase();
-      return this.expenses.filter(e =>
-        e.id !== sourceExpense.id &&
-        e.description.trim().toLowerCase() === normalizedDescription &&
-        e.businessPercent !== sourceExpense.businessPercent
-      );
-    },
-
-    // Bulk allocation: Check if bulk apply should be offered
-    checkForBulkApplyOpportunity(expense) {
-      const matches = this.findMatchingExpenses(expense);
-      if (matches.length > 0) {
-        this.bulkApplySource = expense;
-        this.bulkApplyMatches = matches;
-        this.showBulkApplyModal = true;
-      }
-    },
-
-    // Bulk allocation: Apply to all matching items
-    applyBulkAllocation() {
-      if (!this.bulkApplySource || this.bulkApplyMatches.length === 0) return;
-
-      const targetPercent = this.bulkApplySource.businessPercent;
-      this.bulkApplyMatches.forEach(expense => {
-        expense.businessPercent = targetPercent;
-
-        // Update all sliders for this expense
-        const sliders = document.querySelectorAll(`[data-expense-id="${expense.id}"]`);
-        sliders.forEach(slider => {
-          if (slider.noUiSlider) {
-            const isSliderBenefits = slider.closest('.benefits') !== null;
-            const sliderValue = isSliderBenefits ? (100 - targetPercent) : targetPercent;
-            slider.noUiSlider.set(sliderValue, false);
-          }
-        });
-      });
-
-      this.updateExpense();
-      this.closeBulkApplyModal();
-    },
-
-    // Bulk allocation: Close modal
-    closeBulkApplyModal() {
-      this.showBulkApplyModal = false;
-      this.bulkApplySource = null;
-      this.bulkApplyMatches = [];
-    },
-
-    // Auth methods (ADR-009) - OAuth redirects to CloudFlare Worker
-    authWith(provider) {
-      const api = window.AUTH_API || 'https://tsv-ledger-api.chf3198.workers.dev/auth';
-      window.location.href = `${api}/oauth/${provider}/start`;
-    },
-    logout() {
-      // Clear auth state
-      this.auth = { user: null, authenticated: false };
-      localStorage.removeItem('tsv-auth');
-      localStorage.removeItem('tsv-session');
-      // Clear all user data on logout (OWASP: clear storage on session end)
-      localStorage.removeItem('tsv-expenses');
-      localStorage.removeItem('tsv-import-history');
-      // Reset storage mode and onboarding (ADR-024, ADR-025)
-      localStorage.removeItem('tsv-storage-mode');
-      localStorage.removeItem('tsv-onboarding-complete');
-      this.storageMode = null;
-      this.onboardingStep = 1;
-      this.expenses = [];
-      this.importHistory = [];
-      this.showUserMenu = false;
-    }
+    getPaymentMethodLabel
   };
 }

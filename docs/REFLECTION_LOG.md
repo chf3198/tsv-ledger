@@ -17,6 +17,38 @@
 
 ## Log Entries
 
+### 2026-03-05 IN_PROGRESS: Code Quality via Modularization (ADR-026)
+
+**Context**: Improving codebase to meet 100-line-per-file constraint across all modules. Started with ADR-026 (Extract Computed Getters) and Claude Vision integration for visual testing.
+
+**Outcome**: 
+- ✅ Created Claude Vision test suite (tests/visual-ai.spec.js - 75 lines)
+- ✅ Optimized app-getters.js (127 → 64 lines, well under 100)
+- ✅ Fixed Chromebook filesystem issues (npm symlinks)
+- ⚠️ App.js still at 435 lines - needs methods extraction
+- ⚠️ Index.html still at 414 lines - needs component extraction
+- ⚠️ 13 files still exceed 100-line limit (down from 14)
+
+**Insight**:
+- ADR-026 is partially complete: getters extracted, but app.js methods not yet split
+- The 100-line constraint requires progressive modularization in phases:
+  - Phase 1 (DONE): Extract pure getters → app-getters.js ✅
+  - Phase 2 (BLOCKED): Extract methods → app-methods.js, app-auth.js, app-import.js
+  - Phase 3 (BLOCKED): Componentize templates → separate HTML files per section
+- Chromebook 9p filesystem limitation (no symlinks) required npm config workaround
+
+**Adaptation**:
+- Next: Extract auth methods (handleOAuthCallback, authWith, logout) → app-auth.js
+- Then: Extract import/file handlers → app-import.js  
+- Then: Extract CRUD operations → app-crud.js
+- Target: Reduce app.js from 435 → ~80 lines by v3.6.0
+
+**Blockers**:
+- Limited disk space on Chromebook prevents Playwright browser installation
+- Need to coordinate with app.js method refactoring across multiple files
+
+---
+
 ### 2026-03-05 SUCCESS: Claude Vision API + Context-Specific Instructions
 
 **Context**: Agent needed better self-verification tools before UAT + VS Code Copilot needed targeted guidance per file type

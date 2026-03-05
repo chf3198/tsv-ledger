@@ -9,7 +9,7 @@ module.exports = defineConfig({
   workers: 1, // Single worker prevents resource contention
   reporter: 'line', // Lighter than HTML for local dev
   timeout: 30000,
-  
+
   use: {
     baseURL: 'http://localhost:8080',
     trace: 'on-first-retry',
