@@ -16,7 +16,7 @@ Completed **ADR-026 (Extract Computed Getters Module)** through comprehensive mo
 
 ### 2. App.js Modularization (73% Reduction!)
 - **Before**: 435 lines
-- **After**: 115 lines  
+- **After**: 115 lines
 - **Extracted Modules**:
   - `app-auth.js` (35 lines) - OAuth & session management
   - `app-crud.js` (38 lines) - Expense CRUD operations

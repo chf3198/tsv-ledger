@@ -34,18 +34,30 @@ const appAllocation = {
   applyBulkAllocation() {
     if (!this.bulkApplySource || this.bulkApplyMatches.length === 0) return;
     const targetPercent = this.bulkApplySource.businessPercent;
-    this.bulkApplyMatches.forEach(expense => {
-      expense.businessPercent = targetPercent;
-      const sliders = document.querySelectorAll(`[data-expense-id="${expense.id}"]`);
-      sliders.forEach(slider => {
-        if (slider.noUiSlider) {
-          const isSliderBenefits = slider.closest('.benefits') !== null;
-          const sliderValue = isSliderBenefits ? (100 - targetPercent) : targetPercent;
-          slider.noUiSlider.set(sliderValue, false);
-        }
+    const matchIds = new Set(this.bulkApplyMatches.map(e => e.id));
+
+    // Immutable update: create new objects for matched expenses (Alpine reactivity)
+    this.expenses = this.expenses.map(expense =>
+      matchIds.has(expense.id)
+        ? { ...expense, businessPercent: targetPercent }
+        : expense
+    );
+
+    // Update sliders after state change (DOM side effects)
+    setTimeout(() => {
+      this.bulkApplyMatches.forEach(expense => {
+        const sliders = document.querySelectorAll(`[data-expense-id="${expense.id}"]`);
+        sliders.forEach(slider => {
+          if (slider.noUiSlider) {
+            const isSliderBenefits = slider.closest('.benefits') !== null;
+            const sliderValue = isSliderBenefits ? (100 - targetPercent) : targetPercent;
+            slider.noUiSlider.set(sliderValue, false);
+          }
+        });
       });
-    });
-    this.updateExpense();
+    }, 0);
+
+    this.save();
     this.closeBulkApplyModal();
   },
   closeBulkApplyModal() {

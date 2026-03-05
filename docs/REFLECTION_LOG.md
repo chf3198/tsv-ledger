@@ -21,7 +21,7 @@
 
 **Context**: Implementing ADR-026 to meet 100-line-per-file constraint across all modules.
 
-**Outcome**: 
+**Outcome**:
 - ✅ Created Claude Vision test suite (tests/visual-ai.spec.js - 75 lines)
 - ✅ Optimized app-getters.js (127 → 64 lines)
 - ✅ **REFACTORED app.js (435 → 115 lines, 73% reduction!)**
@@ -81,7 +81,7 @@ app.js (114 lines) - Core state + delegation
 
 **Context**: Improving codebase to meet 100-line-per-file constraint across all modules. Started with ADR-026 (Extract Computed Getters) and Claude Vision integration for visual testing.
 
-**Outcome**: 
+**Outcome**:
 - ✅ Created Claude Vision test suite (tests/visual-ai.spec.js - 75 lines)
 - ✅ Optimized app-getters.js (127 → 64 lines, well under 100)
 - ✅ Fixed Chromebook filesystem issues (npm symlinks)
@@ -99,7 +99,7 @@ app.js (114 lines) - Core state + delegation
 
 **Adaptation**:
 - Next: Extract auth methods (handleOAuthCallback, authWith, logout) → app-auth.js
-- Then: Extract import/file handlers → app-import.js  
+- Then: Extract import/file handlers → app-import.js
 - Then: Extract CRUD operations → app-crud.js
 - Target: Reduce app.js from 435 → ~80 lines by v3.6.0
 
