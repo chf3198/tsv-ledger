@@ -32,7 +32,6 @@ window.appGetters = {
     if (!app?.expenses.length) return [];
     const q = app.allocationSearchQuery?.toLowerCase() || '';
     return app.expenses
-      .map(e => ({ ...e, benefitsPercent: 100 - (e.businessPercent ?? 100) }))
       .filter(e => (e.businessPercent ?? 100) > 0)
       .filter(e => !q || e.description.toLowerCase().includes(q) || e.id.toLowerCase().includes(q))
       .sort((a, b) => new Date(b.date) - new Date(a.date));
@@ -42,8 +41,7 @@ window.appGetters = {
     if (!app?.expenses.length) return [];
     const q = app.allocationSearchQuery?.toLowerCase() || '';
     return app.expenses
-      .map(e => ({ ...e, benefitsPercent: 100 - (e.businessPercent ?? 100) }))
-      .filter(e => e.benefitsPercent > 0)
+      .filter(e => (100 - (e.businessPercent ?? 100)) > 0)
       .filter(e => !q || e.description.toLowerCase().includes(q) || e.id.toLowerCase().includes(q))
       .sort((a, b) => new Date(b.date) - new Date(a.date));
   },
