@@ -27,6 +27,26 @@ rather than modify.
 > ADRs 001–018 are archived in [DESIGN-archive.md](../DESIGN-archive.md).
 > Recent ADRs (019+) have individual files.
 
+## ADR Dependency Matrix
+
+**How to use**: Before modifying code mentioned in "Used By" column, read "Depends On" ADRs to understand constraints.
+
+| ADR | Title | Depends On | Used By | Conflict Risk |
+|-----|-------|------------|---------|---------------|
+| 019 | JWT Bearer Tokens | 009 (OAuth) | 023 (Cloud Sync), worker/src/session.js | None |
+| 020 | CF Pages Previews | 001 (Static-first) | Deployment workflow, scripts/deploy-preview.sh | Low |
+| 021 | Auth Button Visibility | 009 (OAuth) | 025 (Onboarding), index.html:auth-section | **High** (UI coordination) |
+| 022 | Product Repositioning | None | Marketing copy, DESIGN.md, README.md | None |
+| 023 | Cloud Sync Integration | 003 (localStorage-first), 019 (JWT) | js/storage.js, worker/src/expenses.js | Medium (sync conflicts) |
+| 024 | Storage Mode Selection | 003, 023 | 025 (Onboarding), js/app.js:storageMode | None |
+| 025 | Onboarding Wizard | 024, 021 | index.html:wizard, js/app.js:showNav | **High** (modifying showNav breaks onboarding flow) |
+
+**Conflict risk levels**:
+- **High**: Changes require coordinating across multiple files; test extensively
+- **Medium**: Changes may require sync logic updates or conflict resolution
+- **Low**: Changes isolated to specific subsystem
+- **None**: Changes don't affect other ADRs
+
 ## Template
 
 ```markdown
