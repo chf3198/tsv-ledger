@@ -20,10 +20,10 @@
  *   amount: number,          // Dollars (not cents)
  *   businessPercent: number, // 0-100, default 100 (ADR-014: replaces old 'category' field)
  *   paymentMethod: string,   // Credit card last 4 or bank account name
- *   reviewed: boolean        // Manual review flag (future use)
+ *   adjusted: boolean        // Tracks allocation: true = collapsed slider, false = expanded/editable
  * }
  *
- * Migration logic (line 30-34): Converts legacy 'category' field to 'businessPercent'
+ * Migration logic: Converts legacy 'category'→'businessPercent' and 'reviewed'→'adjusted'
  */
 
 const STORAGE_KEY = 'tsv-expenses';
@@ -50,12 +50,13 @@ const expensesToCSV = (expenses) =>
 const loadExpenses = () => {
   try {
     const expenses = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
-    // Migrate old category field to businessPercent
+    // Migrate: category→businessPercent, reviewed→adjusted
     return expenses.map(e => ({
       ...e,
       businessPercent: e.businessPercent !== undefined ? e.businessPercent :
         (e.category === 'Business Supplies' ? 100 :
-         e.category === 'Board Member Benefits' ? 0 : 100) // Default uncategorized to 100%
+         e.category === 'Board Member Benefits' ? 0 : 100),
+      adjusted: e.adjusted !== undefined ? e.adjusted : (e.reviewed || false)
     }));
   }
   catch { return []; }
