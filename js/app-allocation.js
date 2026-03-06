@@ -36,15 +36,13 @@ const appAllocation = {
     const targetPercent = Math.max(0, Math.min(100, Math.round(Number(this.bulkApplySource.businessPercent ?? 100))));
     const matchIds = new Set(this.bulkApplyMatches.map(e => e.id));
 
-    // Bulk apply is a review action: collapse all updated matches (ADR-018)
+    // Bulk apply: set all matched expenses to same % and mark adjusted=true (collapse)
     this.expenses = this.expenses.map(expense =>
       matchIds.has(expense.id)
-        ? { ...expense, businessPercent: targetPercent, reviewed: true }
+        ? { ...expense, businessPercent: targetPercent, adjusted: true }
         : expense
     );
 
-    // NOTE: Don't manually update slider DOM - Alpine will re-render correctly
-    // when reviewed property changes, which triggers x-show="!e.reviewed" update
     this.save();
     this.closeBulkApplyModal();
   },
