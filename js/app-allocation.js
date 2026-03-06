@@ -33,14 +33,13 @@ const appAllocation = {
   },
   applyBulkAllocation() {
     if (!this.bulkApplySource || this.bulkApplyMatches.length === 0) return;
-    const targetPercent = this.bulkApplySource.businessPercent;
+    const targetPercent = Math.max(0, Math.min(100, Math.round(Number(this.bulkApplySource.businessPercent ?? 100))));
     const matchIds = new Set(this.bulkApplyMatches.map(e => e.id));
-    const shouldCollapse = (targetPercent === 0 || targetPercent === 100);
 
-    // Immutable update: create new objects with reviewed state for 0%/100% (Alpine reactivity + ADR-018)
+    // Bulk apply is a review action: collapse all updated matches (ADR-018)
     this.expenses = this.expenses.map(expense =>
       matchIds.has(expense.id)
-        ? { ...expense, businessPercent: targetPercent, reviewed: shouldCollapse }
+        ? { ...expense, businessPercent: targetPercent, reviewed: true }
         : expense
     );
 

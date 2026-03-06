@@ -36,7 +36,8 @@ const appAllocationUI = {
     });
 
     slider.noUiSlider.on('end', () => {
-      this.debouncedBulkApplyCheck(expense);
+      const currentExpense = this.expenses.find(e => e.id === expense.id) || expense;
+      this.debouncedBulkApplyCheck(currentExpense);
     });
   },
 
