@@ -1,13 +1,23 @@
 # tsv-ledger
 
-[![Tests](https://github.com/chf3198/tsv-ledger/actions/workflows/playwright.yml/badge.svg)](https://github.com/chf3198/tsv-ledger/actions/workflows/playwright.yml)
-[![Release](https://img.shields.io/github/v/release/chf3198/tsv-ledger?color=00d9a5)](https://github.com/chf3198/tsv-ledger/releases)
-[![License: PolyForm NC](https://img.shields.io/badge/License-PolyForm%20NC%201.0-blue.svg)](LICENSE)
-[![Live Demo](https://img.shields.io/badge/demo-live-e94560)](https://tsv-ledger.pages.dev)
+<p align="center">
+  <a href="https://github.com/chf3198/tsv-ledger/actions/workflows/playwright.yml"><img src="https://github.com/chf3198/tsv-ledger/actions/workflows/playwright.yml/badge.svg" alt="Tests"></a>
+  <a href="https://github.com/chf3198/tsv-ledger/releases"><img src="https://img.shields.io/github/v/release/chf3198/tsv-ledger?color=00d9a5" alt="Release"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-PolyForm%20NC%201.0-blue.svg" alt="PolyForm Noncommercial"></a>
+  <a href="https://tsv-ledger.pages.dev"><img src="https://img.shields.io/badge/demo-live-e94560" alt="Live Demo"></a>
+</p>
+
+<p align="center">
+  <a href="https://tsv-ledger.pages.dev">Live Demo</a> ·
+  <a href="#features">Features</a> ·
+  <a href="#quick-start">Quick Start</a> ·
+  <a href="docs/DESIGN.md">Documentation</a> ·
+  <a href="CONTRIBUTING.md">Contributing</a>
+</p>
+
+---
 
 **tsv-ledger** is a browser-based expense allocation tool for sole proprietors and self-employed workers. It imports Amazon Order History (CSV/ZIP) and Bank of America statements (DAT), lets you split each transaction between Business and Personal using intuitive sliders, and exports a categorized CSV ready for tax prep or accounting software. Built with Alpine.js, Pico CSS, noUiSlider, and Cloudflare Pages/Workers/D1 — zero frontend build step.
-
-[Live Demo](https://tsv-ledger.pages.dev) · [Features](#features) · [Quick Start](#quick-start) · [Documentation](docs/DESIGN.md) · [Contributing](CONTRIBUTING.md)
 
 ---
 
