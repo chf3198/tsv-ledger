@@ -22,5 +22,6 @@
   },
   "dependencies": {
     "nouislider": "^15.8.1"
-  }
+  },
+  "license": "PolyForm-Noncommercial-1.0.0"
 }
