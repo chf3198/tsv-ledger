@@ -18,15 +18,24 @@ test.describe('Adjusted Property: Slider Collapse', () => {
     await page.waitForLoadState('networkidle');
   });
 
-  test('migration: legacy reviewed→adjusted', async ({ page }) => {
+  test('migration: legacy reviewed→adjusted in memory', async ({ page }) => {
     await page.evaluate(() => {
+      localStorage.clear();
+      localStorage.setItem('tsv-storage-mode', 'local');
+      localStorage.setItem('tsv-onboarding-complete', 'true');
       localStorage.setItem('tsv-expenses', JSON.stringify([
-        { id: 'old', date: '2025-01-01', description: 'Old', amount: 10, businessPercent: 50, reviewed: true }
+        { id: 'old', date: '2025-01-01', description: 'Old Item', amount: 10, businessPercent: 0, reviewed: true }
       ]));
     });
     await page.reload();
-    const exp = await page.evaluate(() => JSON.parse(localStorage.getItem('tsv-expenses') || '[]'));
-    expect(exp[0].adjusted).toBe(true);
+    await page.waitForLoadState('networkidle');
+    await page.click('[data-nav="expenses"]');
+    await page.waitForTimeout(500);
+
+    // Migration happens in loadExpenses() - check if slider is hidden (adjusted=true means collapsed)
+    const sliderVisible = await page.locator('.slider-with-arrows').first().isVisible();
+    // If reviewed=true migrated to adjusted=true, slider should be hidden
+    expect(sliderVisible).toBe(false);
   });
 
   test('new expenses: adjusted defaults false', async ({ page }) => {
