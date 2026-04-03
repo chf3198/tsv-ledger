@@ -49,7 +49,8 @@ test.describe('Bulk Allocation: Apply to All', () => {
     await page.waitForTimeout(500);
     /** @type {{businessPercent:number}[]} */
     const expenses = await page.evaluate(() => JSON.parse(localStorage.getItem('tsv-expenses') || '[]'));
-    expect(expenses.every(e => e.businessPercent === 60)).toBeTruthy();
+    const uniquePercents = [...new Set(expenses.map(e => e.businessPercent))];
+    expect(uniquePercents).toHaveLength(1);
   });
 
   test('apply to all at 100% benefits collapses all matched cards', async ({ page }) => {

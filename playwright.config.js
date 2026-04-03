@@ -19,13 +19,7 @@ module.exports = defineConfig({
   projects: [
     {
       name: 'chromium',
-      use: {
-        ...devices['Desktop Chrome'],
-        channel: 'chromium', // Use system chromium
-        launchOptions: {
-          executablePath: '/usr/bin/chromium',
-        }
-      },
+      use: { ...devices['Desktop Chrome'] },
     },
   ],
 

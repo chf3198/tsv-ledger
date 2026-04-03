@@ -67,7 +67,7 @@ async function analyzeScreenshotWithClaude(page, prompt) {
   const apiKey = process.env.ANTHROPIC_API_KEY;
   if (!apiKey) {
     console.warn('ANTHROPIC_API_KEY not set - skipping Claude Vision analysis');
-    return 'API_UNAVAILABLE';
+    return 'SKIPPED_NO_API_KEY';
   }
 
   try {

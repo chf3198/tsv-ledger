@@ -104,7 +104,8 @@ function expenseApp() {
     // Allocation UI (app-allocation-ui.js)
     initSlider(el, e) { return appAllocationUI.initSlider.call(this, el, e); },
     setAllocation(e, percent) { return appAllocationUI.setAllocation.call(this, e, percent); },
-    toggleReviewed(e) { return appAllocationUI.toggleReviewed.call(this, e); },
+    toggleAdjusted(e) { return appAllocationUI.toggleAdjusted.call(this, e); },
+    toggleReviewed(e) { return appAllocationUI.toggleAdjusted.call(this, e); },
 
     // Payment (app-payment.js)
     openPurgeModal(method) { return appPayment.openPurgeModal.call(this, method); },

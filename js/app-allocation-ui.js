@@ -29,7 +29,7 @@ const appAllocationUI = {
       if (businessPercent !== (expense.businessPercent ?? 100)) {
         // Immutable update via map (Alpine reactivity)
         this.expenses = this.expenses.map(e =>
-          e.id === expense.id ? { ...e, businessPercent, adjusted: true } : e
+          e.id === expense.id ? { ...e, businessPercent, adjusted: true, reviewed: true } : e
         );
         this.save();
       }
@@ -45,7 +45,7 @@ const appAllocationUI = {
     const matchIds = new Set([expense.id]);
     this.expenses = this.expenses.map(e =>
       matchIds.has(e.id)
-        ? { ...e, businessPercent, adjusted: true }
+        ? { ...e, businessPercent, adjusted: true, reviewed: true }
         : e
     );
 
@@ -67,7 +67,7 @@ const appAllocationUI = {
   toggleAdjusted(expense) {
     const matchIds = new Set([expense.id]);
     this.expenses = this.expenses.map(e =>
-      matchIds.has(e.id) ? { ...e, adjusted: !e.adjusted } : e
+      matchIds.has(e.id) ? { ...e, adjusted: !e.adjusted, reviewed: !e.adjusted } : e
     );
     this.save();
   }

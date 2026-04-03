@@ -39,7 +39,7 @@ const appAllocation = {
     // Bulk apply: set all matched expenses to same % and mark adjusted=true (collapse)
     this.expenses = this.expenses.map(expense =>
       matchIds.has(expense.id)
-        ? { ...expense, businessPercent: targetPercent, adjusted: true }
+        ? { ...expense, businessPercent: targetPercent, adjusted: true, reviewed: true }
         : expense
     );
 

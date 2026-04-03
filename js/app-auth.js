@@ -1,34 +1,60 @@
 /** Auth-related methods for expenseApp (ADR-009, ADR-019, ADR-026) */
 const appAuth = {
   async handleOAuthCallback() {
+    const api = window.AUTH_API || 'https://tsv-ledger-api.chf3198.workers.dev/auth';
     const params = new URLSearchParams(window.location.search);
-    const code = params.get('code');
-    if (!code) return;
+    const session = params.get('session');
+    if (session) {
+      localStorage.setItem('tsv-session', session);
+      window.history.replaceState({}, '', window.location.pathname);
+    }
+
+    const token = localStorage.getItem('tsv-session');
+    if (!token) return;
+
     try {
-      const res = await fetch('/auth/session', {
-        headers: { 'Authorization': `Bearer ${code}` }
+      const res = await fetch(`${api}/session/get`, {
+        headers: { Authorization: `Bearer ${token}` }
       });
-      if (res.ok) {
-        const session = await res.json();
-        if (session.token) {
-          localStorage.setItem('tsv-auth', JSON.stringify({ token: session.token }));
-          window.history.replaceState({}, document.title, window.location.pathname);
-        }
+      const data = await res.json();
+      if (data.user) {
+        this.auth = { user: data.user, authenticated: true };
+        localStorage.setItem('tsv-auth', JSON.stringify(this.auth));
+        this.storageMode = 'cloud';
+        localStorage.setItem('tsv-storage-mode', 'cloud');
+        this.showAuthModal = false;
+        if (!this.showNav) this.onboardingStep = 3;
+        return;
       }
-    } catch (e) { console.error('OAuth callback failed:', e); }
+
+      localStorage.removeItem('tsv-session');
+      localStorage.removeItem('tsv-auth');
+      this.auth = { user: null, authenticated: false };
+    } catch (e) {
+      console.error('Session check failed:', e);
+      localStorage.removeItem('tsv-session');
+      localStorage.removeItem('tsv-auth');
+      this.auth = { user: null, authenticated: false };
+    }
   },
   authWith(provider) {
-    const redirectUri = `${window.location.origin}${window.location.pathname}`;
-    const clientId = provider === 'github' ? '1234567890' : '0987654321';
-    const authUrl = provider === 'github'
-      ? `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}`
-      : `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${redirectUri}`;
-    window.location.href = authUrl;
+    const api = window.AUTH_API || 'https://tsv-ledger-api.chf3198.workers.dev/auth';
+    window.location.href = `${api}/oauth/${provider}/start`;
   },
   logout() {
+    // Clear auth state
+    this.auth = { user: null, authenticated: false };
     localStorage.removeItem('tsv-auth');
     localStorage.removeItem('tsv-session');
-    this.auth = { user: null, authenticated: false };
+    // Clear all user data on session end
+    localStorage.removeItem('tsv-expenses');
+    localStorage.removeItem('tsv-import-history');
+    localStorage.removeItem('tsv-storage-mode');
+    localStorage.removeItem('tsv-onboarding-complete');
+    this.storageMode = null;
+    this.onboardingStep = 1;
+    this.expenses = [];
+    this.importHistory = [];
     this.showUserMenu = false;
     this.showAuthModal = false;
   }

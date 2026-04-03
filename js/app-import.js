@@ -17,25 +17,43 @@ const appImport = {
     this.importComplete = false;
   },
   async importFile(file) {
-    this.importStatus = 'Processing...';
+    this.importStatus = 'Importing...';
     this.importError = false;
+    this.importComplete = false;
     try {
       const ext = file.name.split('.').pop().toLowerCase();
-      let result = [];
+      let result;
       if (ext === 'zip') {
-        result = await window.parseZip(file);
+        result = await importAmazonZip(file, guessCategory);
       } else if (ext === 'csv') {
-        result = window.parseAmazonCSV(await file.text());
+        const text = await file.text();
+        result = text.includes('Order ID') && text.includes('Product Name')
+          ? parseAmazonCSV(text, guessCategory)
+          : await parseCSVFile(file, guessCategory);
       } else if (ext === 'dat') {
-        result = window.parseBOADAT(await file.text());
+        result = parseBOAStatement(await file.text(), guessCategory);
+      } else {
+        throw new Error('Unsupported file type');
       }
-      const newExpenses = result.filter(e => !isDuplicate(e, this.expenses, this.importHistory));
-      const duplicatesCount = result.length - newExpenses.length;
+
+      const existingIds = new Set(this.expenses.map(e => e.id));
+      const newExpenses = result.expenses.filter(e => !existingIds.has(e.id));
+      const duplicatesCount = result.expenses.length - newExpenses.length;
       this.expenses = [...this.expenses, ...newExpenses];
-      this.save();
+      await this.save();
       addImportRecord(createImportRecord({ ext, result, filename: file.name, newCount: newExpenses.length, dupCount: duplicatesCount }));
-      this.importStatus = `Imported ${newExpenses.length} items (${duplicatesCount} duplicates skipped)`;
+      this.importHistory = loadImportHistory();
+
+      this.importStatus = [
+        `✓ ${newExpenses.length} new`,
+        duplicatesCount > 0 ? `${duplicatesCount} duplicates` : '',
+        result.skipped ? `${result.skipped} skipped` : ''
+      ].filter(Boolean).join(', ');
       this.importComplete = true;
+
+      if (this.storageMode === 'cloud' && this.auth.authenticated) {
+        await this.syncToCloud();
+      }
     } catch (e) { this.setError(e.message); }
   }
 };
