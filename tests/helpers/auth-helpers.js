@@ -48,4 +48,57 @@ async function clearAuthState(page) {
   });
 }
 
-module.exports = { BASE_URL, getAuthButtonStyles, assertAuthButtonVisible, waitForAlpine, clearAuthState };
+/** Clears auth + storage state, waits for Alpine, reloads */
+async function setupFreshAuth(page) {
+  await page.context().clearCookies();
+  await page.evaluate(() => localStorage.clear());
+  await page.reload();
+  await waitForAlpine(page);
+}
+
+/**
+ * Analyzes page screenshot with Claude Vision API
+ * Effect: Calls Anthropic API (requires ANTHROPIC_API_KEY env var)
+ * @param {Page} page - Playwright page object
+ * @param {string} prompt - What to analyze in the screenshot
+ * @returns {Promise<string>} Claude's analysis or 'API_UNAVAILABLE' if key missing
+ */
+async function analyzeScreenshotWithClaude(page, prompt) {
+  const apiKey = process.env.ANTHROPIC_API_KEY;
+  if (!apiKey) {
+    console.warn('ANTHROPIC_API_KEY not set - skipping Claude Vision analysis');
+    return 'API_UNAVAILABLE';
+  }
+
+  try {
+    const Anthropic = (await import('@anthropic-ai/sdk')).default;
+    const client = new Anthropic({ apiKey });
+    const screenshot = await page.screenshot({ encoding: 'base64' });
+
+    const response = await client.messages.create({
+      model: 'claude-3-5-sonnet-20241022',
+      max_tokens: 1024,
+      messages: [{
+        role: 'user',
+        content: [{
+          type: 'image',
+          source: {
+            type: 'base64',
+            media_type: 'image/png',
+            data: screenshot,
+          },
+        }, {
+          type: 'text',
+          text: prompt,
+        }],
+      }],
+    });
+
+    return response.content[0].type === 'text' ? response.content[0].text : 'No analysis';
+  } catch (error) {
+    console.error('Claude Vision API error:', error.message);
+    return 'API_ERROR';
+  }
+}
+
+module.exports = { BASE_URL, getAuthButtonStyles, assertAuthButtonVisible, waitForAlpine, clearAuthState, setupFreshAuth, analyzeScreenshotWithClaude };

@@ -9,7 +9,7 @@ module.exports = defineConfig({
   workers: 1, // Single worker prevents resource contention
   reporter: 'line', // Lighter than HTML for local dev
   timeout: 30000,
-  
+
   use: {
     baseURL: 'http://localhost:8080',
     trace: 'on-first-retry',
@@ -19,12 +19,18 @@ module.exports = defineConfig({
   projects: [
     {
       name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
+      use: {
+        ...devices['Desktop Chrome'],
+        channel: 'chromium', // Use system chromium
+        launchOptions: {
+          executablePath: '/usr/bin/chromium',
+        }
+      },
     },
   ],
 
   webServer: {
-    command: 'npx serve -l 8080',
+    command: 'node ./node_modules/serve/build/main.js -l 8080',
     url: 'http://localhost:8080',
     reuseExistingServer: !process.env.CI,
     timeout: 60000,
