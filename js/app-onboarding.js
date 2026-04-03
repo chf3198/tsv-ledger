@@ -7,6 +7,8 @@ const appOnboarding = {
     }
   },
   async selectStorageMode(mode) {
+    localStorage.removeItem('tsv-local-data-locked');
+    this.localDataLocked = false;
     if (mode === 'cloud') {
       this.storageIntent = 'cloud';
       localStorage.setItem('tsv-storage-mode', 'cloud');
@@ -16,6 +18,8 @@ const appOnboarding = {
     } else if (mode === 'local') {
       this.storageIntent = 'local';
       localStorage.setItem('tsv-storage-mode', 'local');
+      this.ensureLocalProfile();
+      this.localAliasDraft = this.localProfile?.alias || '';
       this.onboardingStep = 3;
     }
   },

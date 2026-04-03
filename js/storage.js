@@ -2,14 +2,17 @@
  * Storage - Pure functions + isolated side effects
  * @module storage
  *
- * localStorage schema (v3.5.0):
+ * localStorage schema (v3.6.4):
  * {
- *   'tsv-expenses': Expense[],           // Main data array
- *   'tsv-storage-mode': 'local'|'cloud', // ADR-024: User choice (local-first vs cloud sync)
- *   'tsv-auth': { token, user, exp },    // ADR-019: JWT session (token = Bearer JWT, exp = Unix timestamp)
- *   'tsv-onboarding-complete': 'true',   // ADR-025: Setup wizard completion flag
- *   'tsv-guest-acknowledged': 'true',    // Guest mode warning modal state
- *   'tsv-import-history': ImportRecord[] // ADR-013: Duplicate detection (file hash + import timestamp)
+ *   'tsv-expenses': Expense[],                 // Main data array
+ *   'tsv-storage-mode': 'local'|'cloud',       // ADR-024/029: User storage intent
+ *   'tsv-auth': { token, user, exp },          // ADR-019: JWT session (token = Bearer JWT, exp = Unix timestamp)
+ *   'tsv-onboarding-complete': 'true',         // ADR-025: Setup wizard completion flag
+ *   'tsv-guest-acknowledged': 'true',          // Guest mode warning modal state
+ *   'tsv-import-history': ImportRecord[],      // ADR-013: Duplicate detection (file hash + import timestamp)
+ *   'tsv-local-profile': { alias },            // ADR-030: Local-only identity badge/profile
+ *   'tsv-local-data-locked': 'true',           // ADR-030: Soft-lock local visibility on shared devices
+ *   'tsv-pending-cloud-migration': 'true'      // ADR-030: Deferred local→cloud migration after auth
  * }
  *
  * Expense schema:

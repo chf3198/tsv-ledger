@@ -22,6 +22,8 @@
   <header role="banner" class="app-header">
     <button data-testid="menu-toggle" class="menu-toggle" @click="menuOpen=!menuOpen" aria-label="Menu">☰</button>
     <h1 data-testid="logo">📊 TSV</h1>
+    <span data-testid="identity-badge" class="outline secondary"
+      style="font-size:0.875rem;padding:0.25rem 0.6rem;border-radius:999px" x-text="identityBadgeLabel"></span>
     <span data-testid="auth-button" class="auth-btn"
       @click="auth.authenticated ? showUserMenu=!showUserMenu : showAuthModal=true">
       <template x-if="auth.authenticated && auth.user?.image"><img :src="auth.user.image" alt=""
@@ -53,9 +55,15 @@
       <button @click="showAuthModal=true" class="outline contrast"
         style="padding:0.25rem 0.5rem;font-size:0.875rem">Sign In</button>
     </aside>
+    <aside x-show="storageIntent === 'local' && localDataLocked" x-cloak data-testid="local-locked-banner"
+      class="cloud-auth-banner" role="alert">
+      🔐 <strong>Local Access Paused</strong> — Data on this device is hidden until you resume local access.
+      <button data-testid="resume-local-access" @click="resumeLocalAccess()" class="outline contrast"
+        style="padding:0.25rem 0.5rem;font-size:0.875rem">Resume Local Access</button>
+    </aside>
     <!-- Local Mode Warning Banner (shown when in local storage mode) -->
     <aside x-show="dataAuthority === 'local' && expenses.length > 0" x-cloak class="guest-warning-banner" role="alert">
-      ⚠️ <strong>Local Mode</strong> — Data stored on this device only.
+      ⚠️ <strong>Local Mode</strong> — Data for <span x-text="localProfile?.alias || 'Local User'"></span> stays on this device only.
       <button @click="showAuthModal=true" class="outline contrast"
         style="padding:0.25rem 0.5rem;font-size:0.875rem">Sign in to sync to cloud</button>
     </aside>
@@ -316,6 +324,20 @@
     <!-- Settings -->
     <section x-show="showNav && route==='settings'">
       <h2>⚙️ Settings</h2>
+      <article style="margin-bottom:1.5rem">
+        <h3>🪪 Identity & Storage</h3>
+        <p><strong>Current identity:</strong> <span x-text="identityBadgeLabel"></span></p>
+        <p><strong>Storage intent:</strong> <span x-text="storageIntent || 'Not selected'"></span></p>
+        <div x-show="storageIntent === 'local'" x-cloak>
+          <label for="local-alias-input">Local alias</label>
+          <input id="local-alias-input" data-testid="local-alias-input" type="text" x-model="localAliasDraft"
+            placeholder="Local User">
+          <button data-testid="save-local-alias" class="outline" @click="saveLocalAlias()">Save Alias</button>
+          <button data-testid="local-signout-button" class="outline secondary"
+            @click="openLocalSignOut()">Local Sign Out</button>
+          <p style="color:var(--muted-color);margin-top:0.5rem">Local lock is a device privacy control, not encryption.</p>
+        </div>
+      </article>
       <p data-testid="export-disclaimer" class="legal-disclaimer"><strong>Not Tax Advice:</strong> This tool provides
         expense allocation assistance only. Verify all allocations with a qualified tax professional.</p>
       <button class="outline" @click="exportCSV()">📤 Export CSV</button><button class="outline secondary"
@@ -356,6 +378,21 @@
       <footer>
         <button class="secondary outline" data-testid="purge-cancel-btn" @click="closePurgeModal()">Cancel</button>
         <button class="contrast" data-testid="purge-confirm-btn" @click="confirmPurge()">Remove Expenses</button>
+      </footer>
+    </article>
+  </dialog>
+
+  <dialog :open="showLocalSignOutModal" data-testid="local-signout-modal" @click.self="closeLocalSignOut()">
+    <article>
+      <header>
+        <h3>🔒 Local Sign Out</h3>
+        <button @click="closeLocalSignOut()" aria-label="Close" class="close">×</button>
+      </header>
+      <p>Choose what should happen to data for <strong x-text="localProfile?.alias || 'Local User'"></strong>.</p>
+      <footer style="display:grid;gap:0.75rem">
+        <button data-testid="local-signout-migrate" class="outline" @click="moveLocalDataToCloud()">Move to Cloud</button>
+        <button data-testid="local-signout-lock" class="outline secondary" @click="lockLocalData()">Lock on This Device</button>
+        <button data-testid="local-signout-delete" class="contrast" @click="deleteLocalData()">Delete Local Data</button>
       </footer>
     </article>
   </dialog>
@@ -424,6 +461,7 @@
   <script src="js/app-allocation.js"></script>
   <script src="js/app-allocation-ui.js"></script>
   <script src="js/app-payment.js"></script>
+  <script src="js/app-identity.js"></script>
   <script src="js/app.js"></script>
 </body>
 

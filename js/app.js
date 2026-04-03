@@ -31,14 +31,26 @@ function expenseApp() {
     // Auth state (ADR-009)
     auth: { user: null, authenticated: false },
     showAuthModal: false, showUserMenu: false,
-    // Storage mode state (ADR-024)
-    // Storage intent / session state / data authority (ADR-029)
+    // Storage intent / session state / data authority (ADR-029, ADR-030)
     storageIntent: localStorage.getItem('tsv-storage-mode') || null,
     sessionState: 'unauthenticated',
+    localProfile: (() => {
+      try { return JSON.parse(localStorage.getItem('tsv-local-profile') || 'null'); }
+      catch { return null; }
+    })(),
+    localAliasDraft: '',
+    localDataLocked: localStorage.getItem('tsv-local-data-locked') === 'true',
+    pendingCloudMigration: localStorage.getItem('tsv-pending-cloud-migration') === 'true',
+    showLocalSignOutModal: false,
     get dataAuthority() {
-      if (this.storageIntent === 'local') return 'local';
+      if (this.storageIntent === 'local' && !this.localDataLocked && this.localProfile?.alias) return 'local';
       if (this.storageIntent === 'cloud' && this.sessionState === 'authenticated') return 'cloud';
       return 'none';
+    },
+    get identityBadgeLabel() {
+      if (this.dataAuthority === 'cloud') return `Cloud: ${this.auth.user?.name || 'Account'}`;
+      if (this.dataAuthority === 'local') return `Local: ${this.localProfile?.alias || 'Local User'}`;
+      return 'Signed out';
     },
     // Onboarding wizard state (ADR-025)
     onboardingStep: 1, onboardingComplete: localStorage.getItem('tsv-onboarding-complete') === 'true',
@@ -62,6 +74,8 @@ function expenseApp() {
 
     // ===== INITIALIZATION =====
     async init() {
+      if (this.storageIntent === 'local') appIdentity.ensureLocalProfile.call(this);
+      this.localAliasDraft = this.localProfile?.alias || '';
       await appAuth.handleOAuthCallback.call(this);
       await appStorage.loadData.call(this);
     },
@@ -70,6 +84,15 @@ function expenseApp() {
     // Auth (app-auth.js)
     authWith(provider) { return appAuth.authWith.call(this, provider); },
     logout() { return appAuth.logout.call(this); },
+    ensureLocalProfile() { return appIdentity.ensureLocalProfile.call(this); },
+    saveLocalAlias() { return appIdentity.saveLocalAlias.call(this); },
+    openLocalSignOut() { return appIdentity.openLocalSignOut.call(this); },
+    closeLocalSignOut() { return appIdentity.closeLocalSignOut.call(this); },
+    moveLocalDataToCloud() { return appIdentity.moveLocalDataToCloud.call(this); },
+    lockLocalData() { return appIdentity.lockLocalData.call(this); },
+    resumeLocalAccess() { return appIdentity.resumeLocalAccess.call(this); },
+    deleteLocalData() { return appIdentity.deleteLocalData.call(this); },
+    completePendingCloudMigration() { return appIdentity.completePendingCloudMigration.call(this); },
 
     // CRUD (app-crud.js)
     addExpense() { return appCrud.addExpense.call(this); },
