@@ -143,6 +143,7 @@ See [ADR index](adr/README.md) for full Architecture Decision Records.
 | [023](adr/023-cloud-sync-integration.md)    | Cloud sync integration       | 3.5.0   |
 | [024](adr/024-storage-mode-selection.md)    | Storage mode selection       | 3.5.0   |
 | [025](adr/025-onboarding-wizard.md)         | Onboarding wizard            | 3.6.0   |
+| [026](adr/026-disclaimer-visibility-and-export-attribution.md) | Disclaimer visibility/export attribution | 3.6.1   |
 
 > ADRs 001–018 archived in [DESIGN-archive.md](DESIGN-archive.md)
 
