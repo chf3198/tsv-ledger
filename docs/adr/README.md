@@ -23,6 +23,12 @@ rather than modify.
 | [019](019-jwt-bearer-tokens.md)         | JWT Bearer tokens               | Accepted |
 | [020](020-cloudflare-pages-previews.md) | Cloudflare Pages previews       | Accepted |
 | [021](021-auth-button-visibility.md)    | Auth button visibility          | Accepted |
+| [022](022-product-repositioning.md)     | Product repositioning           | Accepted |
+| [023](023-cloud-sync-integration.md)    | Cloud sync integration          | Accepted |
+| [024](024-storage-mode-selection.md)    | Storage mode selection          | Accepted |
+| [025](025-onboarding-wizard.md)         | Onboarding wizard               | Accepted |
+| [026](026-disclaimer-visibility-and-export-attribution.md) | Disclaimer visibility/export attribution | Accepted |
+| [027](027-validation-gate-stabilization.md) | Validation gate stabilization | Accepted |
 
 > ADRs 001–018 are archived in [DESIGN-archive.md](../DESIGN-archive.md).
 > Recent ADRs (019+) have individual files.
