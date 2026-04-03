@@ -10,7 +10,10 @@ const appAuth = {
     }
 
     const token = localStorage.getItem('tsv-session');
-    if (!token) return;
+    if (!token) {
+      this.sessionState = 'unauthenticated';
+      return;
+    }
 
     this.sessionState = 'auth-pending';
     try {
@@ -25,6 +28,7 @@ const appAuth = {
         localStorage.setItem('tsv-storage-mode', 'cloud');
         this.sessionState = 'authenticated';
         this.showAuthModal = false;
+        if (this.pendingCloudMigration) await this.completePendingCloudMigration();
         if (!this.showNav) this.onboardingStep = 3;
         return;
       }
@@ -46,18 +50,18 @@ const appAuth = {
     window.location.href = `${api}/oauth/${provider}/start`;
   },
   logout() {
-    // Clear auth state
     this.auth = { user: null, authenticated: false };
     localStorage.removeItem('tsv-auth');
     localStorage.removeItem('tsv-session');
     this.sessionState = 'unauthenticated';
-    // Clear all user data on session end
-    localStorage.removeItem('tsv-expenses');
-    localStorage.removeItem('tsv-import-history');
-    localStorage.removeItem('tsv-storage-mode');
-    localStorage.removeItem('tsv-onboarding-complete');
+    ['tsv-expenses', 'tsv-import-history', 'tsv-storage-mode', 'tsv-onboarding-complete', 'tsv-local-profile', 'tsv-local-data-locked', 'tsv-pending-cloud-migration'].forEach(k => localStorage.removeItem(k));
     this.storageIntent = null;
+    this.localProfile = null;
+    this.localAliasDraft = '';
+    this.localDataLocked = false;
+    this.pendingCloudMigration = false;
     this.onboardingStep = 1;
+    this.onboardingComplete = false;
     this.expenses = [];
     this.importHistory = [];
     this.showUserMenu = false;

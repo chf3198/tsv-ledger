@@ -17,6 +17,33 @@
 
 ## Log Entries
 
+### 2026-04-03 SUCCESS: Tickets #19–#22 — Local Identity, Sign-Out, and Security Matrix Complete
+
+**Context**: Finishing the remaining open work under epic #16 required a user-attributed local mode, a deterministic local sign-out workflow, an encrypted-local-vault decision, and broader security regression coverage across cloud/local/locked/pending states.
+
+**Outcome**:
+- ✅ Added ADR-030 defining local identity, local sign-out outcomes, and the Phase 0 decision to defer encrypted local vault implementation
+- ✅ Added persistent header identity badge with `Cloud`, `Local`, and `Signed out` states
+- ✅ Added local profile persistence via `tsv-local-profile` and editable alias in Settings
+- ✅ Added `Local Sign Out` actions: move to cloud, lock on device, delete local data
+- ✅ Added locked-state gating via `tsv-local-data-locked` so local data does not render while paused
+- ✅ Added pending migration path via `tsv-pending-cloud-migration` and post-auth sync completion
+- ✅ Added 9 new E2E tests across identity badge, local sign-out, and security state matrix coverage
+- ✅ Updated one intentional visual snapshot for the local-mode banner copy change
+- ✅ Final gates green: 99 passed, 0 failed; lint clean
+
+**Insight**:
+- Identity attribution must live in the shell, not inside auth-only controls, or local-mode users remain invisible in the primary UX
+- `lock local` without a user secret is a **privacy affordance**, not an encryption boundary; product copy must state that explicitly
+- Broader matrix tests catch regressions more effectively than single-defect tests because they validate the full state lattice, not only the last incident path
+
+**Adaptation**:
+- Keep `dataAuthority` as the only render gate, even when adding local-only flows
+- Always pair new shared-device/privacy UX with explicit test cases for `signed out`, `pending`, and `locked` states
+- When UI copy intentionally changes a visual regression target, update only the affected snapshot after functional gates pass
+
+---
+
 ### 2026-04-02 SUCCESS: Ticket #17 — P0 Security Hotfix: Blocked Signed-Out Cloud Data Render
 
 **Context**: UAT revealed that users with `storageMode='cloud'` in localStorage could see cached expense data without being authenticated, due to independent persistence of `storageMode` and `auth.authenticated` state.
