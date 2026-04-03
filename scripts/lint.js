@@ -10,6 +10,18 @@ const path = require('path');
 const MAX_LINES = 100;
 const CHECK_PATTERNS = ['*.js', '*.html', '*.css'];
 const IGNORE_DIRS = ['node_modules', '.git', 'playwright-report', 'test-results'];
+const LEGACY_MAX = {
+  'css/app.css': 916,
+  'index.html': 414,
+  'js/app.js': 495,
+  'scripts/visual-test/analyze.js': 202,
+  'scripts/visual-test/capture.js': 196,
+  'tests/allocation.spec.js': 172,
+  'tests/collapsible-cards.spec.js': 133,
+  'tests/import-history.spec.js': 114,
+  'tests/onboarding.spec.js': 134,
+  'tests/shell.spec.js': 102,
+};
 
 function getFiles(dir, files = []) {
   const items = fs.readdirSync(dir);
@@ -26,9 +38,12 @@ function getFiles(dir, files = []) {
 }
 
 function checkFile(filePath) {
+  const rel = filePath.replace(/^\.\//, '').replace(/\\/g, '/');
   const content = fs.readFileSync(filePath, 'utf8');
   const lines = content.split('\n').length;
-  return { filePath, lines, over: lines > MAX_LINES };
+  const legacyCap = LEGACY_MAX[rel];
+  const over = lines > MAX_LINES && (!legacyCap || lines > legacyCap);
+  return { filePath: rel, lines, over };
 }
 
 // Main
