@@ -17,6 +17,32 @@
 
 ## Log Entries
 
+### 2026-04-02 SUCCESS: Ticket #17 — P0 Security Hotfix: Blocked Signed-Out Cloud Data Render
+
+**Context**: UAT revealed that users with `storageMode='cloud'` in localStorage could see cached expense data without being authenticated, due to independent persistence of `storageMode` and `auth.authenticated` state.
+
+**Outcome**:
+- ✅ Root cause identified: `loadData()` silently fell through to local cache on cloud-intent + signed-out state
+- ✅ Auth guard added at top of `loadData()` in `js/app-storage.js` — clears expenses and sets `cloudAuthRequired=true`
+- ✅ Cloud re-auth banner added (`data-testid="cloud-auth-required-banner"`) with Sign In CTA
+- ✅ `cloudAuthRequired` state field added to `js/app.js`
+- ✅ Security regression tests added (`tests/data-authority.spec.js`)
+- ✅ ADR-028 created and indexed
+- ✅ Merged to master `9a979fa`; gates: 83 passed, 1 skipped, 0 failed; lint clean
+- ✅ Issue #17 closed with evidence comment
+
+**Insight**:
+- Persisting `storageMode` and auth independently creates a **persistent drift risk class** — any session expiry or logout leaves `storageMode='cloud'` in localStorage without a corresponding valid session
+- Cloud fetch intentionally caches data locally (for offline resilience), but that cache must never be rendered without re-authentication when cloud intent is set
+- Selector naming discipline is critical: reusing a CSS class (`guest-warning-banner`) for a new banner caused strict-mode Playwright failures when 2 elements matched
+
+**Adaptation**:
+- Added `cloud-auth-banner` as a **distinct class** — never reuse banner class names across intent contexts
+- Added to ERROR_PREVENTION.md checklist: always assign unique `data-testid` and CSS class to each banner/alert element
+- Ticket #18 created (P1) to refactor into explicit `storageIntent`/`sessionState`/`dataAuthority` model eliminating the drift class at its root
+
+---
+
 ### 2026-03-05 SUCCESS: ADR-026 Complete - Full Code Modularization
 
 **Context**: Implementing ADR-026 to meet 100-line-per-file constraint across all modules.
