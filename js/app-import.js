@@ -51,7 +51,7 @@ const appImport = {
       ].filter(Boolean).join(', ');
       this.importComplete = true;
 
-      if (this.storageMode === 'cloud' && this.auth.authenticated) {
+      if (this.dataAuthority === 'cloud') {
         await this.syncToCloud();
       }
     } catch (e) { this.setError(e.message); }

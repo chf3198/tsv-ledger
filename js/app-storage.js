@@ -8,7 +8,7 @@ const appStorage = {
   async save() {
     saveExpenses(this.expenses);
     this.refresh();
-    if (this.storageMode === 'cloud' && this.auth.authenticated) {
+      if (this.dataAuthority === 'cloud') {
       await this.syncToCloud();
     }
   },
@@ -23,16 +23,14 @@ const appStorage = {
   },
   async loadData() {
     if (!this.onboardingComplete) return;
-    if (this.storageMode === 'cloud' && !this.auth.authenticated) {
-      this.cloudAuthRequired = true;
+      if (this.storageIntent === 'cloud' && this.sessionState !== 'authenticated') {
       this.expenses = [];
       this.importHistory = [];
       this.refresh();
       return;
     }
 
-    this.cloudAuthRequired = false;
-    if (this.storageMode === 'cloud' && this.auth.authenticated) {
+      if (this.dataAuthority === 'cloud') {
       await this.fetchFromCloud();
     } else {
       this.expenses = loadExpenses();

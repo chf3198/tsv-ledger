@@ -30,6 +30,7 @@ rather than modify.
 | [026](026-disclaimer-visibility-and-export-attribution.md) | Disclaimer visibility/export attribution | Accepted |
 | [027](027-validation-gate-stabilization.md) | Validation gate stabilization | Accepted |
 | [028](028-cloud-intent-data-authority-hotfix.md) | Cloud-intent data authority hotfix | Accepted |
+| [029](029-explicit-state-model.md) | Explicit storage-intent/session-state/data-authority model | Accepted |
 
 > ADRs 001–018 are archived in [DESIGN-archive.md](../DESIGN-archive.md).
 > Recent ADRs (019+) have individual files.

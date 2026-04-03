@@ -8,13 +8,13 @@ const appOnboarding = {
   },
   async selectStorageMode(mode) {
     if (mode === 'cloud') {
-      this.storageMode = 'cloud';
+      this.storageIntent = 'cloud';
       localStorage.setItem('tsv-storage-mode', 'cloud');
       if (!this.auth.authenticated) {
         this.showAuthModal = true;
       }
     } else if (mode === 'local') {
-      this.storageMode = 'local';
+      this.storageIntent = 'local';
       localStorage.setItem('tsv-storage-mode', 'local');
       this.onboardingStep = 3;
     }

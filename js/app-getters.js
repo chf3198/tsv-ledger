@@ -2,7 +2,7 @@
 window.appGetters = {
   get showNav() {
     const app = document.querySelector('[x-data]')?._x_dataStack?.[0];
-    return !app || app.onboardingComplete || (localStorage.getItem('tsv-storage-mode') && app.expenses.length && app.onboardingStep === 1);
+    return !app || app.onboardingComplete || (app.storageIntent && app.expenses.length && app.onboardingStep === 1);
   },
   get totals() {
     const exp = document.querySelector('[x-data]')?._x_dataStack?.[0]?.expenses || [];
