@@ -29,6 +29,7 @@ rather than modify.
 | [025](025-onboarding-wizard.md)         | Onboarding wizard               | Accepted |
 | [026](026-disclaimer-visibility-and-export-attribution.md) | Disclaimer visibility/export attribution | Accepted |
 | [027](027-validation-gate-stabilization.md) | Validation gate stabilization | Accepted |
+| [028](028-cloud-intent-data-authority-hotfix.md) | Cloud-intent data authority hotfix | Accepted |
 
 > ADRs 001–018 are archived in [DESIGN-archive.md](../DESIGN-archive.md).
 > Recent ADRs (019+) have individual files.

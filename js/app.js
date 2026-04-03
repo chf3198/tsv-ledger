@@ -33,6 +33,7 @@ function expenseApp() {
     showAuthModal: false, showUserMenu: false,
     // Storage mode state (ADR-024)
     storageMode: localStorage.getItem('tsv-storage-mode') || null,
+    cloudAuthRequired: false,
     // Onboarding wizard state (ADR-025)
     onboardingStep: 1, onboardingComplete: localStorage.getItem('tsv-onboarding-complete') === 'true',
     // Payment method purge state (ADR-017)
