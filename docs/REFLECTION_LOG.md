@@ -707,3 +707,21 @@ await expect(nav).toHaveClass(/open/); // Passes - tests reactive binding direct
 - Extract named functions from app.js (currently 1 symbol, 97 lines)
 - Add usage examples to DESIGN.md (few-shot learning)
 - Document common patterns in ERROR_PREVENTION.md
+
+### 2026-04-02 FIX: Ticket #5 Admin Closeout Discipline
+
+**Context**: Legal disclaimer ticket (#5) was initially committed while full validation gates were red.
+
+**Outcome**: Reverted prior commit, re-implemented disclaimer/export changes, stabilized visual-test setup, and restored lint gate actionability before finalizing.
+
+**Insight**:
+
+- Git commit acceptance is not a quality signal; unexecuted/non-executable hooks permit policy drift.
+- Visual regressions must control onboarding/storage state explicitly to avoid false negatives.
+- A strict 100-line rule requires legacy-baseline handling to keep lint actionable during modernization.
+
+**Adaptation**:
+
+- Enforced full `npm test && npm run lint` green status before final commit/merge.
+- Added ADR-026 (disclaimer visibility/export attribution) and ADR-027 (validation gate stabilization).
+- Standardized admin closeout: verify gates, merge, ticket state transition, and branch cleanup only after green checks.
