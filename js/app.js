@@ -32,8 +32,14 @@ function expenseApp() {
     auth: { user: null, authenticated: false },
     showAuthModal: false, showUserMenu: false,
     // Storage mode state (ADR-024)
-    storageMode: localStorage.getItem('tsv-storage-mode') || null,
-    cloudAuthRequired: false,
+    // Storage intent / session state / data authority (ADR-029)
+    storageIntent: localStorage.getItem('tsv-storage-mode') || null,
+    sessionState: 'unauthenticated',
+    get dataAuthority() {
+      if (this.storageIntent === 'local') return 'local';
+      if (this.storageIntent === 'cloud' && this.sessionState === 'authenticated') return 'cloud';
+      return 'none';
+    },
     // Onboarding wizard state (ADR-025)
     onboardingStep: 1, onboardingComplete: localStorage.getItem('tsv-onboarding-complete') === 'true',
     // Payment method purge state (ADR-017)

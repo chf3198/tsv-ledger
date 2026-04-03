@@ -47,14 +47,14 @@
   </aside>
   <!-- App Shell: Main -->
   <main role="main" class="app-main">
-    <aside x-show="cloudAuthRequired" x-cloak data-testid="cloud-auth-required-banner" class="cloud-auth-banner"
-      role="alert">
+    <aside x-show="dataAuthority === 'none' && storageIntent === 'cloud'" x-cloak
+      data-testid="cloud-auth-required-banner" class="cloud-auth-banner" role="alert">
       🔒 <strong>Cloud Access Locked</strong> — Sign in to access your cloud data.
       <button @click="showAuthModal=true" class="outline contrast"
         style="padding:0.25rem 0.5rem;font-size:0.875rem">Sign In</button>
     </aside>
     <!-- Local Mode Warning Banner (shown when in local storage mode) -->
-    <aside x-show="storageMode === 'local' && expenses.length > 0" x-cloak class="guest-warning-banner" role="alert">
+    <aside x-show="dataAuthority === 'local' && expenses.length > 0" x-cloak class="guest-warning-banner" role="alert">
       ⚠️ <strong>Local Mode</strong> — Data stored on this device only.
       <button @click="showAuthModal=true" class="outline contrast"
         style="padding:0.25rem 0.5rem;font-size:0.875rem">Sign in to sync to cloud</button>

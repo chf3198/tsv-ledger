@@ -12,6 +12,7 @@ const appAuth = {
     const token = localStorage.getItem('tsv-session');
     if (!token) return;
 
+    this.sessionState = 'auth-pending';
     try {
       const res = await fetch(`${api}/session/get`, {
         headers: { Authorization: `Bearer ${token}` }
@@ -20,8 +21,9 @@ const appAuth = {
       if (data.user) {
         this.auth = { user: data.user, authenticated: true };
         localStorage.setItem('tsv-auth', JSON.stringify(this.auth));
-        this.storageMode = 'cloud';
+        this.storageIntent = 'cloud';
         localStorage.setItem('tsv-storage-mode', 'cloud');
+        this.sessionState = 'authenticated';
         this.showAuthModal = false;
         if (!this.showNav) this.onboardingStep = 3;
         return;
@@ -30,11 +32,13 @@ const appAuth = {
       localStorage.removeItem('tsv-session');
       localStorage.removeItem('tsv-auth');
       this.auth = { user: null, authenticated: false };
+      this.sessionState = 'unauthenticated';
     } catch (e) {
       console.error('Session check failed:', e);
       localStorage.removeItem('tsv-session');
       localStorage.removeItem('tsv-auth');
       this.auth = { user: null, authenticated: false };
+      this.sessionState = 'unauthenticated';
     }
   },
   authWith(provider) {
@@ -46,12 +50,13 @@ const appAuth = {
     this.auth = { user: null, authenticated: false };
     localStorage.removeItem('tsv-auth');
     localStorage.removeItem('tsv-session');
+    this.sessionState = 'unauthenticated';
     // Clear all user data on session end
     localStorage.removeItem('tsv-expenses');
     localStorage.removeItem('tsv-import-history');
     localStorage.removeItem('tsv-storage-mode');
     localStorage.removeItem('tsv-onboarding-complete');
-    this.storageMode = null;
+    this.storageIntent = null;
     this.onboardingStep = 1;
     this.expenses = [];
     this.importHistory = [];
