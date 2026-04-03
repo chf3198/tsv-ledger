@@ -4,7 +4,6 @@
  */
 
 const STORAGE_KEY = 'tsv-expenses';
-const EXPORT_DISCLAIMER = 'This tool provides expense allocation assistance only. Verify allocations with a qualified tax professional.';
 
 // PURE FUNCTIONS
 
@@ -15,13 +14,12 @@ const getUniqueLocations = (expenses) =>
 // Pure: Expense -> string
 const expenseToCSVRow = (e) => {
   const category = e.businessPercent >= 50 ? 'Office Supplies' : 'Employee Benefits';
-  const disclaimer = `"${EXPORT_DISCLAIMER.replace(/"/g, '""')}"`;
-  return [e.date, `"${(e.description || '').replace(/"/g, '""')}"`, e.location, category, (e.amount || 0).toFixed(2), disclaimer].join(',');
+  return [e.date, `"${(e.description || '').replace(/"/g, '""')}"`, e.location, category, (e.amount || 0).toFixed(2)].join(',');
 };
 
 // Pure: Expense[] -> string
 const expensesToCSV = (expenses) =>
-  ['Date,Description,Location,Category,Amount,Disclaimer', ...expenses.map(expenseToCSVRow)].join('\n');
+  ['Date,Description,Location,Category,Amount', ...expenses.map(expenseToCSVRow)].join('\n');
 
 // SIDE EFFECTS (clearly marked)
 
