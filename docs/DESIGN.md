@@ -145,6 +145,7 @@ See [ADR index](adr/README.md) for full Architecture Decision Records.
 | [025](adr/025-onboarding-wizard.md)         | Onboarding wizard            | 3.6.0   |
 | [026](adr/026-disclaimer-visibility-and-export-attribution.md) | Disclaimer visibility/export attribution | 3.6.1   |
 | [027](adr/027-validation-gate-stabilization.md) | Validation gate stabilization | 3.6.1   |
+| [028](adr/028-cloud-intent-data-authority-hotfix.md) | Cloud-intent data authority hotfix | 3.6.2   |
 
 > ADRs 001–018 archived in [DESIGN-archive.md](DESIGN-archive.md)
 

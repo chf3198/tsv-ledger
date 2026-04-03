@@ -23,6 +23,15 @@ const appStorage = {
   },
   async loadData() {
     if (!this.onboardingComplete) return;
+    if (this.storageMode === 'cloud' && !this.auth.authenticated) {
+      this.cloudAuthRequired = true;
+      this.expenses = [];
+      this.importHistory = [];
+      this.refresh();
+      return;
+    }
+
+    this.cloudAuthRequired = false;
     if (this.storageMode === 'cloud' && this.auth.authenticated) {
       await this.fetchFromCloud();
     } else {
