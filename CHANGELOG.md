@@ -16,6 +16,37 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Clicking resets to onboarding wizard without losing cached data
   - Fixes strict-mode selector in data-authority test
 
+## [3.5.0] - 2026-02-28
+
+### Added
+
+- **Cloud Sync** (ADR-023): Authenticated users can sync expenses to Cloudflare D1
+- **Storage Mode Selection** (ADR-024): Choose between local-only and cloud storage
+- **Onboarding Wizard** (ADR-025): Guided first-time user experience with step indicator
+- **Modular Architecture** (ADR-026): Split app.js into 8 specialized modules (≤100 lines each)
+- **Explicit State Model** (ADR-029): storageIntent/sessionState/dataAuthority derivation
+- **Local Identity & Sign-Out** (ADR-030): User-attributed local mode with lock/resume/delete
+- **Claude Vision AI Tests**: AI-powered visual inspection for accessibility and layout
+- **Visual Testing Infrastructure**: Screenshot capture and regression comparison
+- **Bulk Allocation Improvements**: Apply-to-All with adjusted property and collapse behavior
+- **Context-Specific Instructions**: `.github/instructions/` files for frontend, backend, testing, docs
+
+### Fixed
+
+- **Cloud-Intent Data Leakage** (ADR-028): Block cached data render when signed out with cloud intent
+- **Onboarding Isolation**: Wizard content separated from dashboard during setup
+- **Bulk Apply Determinism**: Normalized target percent and fresh source lookup
+- **Slider Immutability**: Immutable updates in slider handler
+- **Import History Sync**: Field name mapping between frontend and DB
+
+### Changed
+
+- **License**: Migrated from MIT to PolyForm Noncommercial 1.0.0
+- **README**: AI-scannable rewrite with updated badge and nav links
+- **Governance**: Universal automation baseline with pre-commit/pre-push hooks
+
+## [3.4.0] - 2026-02-28
+
 ### Added
 
 - **Guest Mode Warnings** (ADR-020): Clear warnings for unauthenticated users
