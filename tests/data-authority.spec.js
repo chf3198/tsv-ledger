@@ -25,7 +25,7 @@ test.describe('Data Authority Security (P0)', () => {
     const banner = page.locator('[data-testid="cloud-auth-required-banner"]');
     await expect(banner).toBeVisible();
     await expect(banner).toContainText('Sign in to access your cloud data');
-    await banner.locator('button').click();
+    await banner.locator('button.contrast').click();
     await expect(page.locator('[data-testid="auth-modal"]')).toBeVisible();
   });
 });

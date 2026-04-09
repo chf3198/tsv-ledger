@@ -28,5 +28,13 @@ const appOnboarding = {
     this.onboardingComplete = true;
     await this.loadData();
     this.route = 'dashboard';
+  },
+  resetToOnboarding() {
+    localStorage.removeItem('tsv-storage-mode');
+    localStorage.removeItem('tsv-onboarding-complete');
+    this.storageIntent = null;
+    this.onboardingComplete = false;
+    this.onboardingStep = 1;
+    this.route = 'dashboard';
   }
 };

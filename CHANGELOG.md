@@ -7,7 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [3.4.0] - 2026-02-28
+## [3.5.1] - 2026-04-09
+
+### Fixed
+
+- **Returning User Recovery** (ADR-031): Cloud-locked users now see "Start Fresh Locally" button
+  - Eliminates UX dead-end when returning without an active session
+  - Clicking resets to onboarding wizard without losing cached data
+  - Fixes strict-mode selector in data-authority test
 
 ### Added
 

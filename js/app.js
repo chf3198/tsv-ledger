@@ -121,6 +121,7 @@ function expenseApp() {
     navigateToImport() { return appOnboarding.navigateToImport.call(this); },
     selectStorageMode(mode) { return appOnboarding.selectStorageMode.call(this, mode); },
     completeOnboarding() { return appOnboarding.completeOnboarding.call(this); },
+    resetToOnboarding() { return appOnboarding.resetToOnboarding.call(this); },
 
     // Allocation (app-allocation.js)
     loadMoreBusiness() { return appAllocation.loadMoreBusiness.call(this); },
