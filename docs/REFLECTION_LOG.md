@@ -17,6 +17,22 @@
 
 ## Log Entries
 
+### 2026-04-09 SUCCESS: Returning User Recovery — Cloud-Locked UX Dead-End Fix
+
+**Context**: Production UAT revealed that returning users with cloud intent but no active session see only "Cloud Access Locked — Sign In" with no alternative forward path. Users who can't authenticate are stuck.
+
+**Outcome**:
+- ✅ ADR-031: Added "Start Fresh Locally" button to cloud-locked banner
+- ✅ `resetToOnboarding()` clears intent/onboarding flags, returns to wizard step 1
+- ✅ 3 new E2E tests, 1 existing test selector fix, 102/102 tests pass
+- ✅ Released as v3.5.1
+
+**Lesson**: State machines need escape hatches. Every "locked" UI state must offer at least two forward paths (primary + recovery). The ADR-029 state model correctly prevents data leakage but didn't account for the UX recovery flow.
+
+**Applied via**: Agile role baton workflow (Manager → Collaborator → Admin → Consultant)
+
+---
+
 ### 2026-04-03 SUCCESS: Tickets #19–#22 — Local Identity, Sign-Out, and Security Matrix Complete
 
 **Context**: Finishing the remaining open work under epic #16 required a user-attributed local mode, a deterministic local sign-out workflow, an encrypted-local-vault decision, and broader security regression coverage across cloud/local/locked/pending states.

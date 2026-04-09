@@ -54,6 +54,8 @@
       🔒 <strong>Cloud Access Locked</strong> — Sign in to access your cloud data.
       <button @click="showAuthModal=true" class="outline contrast"
         style="padding:0.25rem 0.5rem;font-size:0.875rem">Sign In</button>
+      <button data-testid="start-fresh-local" @click="resetToOnboarding()" class="outline secondary"
+        style="padding:0.25rem 0.5rem;font-size:0.875rem">Start Fresh Locally</button>
     </aside>
     <aside x-show="storageIntent === 'local' && localDataLocked" x-cloak data-testid="local-locked-banner"
       class="cloud-auth-banner" role="alert">
@@ -63,7 +65,8 @@
     </aside>
     <!-- Local Mode Warning Banner (shown when in local storage mode) -->
     <aside x-show="dataAuthority === 'local' && expenses.length > 0" x-cloak class="guest-warning-banner" role="alert">
-      ⚠️ <strong>Local Mode</strong> — Data for <span x-text="localProfile?.alias || 'Local User'"></span> stays on this device only.
+      ⚠️ <strong>Local Mode</strong> — Data for <span x-text="localProfile?.alias || 'Local User'"></span> stays on this
+      device only.
       <button @click="showAuthModal=true" class="outline contrast"
         style="padding:0.25rem 0.5rem;font-size:0.875rem">Sign in to sync to cloud</button>
     </aside>
@@ -333,9 +336,10 @@
           <input id="local-alias-input" data-testid="local-alias-input" type="text" x-model="localAliasDraft"
             placeholder="Local User">
           <button data-testid="save-local-alias" class="outline" @click="saveLocalAlias()">Save Alias</button>
-          <button data-testid="local-signout-button" class="outline secondary"
-            @click="openLocalSignOut()">Local Sign Out</button>
-          <p style="color:var(--muted-color);margin-top:0.5rem">Local lock is a device privacy control, not encryption.</p>
+          <button data-testid="local-signout-button" class="outline secondary" @click="openLocalSignOut()">Local Sign
+            Out</button>
+          <p style="color:var(--muted-color);margin-top:0.5rem">Local lock is a device privacy control, not encryption.
+          </p>
         </div>
       </article>
       <p data-testid="export-disclaimer" class="legal-disclaimer"><strong>Not Tax Advice:</strong> This tool provides
@@ -390,9 +394,12 @@
       </header>
       <p>Choose what should happen to data for <strong x-text="localProfile?.alias || 'Local User'"></strong>.</p>
       <footer style="display:grid;gap:0.75rem">
-        <button data-testid="local-signout-migrate" class="outline" @click="moveLocalDataToCloud()">Move to Cloud</button>
-        <button data-testid="local-signout-lock" class="outline secondary" @click="lockLocalData()">Lock on This Device</button>
-        <button data-testid="local-signout-delete" class="contrast" @click="deleteLocalData()">Delete Local Data</button>
+        <button data-testid="local-signout-migrate" class="outline" @click="moveLocalDataToCloud()">Move to
+          Cloud</button>
+        <button data-testid="local-signout-lock" class="outline secondary" @click="lockLocalData()">Lock on This
+          Device</button>
+        <button data-testid="local-signout-delete" class="contrast" @click="deleteLocalData()">Delete Local
+          Data</button>
       </footer>
     </article>
   </dialog>
