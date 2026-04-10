@@ -15,6 +15,7 @@
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
   <!-- App modules (loaded before Alpine initialization) -->
   <script src="js/app-getters.js"></script>
+  <script src="js/app-settings.js"></script>
 </head>
 
 <body x-data="expenseApp()">
@@ -242,6 +243,8 @@
             <h3>👥 Board Member Benefits</h3>
             <p class="column-total" x-text="formatCurrency(totalBenefits)" data-testid="total-benefits"></p>
             <small x-text="benefitsCards.length + ' items'"></small>
+            <p x-show="entityTypeWarning" data-testid="entity-benefit-warning" x-text="entityTypeWarning"
+              style="color:#e67e22;font-size:.8rem;margin:.25rem 0 0"></p>
           </div>
           <div class="cards-container">
             <template x-for="e in benefitsCardsVisible" :key="'ben-' + e.id">
@@ -270,16 +273,7 @@
                     :title="e.adjusted ? 'Expand controls' : 'Collapse controls'"
                     x-text="e.adjusted ? '▶' : '▼'"></button>
                 </div>
-                <div x-show="(100 - (e.businessPercent ?? 100)) > 0" style="margin:.4rem 0">
-                  <select data-testid="benefit-subcategory-select" :value="e.benefitSubcategory || 'Requires Review'" @change="setBenefitSubcategory(e, $event.target.value)"
-                    style="margin:0;padding:.25rem .5rem;font-size:.75rem">
-                    <option>Requires Review</option>
-                    <option>Taxable Compensation</option>
-                    <option>De Minimis Benefits</option>
-                    <option>Working Condition Fringe</option>
-                    <option>IRC §119 Meals/Lodging</option>
-                  </select>
-                </div>
+                <div x-show="(100 - (e.businessPercent ?? 100)) > 0" style="margin:.4rem 0"><select data-testid="benefit-subcategory-select" :value="e.benefitSubcategory || 'Requires Review'" @change="setBenefitSubcategory(e, $event.target.value)" style="margin:0;padding:.25rem .5rem;font-size:.75rem"><option>Requires Review</option><option>Taxable Compensation</option><option>De Minimis Benefits</option><option>Working Condition Fringe</option><option>IRC §119 Meals/Lodging</option></select></div>
                 <div class="slider-with-arrows" x-show="!e.adjusted">
                   <button class="slider-arrow" @click="setAllocation(e, 100)" title="0% Benefits (100% Business)"
                     aria-label="Allocate 0% to Benefits">○</button>
@@ -357,18 +351,24 @@
           <button data-testid="save-local-alias" class="outline" @click="saveLocalAlias()">Save Alias</button>
           <button data-testid="local-signout-button" class="outline secondary" @click="openLocalSignOut()">Local Sign
             Out</button>
-          <p style="color:var(--muted-color);margin-top:0.5rem">Local lock is a device privacy control, not encryption.
-          </p>
+          <p style="color:var(--muted-color);margin-top:0.5rem">Local lock is a device privacy control, not encryption.</p>
         </div>
       </article>
-      <p data-testid="export-disclaimer" class="legal-disclaimer"><strong>Not Tax Advice:</strong> This tool provides
-        expense allocation assistance only. Verify all allocations with a qualified tax professional.</p>
+      <article data-testid="entity-type-section" style="margin-bottom:1.5rem">
+        <h3>🏢 Entity Type</h3>
+        <select data-testid="entity-type-select" x-model="entityType" @change="setEntityType($event.target.value)">
+          <option value="">Select entity type...</option>
+          <option value="c-corp">C Corporation</option><option value="s-corp">S Corporation</option>
+          <option value="llc">LLC</option><option value="partnership">Partnership</option><option value="sole-prop">Sole Proprietorship</option>
+        </select>
+        <p x-show="entityTypeWarning" data-testid="entity-warning" x-text="entityTypeWarning" style="color:#e67e22;margin-top:.5rem"></p>
+      </article>
+      <p data-testid="export-disclaimer" class="legal-disclaimer"><strong>Not Tax Advice:</strong> This tool provides expense allocation assistance only. Verify all allocations with a qualified tax professional.</p>
       <button class="outline" @click="exportCSV()">📤 Export CSV</button><button class="outline secondary"
         @click="clearAll()">🗑️ Clear All</button>
       <section data-testid="payment-methods-section" style="margin-top:2rem" x-show="paymentMethods.length > 0">
         <h3>💳 Payment Methods</h3>
-        <p style="color:var(--muted-color);margin-bottom:1rem">Remove expenses by payment method to filter out personal
-          purchases.</p>
+        <p style="color:var(--muted-color);margin-bottom:1rem">Remove expenses by payment method to filter out personal purchases.</p>
         <div class="payment-methods-list">
           <template x-for="pm in paymentMethods" :key="pm.method">
             <div class="payment-method-row" data-testid="payment-method-row" :data-payment="pm.method">
