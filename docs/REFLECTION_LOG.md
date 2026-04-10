@@ -17,6 +17,24 @@
 
 ## Log Entries
 
+### 2026-04-10 SUCCESS: Fringe Benefit Subcategory Model + UX + Export
+
+**Context**: Ticket #11 (Epic #2) requires replacing undifferentiated benefits allocations with tax-meaningful fringe benefit subcategories.
+
+**Outcome**:
+- ✅ Added `benefitSubcategory` to expense migration/defaulting in `loadExpenses()`
+- ✅ Added benefits-card selector (`data-testid="benefit-subcategory-select"`) with five options and default `Requires Review`
+- ✅ Added `setBenefitSubcategory()` update path and persistence via existing `save()` flow
+- ✅ Added CSV export column `BenefitSubcategory`
+- ✅ Added E2E tests (`tests/fringe-subcategory.spec.js`) for selector default and export inclusion
+- ✅ Validation: targeted tests pass, full suite passes (111 passed, 1 skipped), lint passes
+
+**Insight**:
+- Tax-specific subcategorization can be introduced with minimal state-surface change when defaults are tied to allocation state (`benefits > 0` → `Requires Review`).
+
+**Adaptation**:
+- Keep compliance-oriented defaults deterministic at migration boundaries (`loadExpenses`) so legacy data gains new fields safely.
+
 ### 2026-04-10 SUCCESS: Onboarding Terms Acceptance Gate Implemented
 
 **Context**: Phase 0 roadmap requires terms acceptance before first use. Existing onboarding allowed first-time users to proceed immediately from the welcome step.

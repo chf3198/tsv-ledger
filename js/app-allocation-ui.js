@@ -1,4 +1,11 @@
 /** Allocation UI methods - slider initialization and interaction (ADR-015, ADR-018, ADR-026) */
+const ensureBenefitSubcategory = (expense, businessPercent) => ({
+  ...expense,
+  benefitSubcategory: (100 - businessPercent) > 0
+    ? (expense.benefitSubcategory || 'Requires Review')
+    : (expense.benefitSubcategory || '')
+});
+
 const appAllocationUI = {
   initSlider(element, expense) {
     const slider = element;
@@ -29,7 +36,7 @@ const appAllocationUI = {
       if (businessPercent !== (expense.businessPercent ?? 100)) {
         // Immutable update via map (Alpine reactivity)
         this.expenses = this.expenses.map(e =>
-          e.id === expense.id ? { ...e, businessPercent, adjusted: true, reviewed: true } : e
+          e.id === expense.id ? { ...ensureBenefitSubcategory(e, businessPercent), businessPercent, adjusted: true, reviewed: true } : e
         );
         this.save();
       }
@@ -45,7 +52,7 @@ const appAllocationUI = {
     const matchIds = new Set([expense.id]);
     this.expenses = this.expenses.map(e =>
       matchIds.has(e.id)
-        ? { ...e, businessPercent, adjusted: true, reviewed: true }
+        ? { ...ensureBenefitSubcategory(e, businessPercent), businessPercent, adjusted: true, reviewed: true }
         : e
     );
 
@@ -68,6 +75,13 @@ const appAllocationUI = {
     const matchIds = new Set([expense.id]);
     this.expenses = this.expenses.map(e =>
       matchIds.has(e.id) ? { ...e, adjusted: !e.adjusted, reviewed: !e.adjusted } : e
+    );
+    this.save();
+  },
+
+  setBenefitSubcategory(expense, benefitSubcategory) {
+    this.expenses = this.expenses.map(e =>
+      e.id === expense.id ? { ...e, benefitSubcategory } : e
     );
     this.save();
   }

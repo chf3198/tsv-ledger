@@ -59,6 +59,7 @@ Expense {
   description: string,
   amount: number,          // dollars
   businessPercent: number, // 0-100, default 100
+  benefitSubcategory: string, // Taxable Compensation | De Minimis Benefits | Working Condition Fringe | IRC §119 Meals/Lodging | Requires Review
   paymentMethod: string,
   reviewed: boolean
 }
@@ -91,6 +92,8 @@ Two summary cards: Business Supplies total, Board Member Benefits total.
 
 Split items (1-99%) appear in **both** columns with orange border.
 
+Benefits cards now include a fringe benefit subcategory selector with default `Requires Review` when any benefits allocation exists.
+
 ### Import
 
 Drag-drop CSV/ZIP. Supports Amazon Order History, Bank of America DAT.
@@ -106,6 +109,7 @@ Retention/deletion controls:
 Export naming:
 - CSV downloads use `tsv-ledger-export-YYYYMMDD-(local|cloud).csv`.
 - Filenames intentionally exclude user names, account identifiers, and source filename metadata.
+- CSV exports include a `BenefitSubcategory` column for tax-meaningful benefit classification.
 
 ## Auth Flow
 
