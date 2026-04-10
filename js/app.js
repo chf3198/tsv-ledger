@@ -31,6 +31,7 @@ function expenseApp() {
     // Auth state (ADR-009)
     auth: { user: null, authenticated: false },
     showAuthModal: false, showUserMenu: false,
+    sessionTimeoutTimer: null, sessionWatcherReady: false, lastSessionTouch: 0,
     // Storage intent / session state / data authority (ADR-029, ADR-030)
     storageIntent: localStorage.getItem('tsv-storage-mode') || null,
     sessionState: 'unauthenticated',
@@ -54,6 +55,7 @@ function expenseApp() {
     },
     // Onboarding wizard state (ADR-025)
     onboardingStep: 1, onboardingComplete: localStorage.getItem('tsv-onboarding-complete') === 'true',
+    termsAccepted: localStorage.getItem('tsv-terms-accepted') === 'true',
     // Payment method purge state (ADR-017)
     showPurgeModal: false, purgeTarget: null,
 
@@ -77,6 +79,8 @@ function expenseApp() {
       if (this.storageIntent === 'local') appIdentity.ensureLocalProfile.call(this);
       this.localAliasDraft = this.localProfile?.alias || '';
       await appAuth.handleOAuthCallback.call(this);
+      appAuth.initSessionTimeoutWatcher.call(this);
+      appAuth.enforceSessionTimeout.call(this);
       await appStorage.loadData.call(this);
     },
 
@@ -84,6 +88,9 @@ function expenseApp() {
     // Auth (app-auth.js)
     authWith(provider) { return appAuth.authWith.call(this, provider); },
     logout() { return appAuth.logout.call(this); },
+    markSessionActivity() { return appAuth.markSessionActivity.call(this); },
+    enforceSessionTimeout() { return appAuth.enforceSessionTimeout.call(this); },
+    initSessionTimeoutWatcher() { return appAuth.initSessionTimeoutWatcher.call(this); },
     ensureLocalProfile() { return appIdentity.ensureLocalProfile.call(this); },
     saveLocalAlias() { return appIdentity.saveLocalAlias.call(this); },
     openLocalSignOut() { return appIdentity.openLocalSignOut.call(this); },
@@ -120,6 +127,7 @@ function expenseApp() {
     // Onboarding (app-onboarding.js)
     navigateToImport() { return appOnboarding.navigateToImport.call(this); },
     selectStorageMode(mode) { return appOnboarding.selectStorageMode.call(this, mode); },
+    setTermsAccepted() { return appOnboarding.setTermsAccepted.call(this); },
     completeOnboarding() { return appOnboarding.completeOnboarding.call(this); },
     resetToOnboarding() { return appOnboarding.resetToOnboarding.call(this); },
 
