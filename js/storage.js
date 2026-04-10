@@ -41,13 +41,14 @@ const getUniqueLocations = (expenses) =>
 // Pure: Expense -> string
 const expenseToCSVRow = (e) => {
   const category = e.businessPercent >= 50 ? 'Office Supplies' : 'Employee Benefits';
+  const benefitSubcategory = (e.benefitSubcategory || '').replace(/"/g, '""');
   const disclaimer = `"${EXPORT_DISCLAIMER.replace(/"/g, '""')}"`;
-  return [e.date, `"${(e.description || '').replace(/"/g, '""')}"`, e.location, category, (e.amount || 0).toFixed(2), disclaimer].join(',');
+  return [e.date, `"${(e.description || '').replace(/"/g, '""')}"`, e.location, category, (e.amount || 0).toFixed(2), `"${benefitSubcategory}"`, disclaimer].join(',');
 };
 
 // Pure: Expense[] -> string
 const expensesToCSV = (expenses) =>
-  ['Date,Description,Location,Category,Amount,Disclaimer', ...expenses.map(expenseToCSVRow)].join('\n');
+  ['Date,Description,Location,Category,Amount,BenefitSubcategory,Disclaimer', ...expenses.map(expenseToCSVRow)].join('\n');
 
 // SIDE EFFECTS (clearly marked)
 
@@ -61,6 +62,10 @@ const loadExpenses = () => {
       businessPercent: e.businessPercent !== undefined ? e.businessPercent :
         (e.category === 'Business Supplies' ? 100 :
          e.category === 'Board Member Benefits' ? 0 : 100),
+      benefitSubcategory: e.benefitSubcategory !== undefined ? e.benefitSubcategory :
+        ((e.businessPercent !== undefined ? e.businessPercent :
+          (e.category === 'Business Supplies' ? 100 : e.category === 'Board Member Benefits' ? 0 : 100)) < 100
+          ? 'Requires Review' : ''),
       adjusted: e.adjusted !== undefined ? e.adjusted : (e.reviewed || false)
     }));
   }

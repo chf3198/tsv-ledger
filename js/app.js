@@ -143,6 +143,7 @@ function expenseApp() {
     // Allocation UI (app-allocation-ui.js)
     initSlider(el, e) { return appAllocationUI.initSlider.call(this, el, e); },
     setAllocation(e, percent) { return appAllocationUI.setAllocation.call(this, e, percent); },
+    setBenefitSubcategory(e, subcategory) { return appAllocationUI.setBenefitSubcategory.call(this, e, subcategory); },
     toggleAdjusted(e) { return appAllocationUI.toggleAdjusted.call(this, e); },
     toggleReviewed(e) { return appAllocationUI.toggleAdjusted.call(this, e); },
 
