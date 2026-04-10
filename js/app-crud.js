@@ -1,4 +1,9 @@
 /** CRUD operations for expenses (ADR-026 - methods extraction) */
+const buildExportFilename = (authority) => {
+  const ymd = new Date().toISOString().slice(0, 10).replace(/-/g, '');
+  return `tsv-ledger-export-${ymd}-${authority === 'cloud' ? 'cloud' : 'local'}.csv`;
+};
+
 const appCrud = {
   addExpense() {
     if (!this.newExpense.description || !this.newExpense.amount) return;
@@ -29,7 +34,7 @@ const appCrud = {
     this.applyFilters();
   },
   exportCSV() {
-    exportToCSV(this.filteredExpenses, `tsv-expenses-${today()}.csv`);
+    exportToCSV(this.filteredExpenses, buildExportFilename(this.dataAuthority));
   },
   formatDate(dateStr) {
     const d = new Date(dateStr);
