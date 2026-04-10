@@ -271,11 +271,11 @@
                     x-text="e.adjusted ? '▶' : '▼'"></button>
                 </div>
                 <div x-show="(100 - (e.businessPercent ?? 100)) > 0" style="margin:.4rem 0">
-                  <select data-testid="benefit-subcategory-select" :value="e.benefitSubcategory || 'Requires Review'"
-                    @change="setBenefitSubcategory(e, $event.target.value)"
+                  <select data-testid="benefit-subcategory-select" :value="e.benefitSubcategory || 'Requires Review'" @change="setBenefitSubcategory(e, $event.target.value)"
                     style="margin:0;padding:.25rem .5rem;font-size:.75rem">
                     <option>Requires Review</option>
-                    <option>Taxable Compensation</option><option>De Minimis Benefits</option>
+                    <option>Taxable Compensation</option>
+                    <option>De Minimis Benefits</option>
                     <option>Working Condition Fringe</option>
                     <option>IRC §119 Meals/Lodging</option>
                   </select>
