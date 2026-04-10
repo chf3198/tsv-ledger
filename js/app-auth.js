@@ -82,12 +82,13 @@ const appAuth = {
     this.auth = { user: null, authenticated: false };
     clearSession();
     this.sessionState = 'unauthenticated';
-    ['tsv-expenses', 'tsv-import-history', 'tsv-storage-mode', 'tsv-onboarding-complete', 'tsv-local-profile', 'tsv-local-data-locked', 'tsv-pending-cloud-migration'].forEach(k => localStorage.removeItem(k));
+    ['tsv-expenses', 'tsv-import-history', 'tsv-storage-mode', 'tsv-onboarding-complete', 'tsv-terms-accepted', 'tsv-local-profile', 'tsv-local-data-locked', 'tsv-pending-cloud-migration'].forEach(k => localStorage.removeItem(k));
     this.storageIntent = null;
     this.localProfile = null;
     this.localAliasDraft = '';
     this.localDataLocked = false;
     this.pendingCloudMigration = false;
+    this.termsAccepted = false;
     this.onboardingStep = 1;
     this.onboardingComplete = false;
     this.expenses = [];

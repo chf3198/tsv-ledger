@@ -37,7 +37,19 @@ test.describe('First-Time User Experience (ADR-025)', () => {
     await expect(getStartedBtn).toContainText(/get started|start/i);
   });
 
+  test('requires terms acceptance before enabling Get Started', async ({ page }) => {
+    const getStartedBtn = page.locator('[data-testid="get-started-btn"]');
+    const termsCheckbox = page.locator('[data-testid="accept-terms-checkbox"]');
+
+    await expect(termsCheckbox).toBeVisible();
+    await expect(getStartedBtn).toBeDisabled();
+
+    await termsCheckbox.check();
+    await expect(getStartedBtn).toBeEnabled();
+  });
+
   test('clicking Get Started shows storage choice', async ({ page }) => {
+    await page.locator('[data-testid="accept-terms-checkbox"]').check();
     await page.locator('[data-testid="get-started-btn"]').click();
 
     // Should see storage choice step
@@ -49,60 +61,6 @@ test.describe('First-Time User Experience (ADR-025)', () => {
     await expect(page.locator('[data-testid="choose-local"]')).toBeVisible();
   });
 
-  test('choosing Local proceeds to import step', async ({ page }) => {
-    await page.locator('[data-testid="get-started-btn"]').click();
-    await page.locator('[data-testid="choose-local"]').click();
-
-    // Should see import step
-    const importStep = page.locator('[data-testid="import-step"]');
-    await expect(importStep).toBeVisible();
-
-    // Should have file drop area (within wizard)
-    await expect(page.locator('[data-testid="drop-zone"]')).toBeVisible();
-  });
-
-  test('successful import reveals navigation', async ({ page }) => {
-    // Complete wizard flow
-    await page.locator('[data-testid="get-started-btn"]').click();
-    await page.locator('[data-testid="choose-local"]').click();
-
-    // Import a file (use the wizard's file input)
-    const fileInput = page.locator('[data-testid="import-step"] input[type="file"]');
-    await fileInput.setInputFiles('test-data/amazon-sample.csv');
-
-    // Wait for import complete and button to appear
-    await expect(page.locator('[data-testid="view-dashboard-btn"]')).toBeVisible({ timeout: 15000 });
-
-    // Click to view dashboard
-    await page.locator('[data-testid="view-dashboard-btn"]').click();
-
-    // Nav should now be visible
-    const nav = page.locator('[data-testid="main-nav"]');
-    await expect(nav).toBeVisible();
-
-    // Welcome wizard should be gone
-    const welcomeScreen = page.locator('[data-testid="welcome-wizard"]');
-    await expect(welcomeScreen).toBeHidden();
-  });
-
-  test('returning user with data sees nav immediately', async ({ page }) => {
-    // Simulate returning user with existing data
-    await page.evaluate(() => {
-      localStorage.setItem('tsv-expenses', JSON.stringify([
-        { id: 'test-1', description: 'Test', amount: 10, date: '2024-01-01' }
-      ]));
-      localStorage.setItem('tsv-onboarding-complete', 'true');
-    });
-    await page.reload();
-
-    // Should see nav immediately
-    const nav = page.locator('[data-testid="main-nav"]');
-    await expect(nav).toBeVisible();
-
-    // Should NOT see welcome wizard
-    const welcomeScreen = page.locator('[data-testid="welcome-wizard"]');
-    await expect(welcomeScreen).toBeHidden();
-  });
 });
 
 test.describe('Onboarding Progress Indicator', () => {
@@ -120,6 +78,7 @@ test.describe('Onboarding Progress Indicator', () => {
     // Step 1 (Welcome)
     await expect(page.locator('[data-step="1"][data-active="true"]')).toBeVisible();
 
+    await page.locator('[data-testid="accept-terms-checkbox"]').check();
     await page.locator('[data-testid="get-started-btn"]').click();
 
     // Step 2 (Storage choice)

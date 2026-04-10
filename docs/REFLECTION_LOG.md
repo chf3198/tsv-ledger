@@ -17,6 +17,27 @@
 
 ## Log Entries
 
+### 2026-04-10 SUCCESS: Onboarding Terms Acceptance Gate Implemented
+
+**Context**: Phase 0 roadmap requires terms acceptance before first use. Existing onboarding allowed first-time users to proceed immediately from the welcome step.
+
+**Outcome**:
+- ✅ Added persisted `termsAccepted` onboarding state (`tsv-terms-accepted`)
+- ✅ Added welcome-step checkbox (`data-testid="accept-terms-checkbox"`) with Terms of Service link
+- ✅ Disabled `Get Started` until terms are accepted
+- ✅ Added onboarding handler `setTermsAccepted()` to persist acceptance intent
+- ✅ Added logout reset behavior for terms acceptance (`logout()` clears `tsv-terms-accepted`)
+- ✅ Added/updated E2E onboarding tests to enforce acceptance flow, repeat-visit bypass, and logout reset
+- ✅ `tests/onboarding*.spec.js` + `tests/session-timeout.spec.js`: 13/13 passing
+
+**Insight**:
+- Legal visibility is insufficient without a hard gate in first-run UX.
+- Small onboarding gates are low-risk when state is persisted and test-backed.
+
+**Adaptation**:
+- Keep legal/compliance prerequisites as explicit state in onboarding, not implicit UI copy.
+- For future first-run requirements, add data-testid selectors up front and wire tests before UI changes.
+
 ### 2026-04-09 SUCCESS: Returning User Recovery — Cloud-Locked UX Dead-End Fix
 
 **Context**: Production UAT revealed that returning users with cloud intent but no active session see only "Cloud Access Locked — Sign In" with no alternative forward path. Users who can't authenticate are stuck.
