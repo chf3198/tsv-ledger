@@ -56,6 +56,8 @@ function expenseApp() {
     // Onboarding wizard state (ADR-025)
     onboardingStep: 1, onboardingComplete: localStorage.getItem('tsv-onboarding-complete') === 'true',
     termsAccepted: localStorage.getItem('tsv-terms-accepted') === 'true',
+    // Entity type configuration (ADR-032)
+    entityType: localStorage.getItem('tsv-entity-type') || '',
     // Payment method purge state (ADR-017)
     showPurgeModal: false, purgeTarget: null,
 
@@ -73,6 +75,7 @@ function expenseApp() {
     get benefitsCardsVisible() { return window.appGetters.benefitsCardsVisible; },
     get hasMoreBusinessCards() { return window.appGetters.hasMoreBusinessCards; },
     get hasMoreBenefitsCards() { return window.appGetters.hasMoreBenefitsCards; },
+    get entityTypeWarning() { return appSettings.getEntityTypeWarning.call(this); },
 
     // ===== INITIALIZATION =====
     async init() {
@@ -146,6 +149,9 @@ function expenseApp() {
     setBenefitSubcategory(e, subcategory) { return appAllocationUI.setBenefitSubcategory.call(this, e, subcategory); },
     toggleAdjusted(e) { return appAllocationUI.toggleAdjusted.call(this, e); },
     toggleReviewed(e) { return appAllocationUI.toggleAdjusted.call(this, e); },
+
+    // Settings (app-settings.js)
+    setEntityType(type) { return appSettings.setEntityType.call(this, type); },
 
     // Payment (app-payment.js)
     openPurgeModal(method) { return appPayment.openPurgeModal.call(this, method); },

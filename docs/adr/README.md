@@ -32,6 +32,7 @@ rather than modify.
 | [028](028-cloud-intent-data-authority-hotfix.md) | Cloud-intent data authority hotfix | Accepted |
 | [029](029-explicit-state-model.md) | Explicit storage-intent/session-state/data-authority model | Accepted |
 | [030](030-local-identity-and-local-sign-out.md) | Local identity, local sign-out, and encrypted vault decision | Accepted |
+| [032](032-entity-type-configuration.md) | Entity type configuration and tax warnings | Accepted |
 
 > ADRs 001–018 are archived in [DESIGN-archive.md](../DESIGN-archive.md).
 > Recent ADRs (019+) have individual files.
@@ -51,6 +52,7 @@ rather than modify.
 | 025 | Onboarding Wizard | 024, 021 | index.html:wizard, js/app.js:showNav | **High** (modifying showNav breaks onboarding flow) |
 | 029 | Explicit State Model | 024, 028 | js/app.js, js/app-storage.js, tests/state-model.spec.js | **High** (data authority gates) |
 | 030 | Local Identity and Sign-Out | 024, 029 | index.html, js/app-identity.js, tests/local-signout.spec.js | **High** (shared-device security UX) |
+| 032 | Entity Type Configuration | 003 (localStorage) | js/app-settings.js, js/app.js, index.html:settings | Low |
 
 **Conflict risk levels**:
 - **High**: Changes require coordinating across multiple files; test extensively

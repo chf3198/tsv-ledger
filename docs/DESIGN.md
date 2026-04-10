@@ -160,6 +160,7 @@ See [ADR index](adr/README.md) for full Architecture Decision Records.
 | [028](adr/028-cloud-intent-data-authority-hotfix.md) | Cloud-intent data authority hotfix | 3.6.2   |
 | [029](adr/029-explicit-state-model.md) | Explicit storage-intent/session-state/data-authority model | 3.6.3   |
 | [030](adr/030-local-identity-and-local-sign-out.md) | Local identity, local sign-out, and encrypted vault decision | 3.6.4   |
+| [032](adr/032-entity-type-configuration.md) | Entity type configuration and tax warnings | 3.7.0   |
 
 > ADRs 001–018 archived in [DESIGN-archive.md](DESIGN-archive.md)
 
