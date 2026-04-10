@@ -12,7 +12,10 @@
     "test:visual": "node scripts/visual-test/capture.js all",
     "test:visual:analyze": "node scripts/visual-test/analyze.js",
     "test:visual:update": "node ./node_modules/.bin/playwright test --update-snapshots",
-    "lint": "node scripts/lint.js"
+    "lint": "node scripts/lint.js",
+    "models:refresh": "node scripts/refresh-openclaw-models.js",
+    "models:refresh:general": "node scripts/refresh-openclaw-models.js general",
+    "models:refresh:image": "node scripts/refresh-openclaw-models.js image"
   },
   "devDependencies": {
     "@anthropic-ai/sdk": "^0.24.3",

@@ -81,6 +81,10 @@ This security policy applies to:
 - Denial of service attacks
 - Social engineering attacks
 
+## Security Audit Artifacts
+
+- OAuth audit report (2026-04): [docs/OAUTH_SECURITY_AUDIT_2026-04.md](docs/OAUTH_SECURITY_AUDIT_2026-04.md)
+
 ## Recognition
 
 We appreciate the security research community's efforts in keeping TSV Ledger

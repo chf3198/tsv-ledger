@@ -1,5 +1,8 @@
 /** Onboarding and storage mode selection (ADR-024, ADR-025, ADR-026) */
 const appOnboarding = {
+  setTermsAccepted() {
+    localStorage.setItem('tsv-terms-accepted', this.termsAccepted ? 'true' : 'false');
+  },
   navigateToImport() {
     this.route = 'import';
     if (!this.showNav) {

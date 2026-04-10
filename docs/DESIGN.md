@@ -99,6 +99,14 @@ Drag-drop CSV/ZIP. Supports Amazon Order History, Bank of America DAT.
 
 Payment method purge (remove personal cards after import).
 
+Retention/deletion controls:
+- `Clear All` permanently deletes all expenses and import history from local storage.
+- Local identity sign-out supports `Delete Local Data` for shared-device cleanup.
+
+Export naming:
+- CSV downloads use `tsv-ledger-export-YYYYMMDD-(local|cloud).csv`.
+- Filenames intentionally exclude user names, account identifiers, and source filename metadata.
+
 ## Auth Flow
 
 ```

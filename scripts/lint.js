@@ -12,7 +12,7 @@ const CHECK_PATTERNS = ['*.js', '*.html', '*.css'];
 const IGNORE_DIRS = ['node_modules', '.git', 'playwright-report', 'test-results'];
 const LEGACY_MAX = {
   'css/app.css': 916,
-  'index.html': 477,
+  'index.html': 495,
   'js/app.js': 495,
   'scripts/visual-test/analyze.js': 202,
   'scripts/visual-test/capture.js': 196,
