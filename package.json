@@ -15,7 +15,13 @@
     "lint": "node scripts/lint.js",
     "models:refresh": "node scripts/refresh-openclaw-models.js",
     "models:refresh:general": "node scripts/refresh-openclaw-models.js general",
-    "models:refresh:image": "node scripts/refresh-openclaw-models.js image"
+    "models:refresh:image": "node scripts/refresh-openclaw-models.js image",
+    "openclaw:preflight": "node scripts/openclaw-preflight.js",
+    "openclaw:preflight:dry": "node scripts/openclaw-preflight.js --dry-run",
+    "openclaw:optimize": "node scripts/openclaw-optimize.js coding",
+    "openclaw:optimize:general": "node scripts/openclaw-optimize.js general",
+    "openclaw:util:report": "node scripts/openclaw-lane-log.js report 7",
+    "openclaw:util:local": "node scripts/openclaw-lane-log.js record local coding"
   },
   "devDependencies": {
     "@anthropic-ai/sdk": "^0.24.3",

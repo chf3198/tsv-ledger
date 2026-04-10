@@ -17,6 +17,24 @@
 
 ## Log Entries
 
+### 2026-04-10 SUCCESS: OpenClaw Optimal-Usage Automation Loop Added
+
+**Context**: OpenClaw was being used mostly for ad-hoc checks, not as a consistent operational lane with measurable utilization.
+
+**Outcome**:
+- ✅ Added automated preflight script (`scripts/openclaw-preflight.js`) for tailscale/ssh/openclaw-health checks
+- ✅ Added optimize script (`scripts/openclaw-optimize.js`) that enforces preflight, refreshes stale model chains, and logs usage
+- ✅ Added utilization logger/report (`scripts/openclaw-lane-log.js`) with rolling 7-day percent and 60% target check
+- ✅ Added global installer (`scripts/install-openclaw-tools.sh`) with PATH symlinks
+- ✅ Added standardized usage doc (`docs/OPENCLAW_USAGE.md`)
+- ✅ Added npm workflow commands (`openclaw:*`) for one-command execution
+
+**Insight**:
+- OpenClaw value increases when entry is automated and measurable; utilization targets require explicit recording, not assumptions.
+
+**Adaptation**:
+- Use `npm run openclaw:optimize` at session start as default gate before implementation slices.
+
 ### 2026-04-10 SUCCESS: Fringe Benefit Subcategory Model + UX + Export
 
 **Context**: Ticket #11 (Epic #2) requires replacing undifferentiated benefits allocations with tax-meaningful fringe benefit subcategories.
