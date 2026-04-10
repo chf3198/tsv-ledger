@@ -83,7 +83,16 @@
         <h2>📊 TSV Expenses</h2>
         <p>Track Amazon orders & bank statements.<br>Allocate expenses between Business and Personal with visual
           sliders.</p>
-        <button data-testid="get-started-btn" @click="onboardingStep = 2" class="primary">Get Started →</button>
+        <label
+          style="display:flex;gap:0.5rem;align-items:flex-start;justify-content:center;margin:1rem 0;text-align:left">
+          <input data-testid="accept-terms-checkbox" type="checkbox" x-model="termsAccepted"
+            @change="setTermsAccepted()" style="margin-top:0.2rem">
+          <span style="font-size:0.875rem">I agree to the <a href="docs/TERMS_OF_SERVICE.md" target="_blank">Terms of
+              Service</a>
+            and understand this tool is not tax advice.</span>
+        </label>
+        <button data-testid="get-started-btn" @click="onboardingStep = 2" class="primary" :disabled="!termsAccepted">Get
+          Started →</button>
       </div>
       <!-- Step 2: Storage Choice -->
       <div x-show="onboardingStep === 2" data-testid="storage-choice-step" class="wizard-step">
