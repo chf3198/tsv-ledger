@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
+bash .github/scripts/check-global-governance.sh
 
 if [[ ! -f package.json ]]; then
   exit 0

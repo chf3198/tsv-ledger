@@ -6,6 +6,7 @@ ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 required_files=(
   ".github/instructions/global-skills.instructions.md"
   ".github/instructions/skill-routing.instructions.md"
+  ".github/instructions/openclaw-universal.instructions.md"
   ".github/scripts/check-global-governance.sh"
   ".github/workflows/global-governance-presence.yml"
 )
